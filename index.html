@@ -176,15 +176,37 @@ button:disabled {
 
     <form id="activationForm">
 
-      <label for="card_code">Kode Kartu</label>
+    <label for="card_code">Kode Kartu</label>
 
-     <input
-  type="text"
-  id="card_code"
-  placeholder="Kode kartu"
-  readonly
-  required
+<div style="
+  position:relative;
+  width:100%;
+">
+  <input
+    type="text"
+    id="card_code"
+    placeholder="Kode kartu"
+    readonly
+    required
+    style="
+      background:#f1f1f1;
+      color:#111;
+      font-weight:700;
+      letter-spacing:1px;
+      padding-right:45px;
+    "
+  >
 
+  <span style="
+    position:absolute;
+    right:15px;
+    top:50%;
+    transform:translateY(-50%);
+    font-size:16px;
+  ">
+    🔒
+  </span>
+</div>
       <label for="business_name">Nama Bisnis</label>
 
       <input
