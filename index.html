@@ -247,9 +247,11 @@ document
         {
           method: "POST",
 
-          headers: {
-            "Content-Type": "application/json"
-          },
+         headers: {
+  "Content-Type": "application/json",
+  "apikey": "SUPABASE_PUBLISHABLE_KEY",
+  "Authorization": "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
+},
 
           body: JSON.stringify(data)
         }
