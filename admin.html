@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ALJAVA Admin</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .header {
+      margin-bottom: 25px;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      color: #777;
+      margin-top: 5px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    }
+
+    .stat-title {
+      color: #777;
+      font-size: 13px;
+    }
+
+    .stat-number {
+      font-size: 28px;
+      font-weight: bold;
+      margin-top: 8px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 13px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+      white-space: nowrap;
+    }
+
+    th {
+      font-size: 13px;
+      color: #777;
+    }
+
+    td {
+      font-size: 14px;
+    }
+
+    .status {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .active {
+      background: #e8f7e8;
+      color: #176b17;
+    }
+
+    .inactive {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    @media (max-width: 700px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <div class="logo">ALJAVA</div>
+    <div class="subtitle">Admin Dashboard</div>
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="stat-title">
+        Total Kartu
+      </div>
+
+      <div class="stat-number" id="totalCards">
+        -
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">
+        Kartu Aktif
+      </div>
+
+      <div class="stat-number" id="activeCards">
+        -
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="stat-title">
+        Belum Aktif
+      </div>
+
+      <div class="stat-number" id="inactiveCards">
+        -
+      </div>
+    </div>
+
+  </div>
+
+  <div class="card">
+
+    <h3>Daftar Kartu</h3>
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Kode</th>
+          <th>Status</th>
+          <th>Produk</th>
+          <th>Aktivasi</th>
+        </tr>
+      </thead>
+
+      <tbody id="cardsTable">
+
+        <tr>
+          <td colspan="4">
+            Memuat data...
+          </td>
+        </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<script>
+
+const SUPABASE_URL =
+  "https://lbzwmcxwxummitldxucj.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+
+
+async function loadCards() {
+
+  try {
+
+    const response = await fetch(
+      ${SUPABASE_URL}/rest/v1/Cards?select=card_code,status,product_type,activated_at&order=created_at.desc,
+      {
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization":
+            Bearer ${SUPABASE_KEY}
+        }
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(
+        "Gagal mengambil data kartu."
+      );
+    }
+
+    const cards =
+      await response.json();
+
+
+    const total =
+      cards.length;
+
+    const active =
+      cards.filter(
+        card => card.status === "active"
+      ).length;
+
+    const inactive =
+      cards.filter(
+        card => card.status === "inactive"
+      ).length;
+
+
+    document.getElementById(
+      "totalCards"
+    ).innerText = total;
+
+    document.getElementById(
+      "activeCards"
+    ).innerText = active;
+
+    document.getElementById(
+      "inactiveCards"
+    ).innerText = inactive;
+
+
+    const table =
+      document.getElementById(
+        "cardsTable"
+      );
+
+    table.innerHTML = "";
+
+
+    cards.forEach(card => {
+
+      const row =
+        document.createElement("tr");
+
+      row.innerHTML = `
+        <td>
+          ${card.card_code}
+        </td>
+
+        <td>
+          <span class="status ${card.status}">
+            ${card.status}
+          </span>
+        </td>
+
+        <td>
+          ${card.product_type || "-"}
+        </td>
+
+        <td>
+          ${
+            card.activated_at
+              ? new Date(
+                  card.activated_at
+                ).toLocaleDateString("id-ID")
+              : "-"
+          }
+        </td>
+      `;
+
+      table.appendChild(row);
+
+    });
+
+  } catch (error) {
+
+    document.getElementById(
+      "cardsTable"
+    ).innerHTML = `
+      <tr>
+        <td colspan="4">
+          ❌ ${error.message}
+        </td>
+      </tr>
+    `;
+
+  }
+
+}
+
+
+loadCards();
+
+</script>
+
+</body>
+</html>
