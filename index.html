@@ -196,7 +196,45 @@ const CHECK_FUNCTION_URL =
 if (cardCode) {
   document.getElementById("card_code").value = cardCode;
 }
+async function checkCardStatus() {
+  if (!cardCode) return;
 
+  try {
+    const response = await fetch(
+      CHECK_FUNCTION_URL,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw",
+          "Authorization": "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
+        },
+        body: JSON.stringify({
+          card_code: cardCode
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(
+        result.message || "Gagal mengecek kartu."
+      );
+    }
+
+    if (result.status === "active") {
+      window.location.href =
+        result.google_review_url;
+      return;
+    }
+
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+checkCardStatus();
 document
   .getElementById("activationForm")
   .addEventListener("submit", async function(event) {
