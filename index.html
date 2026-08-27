@@ -417,7 +417,33 @@ document
       message.style.display = "block";
 
       message.innerText =
-        "✅ Kartu berhasil diaktifkan!";
+       message.className = "success";
+
+message.style.display = "block";
+
+message.innerHTML = `
+  <div style="
+    font-size:24px;
+    margin-bottom:8px;
+  ">
+    🎉
+  </div>
+
+  <div style="
+    font-size:17px;
+    font-weight:700;
+    margin-bottom:5px;
+  ">
+    Kartu Berhasil Diaktifkan
+  </div>
+
+  <div style="
+    font-size:13px;
+    font-weight:400;
+  ">
+    Kartu Anda sudah siap digunakan untuk Google Review.
+  </div>
+`;
 
 
       reviewButton.href =
