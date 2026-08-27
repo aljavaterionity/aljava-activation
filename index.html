@@ -118,12 +118,12 @@
 
       <label for="card_code">Kode Kartu</label>
 
-      <input
-        type="text"
-        id="card_code"
-        placeholder="Contoh: ALV000001"
-        required
-      >
+     <input
+  type="text"
+  id="card_code"
+  placeholder="Kode kartu"
+  readonly
+  required
 
       <label for="business_name">Nama Bisnis</label>
 
@@ -186,7 +186,13 @@
 
 const FUNCTION_URL =
   "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
+const urlParams = new URLSearchParams(window.location.search);
 
+const cardCode = urlParams.get("code");
+
+if (cardCode) {
+  document.getElementById("card_code").value = cardCode;
+}
 
 document
   .getElementById("activationForm")
