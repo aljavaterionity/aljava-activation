@@ -203,137 +203,118 @@ const SUPABASE_KEY =
 
 async function loadCards() {
 
-  const table =
-    document.getElementById("cardsTable");
-
   try {
 
     const response = await fetch(
-      ${SUPABASE_URL}/rest/v1/Cards?select=card_code,status,product_type,activated_at,
+      SUPABASE_URL +
+      "/rest/v1/Cards?select=card_code,status,product_type,activated_at",
       {
-        method: "GET",
         headers: {
           "apikey": SUPABASE_KEY,
-          "Authorization":
-            Bearer ${SUPABASE_KEY},
-          "Content-Type":
-            "application/json"
+          "Authorization": "Bearer " + SUPABASE_KEY
         }
       }
     );
 
-    const cards =
-      await response.json();
 
     if (!response.ok) {
+
       throw new Error(
-        cards.message ||
-        "Gagal mengambil data kartu."
+        "Gagal mengambil data kartu: " +
+        response.status
       );
+
     }
 
 
-    const total =
+    const cards =
+      await response.json();
+
+
+    document.getElementById("totalCards").textContent =
       cards.length;
 
-    const active =
-      cards.filter(
-        card => card.status === "active"
-      ).length;
 
-    const inactive =
-      cards.filter(
-        card => card.status === "inactive"
-      ).length;
+    document.getElementById("activeCards").textContent =
+      cards.filter(function(card) {
+        return card.status === "active";
+      }).length;
 
 
-    document.getElementById(
-      "totalCards"
-    ).textContent = total;
+    document.getElementById("inactiveCards").textContent =
+      cards.filter(function(card) {
+        return card.status === "inactive";
+      }).length;
 
-    document.getElementById(
-      "activeCards"
-    ).textContent = active;
 
-    document.getElementById(
-      "inactiveCards"
-    ).textContent = inactive;
+    const table =
+      document.getElementById("cardsTable");
 
 
     table.innerHTML = "";
 
 
-    if (cards.length === 0) {
-
-      table.innerHTML = `
-        <tr>
-          <td colspan="4">
-            Belum ada kartu.
-          </td>
-        </tr>
-      `;
-
-      return;
-    }
-
-
-    cards.forEach(card => {
+    cards.forEach(function(card) {
 
       const row =
         document.createElement("tr");
+
 
       const statusClass =
         card.status === "active"
           ? "active"
           : "inactive";
 
-      const activated =
-        card.activated_at
-          ? new Date(
-              card.activated_at
-            ).toLocaleDateString(
-              "id-ID"
-            )
-          : "-";
+
+      let activated = "-";
 
 
-      row.innerHTML = `
-        <td>
-          ${card.card_code || "-"}
-        </td>
+      if (card.activated_at) {
 
-        <td>
-          <span class="status ${statusClass}">
-            ${card.status || "-"}
-          </span>
-        </td>
+        activated =
+          new Date(
+            card.activated_at
+          ).toLocaleDateString("id-ID");
 
-        <td>
-          ${card.product_type || "-"}
-        </td>
+      }
 
-        <td>
-          ${activated}
-        </td>
-      `;
+
+      row.innerHTML =
+        "<td>" +
+        (card.card_code || "-") +
+        "</td>" +
+
+        "<td>" +
+        "<span class=\"status " +
+        statusClass +
+        "\">" +
+        (card.status || "-") +
+        "</span>" +
+        "</td>" +
+
+        "<td>" +
+        (card.product_type || "-") +
+        "</td>" +
+
+        "<td>" +
+        activated +
+        "</td>";
 
 
       table.appendChild(row);
 
     });
 
-
   } catch (error) {
 
     console.error(error);
 
-    table.innerHTML = `
-      <tr>
-        <td colspan="4">
-          ❌ ${error.message}
-        </td>
-      </tr>
-    `;
+    document.getElementById("cardsTable").innerHTML =
+      "<tr>" +
+      "<td colspan=\"4\">❌ " +
+      error.message +
+      "</td>" +
+      "</tr>";
 
   }
 
@@ -341,9 +322,6 @@ async function loadCards() {
 
 
 loadCards();
-
-
-
 </script>
 
 </body>
