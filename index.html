@@ -190,6 +190,9 @@ const urlParams = new URLSearchParams(window.location.search);
 
 const cardCode = urlParams.get("code");
 
+const CHECK_FUNCTION_URL =
+  "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/check_card";
+
 if (cardCode) {
   document.getElementById("card_code").value = cardCode;
 }
