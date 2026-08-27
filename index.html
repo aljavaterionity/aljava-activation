@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Aktivasi Kartu ALJAVA</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    .container {
+      max-width: 450px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    .logo {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      margin-top: 22px;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #111;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      opacity: 0.6;
+    }
+
+    #message {
+      display: none;
+      margin-top: 18px;
+      padding: 12px;
+      border-radius: 8px;
+    }
+
+    .success {
+      background: #e8f7e8;
+      color: #176b17;
+    }
+
+    .error {
+      background: #ffeaea;
+      color: #a00000;
+    }
+
+    .review-button {
+      display: none;
+      text-align: center;
+      text-decoration: none;
+      background: #111;
+      color: white;
+      padding: 13px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+
+    <div class="logo">
+      ALJAVA
+    </div>
+
+    <div class="subtitle">
+      Aktivasi Kartu Google Review
+    </div>
+
+    <form id="activationForm">
+
+      <label for="card_code">Kode Kartu</label>
+
+      <input
+        type="text"
+        id="card_code"
+        placeholder="Contoh: ALV000001"
+        required
+      >
+
+      <label for="business_name">Nama Bisnis</label>
+
+      <input
+        type="text"
+        id="business_name"
+        placeholder="Contoh: Kopi Alpin"
+        required
+      >
+
+      <label for="owner_name">Nama Pemilik</label>
+
+      <input
+        type="text"
+        id="owner_name"
+        placeholder="Nama pemilik"
+        required
+      >
+
+      <label for="whatsapp">WhatsApp</label>
+
+      <input
+        type="tel"
+        id="whatsapp"
+        placeholder="08123456789"
+        required
+      >
+
+      <label for="google_review_url">
+        Link Google Review
+      </label>
+
+      <input
+        type="url"
+        id="google_review_url"
+        placeholder="https://g.page/r/..."
+        required
+      >
+
+      <button type="submit" id="submitButton">
+        Aktifkan Kartu
+      </button>
+
+    </form>
+
+    <div id="message"></div>
+
+    <a
+      id="reviewButton"
+      class="review-button"
+      href="#"
+      target="_blank"
+    >
+      Buka Google Review
+    </a>
+
+  </div>
+
+<script>
+
+const FUNCTION_URL =
+  "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
+
+
+document
+  .getElementById("activationForm")
+  .addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button =
+      document.getElementById("submitButton");
+
+    const message =
+      document.getElementById("message");
+
+    const reviewButton =
+      document.getElementById("reviewButton");
+
+    button.disabled = true;
+    button.innerText = "Mengaktifkan...";
+
+    message.style.display = "none";
+    reviewButton.style.display = "none";
+
+
+    const data = {
+
+      card_code:
+        document.getElementById("card_code")
+        .value
+        .trim(),
+
+      business_name:
+        document.getElementById("business_name")
+        .value
+        .trim(),
+
+      owner_name:
+        document.getElementById("owner_name")
+        .value
+        .trim(),
+
+      whatsapp:
+        document.getElementById("whatsapp")
+        .value
+        .trim(),
+
+      google_review_url:
+        document.getElementById("google_review_url")
+        .value
+        .trim()
+
+    };
+
+
+    try {
+
+      const response = await fetch(
+        FUNCTION_URL,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type": "application/json"
+          },
+
+          body: JSON.stringify(data)
+        }
+      );
+
+
+      const result =
+        await response.json();
+
+
+      if (!response.ok || !result.success) {
+
+        throw new Error(
+          result.message ||
+          "Aktivasi gagal."
+        );
+
+      }
+
+
+      message.className = "success";
+
+      message.style.display = "block";
+
+      message.innerText =
+        "✅ Kartu berhasil diaktifkan!";
+
+
+      reviewButton.href =
+        result.google_review_url;
+
+      reviewButton.style.display =
+        "block";
+
+
+      document
+        .getElementById("activationForm")
+        .reset();
+
+
+    } catch (error) {
+
+      message.className = "error";
+
+      message.style.display = "block";
+
+      message.innerText =
+        "❌ " + error.message;
+
+    }
+
+
+    button.disabled = false;
+
+    button.innerText =
+      "Aktifkan Kartu";
+
+  });
+
+</script>
+
+</body>
+</html>
