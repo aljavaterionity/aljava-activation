@@ -21,12 +21,11 @@ body {
   overflow-x: hidden;
 }
 
-/* BACKGROUND */
-
 .scene {
   position: fixed;
   inset: 0;
   z-index: 0;
+  overflow: hidden;
 
   background:
     radial-gradient(
@@ -79,17 +78,12 @@ body {
   opacity: .35;
 }
 
-/* CONTENT */
-
 .container {
   position: relative;
   z-index: 2;
-
   width: min(100%, 1100px);
   margin: auto;
 }
-
-/* HEADER */
 
 .header {
   text-align: center;
@@ -98,7 +92,6 @@ body {
 
 .brand {
   display: inline-block;
-
   font-size: 28px;
   font-weight: 900;
   letter-spacing: 3px;
@@ -121,7 +114,6 @@ body {
   width: 55px;
   height: 3px;
   margin: 10px auto 12px;
-
   border-radius: 10px;
 
   background:
@@ -132,8 +124,7 @@ body {
       #35f4ff
     );
 
-  box-shadow:
-    0 0 14px rgba(0,200,255,.7);
+  box-shadow: 0 0 14px rgba(0,200,255,.7);
 }
 
 .subtitle {
@@ -141,24 +132,18 @@ body {
   font-size: 14px;
 }
 
-/* STATS */
-
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 15px;
-
   margin-bottom: 20px;
 }
 
 .stat {
   position: relative;
   overflow: hidden;
-
   padding: 20px;
-
   min-height: 125px;
-
   border-radius: 20px;
 
   border: 1px solid rgba(45,210,255,.38);
@@ -179,17 +164,14 @@ body {
 
 .stat-title {
   color: #9ebbd0;
-
   font-size: 12px;
   font-weight: 700;
-
   text-transform: uppercase;
   letter-spacing: .7px;
 }
 
 .stat-number {
   margin-top: 10px;
-
   font-size: 27px;
   font-weight: 900;
 
@@ -211,12 +193,9 @@ body {
   font-size: 11px;
 }
 
-/* CARD */
-
 .card {
   margin-bottom: 20px;
   padding: 23px;
-
   border-radius: 24px;
 
   border: 1px solid rgba(45,210,255,.42);
@@ -239,7 +218,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  gap: 15px;
   margin-bottom: 20px;
 }
 
@@ -250,20 +229,15 @@ body {
 
 .card-description {
   margin: 5px 0 0;
-
   color: #91b1c9;
   font-size: 12px;
 }
-
-/* LIVE */
 
 .live {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-
   padding: 7px 11px;
-
   border-radius: 30px;
 
   border: 1px solid rgba(40,220,255,.35);
@@ -278,15 +252,10 @@ body {
 .live-dot {
   width: 7px;
   height: 7px;
-
   border-radius: 50%;
-
   background: #35eaff;
-
   box-shadow: 0 0 10px #35eaff;
 }
-
-/* REVENUE SUMMARY */
 
 .revenue-main {
   display: grid;
@@ -296,7 +265,6 @@ body {
 
 .big-revenue {
   padding: 25px;
-
   border-radius: 18px;
 
   border: 1px solid rgba(0,220,255,.28);
@@ -311,16 +279,13 @@ body {
 
 .big-label {
   color: #8db1c8;
-
   font-size: 12px;
   font-weight: 700;
-
   text-transform: uppercase;
 }
 
 .big-number {
   margin-top: 10px;
-
   font-size: 38px;
   font-weight: 900;
 
@@ -339,7 +304,6 @@ body {
 
 .profit-box {
   padding: 25px;
-
   border-radius: 18px;
 
   border: 1px solid rgba(45,210,255,.25);
@@ -354,49 +318,35 @@ body {
 
 .profit-number {
   margin-top: 10px;
-
   font-size: 28px;
   font-weight: 900;
-
   color: #55eaff;
 }
 
-/* TABLE */
-
 .table-wrapper {
   overflow-x: auto;
-
   border-radius: 15px;
-
   border: 1px solid rgba(60,110,160,.25);
 }
 
 table {
   width: 100%;
   min-width: 850px;
-
   border-collapse: collapse;
 }
 
 th,
 td {
   padding: 14px 15px;
-
   text-align: left;
-
-  border-bottom:
-    1px solid rgba(80,130,170,.18);
-
+  border-bottom: 1px solid rgba(80,130,170,.18);
   white-space: nowrap;
 }
 
 th {
   color: #77a8c6;
-
   background: rgba(4,22,55,.75);
-
   font-size: 10px;
-
   text-transform: uppercase;
   letter-spacing: .7px;
 }
@@ -414,18 +364,12 @@ tbody tr:last-child td {
   border-bottom: none;
 }
 
-/* STATUS */
-
 .status {
   display: inline-flex;
-
   padding: 5px 9px;
-
   border-radius: 20px;
-
   font-size: 10px;
   font-weight: 800;
-
   text-transform: uppercase;
 }
 
@@ -447,21 +391,14 @@ tbody tr:last-child td {
   border: 1px solid rgba(120,150,175,.25);
 }
 
-/* FOOTER */
-
 footer {
   margin-top: 25px;
-
   text-align: center;
-
   color: #7290a6;
   font-size: 10px;
 }
 
-/* MOBILE */
-
 @media (max-width: 850px) {
-
   .stats {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -472,7 +409,6 @@ footer {
 }
 
 @media (max-width: 550px) {
-
   body {
     padding: 22px 12px 35px;
   }
@@ -535,97 +471,43 @@ footer {
 
 </header>
 
-
-<!-- STATISTIK -->
-
 <section class="stats">
 
   <div class="stat">
-
-    <div class="stat-title">
-      Total Revenue
-    </div>
-
-    <div class="stat-number" id="totalRevenue">
-      Rp 0
-    </div>
-
-    <div class="stat-small">
-      Semua transaksi
-    </div>
-
+    <div class="stat-title">Total Revenue</div>
+    <div class="stat-number" id="totalRevenue">Rp 0</div>
+    <div class="stat-small">Semua transaksi</div>
   </div>
 
-
   <div class="stat">
-
-    <div class="stat-title">
-      Total HPP
-    </div>
-
-    <div class="stat-number" id="totalHpp">
-      Rp 0
-    </div>
-
-    <div class="stat-small">
-      Modal produk
-    </div>
-
+    <div class="stat-title">Total HPP</div>
+    <div class="stat-number" id="totalHpp">Rp 0</div>
+    <div class="stat-small">Modal produk</div>
   </div>
 
-
   <div class="stat">
-
-    <div class="stat-title">
-      Total Komisi
-    </div>
-
-    <div class="stat-number" id="totalCommission">
-      Rp 0
-    </div>
-
-    <div class="stat-small">
-      Komisi otomatis
-    </div>
-
+    <div class="stat-title">Total Komisi</div>
+    <div class="stat-number" id="totalCommission">Rp 0</div>
+    <div class="stat-small">Komisi otomatis</div>
   </div>
 
-
   <div class="stat">
-
-    <div class="stat-title">
-      Transaksi
-    </div>
-
-    <div class="stat-number" id="totalTransactions">
-      0
-    </div>
-
-    <div class="stat-small">
-      Total transaksi
-    </div>
-
+    <div class="stat-title">Transaksi</div>
+    <div class="stat-number" id="totalTransactions">0</div>
+    <div class="stat-small">Total transaksi</div>
   </div>
 
 </section>
-
-
-<!-- PROFIT -->
 
 <section class="card">
 
   <div class="card-header">
 
     <div>
-
-      <h2 class="card-title">
-        Ringkasan Revenue
-      </h2>
-
+      <h2 class="card-title">Ringkasan Revenue</h2>
       <p class="card-description">
         Perhitungan otomatis berdasarkan transaksi.
       </p>
-
     </div>
 
     <div class="live">
@@ -635,66 +517,40 @@ footer {
 
   </div>
 
-
   <div class="revenue-main">
 
     <div class="big-revenue">
-
-      <div class="big-label">
-        Total Revenue
-      </div>
-
-      <div class="big-number" id="mainRevenue">
-        Rp 0
-      </div>
-
+      <div class="big-label">Total Revenue</div>
+      <div class="big-number" id="mainRevenue">Rp 0</div>
     </div>
 
-
     <div class="profit-box">
-
-      <div class="profit-label">
-        Profit Bersih
-      </div>
-
-      <div class="profit-number" id="netProfit">
-        Rp 0
-      </div>
-
+      <div class="profit-label">Profit Bersih</div>
+      <div class="profit-number" id="netProfit">Rp 0</div>
     </div>
 
   </div>
 
 </section>
 
-
-<!-- TRANSAKSI -->
-
 <section class="card">
 
   <div class="card-header">
 
     <div>
-
-      <h2 class="card-title">
-        Transaksi Terbaru
-      </h2>
-
+      <h2 class="card-title">Transaksi Terbaru</h2>
       <p class="card-description">
         Data transaksi dari sistem ALJAVA.
       </p>
-
     </div>
 
   </div>
-
 
   <div class="table-wrapper">
 
     <table>
 
       <thead>
-
         <tr>
           <th>Tanggal</th>
           <th>Produk</th>
@@ -705,18 +561,14 @@ footer {
           <th>Profit</th>
           <th>Status</th>
         </tr>
-
       </thead>
-
 
       <tbody id="transactionsTable">
 
         <tr>
-
           <td colspan="8">
             Memuat data...
           </td>
-
         </tr>
 
       </tbody>
@@ -727,15 +579,17 @@ footer {
 
 </section>
 
-
 <footer>
   © 2026 ALJAVA TERIONITY • Revenue System
 </footer>
 
 </main>
 
-
 <script>
+
+/* =========================================
+   SUPABASE
+========================================= */
 
 const SUPABASE_URL =
   "https://lbzwmcxwxummitldxucj.supabase.co";
@@ -743,6 +597,10 @@ const SUPABASE_URL =
 const SUPABASE_KEY =
   "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
+
+/* =========================================
+   FORMAT RUPIAH
+========================================= */
 
 function rupiah(value) {
 
@@ -752,38 +610,38 @@ function rupiah(value) {
 }
 
 
+/* =========================================
+   LOAD REVENUE
+========================================= */
+
 async function loadRevenue() {
 
   try {
 
     const response = await fetch(
-
       SUPABASE_URL +
       "/rest/v1/Transactions" +
       "?select=product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date" +
       "&order=transaction_date.desc",
-
       {
-
         headers: {
-
           "apikey": SUPABASE_KEY,
-
-          "Authorization":
-            "Bearer " + SUPABASE_KEY
-
+          "Authorization": "Bearer " + SUPABASE_KEY
         }
-
       }
-
     );
 
 
     if (!response.ok) {
 
+      const errorText =
+        await response.text();
+
       throw new Error(
         "Gagal mengambil transaksi: " +
-        response.status
+        response.status +
+        " " +
+        errorText
       );
 
     }
@@ -869,31 +727,32 @@ async function loadRevenue() {
 
     renderTransactions(transactions);
 
+  }
 
-  } catch (error) {
+
+  catch (error) {
 
     console.error(error);
-
 
     document.getElementById(
       "transactionsTable"
     ).innerHTML =
 
       "<tr>" +
-
         "<td colspan='8' style='color:#ff9eb1;padding:25px'>" +
-
           "❌ " +
           error.message +
-
         "</td>" +
-
       "</tr>";
 
   }
 
 }
 
+
+/* =========================================
+   RENDER TRANSACTIONS
+========================================= */
 
 function renderTransactions(transactions) {
 
@@ -908,13 +767,9 @@ function renderTransactions(transactions) {
     table.innerHTML =
 
       "<tr>" +
-
         "<td colspan='8' style='text-align:center;color:#8aa8bd;padding:35px'>" +
-
           "Belum ada transaksi." +
-
         "</td>" +
-
       "</tr>";
 
     return;
@@ -956,16 +811,15 @@ function renderTransactions(transactions) {
       tx.transaction_date
         ? new Date(
             tx.transaction_date
-          ).toLocaleDateString(
-            "id-ID"
-          )
+          ).toLocaleDateString("id-ID")
         : "-";
 
 
-    let statusClass = "other";
-
     const status =
       tx.payment_status || "-";
+
+
+    let statusClass = "other";
 
 
     if (
@@ -1039,12 +893,14 @@ function renderTransactions(transactions) {
 }
 
 
+/* =========================================
+   START
+========================================= */
+
 loadRevenue();
 
 
-/*
-  Refresh otomatis setiap 30 detik
-*/
+/* Refresh setiap 30 detik */
 
 setInterval(
   loadRevenue,
