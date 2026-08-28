@@ -1,1205 +1,1478 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Dashboard ALJAVA TERIONITY</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    :root {
-      --blue: #168cff;
-      --cyan: #25e4ff;
-      --blue-dark: #0757c9;
-      --bg: #010713;
-      --text: #ffffff;
-      --muted: #a9bfd4;
-      --border: rgba(50, 180, 255, 0.28);
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 25px 14px 45px;
-
-      font-family:
-        Inter,
-        Poppins,
-        Arial,
-        Helvetica,
-        sans-serif;
-
-      color: var(--text);
-      overflow-x: hidden;
-
-      background: #010713;
-    }
-
-    /* =========================================
-       BACKGROUND
-       ========================================= */
-
-    .scene {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-
-      background:
-        radial-gradient(
-          ellipse at 50% 10%,
-          rgba(0, 132, 255, 0.38),
-          transparent 42%
-        ),
-        radial-gradient(
-          ellipse at 85% 35%,
-          rgba(0, 225, 255, 0.18),
-          transparent 30%
-        ),
-        radial-gradient(
-          ellipse at 10% 55%,
-          rgba(0, 100, 255, 0.18),
-          transparent 32%
-        ),
-        linear-gradient(
-          180deg,
-          #010817 0%,
-          #031b46 48%,
-          #010713 100%
-        );
-    }
-
-    /* =========================================
-       STARS
-       ========================================= */
-
-    .stars {
-      position: absolute;
-      inset: 0;
-
-      background-image:
-        radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.85) 0 1px,
-          transparent 1.5px
-        ),
-        radial-gradient(
-          circle,
-          rgba(80, 215, 255, 0.7) 0 1px,
-          transparent 1.5px
-        );
-
-      background-size:
-        97px 83px,
-        151px 137px;
-
-      background-position:
-        8px 3px,
-        31px 42px;
-
-      opacity: 0.38;
-    }
-
-    /* =========================================
-       GLOW
-       ========================================= */
-
-    .sun {
-      position: absolute;
-
-      width: 420px;
-      height: 420px;
-
-      right: -100px;
-      top: 12%;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(255, 255, 255, 0.9) 0 2%,
-          rgba(180, 245, 255, 0.55) 7%,
-          rgba(0, 210, 255, 0.28) 23%,
-          rgba(0, 140, 255, 0.12) 45%,
-          transparent 70%
-        );
-
-      filter: blur(1px);
-      opacity: 0.8;
-    }
-
-    /* =========================================
-       MOUNTAIN
-       ========================================= */
-
-    .mountain.back {
-      position: absolute;
-
-      left: -5%;
-      bottom: 28%;
-
-      width: 110%;
-      height: 350px;
-
-      opacity: 0.42;
-
-      clip-path: polygon(
-        0 100%,
-        0 58%,
-        8% 32%,
-        13% 48%,
-        19% 27%,
-        26% 59%,
-        34% 39%,
-        42% 66%,
-        49% 37%,
-        57% 62%,
-        64% 33%,
-        72% 57%,
-        79% 22%,
-        86% 52%,
-        94% 15%,
-        100% 35%,
-        100% 100%
-      );
-
-      background:
-        linear-gradient(
-          135deg,
-          #083a83,
-          #020d2b 72%
-        );
-    }
-
-    .mountain {
-      position: absolute;
-
-      left: -5%;
-      bottom: 24%;
-
-      width: 110%;
-      height: 430px;
-
-      clip-path: polygon(
-        0 100%,
-        0 58%,
-        8% 32%,
-        13% 48%,
-        19% 27%,
-        26% 59%,
-        34% 39%,
-        42% 66%,
-        49% 37%,
-        57% 62%,
-        64% 33%,
-        72% 57%,
-        79% 22%,
-        86% 52%,
-        94% 15%,
-        100% 35%,
-        100% 100%
-      );
-
-      background:
-        linear-gradient(
-          135deg,
-          rgba(10, 65, 145, 0.92),
-          rgba(1, 7, 28, 0.99) 72%
-        );
-
-      filter:
-        drop-shadow(
-          0 -8px 20px rgba(0, 150, 255, 0.25)
-        );
-    }
-
-    /* =========================================
-       MIST
-       ========================================= */
-
-    .mist {
-      position: absolute;
-
-      left: -10%;
-      bottom: 30%;
-
-      width: 120%;
-      height: 150px;
-
-      background:
-        radial-gradient(
-          ellipse at 20% 50%,
-          rgba(90, 210, 255, 0.18),
-          transparent 42%
-        ),
-        radial-gradient(
-          ellipse at 55% 30%,
-          rgba(50, 150, 255, 0.16),
-          transparent 42%
-        ),
-        radial-gradient(
-          ellipse at 85% 55%,
-          rgba(0, 210, 255, 0.14),
-          transparent 38%
-        );
-
-      filter: blur(20px);
-    }
-
-    /* =========================================
-       NEON WAVES
-       ========================================= */
-
-    .waves {
-      position: absolute;
-
-      left: -10%;
-      right: -10%;
-      bottom: -2%;
-
-      height: 49%;
-
-      opacity: 0.8;
-    }
-
-    .waves svg {
-      width: 100%;
-      height: 100%;
-    }
-
-    .waves path {
-      fill: none;
-      stroke: url(#waveGradient);
-      stroke-width: 1.4;
-    }
-
-    .glow {
-      position: absolute;
-
-      width: 70%;
-      height: 250px;
-
-      left: 15%;
-      bottom: 2%;
-
-      background:
-        radial-gradient(
-          ellipse,
-          rgba(0, 130, 255, 0.25),
-          transparent 68%
-        );
-
-      filter: blur(30px);
-    }
-
-    /* =========================================
-       CONTENT
-       ========================================= */
-
-    .content {
-      position: relative;
-      z-index: 2;
-
-      width: min(100%, 1100px);
-
-      margin: 0 auto;
-    }
-
-    /* =========================================
-       BRAND
-       ========================================= */
-
-    .brand {
-      text-align: center;
-
-      margin: 5px auto 30px;
-
-      animation: fadeDown 0.7s ease both;
-    }
-
-    .brand-name {
-      display: inline-block;
-
-      font-size: 20px;
-      font-weight: 900;
-
-      letter-spacing: 3px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #ffffff,
-          #35e7ff,
-          #168cff,
-          #ffffff
-        );
-
-      background-size: 250% auto;
-
-      -webkit-background-clip: text;
-      background-clip: text;
-
-      color: transparent;
-
-      animation: shine 5s linear infinite;
-
-      text-shadow:
-        0 0 25px rgba(0, 190, 255, 0.18);
-    }
-
-    .brand-line {
-      width: 55px;
-      height: 2px;
-
-      margin: 8px auto 0;
-
-      border-radius: 999px;
-
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          #25e4ff,
-          transparent
-        );
-
-      box-shadow:
-        0 0 12px rgba(37, 228, 255, 0.7);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Dashboard ALJAVA TERIONITY</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --blue: #168cff;
+  --cyan: #25e4ff;
+  --blue-dark: #0757c9;
+  --bg: #010713;
+  --text: #ffffff;
+  --muted: #a9bfd4;
+  --border: rgba(50, 180, 255, 0.28);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 25px 14px 45px;
+
+  font-family:
+    Inter,
+    Poppins,
+    Arial,
+    Helvetica,
+    sans-serif;
+
+  color: var(--text);
+  overflow-x: hidden;
+
+  background: #010713;
+}
+
+
+/* =====================================================
+   BACKGROUND
+===================================================== */
+
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 10%,
+      rgba(0, 132, 255, 0.38),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 85% 35%,
+      rgba(0, 225, 255, 0.18),
+      transparent 30%
+    ),
+    radial-gradient(
+      ellipse at 10% 55%,
+      rgba(0, 100, 255, 0.18),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #010817 0%,
+      #031b46 48%,
+      #010713 100%
+    );
+}
+
+
+/* =====================================================
+   STARS
+===================================================== */
+
+.stars {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.85) 0 1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      circle,
+      rgba(80, 215, 255, 0.7) 0 1px,
+      transparent 1.5px
+    );
+
+  background-size:
+    97px 83px,
+    151px 137px;
+
+  background-position:
+    8px 3px,
+    31px 42px;
+
+  opacity: 0.38;
+}
+
+
+/* =====================================================
+   GLOW
+===================================================== */
+
+.sun {
+  position: absolute;
+
+  width: 420px;
+  height: 420px;
+
+  right: -100px;
+  top: 12%;
+
+  border-radius: 50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(255, 255, 255, 0.9) 0 2%,
+      rgba(180, 245, 255, 0.55) 7%,
+      rgba(0, 210, 255, 0.28) 23%,
+      rgba(0, 140, 255, 0.12) 45%,
+      transparent 70%
+    );
+
+  filter: blur(1px);
+  opacity: 0.8;
+}
+
+
+/* =====================================================
+   MOUNTAIN
+===================================================== */
+
+.mountain.back {
+  position: absolute;
+
+  left: -5%;
+  bottom: 28%;
+
+  width: 110%;
+  height: 350px;
+
+  opacity: 0.42;
+
+  clip-path: polygon(
+    0 100%,
+    0 58%,
+    8% 32%,
+    13% 48%,
+    19% 27%,
+    26% 59%,
+    34% 39%,
+    42% 66%,
+    49% 37%,
+    57% 62%,
+    64% 33%,
+    72% 57%,
+    79% 22%,
+    86% 52%,
+    94% 15%,
+    100% 35%,
+    100% 100%
+  );
+
+  background:
+    linear-gradient(
+      135deg,
+      #083a83,
+      #020d2b 72%
+    );
+}
+
+.mountain {
+  position: absolute;
+
+  left: -5%;
+  bottom: 24%;
+
+  width: 110%;
+  height: 430px;
+
+  clip-path: polygon(
+    0 100%,
+    0 58%,
+    8% 32%,
+    13% 48%,
+    19% 27%,
+    26% 59%,
+    34% 39%,
+    42% 66%,
+    49% 37%,
+    57% 62%,
+    64% 33%,
+    72% 57%,
+    79% 22%,
+    86% 52%,
+    94% 15%,
+    100% 35%,
+    100% 100%
+  );
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(10, 65, 145, 0.92),
+      rgba(1, 7, 28, 0.99) 72%
+    );
+
+  filter:
+    drop-shadow(
+      0 -8px 20px rgba(0, 150, 255, 0.25)
+    );
+}
+
+
+/* =====================================================
+   MIST
+===================================================== */
+
+.mist {
+  position: absolute;
+
+  left: -10%;
+  bottom: 30%;
+
+  width: 120%;
+  height: 150px;
+
+  background:
+    radial-gradient(
+      ellipse at 20% 50%,
+      rgba(90, 210, 255, 0.18),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 55% 30%,
+      rgba(50, 150, 255, 0.16),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 85% 55%,
+      rgba(0, 210, 255, 0.14),
+      transparent 38%
+    );
+
+  filter: blur(20px);
+}
+
+
+/* =====================================================
+   WAVES
+===================================================== */
+
+.waves {
+  position: absolute;
+
+  left: -10%;
+  right: -10%;
+  bottom: -2%;
+
+  height: 49%;
 
-    /* =========================================
-       HERO
-       ========================================= */
+  opacity: 0.8;
+}
 
-    .hero {
-      text-align: center;
+.waves svg {
+  width: 100%;
+  height: 100%;
+}
+
+.waves path {
+  fill: none;
+
+  stroke: url(#waveGradient);
+
+  stroke-width: 1.4;
+}
 
-      margin: 0 auto 30px;
+.glow {
+  position: absolute;
 
-      animation: fadeUp 0.8s ease both;
-    }
+  width: 70%;
+  height: 250px;
 
-    .hero h1 {
-      margin: 0;
+  left: 15%;
+  bottom: 2%;
 
-      font-size: 40px;
+  background:
+    radial-gradient(
+      ellipse,
+      rgba(0, 130, 255, 0.25),
+      transparent 68%
+    );
 
-      line-height: 1.15;
+  filter: blur(30px);
+}
 
-      font-weight: 850;
 
-      letter-spacing: -1px;
+/* =====================================================
+   CONTENT
+===================================================== */
 
-      text-shadow:
-        0 0 15px rgba(0, 190, 255, 0.22);
-    }
+.content {
+  position: relative;
+  z-index: 2;
 
-    .hero h1 span {
-      background:
-        linear-gradient(
-          90deg,
-          #34dfff,
-          #168cff,
-          #00e5ff
-        );
+  width: min(100%, 1100px);
 
-      -webkit-background-clip: text;
-      background-clip: text;
+  margin: 0 auto;
+}
 
-      color: transparent;
-    }
 
-    .hero p {
-      margin: 13px auto 0;
+/* =====================================================
+   BRAND
+===================================================== */
 
-      max-width: 620px;
+.brand {
+  text-align: center;
 
-      color: #d6e9f7;
+  margin: 5px auto 25px;
 
-      font-size: 15px;
+  animation: fadeDown 0.7s ease both;
+}
 
-      line-height: 1.65;
-    }
+.brand-name {
+  display: inline-block;
 
-    /* =========================================
-       MAIN CARD
-       ========================================= */
+  font-size: 20px;
+  font-weight: 900;
 
-    .dashboard-card {
-      width: 100%;
+  letter-spacing: 3px;
 
-      margin: 0 auto;
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #35e7ff,
+      #168cff,
+      #ffffff
+    );
 
-      padding: 28px 30px 30px;
+  background-size: 250% auto;
 
-      border-radius: 24px;
+  -webkit-background-clip: text;
+  background-clip: text;
 
-      border: 1px solid rgba(55, 210, 255, 0.55);
+  color: transparent;
 
-      background:
-        linear-gradient(
-          145deg,
-          rgba(4, 25, 72, 0.82),
-          rgba(1, 8, 35, 0.94)
-        );
+  animation: shine 5s linear infinite;
 
-      box-shadow:
-        0 0 35px rgba(0, 160, 255, 0.22),
-        0 25px 75px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  text-shadow:
+    0 0 25px rgba(0, 190, 255, 0.18);
+}
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+.brand-line {
+  width: 55px;
+  height: 2px;
 
-      animation: cardIn 0.9s ease both;
-    }
+  margin: 8px auto 0;
 
-    .section-head {
-      margin-bottom: 20px;
-    }
+  border-radius: 999px;
 
-    .section-head h2 {
-      margin: 0 0 6px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #25e4ff,
+      transparent
+    );
 
-      font-size: 21px;
+  box-shadow:
+    0 0 12px rgba(37, 228, 255, 0.7);
+}
 
-      color: #ffffff;
 
-      letter-spacing: -0.3px;
-    }
+/* =====================================================
+   HERO
+===================================================== */
 
-    .section-head p {
-      margin: 0;
+.hero {
+  text-align: center;
 
-      color: #9db7cc;
+  margin: 0 auto 25px;
 
-      font-size: 13px;
-    }
+  animation: fadeUp 0.8s ease both;
+}
 
-    /* =========================================
-       STATISTICS
-       ========================================= */
+.hero h1 {
+  margin: 0;
 
-    .stats {
-      display: grid;
+  font-size: 40px;
 
-      grid-template-columns:
-        repeat(5, 1fr);
+  line-height: 1.15;
 
-      gap: 14px;
+  font-weight: 850;
 
-      margin-bottom: 28px;
-    }
+  letter-spacing: -1px;
 
-    .stat {
-      min-width: 0;
+  text-shadow:
+    0 0 15px rgba(0, 190, 255, 0.22);
+}
 
-      padding: 18px 15px;
+.hero h1 span {
+  background:
+    linear-gradient(
+      90deg,
+      #34dfff,
+      #168cff,
+      #00e5ff
+    );
 
-      border-radius: 16px;
+  -webkit-background-clip: text;
+  background-clip: text;
 
-      border: 1px solid rgba(55, 190, 255, 0.34);
+  color: transparent;
+}
 
-      background:
-        linear-gradient(
-          145deg,
-          rgba(9, 46, 95, 0.55),
-          rgba(2, 16, 46, 0.7)
-        );
+.hero p {
+  margin: 13px auto 0;
 
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,0.04),
-        0 0 18px rgba(0, 150, 255, 0.07);
+  max-width: 700px;
 
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-    }
+  color: #d6e9f7;
 
-    .stat:hover {
-      transform: translateY(-3px);
+  font-size: 15px;
 
-      border-color:
-        rgba(55, 220, 255, 0.65);
+  line-height: 1.65;
+}
 
-      box-shadow:
-        0 0 24px rgba(0, 170, 255, 0.16);
-    }
 
-    .stat-label {
-      color: #9db7cc;
+/* =====================================================
+   CARD
+===================================================== */
 
-      font-size: 11px;
+.card {
+  width: 100%;
 
-      margin-bottom: 8px;
-    }
+  margin: 0 auto 20px;
 
-    .stat-value {
-      color: #ffffff;
+  padding: 24px;
 
-      font-size: 20px;
+  border-radius: 24px;
 
-      font-weight: 850;
+  border: 1px solid rgba(55, 210, 255, 0.55);
 
-      line-height: 1.25;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(4, 25, 72, 0.82),
+      rgba(1, 8, 35, 0.94)
+    );
 
-      word-break: break-word;
-    }
+  box-shadow:
+    0 0 35px rgba(0, 160, 255, 0.22),
+    0 25px 75px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 
-    .stat.main .stat-value {
-      background:
-        linear-gradient(
-          90deg,
-          #34dfff,
-          #168cff,
-          #00e5ff
-        );
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
 
-      -webkit-background-clip: text;
-      background-clip: text;
+  animation: cardIn 0.9s ease both;
+}
 
-      color: transparent;
-    }
 
-    /* =========================================
-       SEPARATOR
-       ========================================= */
+/* =====================================================
+   SECTION TITLE
+===================================================== */
 
-    hr {
-      border: 0;
+.section-head {
+  margin-bottom: 18px;
+}
 
-      height: 1px;
+.section-head h2 {
+  margin: 0 0 6px;
 
-      margin: 25px 0;
+  font-size: 21px;
 
-      background:
-        linear-gradient(
-          90deg,
-          transparent,
-          rgba(55, 180, 255, 0.35),
-          transparent
-        );
-    }
+  color: #ffffff;
 
-    /* =========================================
-       TABLE
-       ========================================= */
+  letter-spacing: -0.3px;
+}
 
-    .table-title {
-      margin-bottom: 15px;
-    }
+.section-head p {
+  margin: 0;
 
-    .table-title h2 {
-      margin: 0 0 6px;
+  color: #9db7cc;
 
-      font-size: 21px;
-    }
+  font-size: 13px;
+}
 
-    .table-title p {
-      margin: 0;
 
-      color: #9db7cc;
+/* =====================================================
+   STAT GRID
+===================================================== */
 
-      font-size: 13px;
-    }
+.stats {
+  display: grid;
 
-    .table-wrap {
-      width: 100%;
+  grid-template-columns:
+    repeat(5, 1fr);
 
-      overflow-x: auto;
+  gap: 14px;
 
-      border-radius: 16px;
+  margin-bottom: 20px;
+}
 
-      border: 1px solid rgba(55, 190, 255, 0.3);
+.stat {
+  min-width: 0;
 
-      background:
-        rgba(2, 13, 37, 0.55);
-    }
+  padding: 18px 16px;
 
-    table {
-      width: 100%;
+  border-radius: 17px;
 
-      min-width: 820px;
+  border:
+    1px solid rgba(55, 210, 255, 0.32);
 
-      border-collapse: collapse;
-    }
+  background:
+    linear-gradient(
+      145deg,
+      rgba(8, 42, 92, 0.62),
+      rgba(2, 13, 40, 0.78)
+    );
 
-    thead {
-      background:
-        linear-gradient(
-          135deg,
-          rgba(8, 55, 110, 0.7),
-          rgba(5, 28, 68, 0.8)
-        );
-    }
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04),
+    0 0 18px rgba(0,150,255,0.08);
 
-    th {
-      padding: 15px 13px;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
 
-      text-align: left;
+.stat:hover {
+  transform: translateY(-3px);
 
-      color: #bfefff;
+  border-color:
+    rgba(55, 220, 255, 0.65);
 
-      font-size: 11px;
+  box-shadow:
+    0 0 25px rgba(0,180,255,0.18);
+}
 
-      font-weight: 800;
+.stat-label {
+  color: #91abc0;
 
-      white-space: nowrap;
+  font-size: 11px;
 
-      border-bottom:
-        1px solid rgba(55, 190, 255, 0.28);
-    }
+  text-transform: uppercase;
 
-    td {
-      padding: 14px 13px;
+  letter-spacing: 1px;
 
-      color: #dceefa;
+  margin-bottom: 8px;
+}
 
-      font-size: 12px;
+.stat-value {
+  color: #ffffff;
 
-      border-bottom:
-        1px solid rgba(90, 150, 200, 0.11);
+  font-size: 21px;
 
-      white-space: nowrap;
-    }
+  font-weight: 850;
 
-    tbody tr {
-      transition:
-        background 0.2s ease;
-    }
+  white-space: nowrap;
+}
 
-    tbody tr:hover {
-      background:
-        rgba(0, 150, 255, 0.07);
-    }
+.stat-value.profit {
+  color: #43eaff;
 
-    tbody tr:last-child td {
-      border-bottom: 0;
-    }
+  text-shadow:
+    0 0 15px rgba(40,220,255,0.28);
+}
 
-    /* =========================================
-       STATUS
-       ========================================= */
 
-    .status {
-      display: inline-flex;
+/* =====================================================
+   FILTER
+===================================================== */
 
-      align-items: center;
+.filters {
+  display: grid;
 
-      justify-content: center;
+  grid-template-columns:
+    repeat(3, 1fr);
 
-      min-width: 60px;
+  gap: 14px;
 
-      padding: 5px 9px;
+  margin-bottom: 20px;
+}
 
-      border-radius: 999px;
+.filter-box label {
+  display: block;
 
-      font-size: 10px;
+  margin-bottom: 7px;
 
-      font-weight: 800;
+  color: #bfefff;
 
-      text-transform: capitalize;
+  font-size: 12px;
 
-      border: 1px solid transparent;
-    }
+  font-weight: 750;
+}
 
-    .status.paid {
-      color: #cfffff;
+select {
+  width: 100%;
 
-      background:
-        rgba(0, 210, 180, 0.12);
+  height: 48px;
 
-      border-color:
-        rgba(45, 240, 210, 0.35);
-    }
+  padding: 0 13px;
 
-    .status.pending {
-      color: #fff0c8;
+  border:
+    1px solid rgba(100, 145, 190, 0.45);
 
-      background:
-        rgba(255, 190, 50, 0.1);
+  border-radius: 12px;
 
-      border-color:
-        rgba(255, 205, 70, 0.3);
-    }
+  outline: none;
 
-    .status.other {
-      color: #c9d7e5;
+  color: #f7fdff;
 
-      background:
-        rgba(130, 160, 190, 0.1);
+  background:
+    rgba(5, 20, 54, 0.9);
 
-      border-color:
-        rgba(130, 160, 190, 0.25);
-    }
+  font-family: inherit;
 
-    /* =========================================
-       REFRESH
-       ========================================= */
+  font-size: 13px;
 
-    .refresh-info {
-      text-align: center;
+  cursor: pointer;
+}
 
-      margin-top: 15px;
+select:focus {
+  border-color: #25ddff;
 
-      color: #7795aa;
+  box-shadow:
+    0 0 0 3px rgba(0, 190, 255, 0.10),
+    0 0 20px rgba(0, 170, 255, 0.18);
+}
 
-      font-size: 10px;
-    }
+option {
+  background: #061b3b;
 
-    .refresh-dot {
-      display: inline-block;
+  color: white;
+}
 
-      width: 6px;
-      height: 6px;
 
-      margin-right: 5px;
+/* =====================================================
+   CHART
+===================================================== */
 
-      border-radius: 50%;
+.chart-card {
+  margin-bottom: 20px;
 
-      background: #25e4ff;
+  padding: 20px;
 
-      box-shadow:
-        0 0 9px rgba(37, 228, 255, 0.8);
+  border:
+    1px solid rgba(55, 210, 255, 0.32);
 
-      animation: pulse 1.8s ease infinite;
-    }
+  border-radius: 18px;
 
-    /* =========================================
-       FOOTER
-       ========================================= */
+  background:
+    rgba(2, 13, 40, 0.62);
 
-    footer {
-      margin-top: 35px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
 
-      text-align: center;
+.chart-head {
+  display: flex;
 
-      color: #7792a7;
+  align-items: center;
 
-      font-size: 11px;
+  justify-content: space-between;
 
-      letter-spacing: 0.2px;
-    }
+  gap: 10px;
 
-    /* =========================================
-       ANIMATIONS
-       ========================================= */
+  margin-bottom: 15px;
+}
 
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(15px);
-      }
+.chart-title {
+  font-size: 16px;
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  font-weight: 800;
+}
 
-    @keyframes fadeDown {
-      from {
-        opacity: 0;
-        transform: translateY(-10px);
-      }
+.chart-info {
+  color: #8faac0;
 
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+  font-size: 11px;
+}
 
-    @keyframes cardIn {
-      from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.985);
-      }
+.chart-wrap {
+  position: relative;
 
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
+  width: 100%;
 
-    @keyframes shine {
-      0% {
-        background-position: 0% center;
-      }
+  height: 300px;
+}
 
-      100% {
-        background-position: 250% center;
-      }
-    }
+#revenueChart {
+  width: 100%;
+  height: 100%;
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 0.55;
-        transform: scale(0.9);
-      }
+  display: block;
+}
 
-      50% {
-        opacity: 1;
-        transform: scale(1.15);
-      }
-    }
 
-    /* =========================================
-       MOBILE
-       ========================================= */
+/* =====================================================
+   TABLE
+===================================================== */
 
-    @media (max-width: 900px) {
+.table-card {
+  overflow: hidden;
 
-      .stats {
-        grid-template-columns:
-          repeat(2, 1fr);
-      }
+  border:
+    1px solid rgba(55, 210, 255, 0.32);
 
-      .stat.main {
-        grid-column: span 2;
-      }
-    }
+  border-radius: 18px;
 
-    @media (max-width: 700px) {
+  background:
+    rgba(2, 13, 40, 0.62);
+}
 
-      body {
-        padding:
-          20px 12px 32px;
-      }
+.table-top {
+  padding: 18px 20px;
 
-      .brand {
-        margin-bottom: 25px;
-      }
+  border-bottom:
+    1px solid rgba(55, 180, 255, 0.18);
 
-      .brand-name {
-        font-size: 17px;
-        letter-spacing: 2.4px;
-      }
+  display: flex;
 
-      .hero {
-        margin-bottom: 24px;
-      }
+  align-items: center;
 
-      .hero h1 {
-        font-size: 30px;
-        letter-spacing: -0.7px;
-      }
+  justify-content: space-between;
 
-      .hero p {
-        font-size: 13px;
-        line-height: 1.6;
-        padding: 0 5px;
-      }
+  gap: 10px;
+}
 
-      .hero p br {
-        display: none;
-      }
+.table-title {
+  font-size: 16px;
 
-      .dashboard-card {
-        padding:
-          23px 17px 21px;
+  font-weight: 800;
+}
 
-        border-radius: 21px;
-      }
+.table-count {
+  color: #8faac0;
 
-      .section-head h2,
-      .table-title h2 {
-        font-size: 19px;
-      }
+  font-size: 11px;
+}
 
-      .section-head p,
-      .table-title p {
-        font-size: 12px;
-      }
+.table-scroll {
+  width: 100%;
 
-      .stats {
-        grid-template-columns: 1fr 1fr;
+  overflow-x: auto;
+}
 
-        gap: 10px;
-      }
+table {
+  width: 100%;
 
-      .stat {
-        padding: 15px 12px;
-      }
+  border-collapse: collapse;
 
-      .stat.main {
-        grid-column: span 2;
-      }
+  min-width: 850px;
+}
 
-      .stat-value {
-        font-size: 17px;
-      }
+thead {
+  background:
+    rgba(0, 110, 220, 0.12);
+}
 
-      .stat-label {
-        font-size: 10px;
-      }
+th {
+  padding: 13px 14px;
 
-      .mountain {
-        bottom: 29%;
-        height: 300px;
-      }
+  text-align: left;
 
-      .mountain.back {
-        bottom: 28%;
-        height: 260px;
-      }
+  color: #a9d9ed;
 
-      .waves {
-        height: 40%;
-      }
+  font-size: 11px;
 
-      .sun {
-        width: 300px;
-        height: 300px;
-        right: -120px;
-        top: 15%;
-      }
-    }
+  text-transform: uppercase;
 
-    @media (max-width: 380px) {
+  letter-spacing: 0.6px;
 
-      body {
-        padding-left: 9px;
-        padding-right: 9px;
-      }
+  white-space: nowrap;
+}
 
-      .hero h1 {
-        font-size: 27px;
-      }
+td {
+  padding: 14px;
 
-      .dashboard-card {
-        padding-left: 14px;
-        padding-right: 14px;
-      }
+  border-top:
+    1px solid rgba(80, 150, 200, 0.10);
 
-      .stats {
-        gap: 8px;
-      }
+  color: #dcecf6;
 
-      .stat {
-        padding: 13px 10px;
-      }
+  font-size: 12px;
 
-      .stat-value {
-        font-size: 15px;
-      }
-    }
-  </style>
+  white-space: nowrap;
+}
+
+tbody tr {
+  transition:
+    background 0.2s ease;
+}
+
+tbody tr:hover {
+  background:
+    rgba(0, 150, 255, 0.07);
+}
+
+.id-small {
+  max-width: 125px;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  color: #8eb5cb;
+}
+
+.money {
+  font-weight: 700;
+}
+
+.profit-text {
+  color: #43eaff;
+
+  font-weight: 800;
+}
+
+.status {
+  display: inline-flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  min-width: 62px;
+
+  padding: 5px 9px;
+
+  border-radius: 999px;
+
+  font-size: 10px;
+
+  font-weight: 800;
+
+  text-transform: uppercase;
+}
+
+.status.paid {
+  color: #bffcff;
+
+  border:
+    1px solid rgba(50,230,255,0.4);
+
+  background:
+    rgba(0,210,255,0.10);
+}
+
+.status.pending {
+  color: #ffeab5;
+
+  border:
+    1px solid rgba(255,200,80,0.4);
+
+  background:
+    rgba(255,180,50,0.10);
+}
+
+.status.other {
+  color: #d0dce5;
+
+  border:
+    1px solid rgba(160,180,200,0.3);
+
+  background:
+    rgba(120,140,160,0.10);
+}
+
+
+/* =====================================================
+   LOADING / ERROR
+===================================================== */
+
+.loading {
+  padding: 40px 20px;
+
+  text-align: center;
+
+  color: #8faac0;
+
+  font-size: 13px;
+}
+
+.error-box {
+  padding: 18px;
+
+  margin-bottom: 20px;
+
+  border-radius: 14px;
+
+  border:
+    1px solid rgba(255,90,120,0.4);
+
+  background:
+    rgba(220,40,75,0.10);
+
+  color: #ffdce4;
+
+  font-size: 13px;
+
+  line-height: 1.5;
+
+  display: none;
+}
+
+
+/* =====================================================
+   FOOTER
+===================================================== */
+
+footer {
+  margin-top: 30px;
+
+  text-align: center;
+
+  color: #7792a7;
+
+  font-size: 11px;
+
+  letter-spacing: 0.2px;
+}
+
+
+/* =====================================================
+   ANIMATIONS
+===================================================== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: 0% center;
+  }
+
+  100% {
+    background-position: 250% center;
+  }
+}
+
+
+/* =====================================================
+   MOBILE
+===================================================== */
+
+@media (max-width: 900px) {
+
+  .stats {
+    grid-template-columns:
+      repeat(3, 1fr);
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  body {
+    padding:
+      20px 12px 32px;
+  }
+
+  .brand {
+    margin-bottom: 22px;
+  }
+
+  .brand-name {
+    font-size: 17px;
+
+    letter-spacing: 2.4px;
+  }
+
+  .hero {
+    margin-bottom: 22px;
+  }
+
+  .hero h1 {
+    font-size: 30px;
+
+    letter-spacing: -0.7px;
+  }
+
+  .hero p {
+    font-size: 13px;
+
+    line-height: 1.6;
+
+    padding: 0 5px;
+  }
+
+  .hero p br {
+    display: none;
+  }
+
+  .card {
+    padding: 17px;
+
+    border-radius: 21px;
+  }
+
+  .stats {
+    grid-template-columns:
+      repeat(2, 1fr);
+
+    gap: 10px;
+  }
+
+  .stat {
+    padding: 15px 13px;
+  }
+
+  .stat-value {
+    font-size: 17px;
+  }
+
+  .filters {
+    grid-template-columns: 1fr;
+
+    gap: 10px;
+  }
+
+  .chart-card {
+    padding: 15px;
+  }
+
+  .chart-wrap {
+    height: 240px;
+  }
+
+  .chart-head {
+    display: block;
+  }
+
+  .chart-info {
+    margin-top: 5px;
+  }
+
+  .table-top {
+    padding: 15px;
+  }
+
+  .mountain {
+    bottom: 29%;
+
+    height: 300px;
+  }
+
+  .mountain.back {
+    bottom: 28%;
+
+    height: 260px;
+  }
+
+  .waves {
+    height: 40%;
+  }
+
+  .sun {
+    width: 300px;
+    height: 300px;
+
+    right: -120px;
+    top: 15%;
+  }
+
+}
+
+@media (max-width: 380px) {
+
+  body {
+    padding-left: 9px;
+    padding-right: 9px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .card {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .stats {
+    gap: 8px;
+  }
+
+  .stat {
+    padding: 13px 10px;
+  }
+
+  .stat-label {
+    font-size: 9px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+  }
+
+}
+</style>
 </head>
+
 
 <body>
 
-  <!-- =====================================
-       BACKGROUND
-       ===================================== -->
 
-  <div class="scene" aria-hidden="true">
+<!-- =====================================================
+     BACKGROUND
+===================================================== -->
 
-    <div class="stars"></div>
+<div class="scene" aria-hidden="true">
 
-    <div class="sun"></div>
+  <div class="stars"></div>
 
-    <div class="mountain back"></div>
+  <div class="sun"></div>
 
-    <div class="mountain"></div>
+  <div class="mountain back"></div>
 
-    <div class="mist"></div>
+  <div class="mountain"></div>
 
-    <div class="waves">
+  <div class="mist"></div>
 
-      <svg
-        viewBox="0 0 1600 520"
-        preserveAspectRatio="none"
-      >
+  <div class="waves">
 
-        <defs>
+    <svg
+      viewBox="0 0 1600 520"
+      preserveAspectRatio="none"
+    >
 
-          <linearGradient
-            id="waveGradient"
-            x1="0"
-            y1="0"
-            x2="1"
-            y2="0"
-          >
+      <defs>
 
-            <stop
-              offset="0"
-              stop-color="#00d9ff"
-            />
+        <linearGradient
+          id="waveGradient"
+          x1="0"
+          y1="0"
+          x2="1"
+          y2="0"
+        >
 
-            <stop
-              offset=".5"
-              stop-color="#168cff"
-            />
+          <stop
+            offset="0"
+            stop-color="#00d9ff"
+          />
 
-            <stop
-              offset="1"
-              stop-color="#35f4ff"
-            />
+          <stop
+            offset=".5"
+            stop-color="#168cff"
+          />
 
-          </linearGradient>
+          <stop
+            offset="1"
+            stop-color="#35f4ff"
+          />
 
-        </defs>
+        </linearGradient>
 
-        <path d="M-30 400 C150 220 260 470 470 320 S770 150 960 350 S1250 490 1630 160"/>
-        <path d="M-30 420 C150 240 260 490 470 340 S770 170 960 370 S1250 510 1630 180"/>
-        <path d="M-30 440 C150 260 260 510 470 360 S770 190 960 390 S1250 530 1630 200"/>
-        <path d="M-30 460 C150 280 260 530 470 380 S770 210 960 410 S1250 550 1630 220"/>
-        <path d="M-30 480 C150 300 260 550 470 400 S770 230 960 430 S1250 570 1630 240"/>
-        <path d="M-30 500 C150 320 260 570 470 420 S770 250 960 450 S1250 590 1630 260"/>
-        <path d="M-30 520 C150 340 260 590 470 440 S770 270 960 470 S1250 610 1630 280"/>
+      </defs>
 
-      </svg>
+      <path d="M-30 400 C150 220 260 470 470 320 S770 150 960 350 S1250 490 1630 160"/>
 
+      <path d="M-30 420 C150 240 260 490 470 340 S770 170 960 370 S1250 510 1630 180"/>
+
+      <path d="M-30 440 C150 260 260 510 470 360 S770 190 960 390 S1250 530 1630 200"/>
+
+      <path d="M-30 460 C150 280 260 530 470 380 S770 210 960 410 S1250 550 1630 220"/>
+
+      <path d="M-30 480 C150 300 260 550 470 400 S770 230 960 430 S1250 570 1630 240"/>
+
+      <path d="M-30 500 C150 320 260 570 470 420 S770 250 960 450 S1250 590 1630 260"/>
+
+      <path d="M-30 520 C150 340 260 590 470 440 S770 270 960 470 S1250 610 1630 280"/>
+
+    </svg>
+
+  </div>
+
+  <div class="glow"></div>
+
+</div>
+
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<main class="content">
+
+
+  <!-- BRAND -->
+
+  <div class="brand">
+
+    <div class="brand-name">
+      ALJAVA TERIONITY
     </div>
 
-    <div class="glow"></div>
+    <div class="brand-line"></div>
 
   </div>
 
 
-  <!-- =====================================
-       CONTENT
-       ===================================== -->
+  <!-- HERO -->
 
-  <main class="content">
+  <section class="hero">
 
-    <!-- BRAND -->
+    <h1>
+      Dashboard
+      <span>ALJAVA</span>
+    </h1>
 
-    <div class="brand">
+    <p>
+      Pantau revenue, transaksi, HPP, komisi dan profit bisnis Anda
+      secara realtime.
+    </p>
 
-      <div class="brand-name">
-        ALJAVA TERIONITY
-      </div>
+  </section>
 
-      <div class="brand-line"></div>
+
+
+  <!-- ERROR -->
+
+  <div
+    id="errorBox"
+    class="error-box"
+  ></div>
+
+
+
+  <!-- MAIN CARD -->
+
+  <section class="card">
+
+
+    <!-- STATISTICS -->
+
+    <div class="section-head">
+
+      <h2>
+        Ringkasan Bisnis
+      </h2>
+
+      <p>
+        Data dihitung langsung dari transaksi di sistem.
+      </p>
 
     </div>
 
 
-    <!-- HERO -->
+    <div class="stats">
 
-    <section class="hero">
 
-      <h1>
-        Dashboard
-        <span>ALJAVA</span>
-      </h1>
+      <div class="stat">
+
+        <div class="stat-label">
+          Revenue
+        </div>
+
+        <div
+          class="stat-value"
+          id="totalRevenue"
+        >
+          Rp 0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          HPP
+        </div>
+
+        <div
+          class="stat-value"
+          id="totalHpp"
+        >
+          Rp 0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          Komisi
+        </div>
+
+        <div
+          class="stat-value"
+          id="totalCommission"
+        >
+          Rp 0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          Net Profit
+        </div>
+
+        <div
+          class="stat-value profit"
+          id="netProfit"
+        >
+          Rp 0
+        </div>
+
+      </div>
+
+
+      <div class="stat">
+
+        <div class="stat-label">
+          Transaksi
+        </div>
+
+        <div
+          class="stat-value"
+          id="totalTransactions"
+        >
+          0
+        </div>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- FILTER -->
+
+    <div class="section-head">
+
+      <h2>
+        Filter Dashboard
+      </h2>
 
       <p>
-        Pantau transaksi, pendapatan, HPP, komisi,
-        <br>
-        dan keuntungan bisnis Anda secara realtime.
+        Pilih Sales, Customer atau Product untuk melihat data masing-masing.
       </p>
 
-    </section>
+    </div>
 
 
-    <!-- DASHBOARD -->
+    <div class="filters">
 
-    <section class="dashboard-card">
 
-      <!-- STATISTICS -->
+      <div class="filter-box">
 
-      <div class="section-head">
+        <label for="salesFilter">
+          Sales
+        </label>
 
-        <h2>
-          Ringkasan Bisnis
-        </h2>
+        <select id="salesFilter">
 
-        <p>
-          Data transaksi terbaru dari sistem ALJAVA
-        </p>
+          <option value="all">
+            Semua Sales
+          </option>
+
+        </select>
 
       </div>
 
 
-      <div class="stats">
+      <div class="filter-box">
 
-        <div class="stat main">
+        <label for="customerFilter">
+          Customer
+        </label>
 
-          <div class="stat-label">
-            Total Revenue
+        <select id="customerFilter">
+
+          <option value="all">
+            Semua Customer
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="filter-box">
+
+        <label for="productFilter">
+          Product
+        </label>
+
+        <select id="productFilter">
+
+          <option value="all">
+            Semua Product
+          </option>
+
+        </select>
+
+      </div>
+
+
+    </div>
+
+
+
+    <!-- CHART -->
+
+    <div class="chart-card">
+
+      <div class="chart-head">
+
+        <div>
+
+          <div class="chart-title">
+            Revenue per Bulan
           </div>
 
-          <div
-            class="stat-value"
-            id="totalRevenue"
-          >
-            Rp 0
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            HPP
-          </div>
-
-          <div
-            class="stat-value"
-            id="totalHpp"
-          >
-            Rp 0
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Komisi
-          </div>
-
-          <div
-            class="stat-value"
-            id="totalCommission"
-          >
-            Rp 0
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Transaksi
-          </div>
-
-          <div
-            class="stat-value"
-            id="totalTransactions"
-          >
-            0
-          </div>
-
-        </div>
-
-
-        <div class="stat">
-
-          <div class="stat-label">
-            Net Profit
-          </div>
-
-          <div
-            class="stat-value"
-            id="netProfit"
-          >
-            Rp 0
+          <div class="chart-info">
+            Grafik mengikuti filter yang dipilih.
           </div>
 
         </div>
@@ -1207,25 +1480,37 @@
       </div>
 
 
-      <hr>
+      <div class="chart-wrap">
+
+        <canvas id="revenueChart"></canvas>
+
+      </div>
+
+    </div>
 
 
-      <!-- TABLE -->
 
-      <div class="table-title">
+    <!-- TABLE -->
 
-        <h2>
-          Transaksi Terbaru
-        </h2>
+    <div class="table-card">
 
-        <p>
-          Daftar transaksi yang tercatat di sistem
-        </p>
+      <div class="table-top">
+
+        <div class="table-title">
+          Transactions
+        </div>
+
+        <div
+          class="table-count"
+          id="tableCount"
+        >
+          0 transaksi
+        </div>
 
       </div>
 
 
-      <div class="table-wrap">
+      <div class="table-scroll">
 
         <table>
 
@@ -1238,7 +1523,15 @@
               </th>
 
               <th>
-                Produk
+                Sales
+              </th>
+
+              <th>
+                Customer
+              </th>
+
+              <th>
+                Product
               </th>
 
               <th>
@@ -1275,14 +1568,10 @@
             <tr>
 
               <td
-                colspan="8"
-                style="
-                  text-align:center;
-                  color:#8aa8bd;
-                  padding:35px;
-                "
+                colspan="10"
+                class="loading"
               >
-                Memuat transaksi...
+                Mengambil data transaksi...
               </td>
 
             </tr>
@@ -1293,483 +1582,1484 @@
 
       </div>
 
-
-      <div class="refresh-info">
-
-        <span class="refresh-dot"></span>
-
-        Data diperbarui otomatis setiap 30 detik
-
-      </div>
-
-    </section>
+    </div>
 
 
-    <!-- FOOTER -->
-
-    <footer>
-      © 2026 ALJAVA TERIONITY • Digital Solution
-    </footer>
-
-  </main>
+  </section>
 
 
-  <!-- =====================================
-       JAVASCRIPT
-       ===================================== -->
 
-  <script>
-
-    const SUPABASE_URL =
-      "https://lbzwmcxwxummitldxucj.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+  <footer>
+    © 2026 ALJAVA TERIONITY • Digital Solution
+  </footer>
 
 
-    function rupiah(value) {
-
-      return "Rp " +
-        Number(value || 0)
-          .toLocaleString("id-ID");
-
-    }
+</main>
 
 
-    async function loadRevenue() {
 
-      const table =
-        document.getElementById(
-          "transactionsTable"
-        );
+<script>
 
 
-      try {
+/* =====================================================
+   SUPABASE
+===================================================== */
 
-        const url =
-          SUPABASE_URL +
-          "/rest/v1/Transactions" +
-          "?select=product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date" +
-          "&order=transaction_date.desc";
+const SUPABASE_URL =
+  "https://lbzwmcxwxummitldxucj.supabase.co";
 
-
-        console.log(
-          "Mengambil transaksi:",
-          url
-        );
+const SUPABASE_KEY =
+  "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
 
-        const response =
-          await fetch(
-            url,
-            {
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
 
-              method: "GET",
+let allTransactions = [];
 
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-
-              }
-
-            }
-          );
+let filteredTransactions = [];
 
 
-        const text =
-          await response.text();
+/* =====================================================
+   RUPIAH
+===================================================== */
+
+function rupiah(value) {
+
+  return (
+    "Rp " +
+    Number(value || 0).toLocaleString("id-ID")
+  );
+
+}
 
 
-        console.log(
-          "Supabase status:",
-          response.status
-        );
+/* =====================================================
+   UUID SHORT
+===================================================== */
 
-        console.log(
-          "Supabase response:",
-          text
-        );
+function shortId(value) {
+
+  if (!value) {
+    return "-";
+  }
+
+  return String(value).substring(0, 8) + "...";
+
+}
 
 
-        if (!response.ok) {
+/* =====================================================
+   FETCH TRANSACTIONS
+===================================================== */
 
-          throw new Error(
-            "Supabase error " +
-            response.status +
-            ": " +
-            text
-          );
+async function loadRevenue() {
 
+  const table =
+    document.getElementById(
+      "transactionsTable"
+    );
+
+  const errorBox =
+    document.getElementById(
+      "errorBox"
+    );
+
+
+  try {
+
+    errorBox.style.display =
+      "none";
+
+
+    const url =
+      SUPABASE_URL +
+      "/rest/v1/Transactions" +
+      "?select=*" +
+      "&order=transaction_date.desc";
+
+
+    console.log(
+      "Mengambil data:",
+      url
+    );
+
+
+    const response =
+      await fetch(
+        url,
+        {
+          method: "GET",
+
+          headers: {
+            "apikey":
+              SUPABASE_KEY
+          }
         }
+      );
 
 
-        const transactions =
-          JSON.parse(text);
+    const text =
+      await response.text();
 
 
-        console.log(
-          "Jumlah transaksi:",
-          transactions.length
-        );
+    console.log(
+      "Status:",
+      response.status
+    );
 
+    console.log(
+      "Response:",
+      text
+    );
 
-        let totalRevenue = 0;
 
-        let totalHpp = 0;
+    if (!response.ok) {
 
-        let totalCommission = 0;
-
-
-        transactions.forEach(
-          function(tx) {
-
-            const quantity =
-              Number(tx.quantity) || 0;
-
-
-            const sellingPrice =
-              Number(tx.selling_price) || 0;
-
-
-            const hpp =
-              Number(tx.hpp) || 0;
-
-
-            const commission =
-              Number(tx.commission) || 0;
-
-
-            totalRevenue +=
-              sellingPrice *
-              quantity;
-
-
-            totalHpp +=
-              hpp *
-              quantity;
-
-
-            totalCommission +=
-              commission;
-
-          }
-        );
-
-
-        const netProfit =
-          totalRevenue -
-          totalHpp -
-          totalCommission;
-
-
-        document.getElementById(
-          "totalRevenue"
-        ).textContent =
-          rupiah(totalRevenue);
-
-
-        document.getElementById(
-          "totalHpp"
-        ).textContent =
-          rupiah(totalHpp);
-
-
-        document.getElementById(
-          "totalCommission"
-        ).textContent =
-          rupiah(totalCommission);
-
-
-        document.getElementById(
-          "totalTransactions"
-        ).textContent =
-          transactions.length;
-
-
-        document.getElementById(
-          "netProfit"
-        ).textContent =
-          rupiah(netProfit);
-
-
-        renderTransactions(
-          transactions
-        );
-
-      }
-
-
-      catch (error) {
-
-        console.error(
-          "ERROR DASHBOARD:",
-          error
-        );
-
-
-        table.innerHTML =
-
-          "<tr>" +
-
-            "<td colspan='8' " +
-
-              "style='" +
-
-                "color:#ff9eb1;" +
-                "padding:25px;" +
-                "text-align:center;" +
-
-              "'>" +
-
-              "❌ " +
-              escapeHtml(
-                error.message
-              ) +
-
-            "</td>" +
-
-          "</tr>";
-
-      }
-
-    }
-
-
-    function renderTransactions(
-      transactions
-    ) {
-
-      const table =
-        document.getElementById(
-          "transactionsTable"
-        );
-
-
-      if (
-        !transactions ||
-        transactions.length === 0
-      ) {
-
-        table.innerHTML =
-
-          "<tr>" +
-
-            "<td colspan='8' " +
-
-              "style='" +
-
-                "text-align:center;" +
-                "color:#8aa8bd;" +
-                "padding:35px;" +
-
-              "'>" +
-
-              "Belum ada transaksi." +
-
-            "</td>" +
-
-          "</tr>";
-
-        return;
-
-      }
-
-
-      table.innerHTML = "";
-
-
-      transactions.forEach(
-        function(tx) {
-
-          const quantity =
-            Number(tx.quantity) || 0;
-
-
-          const sellingPrice =
-            Number(tx.selling_price) || 0;
-
-
-          const hpp =
-            Number(tx.hpp) || 0;
-
-
-          const commission =
-            Number(tx.commission) || 0;
-
-
-          const revenue =
-            sellingPrice *
-            quantity;
-
-
-          const totalHpp =
-            hpp *
-            quantity;
-
-
-          const profit =
-            revenue -
-            totalHpp -
-            commission;
-
-
-          const date =
-            tx.transaction_date
-
-              ? new Date(
-                  tx.transaction_date
-                ).toLocaleDateString(
-                  "id-ID"
-                )
-
-              : "-";
-
-
-          const status =
-            tx.payment_status || "-";
-
-
-          const statusLower =
-            String(status)
-              .toLowerCase();
-
-
-          let statusClass =
-            "other";
-
-
-          if (
-            statusLower === "paid"
-          ) {
-
-            statusClass =
-              "paid";
-
-          }
-
-
-          else if (
-            statusLower === "pending"
-          ) {
-
-            statusClass =
-              "pending";
-
-          }
-
-
-          const row =
-            document.createElement(
-              "tr"
-            );
-
-
-          row.innerHTML =
-
-            "<td>" +
-              escapeHtml(date) +
-            "</td>" +
-
-            "<td>" +
-              escapeHtml(
-                tx.product_id || "-"
-              ) +
-            "</td>" +
-
-            "<td>" +
-              quantity +
-            "</td>" +
-
-            "<td>" +
-              rupiah(revenue) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(totalHpp) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(commission) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(profit) +
-            "</td>" +
-
-            "<td>" +
-
-              "<span class='status " +
-                statusClass +
-              "'>" +
-
-                escapeHtml(
-                  status
-                ) +
-
-              "</span>" +
-
-            "</td>";
-
-
-          table.appendChild(row);
-
-        }
+      throw new Error(
+        "Supabase error " +
+        response.status +
+        ": " +
+        text
       );
 
     }
 
 
-    function escapeHtml(value) {
-
-      return String(value)
-
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-
-        .replace(
-          /</g,
-          "&lt;"
-        )
-
-        .replace(
-          />/g,
-          "&gt;"
-        )
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
+    const transactions =
+      JSON.parse(text);
 
 
-    // LOAD PERTAMA
-    loadRevenue();
-
-
-    // AUTO REFRESH 30 DETIK
-    setInterval(
-      loadRevenue,
-      30000
+    console.log(
+      "Jumlah transaksi:",
+      transactions.length
     );
 
-  </script>
+    console.log(
+      "Data transaksi:",
+      transactions
+    );
+
+
+    allTransactions =
+      Array.isArray(transactions)
+        ? transactions
+        : [];
+
+
+    filteredTransactions =
+      [...allTransactions];
+
+
+    buildFilters(
+      allTransactions
+    );
+
+
+    updateDashboard();
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "ERROR DASHBOARD:",
+      error
+    );
+
+
+    errorBox.innerHTML =
+      "❌ Gagal mengambil data: " +
+      error.message;
+
+
+    errorBox.style.display =
+      "block";
+
+
+    table.innerHTML =
+      "<tr>" +
+        "<td colspan='10' class='loading'>" +
+          "Gagal mengambil data transaksi." +
+        "</td>" +
+      "</tr>";
+
+  }
+
+}
+
+
+/* =====================================================
+   UNIQUE VALUES
+===================================================== */
+
+function uniqueValues(
+  transactions,
+  field
+) {
+
+  const values =
+    transactions
+      .map(function(tx) {
+
+        return tx[field];
+
+      })
+      .filter(function(value) {
+
+        return value !== null &&
+               value !== undefined &&
+               value !== "";
+
+      });
+
+
+  return [
+    ...new Set(values)
+  ];
+
+}
+
+
+/* =====================================================
+   BUILD FILTER
+===================================================== */
+
+function buildFilters(
+  transactions
+) {
+
+  const salesFilter =
+    document.getElementById(
+      "salesFilter"
+    );
+
+  const customerFilter =
+    document.getElementById(
+      "customerFilter"
+    );
+
+  const productFilter =
+    document.getElementById(
+      "productFilter"
+    );
+
+
+  const currentSales =
+    salesFilter.value;
+
+  const currentCustomer =
+    customerFilter.value;
+
+  const currentProduct =
+    productFilter.value;
+
+
+  salesFilter.innerHTML =
+    "<option value='all'>Semua Sales</option>";
+
+
+  customerFilter.innerHTML =
+    "<option value='all'>Semua Customer</option>";
+
+
+  productFilter.innerHTML =
+    "<option value='all'>Semua Product</option>";
+
+
+  const sales =
+    uniqueValues(
+      transactions,
+      "sales_id"
+    );
+
+
+  const customers =
+    uniqueValues(
+      transactions,
+      "customer_id"
+    );
+
+
+  const products =
+    uniqueValues(
+      transactions,
+      "product_id"
+    );
+
+
+  sales.forEach(function(value) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      value;
+
+    option.textContent =
+      shortId(value);
+
+    salesFilter.appendChild(
+      option
+    );
+
+  });
+
+
+  customers.forEach(function(value) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      value;
+
+    option.textContent =
+      shortId(value);
+
+    customerFilter.appendChild(
+      option
+    );
+
+  });
+
+
+  products.forEach(function(value) {
+
+    const option =
+      document.createElement(
+        "option"
+      );
+
+    option.value =
+      value;
+
+    option.textContent =
+      shortId(value);
+
+    productFilter.appendChild(
+      option
+    );
+
+  });
+
+
+  if (
+    [...salesFilter.options]
+      .some(
+        option =>
+          option.value ===
+          currentSales
+      )
+  ) {
+
+    salesFilter.value =
+      currentSales;
+
+  }
+
+
+  if (
+    [...customerFilter.options]
+      .some(
+        option =>
+          option.value ===
+          currentCustomer
+      )
+  ) {
+
+    customerFilter.value =
+      currentCustomer;
+
+  }
+
+
+  if (
+    [...productFilter.options]
+      .some(
+        option =>
+          option.value ===
+          currentProduct
+      )
+  ) {
+
+    productFilter.value =
+      currentProduct;
+
+  }
+
+}
+
+
+/* =====================================================
+   APPLY FILTER
+===================================================== */
+
+function applyFilters() {
+
+  const sales =
+    document.getElementById(
+      "salesFilter"
+    ).value;
+
+
+  const customer =
+    document.getElementById(
+      "customerFilter"
+    ).value;
+
+
+  const product =
+    document.getElementById(
+      "productFilter"
+    ).value;
+
+
+  filteredTransactions =
+    allTransactions.filter(
+      function(tx) {
+
+
+        const salesMatch =
+          sales === "all" ||
+          tx.sales_id === sales;
+
+
+        const customerMatch =
+          customer === "all" ||
+          tx.customer_id === customer;
+
+
+        const productMatch =
+          product === "all" ||
+          tx.product_id === product;
+
+
+        return (
+          salesMatch &&
+          customerMatch &&
+          productMatch
+        );
+
+      }
+    );
+
+
+  updateDashboard();
+
+}
+
+
+/* =====================================================
+   UPDATE DASHBOARD
+===================================================== */
+
+function updateDashboard() {
+
+  calculateStats(
+    filteredTransactions
+  );
+
+  renderTransactions(
+    filteredTransactions
+  );
+
+  renderChart(
+    filteredTransactions
+  );
+
+}
+
+
+/* =====================================================
+   CALCULATE STATS
+===================================================== */
+
+function calculateStats(
+  transactions
+) {
+
+  let totalRevenue = 0;
+
+  let totalHpp = 0;
+
+  let totalCommission = 0;
+
+
+  transactions.forEach(
+    function(tx) {
+
+      const quantity =
+        Number(tx.quantity) || 0;
+
+
+      const sellingPrice =
+        Number(
+          tx.selling_price
+        ) || 0;
+
+
+      const hpp =
+        Number(tx.hpp) || 0;
+
+
+      const commission =
+        Number(
+          tx.commission
+        ) || 0;
+
+
+      totalRevenue +=
+        sellingPrice *
+        quantity;
+
+
+      totalHpp +=
+        hpp *
+        quantity;
+
+
+      totalCommission +=
+        commission;
+
+    }
+  );
+
+
+  const netProfit =
+    totalRevenue -
+    totalHpp -
+    totalCommission;
+
+
+  document
+    .getElementById(
+      "totalRevenue"
+    )
+    .textContent =
+      rupiah(totalRevenue);
+
+
+  document
+    .getElementById(
+      "totalHpp"
+    )
+    .textContent =
+      rupiah(totalHpp);
+
+
+  document
+    .getElementById(
+      "totalCommission"
+    )
+    .textContent =
+      rupiah(totalCommission);
+
+
+  document
+    .getElementById(
+      "netProfit"
+    )
+    .textContent =
+      rupiah(netProfit);
+
+
+  document
+    .getElementById(
+      "totalTransactions"
+    )
+    .textContent =
+      transactions.length;
+
+
+  document
+    .getElementById(
+      "tableCount"
+    )
+    .textContent =
+      transactions.length +
+      " transaksi";
+
+}
+
+
+/* =====================================================
+   RENDER TABLE
+===================================================== */
+
+function renderTransactions(
+  transactions
+) {
+
+  const table =
+    document.getElementById(
+      "transactionsTable"
+    );
+
+
+  if (
+    !transactions ||
+    transactions.length === 0
+  ) {
+
+    table.innerHTML =
+      "<tr>" +
+        "<td colspan='10' class='loading'>" +
+          "Belum ada transaksi." +
+        "</td>" +
+      "</tr>";
+
+    return;
+
+  }
+
+
+  table.innerHTML = "";
+
+
+  transactions.forEach(
+    function(tx) {
+
+
+      const quantity =
+        Number(tx.quantity) || 0;
+
+
+      const sellingPrice =
+        Number(
+          tx.selling_price
+        ) || 0;
+
+
+      const hpp =
+        Number(tx.hpp) || 0;
+
+
+      const commission =
+        Number(
+          tx.commission
+        ) || 0;
+
+
+      const revenue =
+        sellingPrice *
+        quantity;
+
+
+      const totalHpp =
+        hpp *
+        quantity;
+
+
+      const profit =
+        revenue -
+        totalHpp -
+        commission;
+
+
+      const date =
+        tx.transaction_date
+          ? new Date(
+              tx.transaction_date
+            ).toLocaleDateString(
+              "id-ID",
+              {
+                day: "2-digit",
+                month: "short",
+                year: "numeric"
+              }
+            )
+          : "-";
+
+
+      const status =
+        tx.payment_status ||
+        "-";
+
+
+      let statusClass =
+        "other";
+
+
+      if (
+        status.toLowerCase() ===
+        "paid"
+      ) {
+
+        statusClass =
+          "paid";
+
+      }
+
+
+      if (
+        status.toLowerCase() ===
+        "pending"
+      ) {
+
+        statusClass =
+          "pending";
+
+      }
+
+
+      const row =
+        document.createElement(
+          "tr"
+        );
+
+
+      row.innerHTML =
+
+        "<td>" +
+          date +
+        "</td>" +
+
+        "<td class='id-small' title='" +
+          (tx.sales_id || "-") +
+        "'>" +
+          shortId(
+            tx.sales_id
+          ) +
+        "</td>" +
+
+        "<td class='id-small' title='" +
+          (tx.customer_id || "-") +
+        "'>" +
+          shortId(
+            tx.customer_id
+          ) +
+        "</td>" +
+
+        "<td class='id-small' title='" +
+          (tx.product_id || "-") +
+        "'>" +
+          shortId(
+            tx.product_id
+          ) +
+        "</td>" +
+
+        "<td>" +
+          quantity +
+        "</td>" +
+
+        "<td class='money'>" +
+          rupiah(revenue) +
+        "</td>" +
+
+        "<td>" +
+          rupiah(totalHpp) +
+        "</td>" +
+
+        "<td>" +
+          rupiah(commission) +
+        "</td>" +
+
+        "<td class='profit-text'>" +
+          rupiah(profit) +
+        "</td>" +
+
+        "<td>" +
+          "<span class='status " +
+            statusClass +
+          "'>" +
+            status +
+          "</span>" +
+        "</td>";
+
+
+      table.appendChild(
+        row
+      );
+
+    }
+  );
+
+}
+
+
+/* =====================================================
+   CHART
+===================================================== */
+
+function renderChart(
+  transactions
+) {
+
+  const canvas =
+    document.getElementById(
+      "revenueChart"
+    );
+
+
+  const rect =
+    canvas.getBoundingClientRect();
+
+
+  const dpr =
+    window.devicePixelRatio ||
+    1;
+
+
+  const width =
+    Math.max(
+      rect.width,
+      300
+    );
+
+
+  const height =
+    Math.max(
+      rect.height,
+      220
+    );
+
+
+  canvas.width =
+    width * dpr;
+
+
+  canvas.height =
+    height * dpr;
+
+
+  const ctx =
+    canvas.getContext("2d");
+
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+
+  ctx.clearRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  /* =========================
+     BULAN
+  ========================= */
+
+  const months = [];
+
+
+  const now =
+    new Date();
+
+
+  for (
+    let i = 11;
+    i >= 0;
+    i--
+  ) {
+
+    const date =
+      new Date(
+        now.getFullYear(),
+        now.getMonth() - i,
+        1
+      );
+
+
+    months.push({
+      year:
+        date.getFullYear(),
+
+      month:
+        date.getMonth(),
+
+      label:
+        date.toLocaleDateString(
+          "id-ID",
+          {
+            month: "short"
+          }
+        )
+    });
+
+  }
+
+
+  const values =
+    months.map(
+      function(item) {
+
+        return transactions
+          .filter(
+            function(tx) {
+
+              if (
+                !tx.transaction_date
+              ) {
+                return false;
+              }
+
+
+              const date =
+                new Date(
+                  tx.transaction_date
+                );
+
+
+              return (
+                date.getFullYear() ===
+                  item.year &&
+                date.getMonth() ===
+                  item.month
+              );
+
+            }
+          )
+          .reduce(
+            function(total, tx) {
+
+              const quantity =
+                Number(
+                  tx.quantity
+                ) || 0;
+
+
+              const price =
+                Number(
+                  tx.selling_price
+                ) || 0;
+
+
+              return (
+                total +
+                price *
+                quantity
+              );
+
+            },
+            0
+          );
+
+      }
+    );
+
+
+  const maxValue =
+    Math.max(
+      ...values,
+      1
+    );
+
+
+  /* =========================
+     AREA
+  ========================= */
+
+  const paddingLeft =
+    55;
+
+  const paddingRight =
+    18;
+
+  const paddingTop =
+    20;
+
+  const paddingBottom =
+    42;
+
+
+  const chartWidth =
+    width -
+    paddingLeft -
+    paddingRight;
+
+
+  const chartHeight =
+    height -
+    paddingTop -
+    paddingBottom;
+
+
+  /* =========================
+     GRID
+  ========================= */
+
+  ctx.font =
+    "10px Arial";
+
+
+  ctx.textAlign =
+    "right";
+
+
+  ctx.textBaseline =
+    "middle";
+
+
+  for (
+    let i = 0;
+    i <= 4;
+    i++
+  ) {
+
+    const y =
+      paddingTop +
+      chartHeight -
+      (
+        chartHeight *
+        i /
+        4
+      );
+
+
+    const value =
+      maxValue *
+      i /
+      4;
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+      paddingLeft,
+      y
+    );
+
+
+    ctx.lineTo(
+      width -
+      paddingRight,
+      y
+    );
+
+
+    ctx.strokeStyle =
+      "rgba(100,180,230,0.10)";
+
+
+    ctx.lineWidth =
+      1;
+
+
+    ctx.stroke();
+
+
+    ctx.fillStyle =
+      "rgba(180,220,240,0.55)";
+
+
+    ctx.fillText(
+      formatChartValue(value),
+      paddingLeft - 8,
+      y
+    );
+
+  }
+
+
+  /* =========================
+     POINTS
+  ========================= */
+
+  const points =
+    values.map(
+      function(value, index) {
+
+        const x =
+          paddingLeft +
+          (
+            chartWidth *
+            index /
+            (values.length - 1)
+          );
+
+
+        const y =
+          paddingTop +
+          chartHeight -
+          (
+            value /
+            maxValue *
+            chartHeight
+          );
+
+
+        return {
+          x,
+          y,
+          value
+        };
+
+      }
+    );
+
+
+  /* =========================
+     AREA FILL
+  ========================= */
+
+  if (points.length) {
+
+    const gradient =
+      ctx.createLinearGradient(
+        0,
+        paddingTop,
+        0,
+        paddingTop +
+        chartHeight
+      );
+
+
+    gradient.addColorStop(
+      0,
+      "rgba(0,210,255,0.28)"
+    );
+
+
+    gradient.addColorStop(
+      1,
+      "rgba(0,100,255,0.01)"
+    );
+
+
+    ctx.beginPath();
+
+
+    ctx.moveTo(
+      points[0].x,
+      paddingTop +
+      chartHeight
+    );
+
+
+    points.forEach(
+      function(point) {
+
+        ctx.lineTo(
+          point.x,
+          point.y
+        );
+
+      }
+    );
+
+
+    ctx.lineTo(
+      points[
+        points.length - 1
+      ].x,
+      paddingTop +
+      chartHeight
+    );
+
+
+    ctx.closePath();
+
+
+    ctx.fillStyle =
+      gradient;
+
+
+    ctx.fill();
+
+  }
+
+
+  /* =========================
+     LINE
+  ========================= */
+
+  ctx.beginPath();
+
+
+  points.forEach(
+    function(point, index) {
+
+      if (index === 0) {
+
+        ctx.moveTo(
+          point.x,
+          point.y
+        );
+
+      } else {
+
+        ctx.lineTo(
+          point.x,
+          point.y
+        );
+
+      }
+
+    }
+  );
+
+
+  ctx.strokeStyle =
+    "#25e4ff";
+
+
+  ctx.lineWidth =
+    2.5;
+
+
+  ctx.shadowColor =
+    "rgba(0,210,255,0.65)";
+
+
+  ctx.shadowBlur =
+    10;
+
+
+  ctx.stroke();
+
+
+  ctx.shadowBlur =
+    0;
+
+
+  /* =========================
+     POINT CIRCLES
+  ========================= */
+
+  points.forEach(
+    function(point) {
+
+      ctx.beginPath();
+
+
+      ctx.arc(
+        point.x,
+        point.y,
+        4,
+        0,
+        Math.PI * 2
+      );
+
+
+      ctx.fillStyle =
+        "#0b1d43";
+
+
+      ctx.fill();
+
+
+      ctx.strokeStyle =
+        "#35e7ff";
+
+
+      ctx.lineWidth =
+        2;
+
+
+      ctx.stroke();
+
+    }
+  );
+
+
+  /* =========================
+     MONTH LABEL
+  ========================= */
+
+  ctx.textAlign =
+    "center";
+
+
+  ctx.textBaseline =
+    "top";
+
+
+  points.forEach(
+    function(point, index) {
+
+      ctx.fillStyle =
+        "rgba(180,220,240,0.65)";
+
+
+      ctx.font =
+        "10px Arial";
+
+
+      ctx.fillText(
+        months[index].label,
+        point.x,
+        height -
+        paddingBottom +
+        15
+      );
+
+    }
+  );
+
+
+  /* =========================
+     EMPTY MESSAGE
+  ========================= */
+
+  if (
+    transactions.length === 0
+  ) {
+
+    ctx.textAlign =
+      "center";
+
+    ctx.textBaseline =
+      "middle";
+
+    ctx.font =
+      "13px Arial";
+
+    ctx.fillStyle =
+      "rgba(150,190,215,0.7)";
+
+    ctx.fillText(
+      "Belum ada data untuk filter ini",
+      width / 2,
+      height / 2
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   FORMAT CHART
+===================================================== */
+
+function formatChartValue(
+  value
+) {
+
+  value =
+    Number(value) || 0;
+
+
+  if (value >= 1000000000) {
+
+    return (
+      "Rp " +
+      (value / 1000000000)
+        .toFixed(1) +
+      "M"
+    );
+
+  }
+
+
+  if (value >= 1000000) {
+
+    return (
+      "Rp " +
+      (value / 1000000)
+        .toFixed(1) +
+      "jt"
+    );
+
+  }
+
+
+  if (value >= 1000) {
+
+    return (
+      "Rp " +
+      (value / 1000)
+        .toFixed(0) +
+      "rb"
+    );
+
+  }
+
+
+  return (
+    "Rp " +
+    value.toLocaleString(
+      "id-ID"
+    )
+  );
+
+}
+
+
+/* =====================================================
+   FILTER EVENTS
+===================================================== */
+
+document
+  .getElementById(
+    "salesFilter"
+  )
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+document
+  .getElementById(
+    "customerFilter"
+  )
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+document
+  .getElementById(
+    "productFilter"
+  )
+  .addEventListener(
+    "change",
+    applyFilters
+  );
+
+
+/* =====================================================
+   RESIZE CHART
+===================================================== */
+
+window.addEventListener(
+  "resize",
+  function() {
+
+    renderChart(
+      filteredTransactions
+    );
+
+  }
+);
+
+
+/* =====================================================
+   START
+===================================================== */
+
+loadRevenue();
+
+
+/* =====================================================
+   AUTO REFRESH
+===================================================== */
+
+setInterval(
+  loadRevenue,
+  30000
+);
+
+</script>
 
 </body>
 </html>
