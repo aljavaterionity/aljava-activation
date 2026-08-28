@@ -8,468 +8,1288 @@
 
   <style>
     * {
-  box-sizing: border-box;
-}
+      box-sizing: border-box;
+    }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #111111, #2b2b2b);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+    :root {
+      --blue: #1463ff;
+      --blue-dark: #0d3db8;
+      --blue-light: #eaf2ff;
+      --text: #102044;
+      --muted: #6d7892;
+      --border: #dce5f5;
+      --success: #18a957;
+    }
 
-.container {
-  width: 100%;
-  max-width: 430px;
-  background: #ffffff;
-  padding: 30px 25px;
-  border-radius: 24px;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.logo {
-  text-align: center;
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  color: #111111;
-  margin-bottom: 6px;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 30px 16px;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
 
-.subtitle {
-  text-align: center;
-  color: #777777;
-  font-size: 14px;
-  margin-bottom: 28px;
-}
+      background:
+        radial-gradient(
+          circle at 10% 10%,
+          rgba(75, 145, 255, 0.25),
+          transparent 30%
+        ),
+        radial-gradient(
+          circle at 90% 20%,
+          rgba(0, 102, 255, 0.20),
+          transparent 28%
+        ),
+        linear-gradient(
+          135deg,
+          #f8fbff 0%,
+          #eaf3ff 45%,
+          #f8fbff 100%
+        );
 
-label {
-  display: block;
-  margin-top: 17px;
-  margin-bottom: 7px;
-  font-size: 14px;
-  font-weight: 700;
-  color: #222222;
-}
+      position: relative;
+      overflow-x: hidden;
+    }
 
-input {
-  width: 100%;
-  padding: 14px 15px;
-  border: 1px solid #dddddd;
-  border-radius: 12px;
-  font-size: 15px;
-  outline: none;
-  transition: 0.2s;
-}
+    body::before {
+      content: "";
+      position: fixed;
+      width: 520px;
+      height: 520px;
+      right: -230px;
+      top: -180px;
+      border-radius: 50%;
+      background: rgba(35, 112, 255, 0.12);
+      filter: blur(10px);
+      pointer-events: none;
+    }
 
-input:focus {
-  border-color: #111111;
-  box-shadow: 0 0 0 3px rgba(0,0,0,0.06);
-}
+    body::after {
+      content: "";
+      position: fixed;
+      width: 480px;
+      height: 480px;
+      left: -250px;
+      bottom: -220px;
+      border-radius: 50%;
+      background: rgba(83, 157, 255, 0.12);
+      filter: blur(10px);
+      pointer-events: none;
+    }
 
-#card_code {
-  background: #f3f3f3;
-  color: #555555;
-  font-weight: bold;
-}
+    .page {
+      width: 100%;
+      max-width: 900px;
+      margin: auto;
+      position: relative;
+      z-index: 2;
+    }
 
-button {
-  width: 100%;
-  margin-top: 25px;
-  padding: 15px;
-  border: none;
-  border-radius: 12px;
-  background: #111111;
-  color: white;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
+    /* HEADER */
 
-button:hover {
-  transform: translateY(-1px);
-  opacity: 0.9;
-}
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
 
-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-#message {
-  display: none;
-  margin-top: 18px;
-  padding: 14px;
-  border-radius: 12px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 600;
-}
+    .brand-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
 
-.success {
-  background: #e9f8ee;
-  color: #17723a;
-}
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-.error {
-  background: #ffecec;
-  color: #a00000;
-}
+      background: linear-gradient(
+        135deg,
+        #1768ff,
+        #4c9aff
+      );
 
-.review-button {
-  display: none;
-  width: 100%;
-  text-align: center;
-  text-decoration: none;
-  background: #111111;
-  color: white;
-  padding: 14px;
-  border-radius: 12px;
-  margin-top: 15px;
-  font-weight: bold;
-}
+      color: white;
+      font-size: 23px;
+      font-weight: 900;
 
-@media (max-width: 480px) {
-  body {
-    padding: 14px;
-  }
+      box-shadow:
+        0 10px 25px rgba(20, 99, 255, 0.25);
+    }
 
-  .container {
-    padding: 25px 20px;
-    border-radius: 20px;
-  }
+    .brand-name {
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
 
-  .logo {
-    font-size: 28px;
-  }
-}
+    .trust-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 10px 15px;
+      border-radius: 30px;
+
+      background: rgba(255, 255, 255, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.9);
+
+      box-shadow: 0 8px 25px rgba(38, 85, 150, 0.08);
+
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .trust-icon {
+      color: var(--success);
+      font-size: 17px;
+    }
+
+    /* HERO */
+
+    .hero {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .hero-badge {
+      display: inline-block;
+
+      padding: 9px 16px;
+      border-radius: 30px;
+
+      background: #e5efff;
+      color: var(--blue);
+
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 1px;
+
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      margin: 0;
+
+      font-size: clamp(34px, 6vw, 52px);
+      line-height: 1.08;
+      letter-spacing: -1.5px;
+
+      color: #102044;
+    }
+
+    .hero h1 span {
+      color: var(--blue);
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 16px auto 0;
+
+      font-size: 16px;
+      line-height: 1.7;
+
+      color: var(--muted);
+    }
+
+    /* MAIN CARD */
+
+    .form-card {
+      background: rgba(255, 255, 255, 0.94);
+
+      border: 1px solid rgba(255, 255, 255, 0.95);
+
+      border-radius: 28px;
+
+      padding: 34px;
+
+      box-shadow:
+        0 25px 70px rgba(31, 78, 135, 0.14);
+
+      backdrop-filter: blur(15px);
+    }
+
+    .form-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .form-icon {
+      width: 58px;
+      height: 58px;
+
+      margin: 0 auto 15px;
+
+      border-radius: 18px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: linear-gradient(
+        135deg,
+        #1768ff,
+        #62a7ff
+      );
+
+      color: white;
+      font-size: 25px;
+
+      box-shadow:
+        0 12px 30px rgba(20, 99, 255, 0.25);
+    }
+
+    .form-header h2 {
+      margin: 0 0 7px;
+
+      font-size: 27px;
+    }
+
+    .form-header p {
+      margin: 0;
+
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* FORM */
+
+    form {
+      width: 100%;
+    }
+
+    .field {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+
+      margin-bottom: 8px;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      color: #182849;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+
+      padding: 15px 16px;
+
+      border: 1px solid var(--border);
+      border-radius: 13px;
+
+      background: #fbfdff;
+
+      color: #172644;
+
+      font-size: 15px;
+
+      outline: none;
+
+      transition:
+        border-color 0.2s,
+        box-shadow 0.2s,
+        background 0.2s;
+    }
+
+    input:focus {
+      border-color: var(--blue);
+
+      background: white;
+
+      box-shadow:
+        0 0 0 4px rgba(20, 99, 255, 0.08);
+    }
+
+    input::placeholder {
+      color: #9aa5ba;
+    }
+
+    #card_code {
+      background: #f1f6ff;
+      color: #153d91;
+
+      font-weight: 800;
+      letter-spacing: 1.2px;
+
+      padding-right: 50px;
+    }
+
+    .lock-icon {
+      position: absolute;
+
+      right: 16px;
+      top: 50%;
+
+      transform: translateY(-50%);
+
+      font-size: 17px;
+    }
+
+    .card-status {
+      margin-top: 8px;
+
+      font-size: 12px;
+      color: var(--success);
+
+      font-weight: 700;
+    }
+
+    /* BUTTON */
+
+    button {
+      width: 100%;
+
+      margin-top: 8px;
+
+      padding: 16px 20px;
+
+      border: none;
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0d5cff,
+          #287cff
+        );
+
+      color: white;
+
+      font-size: 16px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 14px 30px rgba(20, 99, 255, 0.25);
+
+      transition:
+        transform 0.2s,
+        box-shadow 0.2s,
+        opacity 0.2s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 18px 35px rgba(20, 99, 255, 0.30);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .button-icon {
+      margin-right: 8px;
+    }
+
+    .privacy-note {
+      text-align: center;
+
+      margin-top: 14px;
+
+      color: #7c879c;
+
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* MESSAGE */
+
+    #message {
+      display: none;
+
+      margin-top: 20px;
+
+      padding: 18px;
+
+      border-radius: 15px;
+
+      text-align: center;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .success {
+      background: #eafaf1;
+      color: #14783d;
+
+      border: 1px solid #c8efd8;
+    }
+
+    .error {
+      background: #fff0f0;
+      color: #a00000;
+
+      border: 1px solid #ffd0d0;
+    }
+
+    .success-icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .success-title {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 5px;
+    }
+
+    .success-text {
+      font-size: 13px;
+      font-weight: 400;
+    }
+
+    /* REVIEW BUTTON */
+
+    .review-button {
+      display: none;
+
+      width: 100%;
+
+      text-align: center;
+      text-decoration: none;
+
+      background: #102044;
+      color: white;
+
+      padding: 15px;
+
+      border-radius: 14px;
+
+      margin-top: 15px;
+
+      font-weight: 800;
+
+      transition: 0.2s;
+    }
+
+    .review-button:hover {
+      transform: translateY(-2px);
+      opacity: 0.92;
+    }
+
+    /* BENEFITS */
+
+    .benefits {
+      display: grid;
+
+      grid-template-columns:
+        repeat(3, 1fr);
+
+      gap: 16px;
+
+      margin-top: 22px;
+    }
+
+    .benefit {
+      background: rgba(255, 255, 255, 0.82);
+
+      border: 1px solid rgba(255, 255, 255, 0.95);
+
+      border-radius: 18px;
+
+      padding: 20px;
+
+      box-shadow:
+        0 10px 30px rgba(31, 78, 135, 0.07);
+    }
+
+    .benefit-icon {
+      width: 43px;
+      height: 43px;
+
+      border-radius: 13px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: #e9f2ff;
+
+      color: var(--blue);
+
+      font-size: 20px;
+
+      margin-bottom: 12px;
+    }
+
+    .benefit strong {
+      display: block;
+
+      margin-bottom: 5px;
+
+      font-size: 14px;
+    }
+
+    .benefit span {
+      color: var(--muted);
+
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    /* FOOTER */
+
+    footer {
+      text-align: center;
+
+      padding: 28px 0 8px;
+
+      color: #8290a8;
+
+      font-size: 12px;
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 18px 12px;
+      }
+
+      .topbar {
+        margin-bottom: 25px;
+      }
+
+      .brand-icon {
+        width: 42px;
+        height: 42px;
+      }
+
+      .brand-name {
+        font-size: 20px;
+      }
+
+      .trust-badge {
+        padding: 8px 10px;
+        font-size: 11px;
+      }
+
+      .hero h1 {
+        font-size: 36px;
+      }
+
+      .hero p {
+        font-size: 14px;
+      }
+
+      .form-card {
+        padding: 23px 17px;
+        border-radius: 22px;
+      }
+
+      .form-header h2 {
+        font-size: 23px;
+      }
+
+      .benefits {
+        grid-template-columns: 1fr;
+      }
+
+      .benefit {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 15px;
+      }
+
+      .benefit-icon {
+        flex-shrink: 0;
+        margin-bottom: 0;
+      }
+    }
+
+    @media (max-width: 430px) {
+
+      .topbar {
+        align-items: flex-start;
+      }
+
+      .trust-badge {
+        max-width: 115px;
+        text-align: center;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .form-card {
+        padding: 20px 15px;
+      }
+
+      input {
+        padding: 14px;
+      }
+    }
   </style>
 </head>
 
 <body>
 
-  <div class="container">
+  <div class="page">
 
-   <div class="logo">
-  ALJAVA TERIONITY
-</div>
+    <!-- HEADER -->
 
-<div class="subtitle">
-  Google Review Card
-</div>
+    <div class="topbar">
 
-<div style="
-  text-align:center;
-  color:#555;
-  font-size:13px;
-  line-height:1.5;
-  margin-top:-15px;
-  margin-bottom:20px;
-">
-  Aktivasi Kartu
-</div>
+      <div class="brand">
+        <div class="brand-icon">
+          A
+        </div>
 
-    <form id="activationForm">
+        <div class="brand-name">
+          ALJAVA
+        </div>
+      </div>
 
-    <label for="card_code">Kode Kartu</label>
+      <div class="trust-badge">
+        <span class="trust-icon">✓</span>
+        Aman & Terpercaya
+      </div>
 
-<div style="
-  position:relative;
-  width:100%;
-">
-  <input
-    type="text"
-    id="card_code"
-    placeholder="Kode kartu"
-    readonly
-    required
-    style="
-      background:#f1f1f1;
-      color:#111;
-      font-weight:700;
-      letter-spacing:1px;
-      padding-right:45px;
-    "
-  >
+    </div>
 
-  <span style="
-    position:absolute;
-    right:15px;
-    top:50%;
-    transform:translateY(-50%);
-    font-size:16px;
-  ">
-    🔒
-  </span>
-</div>
-      <label for="business_name">Nama Bisnis</label>
 
-      <input
-        type="text"
-        id="business_name"
-        placeholder="Contoh: Kopi Alpin"
-        required
+    <!-- HERO -->
+
+    <div class="hero">
+
+      <div class="hero-badge">
+        AKTIVASI KARTU ALJAVA
+      </div>
+
+      <h1>
+        Aktifkan Kartu
+        <span>Anda Sekarang</span>
+      </h1>
+
+      <p>
+        Lengkapi data di bawah ini untuk mengaktifkan
+        kartu ALJAVA Anda dan mulai menggunakan
+        Google Review Card.
+      </p>
+
+    </div>
+
+
+    <!-- FORM CARD -->
+
+    <div class="form-card">
+
+      <div class="form-header">
+
+        <div class="form-icon">
+          ▣
+        </div>
+
+        <h2>
+          Form Aktivasi Kartu
+        </h2>
+
+        <p>
+          Pastikan semua data sudah benar sebelum mengaktifkan kartu.
+        </p>
+
+      </div>
+
+
+      <form id="activationForm">
+
+        <!-- KODE KARTU -->
+
+        <div class="field">
+
+          <label for="card_code">
+            Kode Kartu
+          </label>
+
+          <div class="input-wrapper">
+
+            <input
+              type="text"
+              id="card_code"
+              placeholder="Kode kartu"
+              readonly
+              required
+            >
+
+            <span class="lock-icon">
+              🔒
+            </span>
+
+          </div>
+
+          <div class="card-status">
+            ✓ Kode kartu terdeteksi
+          </div>
+
+        </div>
+
+
+        <!-- NAMA BISNIS -->
+
+        <div class="field">
+
+          <label for="business_name">
+            Nama Bisnis
+          </label>
+
+          <input
+            type="text"
+            id="business_name"
+            placeholder="Contoh: Kopi Alpin"
+            required
+          >
+
+        </div>
+
+
+        <!-- NAMA PEMILIK -->
+
+        <div class="field">
+
+          <label for="owner_name">
+            Nama Pemilik
+          </label>
+
+          <input
+            type="text"
+            id="owner_name"
+            placeholder="Nama pemilik"
+            required
+          >
+
+        </div>
+
+
+        <!-- WHATSAPP -->
+
+        <div class="field">
+
+          <label for="whatsapp">
+            Nomor WhatsApp
+          </label>
+
+          <input
+            type="tel"
+            id="whatsapp"
+            placeholder="08123456789"
+            required
+          >
+
+        </div>
+
+
+        <!-- GOOGLE REVIEW -->
+
+        <div class="field">
+
+          <label for="google_review_url">
+            Link Google Review
+          </label>
+
+          <input
+            type="url"
+            id="google_review_url"
+            placeholder="https://g.page/r/..."
+            required
+          >
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+          type="submit"
+          id="submitButton"
+        >
+          <span class="button-icon">✓</span>
+          Aktifkan Kartu
+        </button>
+
+
+        <div class="privacy-note">
+          🔒 Data Anda aman dan digunakan hanya untuk
+          proses aktivasi kartu ALJAVA.
+        </div>
+
+      </form>
+
+
+      <!-- MESSAGE -->
+
+      <div id="message"></div>
+
+
+      <!-- REVIEW BUTTON -->
+
+      <a
+        id="reviewButton"
+        class="review-button"
+        href="#"
+        target="_blank"
+        rel="noopener noreferrer"
       >
+        ⭐ Buka Google Review
+      </a>
 
-      <label for="owner_name">Nama Pemilik</label>
+    </div>
 
-      <input
-        type="text"
-        id="owner_name"
-        placeholder="Nama pemilik"
-        required
-      >
 
-      <label for="whatsapp">WhatsApp</label>
+    <!-- BENEFITS -->
 
-      <input
-        type="tel"
-        id="whatsapp"
-        placeholder="08123456789"
-        required
-      >
+    <div class="benefits">
 
-      <label for="google_review_url">
-        Link Google Review
-      </label>
+      <div class="benefit">
 
-      <input
-        type="url"
-        id="google_review_url"
-        placeholder="https://g.page/r/..."
-        required
-      >
+        <div class="benefit-icon">
+          🛡
+        </div>
 
-    
-<button type="submit" id="submitButton">
-  Aktifkan Kartu
-</button>
+        <div>
+          <strong>
+            Aman & Terjamin
+          </strong>
 
-<div style="
-  text-align:center;
-  margin-top:12px;
-  font-size:12px;
-  color:#888;
-">
-  Dengan mengaktifkan kartu, data Ulasan Bisnis Anda akan tersimpan di sistem ALJAVA.
-</div>
-    </form>
+          <span>
+            Data aktivasi diproses melalui sistem ALJAVA.
+          </span>
+        </div>
 
-    <div id="message"></div>
+      </div>
 
-    <a
-      id="reviewButton"
-      class="review-button"
-      href="#"
-      target="_blank"
-    >
-      Buka Google Review
-    </a>
+
+      <div class="benefit">
+
+        <div class="benefit-icon">
+          ⚡
+        </div>
+
+        <div>
+          <strong>
+            Proses Cepat
+          </strong>
+
+          <span>
+            Aktivasi kartu hanya membutuhkan beberapa detik.
+          </span>
+        </div>
+
+      </div>
+
+
+      <div class="benefit">
+
+        <div class="benefit-icon">
+          ★
+        </div>
+
+        <div>
+          <strong>
+            Siap Digunakan
+          </strong>
+
+          <span>
+            Setelah aktif, kartu langsung siap untuk Google Review.
+          </span>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- FOOTER -->
+
+    <footer>
+      © 2026 ALJAVA. All rights reserved.
+    </footer>
 
   </div>
 
+
 <script>
 
-const FUNCTION_URL =
-  "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
-const urlParams = new URLSearchParams(window.location.search);
+  /*
+   * ==========================================
+   * ALJAVA ACTIVATION SYSTEM
+   * ==========================================
+   */
 
-const cardCode = urlParams.get("code");
+  const FUNCTION_URL =
+    "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
 
-const CHECK_FUNCTION_URL =
-  "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/check_card";
 
-if (cardCode) {
-  document.getElementById("card_code").value = cardCode;
-}
-async function checkCardStatus() {
-  if (!cardCode) return;
+  const CHECK_FUNCTION_URL =
+    "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/check_card";
 
-  try {
-    const response = await fetch(
-      CHECK_FUNCTION_URL,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "apikey": "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw",
-          "Authorization": "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
-        },
-        body: JSON.stringify({
-          card_code: cardCode
-        })
-      }
+
+  const urlParams =
+    new URLSearchParams(
+      window.location.search
     );
 
-    const result = await response.json();
 
-    if (!response.ok || !result.success) {
-      throw new Error(
-        result.message || "Gagal mengecek kartu."
-      );
-    }
+  const cardCode =
+    urlParams.get("code");
 
-    if (result.status === "active") {
-      window.location.href =
-        result.google_review_url;
-      return;
-    }
 
-  } catch (error) {
-    console.error(error);
+  /*
+   * SET CARD CODE
+   */
+
+  if (cardCode) {
+
+    document.getElementById(
+      "card_code"
+    ).value = cardCode;
+
   }
-}
-
-checkCardStatus();
-document
-  .getElementById("activationForm")
-  .addEventListener("submit", async function(event) {
-
-    event.preventDefault();
-
-    const button =
-      document.getElementById("submitButton");
-
-    const message =
-      document.getElementById("message");
-
-    const reviewButton =
-      document.getElementById("reviewButton");
-
-    button.disabled = true;
-    button.innerText = "Mengaktifkan...";
-
-    message.style.display = "none";
-    reviewButton.style.display = "none";
 
 
-    const data = {
+  /*
+   * CHECK CARD STATUS
+   */
 
-      card_code:
-        document.getElementById("card_code")
-        .value
-        .trim(),
+  async function checkCardStatus() {
 
-      business_name:
-        document.getElementById("business_name")
-        .value
-        .trim(),
-
-      owner_name:
-        document.getElementById("owner_name")
-        .value
-        .trim(),
-
-      whatsapp:
-        document.getElementById("whatsapp")
-        .value
-        .trim(),
-
-      google_review_url:
-        document.getElementById("google_review_url")
-        .value
-        .trim()
-
-    };
+    if (!cardCode) return;
 
 
     try {
 
-      const response = await fetch(
-        FUNCTION_URL,
-        {
-          method: "POST",
+      const response =
+        await fetch(
+          CHECK_FUNCTION_URL,
+          {
+            method: "POST",
 
-         headers: {
-  "Content-Type": "application/json",
-  "apikey": "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw",
-  "Authorization": "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
-},
+            headers: {
+              "Content-Type": "application/json",
 
-          body: JSON.stringify(data)
-        }
-      );
+              "apikey":
+                "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw",
+
+              "Authorization":
+                "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
+            },
+
+            body: JSON.stringify({
+              card_code: cardCode
+            })
+          }
+        );
 
 
       const result =
         await response.json();
 
 
-      if (!response.ok || !result.success) {
+      if (
+        !response.ok ||
+        !result.success
+      ) {
 
         throw new Error(
           result.message ||
-          "Aktivasi gagal."
+          "Gagal mengecek kartu."
         );
 
       }
 
 
-     
-       message.className = "success";
+      /*
+       * JIKA KARTU SUDAH AKTIF
+       * LANGSUNG KE GOOGLE REVIEW
+       */
 
-message.style.display = "block";
+      if (
+        result.status === "active"
+      ) {
 
-message.innerHTML = `
-  <div style="
-    font-size:24px;
-    margin-bottom:8px;
-  ">
-    🎉
-  </div>
+        window.location.href =
+          result.google_review_url;
 
-  <div style="
-    font-size:17px;
-    font-weight:700;
-    margin-bottom:5px;
-  ">
-    Kartu Berhasil Diaktifkan
-  </div>
+        return;
 
-  <div style="
-    font-size:13px;
-    font-weight:400;
-  ">
-    Kartu Anda sudah siap digunakan untuk Google Review.
-  </div>
-`;
-
-
-      reviewButton.href =
-        result.google_review_url;
-
-      reviewButton.style.display =
-        "block";
-
-
-      document
-        .getElementById("activationForm")
-        .reset();
+      }
 
 
     } catch (error) {
 
-      message.className = "error";
-
-      message.style.display = "block";
-
-      message.innerText =
-        "❌ " + error.message;
+      console.error(error);
 
     }
 
+  }
 
-    button.disabled = false;
 
-    button.innerText =
-      "Aktifkan Kartu";
+  checkCardStatus();
 
-  });
+
+  /*
+   * FORM SUBMIT
+   */
+
+  document
+    .getElementById("activationForm")
+    .addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+
+        const button =
+          document.getElementById(
+            "submitButton"
+          );
+
+
+        const message =
+          document.getElementById(
+            "message"
+          );
+
+
+        const reviewButton =
+          document.getElementById(
+            "reviewButton"
+          );
+
+
+        /*
+         * DISABLE BUTTON
+         */
+
+        button.disabled = true;
+
+        button.innerHTML =
+          "⏳ Mengaktifkan...";
+
+
+        message.style.display =
+          "none";
+
+
+        reviewButton.style.display =
+          "none";
+
+
+        /*
+         * AMBIL DATA FORM
+         */
+
+        const data = {
+
+          card_code:
+            document.getElementById(
+              "card_code"
+            ).value.trim(),
+
+
+          business_name:
+            document.getElementById(
+              "business_name"
+            ).value.trim(),
+
+
+          owner_name:
+            document.getElementById(
+              "owner_name"
+            ).value.trim(),
+
+
+          whatsapp:
+            document.getElementById(
+              "whatsapp"
+            ).value.trim(),
+
+
+          google_review_url:
+            document.getElementById(
+              "google_review_url"
+            ).value.trim()
+
+        };
+
+
+        try {
+
+          /*
+           * KIRIM KE SUPABASE
+           */
+
+          const response =
+            await fetch(
+              FUNCTION_URL,
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json",
+
+                  "apikey":
+                    "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw",
+
+                  "Authorization":
+                    "Bearer sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw"
+                },
+
+                body:
+                  JSON.stringify(data)
+              }
+            );
+
+
+          const result =
+            await response.json();
+
+
+          /*
+           * CEK RESPONSE
+           */
+
+          if (
+            !response.ok ||
+            !result.success
+          ) {
+
+            throw new Error(
+              result.message ||
+              "Aktivasi gagal."
+            );
+
+          }
+
+
+          /*
+           * SUCCESS MESSAGE
+           */
+
+          message.className =
+            "success";
+
+
+          message.style.display =
+            "block";
+
+
+          message.innerHTML = `
+
+            <div class="success-icon">
+              🎉
+            </div>
+
+            <div class="success-title">
+              Kartu Berhasil Diaktifkan
+            </div>
+
+            <div class="success-text">
+              Kartu Anda sudah siap digunakan
+              untuk Google Review.
+            </div>
+
+          `;
+
+
+          /*
+           * GOOGLE REVIEW BUTTON
+           */
+
+          reviewButton.href =
+            result.google_review_url;
+
+
+          reviewButton.style.display =
+            "block";
+
+
+          /*
+           * RESET INPUT
+           *
+           * KODE KARTU DIKEMBALIKAN
+           * AGAR TIDAK HILANG
+           */
+
+          document
+            .getElementById(
+              "activationForm"
+            )
+            .reset();
+
+
+          document
+            .getElementById(
+              "card_code"
+            )
+            .value =
+              cardCode || data.card_code;
+
+
+        } catch (error) {
+
+          /*
+           * ERROR MESSAGE
+           */
+
+          message.className =
+            "error";
+
+
+          message.style.display =
+            "block";
+
+
+          message.innerText =
+            "❌ " + error.message;
+
+        }
+
+
+        /*
+         * ENABLE BUTTON
+         */
+
+        button.disabled =
+          false;
+
+
+        button.innerHTML =
+          '<span class="button-icon">✓</span> Aktifkan Kartu';
+
+      }
+    );
 
 </script>
 
