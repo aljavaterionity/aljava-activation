@@ -1,1002 +1,1057 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>ALJAVA TERIONITY • Admin</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      min-height: 100vh;
-      padding: 28px 16px 45px;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #ffffff;
-      overflow-x: hidden;
-      background: #010713;
-    }
-
-    /* =========================================
-       BACKGROUND
-       ========================================= */
-
-    .scene {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      overflow: hidden;
-
-      background:
-        radial-gradient(
-          ellipse at 50% 10%,
-          rgba(0, 130, 255, 0.40),
-          transparent 42%
-        ),
-        radial-gradient(
-          ellipse at 90% 45%,
-          rgba(0, 220, 255, 0.20),
-          transparent 32%
-        ),
-        radial-gradient(
-          ellipse at 10% 70%,
-          rgba(0, 100, 255, 0.18),
-          transparent 32%
-        ),
-        linear-gradient(
-          180deg,
-          #010817 0%,
-          #031b46 48%,
-          #010713 100%
-        );
-    }
-
-    .stars {
-      position: absolute;
-      inset: 0;
-
-      background-image:
-        radial-gradient(
-          circle,
-          rgba(255,255,255,0.9) 0 1px,
-          transparent 1.5px
-        ),
-        radial-gradient(
-          circle,
-          rgba(80,220,255,0.65) 0 1px,
-          transparent 1.5px
-        );
-
-      background-size:
-        97px 83px,
-        151px 137px;
-
-      background-position:
-        8px 3px,
-        31px 42px;
-
-      opacity: 0.35;
-    }
-
-    .glow {
-      position: absolute;
-      width: 600px;
-      height: 300px;
-      left: 50%;
-      bottom: -120px;
-      transform: translateX(-50%);
-
-      background:
-        radial-gradient(
-          ellipse,
-          rgba(0,150,255,0.30),
-          transparent 68%
-        );
-
-      filter: blur(35px);
-    }
-
-    /* =========================================
-       CONTENT
-       ========================================= */
-
-    .container {
-      position: relative;
-      z-index: 2;
-
-      width: min(100%, 1050px);
-      margin: 0 auto;
-    }
-
-    /* =========================================
-       HEADER
-       ========================================= */
-
-    .header {
-      text-align: center;
-      margin: 12px auto 30px;
-      animation: fadeUp 0.6s ease both;
-    }
-
-    .brand {
-      display: inline-block;
-
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: 3px;
-
-      background:
-        linear-gradient(
-          90deg,
-          #ffffff,
-          #3be6ff,
-          #168cff,
-          #ffffff
-        );
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ALJAVA TERIONITY • Revenue</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 28px 16px 45px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  background: #010713;
+  overflow-x: hidden;
+}
+
+/* BACKGROUND */
+
+.scene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  background:
+    radial-gradient(
+      ellipse at 50% 10%,
+      rgba(0,130,255,.40),
+      transparent 42%
+    ),
+    radial-gradient(
+      ellipse at 90% 45%,
+      rgba(0,220,255,.20),
+      transparent 32%
+    ),
+    radial-gradient(
+      ellipse at 10% 70%,
+      rgba(0,100,255,.18),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #010817 0%,
+      #031b46 48%,
+      #010713 100%
+    );
+}
+
+.stars {
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.9) 0 1px,
+      transparent 1.5px
+    ),
+    radial-gradient(
+      circle,
+      rgba(80,220,255,.65) 0 1px,
+      transparent 1.5px
+    );
+
+  background-size:
+    97px 83px,
+    151px 137px;
+
+  background-position:
+    8px 3px,
+    31px 42px;
+
+  opacity: .35;
+}
+
+/* CONTENT */
+
+.container {
+  position: relative;
+  z-index: 2;
+
+  width: min(100%, 1100px);
+  margin: auto;
+}
+
+/* HEADER */
+
+.header {
+  text-align: center;
+  margin: 12px auto 30px;
+}
+
+.brand {
+  display: inline-block;
+
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #3be6ff,
+      #168cff,
+      #fff
+    );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.brand-line {
+  width: 55px;
+  height: 3px;
+  margin: 10px auto 12px;
 
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+  border-radius: 10px;
 
-      text-shadow:
-        0 0 20px rgba(0,190,255,0.20);
-    }
+  background:
+    linear-gradient(
+      90deg,
+      #00d9ff,
+      #168cff,
+      #35f4ff
+    );
+
+  box-shadow:
+    0 0 14px rgba(0,200,255,.7);
+}
 
-    .brand-line {
-      width: 55px;
-      height: 3px;
-      margin: 10px auto 12px;
+.subtitle {
+  color: #bcd5e8;
+  font-size: 14px;
+}
 
-      border-radius: 10px;
+/* STATS */
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 15px;
+
+  margin-bottom: 20px;
+}
+
+.stat {
+  position: relative;
+  overflow: hidden;
+
+  padding: 20px;
 
-      background:
-        linear-gradient(
-          90deg,
-          #00d9ff,
-          #168cff,
-          #35f4ff
-        );
+  min-height: 125px;
 
-      box-shadow:
-        0 0 14px rgba(0,200,255,0.7);
-    }
+  border-radius: 20px;
 
-    .subtitle {
-      color: #bcd5e8;
-      font-size: 14px;
-      letter-spacing: 0.3px;
-    }
+  border: 1px solid rgba(45,210,255,.38);
 
-    /* =========================================
-       STATS
-       ========================================= */
+  background:
+    linear-gradient(
+      145deg,
+      rgba(5,30,80,.88),
+      rgba(1,10,38,.94)
+    );
 
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+  box-shadow:
+    0 0 25px rgba(0,150,255,.14),
+    0 20px 45px rgba(0,0,0,.35);
 
-      margin-bottom: 22px;
+  backdrop-filter: blur(15px);
+}
 
-      animation: fadeUp 0.7s ease both;
-    }
+.stat-title {
+  color: #9ebbd0;
 
-    .stat {
-      position: relative;
-      overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
 
-      padding: 22px;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
 
-      min-height: 125px;
+.stat-number {
+  margin-top: 10px;
 
-      border-radius: 20px;
-
-      border: 1px solid rgba(45,210,255,0.38);
+  font-size: 27px;
+  font-weight: 900;
 
-      background:
-        linear-gradient(
-          145deg,
-          rgba(5,30,80,0.88),
-          rgba(1,10,38,0.94)
-        );
-
-      box-shadow:
-        0 0 25px rgba(0,150,255,0.14),
-        0 20px 45px rgba(0,0,0,0.35),
-        inset 0 0 25px rgba(0,150,255,0.05);
-
-      backdrop-filter: blur(15px);
-
-      transition:
-        transform 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-    }
-
-    .stat:hover {
-      transform: translateY(-3px);
-
-      border-color: rgba(50,225,255,0.70);
-
-      box-shadow:
-        0 0 30px rgba(0,170,255,0.24),
-        0 20px 50px rgba(0,0,0,0.40);
-    }
-
-    .stat::after {
-      content: "";
-
-      position: absolute;
-
-      width: 90px;
-      height: 90px;
-
-      right: -35px;
-      bottom: -35px;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(0,210,255,0.20),
-          transparent 70%
-        );
-
-      filter: blur(8px);
-    }
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #35ddff
+    );
 
-    .stat-title {
-      position: relative;
-      z-index: 1;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-      color: #9ebbd0;
-      font-size: 13px;
-      font-weight: 700;
+.stat-small {
+  margin-top: 8px;
+  color: #6f9ab6;
+  font-size: 11px;
+}
 
-      text-transform: uppercase;
-      letter-spacing: 0.7px;
-    }
+/* CARD */
 
-    .stat-number {
-      position: relative;
-      z-index: 1;
+.card {
+  margin-bottom: 20px;
+  padding: 23px;
 
-      margin-top: 9px;
+  border-radius: 24px;
 
-      font-size: 34px;
-      line-height: 1;
+  border: 1px solid rgba(45,210,255,.42);
 
-      font-weight: 900;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(4,25,70,.94),
+      rgba(1,8,32,.97)
+    );
 
-      background:
-        linear-gradient(
-          90deg,
-          #ffffff,
-          #35ddff
-        );
+  box-shadow:
+    0 0 35px rgba(0,150,255,.18),
+    0 25px 70px rgba(0,0,0,.55);
 
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
+  backdrop-filter: blur(18px);
+}
 
-      text-shadow:
-        0 0 18px rgba(0,190,255,0.18);
-    }
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    .stat:nth-child(2) .stat-number {
-      background:
-        linear-gradient(
-          90deg,
-          #35ddff,
-          #168cff
-        );
+  margin-bottom: 20px;
+}
 
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
+.card-title {
+  margin: 0;
+  font-size: 20px;
+}
 
-    .stat:nth-child(3) .stat-number {
-      background:
-        linear-gradient(
-          90deg,
-          #ffffff,
-          #7ba8c9
-        );
+.card-description {
+  margin: 5px 0 0;
 
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
+  color: #91b1c9;
+  font-size: 12px;
+}
 
-    /* =========================================
-       TABLE CARD
-       ========================================= */
+/* LIVE */
 
-    .card {
-      padding: 24px;
+.live {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
 
-      border-radius: 24px;
+  padding: 7px 11px;
 
-      border: 1px solid rgba(45,210,255,0.42);
+  border-radius: 30px;
 
-      background:
-        linear-gradient(
-          145deg,
-          rgba(4,25,70,0.94),
-          rgba(1,8,32,0.97)
-        );
+  border: 1px solid rgba(40,220,255,.35);
 
-      box-shadow:
-        0 0 35px rgba(0,150,255,0.18),
-        0 25px 70px rgba(0,0,0,0.55),
-        inset 0 0 30px rgba(0,150,255,0.05);
+  color: #6feaff;
+  background: rgba(0,150,255,.10);
 
-      backdrop-filter: blur(18px);
+  font-size: 10px;
+  font-weight: 800;
+}
 
-      animation: fadeUp 0.8s ease both;
-    }
+.live-dot {
+  width: 7px;
+  height: 7px;
 
-    .card-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+  border-radius: 50%;
 
-      gap: 15px;
+  background: #35eaff;
 
-      margin-bottom: 20px;
-    }
+  box-shadow: 0 0 10px #35eaff;
+}
 
-    .card-title {
-      margin: 0;
+/* REVENUE SUMMARY */
 
-      font-size: 21px;
-      font-weight: 800;
-    }
+.revenue-main {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 15px;
+}
 
-    .card-description {
-      margin: 5px 0 0;
+.big-revenue {
+  padding: 25px;
 
-      color: #91b1c9;
+  border-radius: 18px;
 
-      font-size: 13px;
-    }
+  border: 1px solid rgba(0,220,255,.28);
 
-    .live {
-      display: inline-flex;
-      align-items: center;
-      gap: 7px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(0,130,255,.14),
+      rgba(0,30,80,.20)
+    );
+}
 
-      padding: 7px 11px;
+.big-label {
+  color: #8db1c8;
 
-      border-radius: 30px;
+  font-size: 12px;
+  font-weight: 700;
 
-      border: 1px solid rgba(40,220,255,0.35);
+  text-transform: uppercase;
+}
 
-      color: #6feaff;
+.big-number {
+  margin-top: 10px;
 
-      background: rgba(0,150,255,0.10);
+  font-size: 38px;
+  font-weight: 900;
 
-      font-size: 11px;
-      font-weight: 800;
-    }
+  background:
+    linear-gradient(
+      90deg,
+      #fff,
+      #35eaff,
+      #168cff
+    );
 
-    .live-dot {
-      width: 7px;
-      height: 7px;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
 
-      border-radius: 50%;
+.profit-box {
+  padding: 25px;
 
-      background: #35eaff;
+  border-radius: 18px;
 
-      box-shadow:
-        0 0 10px #35eaff;
-    }
+  border: 1px solid rgba(45,210,255,.25);
 
-    /* =========================================
-       TABLE
-       ========================================= */
+  background: rgba(0,20,60,.35);
+}
 
-    .table-wrapper {
-      overflow-x: auto;
+.profit-label {
+  color: #8db1c8;
+  font-size: 12px;
+}
 
-      border-radius: 16px;
+.profit-number {
+  margin-top: 10px;
 
-      border: 1px solid rgba(60,110,160,0.25);
-    }
+  font-size: 28px;
+  font-weight: 900;
 
-    table {
-      width: 100%;
+  color: #55eaff;
+}
 
-      min-width: 650px;
+/* TABLE */
 
-      border-collapse: collapse;
-    }
+.table-wrapper {
+  overflow-x: auto;
 
-    th,
-    td {
-      padding: 15px 16px;
+  border-radius: 15px;
 
-      text-align: left;
+  border: 1px solid rgba(60,110,160,.25);
+}
 
-      border-bottom:
-        1px solid rgba(80,130,170,0.18);
+table {
+  width: 100%;
+  min-width: 850px;
 
-      white-space: nowrap;
-    }
+  border-collapse: collapse;
+}
 
-    th {
-      color: #77a8c6;
+th,
+td {
+  padding: 14px 15px;
 
-      background:
-        rgba(4,22,55,0.75);
+  text-align: left;
 
-      font-size: 11px;
+  border-bottom:
+    1px solid rgba(80,130,170,.18);
 
-      text-transform: uppercase;
+  white-space: nowrap;
+}
 
-      letter-spacing: 0.8px;
-    }
+th {
+  color: #77a8c6;
 
-    td {
-      color: #e8f8ff;
+  background: rgba(4,22,55,.75);
 
-      font-size: 14px;
-    }
+  font-size: 10px;
 
-    tbody tr {
-      transition: background 0.18s ease;
-    }
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
 
-    tbody tr:hover {
-      background:
-        rgba(0,160,255,0.07);
-    }
+td {
+  color: #e8f8ff;
+  font-size: 13px;
+}
 
-    tbody tr:last-child td {
-      border-bottom: none;
-    }
+tbody tr:hover {
+  background: rgba(0,160,255,.07);
+}
 
-    /* =========================================
-       STATUS
-       ========================================= */
+tbody tr:last-child td {
+  border-bottom: none;
+}
 
-    .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+/* STATUS */
 
-      padding: 6px 11px;
+.status {
+  display: inline-flex;
 
-      border-radius: 30px;
+  padding: 5px 9px;
 
-      font-size: 11px;
+  border-radius: 20px;
 
-      font-weight: 800;
+  font-size: 10px;
+  font-weight: 800;
 
-      text-transform: uppercase;
+  text-transform: uppercase;
+}
 
-      letter-spacing: 0.4px;
-    }
+.paid {
+  color: #73efff;
+  background: rgba(0,210,255,.10);
+  border: 1px solid rgba(0,220,255,.28);
+}
 
-    .status::before {
-      content: "";
+.pending {
+  color: #ffd76a;
+  background: rgba(255,190,0,.08);
+  border: 1px solid rgba(255,190,0,.20);
+}
 
-      width: 6px;
-      height: 6px;
+.other {
+  color: #b9c7d4;
+  background: rgba(120,150,175,.10);
+  border: 1px solid rgba(120,150,175,.25);
+}
 
-      border-radius: 50%;
-    }
+/* FOOTER */
 
-    .active {
-      color: #73efff;
+footer {
+  margin-top: 25px;
 
-      background:
-        rgba(0,210,255,0.10);
+  text-align: center;
 
-      border:
-        1px solid rgba(0,220,255,0.28);
-    }
+  color: #7290a6;
+  font-size: 10px;
+}
 
-    .active::before {
-      background: #35eaff;
+/* MOBILE */
 
-      box-shadow:
-        0 0 8px #35eaff;
-    }
+@media (max-width: 850px) {
 
-    .inactive {
-      color: #b9c7d4;
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-      background:
-        rgba(120,150,175,0.10);
+  .revenue-main {
+    grid-template-columns: 1fr;
+  }
+}
 
-      border:
-        1px solid rgba(120,150,175,0.25);
-    }
+@media (max-width: 550px) {
 
-    .inactive::before {
-      background: #71879a;
-    }
+  body {
+    padding: 22px 12px 35px;
+  }
 
-    /* =========================================
-       FOOTER
-       ========================================= */
+  .brand {
+    font-size: 22px;
+  }
 
-    footer {
-      margin-top: 25px;
+  .subtitle {
+    font-size: 12px;
+  }
 
-      text-align: center;
+  .stats {
+    grid-template-columns: 1fr;
+  }
 
-      color: #7290a6;
+  .stat {
+    min-height: 105px;
+  }
 
-      font-size: 11px;
+  .big-number {
+    font-size: 30px;
+  }
 
-      animation: fadeUp 1s ease both;
-    }
+  .card {
+    padding: 17px 13px;
+    border-radius: 20px;
+  }
 
-    /* =========================================
-       ANIMATION
-       ========================================= */
+  .card-header {
+    align-items: flex-start;
+  }
 
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* =========================================
-       MOBILE
-       ========================================= */
-
-    @media (max-width: 700px) {
-
-      body {
-        padding: 22px 12px 35px;
-      }
-
-      .header {
-        margin-top: 8px;
-        margin-bottom: 24px;
-      }
-
-      .brand {
-        font-size: 23px;
-        letter-spacing: 2.2px;
-      }
-
-      .subtitle {
-        font-size: 12px;
-      }
-
-      .stats {
-        grid-template-columns: 1fr;
-        gap: 12px;
-      }
-
-      .stat {
-        min-height: 105px;
-        padding: 19px;
-        border-radius: 18px;
-      }
-
-      .stat-number {
-        font-size: 30px;
-      }
-
-      .card {
-        padding: 18px 14px;
-
-        border-radius: 21px;
-      }
-
-      .card-header {
-        align-items: flex-start;
-      }
-
-      .card-title {
-        font-size: 18px;
-      }
-
-      .card-description {
-        font-size: 12px;
-      }
-
-      .live {
-        font-size: 9px;
-        padding: 6px 8px;
-      }
-
-      th,
-      td {
-        padding: 13px 12px;
-      }
-    }
-
-    @media (max-width: 390px) {
-
-      .live {
-        display: none;
-      }
-
-      .brand {
-        font-size: 21px;
-      }
-    }
-  </style>
+  .live {
+    font-size: 9px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <!-- =========================================
-       BACKGROUND
-       ========================================= -->
+<div class="scene">
+  <div class="stars"></div>
+</div>
 
-  <div class="scene" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="glow"></div>
+<main class="container">
+
+<header class="header">
+
+  <div class="brand">
+    ALJAVA TERIONITY
+  </div>
+
+  <div class="brand-line"></div>
+
+  <div class="subtitle">
+    Revenue Dashboard • Admin System
+  </div>
+
+</header>
+
+
+<!-- STATISTIK -->
+
+<section class="stats">
+
+  <div class="stat">
+
+    <div class="stat-title">
+      Total Revenue
+    </div>
+
+    <div class="stat-number" id="totalRevenue">
+      Rp 0
+    </div>
+
+    <div class="stat-small">
+      Semua transaksi
+    </div>
+
   </div>
 
 
-  <!-- =========================================
-       MAIN
-       ========================================= -->
+  <div class="stat">
 
-  <main class="container">
+    <div class="stat-title">
+      Total HPP
+    </div>
+
+    <div class="stat-number" id="totalHpp">
+      Rp 0
+    </div>
+
+    <div class="stat-small">
+      Modal produk
+    </div>
+
+  </div>
 
 
-    <!-- HEADER -->
+  <div class="stat">
 
-    <header class="header">
+    <div class="stat-title">
+      Total Komisi
+    </div>
 
-      <div class="brand">
-        ALJAVA TERIONITY
+    <div class="stat-number" id="totalCommission">
+      Rp 0
+    </div>
+
+    <div class="stat-small">
+      Komisi otomatis
+    </div>
+
+  </div>
+
+
+  <div class="stat">
+
+    <div class="stat-title">
+      Transaksi
+    </div>
+
+    <div class="stat-number" id="totalTransactions">
+      0
+    </div>
+
+    <div class="stat-small">
+      Total transaksi
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- PROFIT -->
+
+<section class="card">
+
+  <div class="card-header">
+
+    <div>
+
+      <h2 class="card-title">
+        Ringkasan Revenue
+      </h2>
+
+      <p class="card-description">
+        Perhitungan otomatis berdasarkan transaksi.
+      </p>
+
+    </div>
+
+    <div class="live">
+      <span class="live-dot"></span>
+      LIVE
+    </div>
+
+  </div>
+
+
+  <div class="revenue-main">
+
+    <div class="big-revenue">
+
+      <div class="big-label">
+        Total Revenue
       </div>
 
-      <div class="brand-line"></div>
-
-      <div class="subtitle">
-        Admin Dashboard • Google Review Card
+      <div class="big-number" id="mainRevenue">
+        Rp 0
       </div>
 
-    </header>
+    </div>
 
 
-    <!-- =========================================
-         STATS
-         ========================================= -->
+    <div class="profit-box">
 
-    <section class="stats">
-
-      <div class="stat">
-
-        <div class="stat-title">
-          Total Kartu
-        </div>
-
-        <div
-          class="stat-number"
-          id="totalCards"
-        >
-          -
-        </div>
-
+      <div class="profit-label">
+        Profit Bersih
       </div>
 
-
-      <div class="stat">
-
-        <div class="stat-title">
-          Kartu Aktif
-        </div>
-
-        <div
-          class="stat-number"
-          id="activeCards"
-        >
-          -
-        </div>
-
+      <div class="profit-number" id="netProfit">
+        Rp 0
       </div>
 
+    </div>
 
-      <div class="stat">
+  </div>
 
-        <div class="stat-title">
-          Belum Aktif
-        </div>
-
-        <div
-          class="stat-number"
-          id="inactiveCards"
-        >
-          -
-        </div>
-
-      </div>
-
-    </section>
+</section>
 
 
-    <!-- =========================================
-         TABLE
-         ========================================= -->
+<!-- TRANSAKSI -->
 
-    <section class="card">
+<section class="card">
 
-      <div class="card-header">
+  <div class="card-header">
 
-        <div>
+    <div>
 
-          <h2 class="card-title">
-            Daftar Kartu
-          </h2>
+      <h2 class="card-title">
+        Transaksi Terbaru
+      </h2>
 
-          <p class="card-description">
-            Pantau status kartu ALJAVA secara realtime.
-          </p>
+      <p class="card-description">
+        Data transaksi dari sistem ALJAVA.
+      </p>
 
-        </div>
+    </div>
 
-        <div class="live">
-
-          <span class="live-dot"></span>
-
-          SYSTEM
-
-        </div>
-
-      </div>
+  </div>
 
 
-      <div class="table-wrapper">
+  <div class="table-wrapper">
 
-        <table>
+    <table>
 
-          <thead>
+      <thead>
 
-            <tr>
-              <th>Kode</th>
-              <th>Status</th>
-              <th>Produk</th>
-              <th>Aktivasi</th>
-            </tr>
+        <tr>
+          <th>Tanggal</th>
+          <th>Produk</th>
+          <th>Qty</th>
+          <th>Revenue</th>
+          <th>HPP</th>
+          <th>Komisi</th>
+          <th>Profit</th>
+          <th>Status</th>
+        </tr>
 
-          </thead>
-
-
-          <tbody id="cardsTable">
-
-            <tr>
-
-              <td colspan="4">
-                Memuat data...
-              </td>
-
-            </tr>
-
-          </tbody>
-
-        </table>
-
-      </div>
-
-    </section>
+      </thead>
 
 
-    <!-- FOOTER -->
+      <tbody id="transactionsTable">
 
-    <footer>
-      © 2024 ALJAVA TERIONITY • Admin System
-    </footer>
+        <tr>
 
-  </main>
+          <td colspan="8">
+            Memuat data...
+          </td>
 
+        </tr>
 
-  <!-- =========================================
-       JAVASCRIPT
-       FUNGSI BACKEND TETAP
-       ========================================= -->
+      </tbody>
 
-  <script>
+    </table>
 
-    const SUPABASE_URL =
-      "https://lbzwmcxwxummitldxucj.supabase.co";
+  </div>
 
-    const SUPABASE_KEY =
-      "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+</section>
 
 
-    async function loadCards() {
+<footer>
+  © 2026 ALJAVA TERIONITY • Revenue System
+</footer>
 
-      try {
-
-        const response = await fetch(
-          SUPABASE_URL +
-          "/rest/v1/Cards?select=card_code,status,product_type,activated_at",
-          {
-            headers: {
-              "apikey": SUPABASE_KEY,
-              "Authorization":
-                "Bearer " + SUPABASE_KEY
-            }
-          }
-        );
+</main>
 
 
-        if (!response.ok) {
+<script>
 
-          throw new Error(
-            "Gagal mengambil data kartu: " +
-            response.status
-          );
+const SUPABASE_URL =
+  "https://lbzwmcxwxummitldxucj.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+
+
+function rupiah(value) {
+
+  return "Rp " +
+    Number(value || 0).toLocaleString("id-ID");
+
+}
+
+
+async function loadRevenue() {
+
+  try {
+
+    const response = await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/Transactions" +
+      "?select=product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date" +
+      "&order=transaction_date.desc",
+
+      {
+
+        headers: {
+
+          "apikey": SUPABASE_KEY,
+
+          "Authorization":
+            "Bearer " + SUPABASE_KEY
 
         }
-
-
-        const cards =
-          await response.json();
-
-
-        /* TOTAL */
-
-        document.getElementById(
-          "totalCards"
-        ).textContent =
-          cards.length;
-
-
-        /* ACTIVE */
-
-        document.getElementById(
-          "activeCards"
-        ).textContent =
-          cards.filter(function(card) {
-
-            return card.status === "active";
-
-          }).length;
-
-
-        /* INACTIVE */
-
-        document.getElementById(
-          "inactiveCards"
-        ).textContent =
-          cards.filter(function(card) {
-
-            return card.status === "inactive";
-
-          }).length;
-
-
-        /* TABLE */
-
-        const table =
-          document.getElementById(
-            "cardsTable"
-          );
-
-
-        table.innerHTML = "";
-
-
-        if (!cards.length) {
-
-          table.innerHTML =
-            "<tr>" +
-              "<td colspan=\"4\" style=\"text-align:center;color:#8aa8bd;padding:30px;\">" +
-                "Belum ada data kartu." +
-              "</td>" +
-            "</tr>";
-
-          return;
-
-        }
-
-
-        cards.forEach(function(card) {
-
-          const row =
-            document.createElement("tr");
-
-
-          const statusClass =
-            card.status === "active"
-              ? "active"
-              : "inactive";
-
-
-          let activated = "-";
-
-
-          if (card.activated_at) {
-
-            activated =
-              new Date(
-                card.activated_at
-              ).toLocaleDateString(
-                "id-ID"
-              );
-
-          }
-
-
-          row.innerHTML =
-
-            "<td>" +
-              (card.card_code || "-") +
-            "</td>" +
-
-            "<td>" +
-
-              "<span class=\"status " +
-                statusClass +
-              "\">" +
-
-                (card.status || "-") +
-
-              "</span>" +
-
-            "</td>" +
-
-            "<td>" +
-              (card.product_type || "-") +
-            "</td>" +
-
-            "<td>" +
-              activated +
-            "</td>";
-
-
-          table.appendChild(row);
-
-        });
-
-
-      } catch (error) {
-
-        console.error(error);
-
-
-        document.getElementById(
-          "cardsTable"
-        ).innerHTML =
-
-          "<tr>" +
-
-            "<td colspan=\"4\" style=\"color:#ff9eb1;padding:25px;\">" +
-
-              "❌ " +
-              error.message +
-
-            "</td>" +
-
-          "</tr>";
 
       }
+
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Gagal mengambil transaksi: " +
+        response.status
+      );
 
     }
 
 
-    loadCards();
+    const transactions =
+      await response.json();
 
-  </script>
+
+    let totalRevenue = 0;
+    let totalHpp = 0;
+    let totalCommission = 0;
+
+
+    transactions.forEach(function(tx) {
+
+      const quantity =
+        Number(tx.quantity || 0);
+
+      const sellingPrice =
+        Number(tx.selling_price || 0);
+
+      const hpp =
+        Number(tx.hpp || 0);
+
+      const commission =
+        Number(tx.commission || 0);
+
+
+      totalRevenue +=
+        sellingPrice * quantity;
+
+      totalHpp +=
+        hpp * quantity;
+
+      totalCommission +=
+        commission;
+
+    });
+
+
+    const netProfit =
+      totalRevenue -
+      totalHpp -
+      totalCommission;
+
+
+    document.getElementById(
+      "totalRevenue"
+    ).textContent =
+      rupiah(totalRevenue);
+
+
+    document.getElementById(
+      "mainRevenue"
+    ).textContent =
+      rupiah(totalRevenue);
+
+
+    document.getElementById(
+      "totalHpp"
+    ).textContent =
+      rupiah(totalHpp);
+
+
+    document.getElementById(
+      "totalCommission"
+    ).textContent =
+      rupiah(totalCommission);
+
+
+    document.getElementById(
+      "totalTransactions"
+    ).textContent =
+      transactions.length;
+
+
+    document.getElementById(
+      "netProfit"
+    ).textContent =
+      rupiah(netProfit);
+
+
+    renderTransactions(transactions);
+
+
+  } catch (error) {
+
+    console.error(error);
+
+
+    document.getElementById(
+      "transactionsTable"
+    ).innerHTML =
+
+      "<tr>" +
+
+        "<td colspan='8' style='color:#ff9eb1;padding:25px'>" +
+
+          "❌ " +
+          error.message +
+
+        "</td>" +
+
+      "</tr>";
+
+  }
+
+}
+
+
+function renderTransactions(transactions) {
+
+  const table =
+    document.getElementById(
+      "transactionsTable"
+    );
+
+
+  if (!transactions.length) {
+
+    table.innerHTML =
+
+      "<tr>" +
+
+        "<td colspan='8' style='text-align:center;color:#8aa8bd;padding:35px'>" +
+
+          "Belum ada transaksi." +
+
+        "</td>" +
+
+      "</tr>";
+
+    return;
+
+  }
+
+
+  table.innerHTML = "";
+
+
+  transactions.forEach(function(tx) {
+
+    const quantity =
+      Number(tx.quantity || 0);
+
+    const sellingPrice =
+      Number(tx.selling_price || 0);
+
+    const hpp =
+      Number(tx.hpp || 0);
+
+    const commission =
+      Number(tx.commission || 0);
+
+
+    const revenue =
+      sellingPrice * quantity;
+
+    const totalHpp =
+      hpp * quantity;
+
+    const profit =
+      revenue -
+      totalHpp -
+      commission;
+
+
+    const date =
+      tx.transaction_date
+        ? new Date(
+            tx.transaction_date
+          ).toLocaleDateString(
+            "id-ID"
+          )
+        : "-";
+
+
+    let statusClass = "other";
+
+    const status =
+      tx.payment_status || "-";
+
+
+    if (
+      status.toLowerCase() === "paid"
+    ) {
+
+      statusClass = "paid";
+
+    }
+
+    else if (
+      status.toLowerCase() === "pending"
+    ) {
+
+      statusClass = "pending";
+
+    }
+
+
+    const row =
+      document.createElement("tr");
+
+
+    row.innerHTML =
+
+      "<td>" +
+        date +
+      "</td>" +
+
+      "<td>" +
+        (tx.product_id || "-") +
+      "</td>" +
+
+      "<td>" +
+        quantity +
+      "</td>" +
+
+      "<td>" +
+        rupiah(revenue) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(totalHpp) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(commission) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(profit) +
+      "</td>" +
+
+      "<td>" +
+
+        "<span class='status " +
+          statusClass +
+        "'>" +
+
+          status +
+
+        "</span>" +
+
+      "</td>";
+
+
+    table.appendChild(row);
+
+  });
+
+}
+
+
+loadRevenue();
+
+
+/*
+  Refresh otomatis setiap 30 detik
+*/
+
+setInterval(
+  loadRevenue,
+  30000
+);
+
+</script>
 
 </body>
 </html>
