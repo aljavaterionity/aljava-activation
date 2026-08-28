@@ -777,359 +777,236 @@
 
   <!-- JAVASCRIPT -->
 
-  <script>
-
-    const SUPABASE_URL =
-      "https://lbzwmcxwxummitldxucj.supabase.co";
-
-    const SUPABASE_KEY =
-      "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
-
-
-    function rupiah(value) {
-
-      return "Rp " +
-        Number(value || 0).toLocaleString("id-ID");
-
-    }
-
-
-    async function loadRevenue() {
-
-      try {
-
-        const url =
-          SUPABASE_URL +
-          "/rest/v1/Transactions" +
-          "?select=product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date" +
-          "&order=transaction_date.desc";
-
-
-        const response =
-          await fetch(
-            url,
-            {
-              method: "GET",
-
-              headers: {
-                "apikey": SUPABASE_KEY,
-                "Authorization":
-                  "Bearer " + SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-              }
-            }
-          );
-
-
-        if (!response.ok) {
-
-          const errorText =
-            await response.text();
-
-          throw new Error(
-            "Supabase error " +
-            response.status +
-            ": " +
-            errorText
-          );
-
-        }
-
-
-        const transactions =
-          await response.json();
-
-
-        let totalRevenue = 0;
-        let totalHpp = 0;
-        let totalCommission = 0;
-
-
-        transactions.forEach(
-          function(tx) {
-
-            const quantity =
-              Number(tx.quantity) || 0;
-
-            const sellingPrice =
-              Number(tx.selling_price) || 0;
-
-            const hpp =
-              Number(tx.hpp) || 0;
-
-            const commission =
-              Number(tx.commission) || 0;
-
-
-            totalRevenue +=
-              sellingPrice * quantity;
-
-            totalHpp +=
-              hpp * quantity;
-
-            totalCommission +=
-              commission;
-
-          }
-        );
-
-
-        const netProfit =
-          totalRevenue -
-          totalHpp -
-          totalCommission;
-
-
-        document.getElementById(
-          "totalRevenue"
-        ).textContent =
-          rupiah(totalRevenue);
-
-
-        document.getElementById(
-          "mainRevenue"
-        ).textContent =
-          rupiah(totalRevenue);
-
-
-        document.getElementById(
-          "totalHpp"
-        ).textContent =
-          rupiah(totalHpp);
-
-
-        document.getElementById(
-          "totalCommission"
-        ).textContent =
-          rupiah(totalCommission);
-
-
-        document.getElementById(
-          "totalTransactions"
-        ).textContent =
-          transactions.length;
-
-
-        document.getElementById(
-          "netProfit"
-        ).textContent =
-          rupiah(netProfit);
-
-
-        renderTransactions(
-          transactions
-        );
-
-
-      } catch (error) {
-
-        console.error(
-          "Revenue error:",
-          error
-        );
-
-
-        document.getElementById(
-          "transactionsTable"
-        ).innerHTML =
-
-          "<tr>" +
-
-            "<td colspan='8'>" +
-
-              "<div class='error-box'>" +
-
-                "❌ Gagal mengambil data transaksi." +
-
-                "<br><br>" +
-
-                error.message +
-
-              "</div>" +
-
-            "</td>" +
-
-          "</tr>";
-
+  
+<script>
+const SUPABASE_URL = "https://lbzwmcxwxummitldxucj.supabase.co";
+const SUPABASE_KEY = "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+
+function rupiah(value) {
+  return "Rp " + Number(value || 0).toLocaleString("id-ID");
+}
+
+async function loadRevenue() {
+  const table = document.getElementById("transactionsTable");
+
+  try {
+    // Ambil SEMUA kolom transaksi dulu
+    const url =
+      SUPABASE_URL +
+      "/rest/v1/Transactions?select=*&order=transaction_date.desc";
+
+    console.log("Mengambil data:", url);
+
+    const response = await fetch(url, {
+      method: "GET",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
       }
+    });
 
-    }
+    const text = await response.text();
 
+    console.log("Status:", response.status);
+    console.log("Response:", text);
 
-    function renderTransactions(
-      transactions
-    ) {
-
-      const table =
-        document.getElementById(
-          "transactionsTable"
-        );
-
-
-      if (!transactions.length) {
-
-        table.innerHTML =
-
-          "<tr>" +
-
-            "<td colspan='8' " +
-            "style='text-align:center;" +
-            "color:#8aa8bd;" +
-            "padding:35px'>" +
-
-              "Belum ada transaksi." +
-
-            "</td>" +
-
-          "</tr>";
-
-        return;
-
-      }
-
-
-      table.innerHTML = "";
-
-
-      transactions.forEach(
-        function(tx) {
-
-          const quantity =
-            Number(tx.quantity) || 0;
-
-          const sellingPrice =
-            Number(tx.selling_price) || 0;
-
-          const hpp =
-            Number(tx.hpp) || 0;
-
-          const commission =
-            Number(tx.commission) || 0;
-
-
-          const revenue =
-            sellingPrice * quantity;
-
-          const totalHpp =
-            hpp * quantity;
-
-          const profit =
-            revenue -
-            totalHpp -
-            commission;
-
-
-          const date =
-            tx.transaction_date
-              ? new Date(
-                  tx.transaction_date
-                ).toLocaleDateString(
-                  "id-ID"
-                )
-              : "-";
-
-
-          const status =
-            tx.payment_status || "-";
-
-
-          let statusClass =
-            "other";
-
-
-          if (
-            status.toLowerCase() ===
-            "paid"
-          ) {
-
-            statusClass =
-              "paid";
-
-          }
-
-          else if (
-            status.toLowerCase() ===
-            "pending"
-          ) {
-
-            statusClass =
-              "pending";
-
-          }
-
-
-          const row =
-            document.createElement(
-              "tr"
-            );
-
-
-          row.innerHTML =
-
-            "<td>" +
-              date +
-            "</td>" +
-
-            "<td>" +
-              (
-                tx.product_id ||
-                "-"
-              ) +
-            "</td>" +
-
-            "<td>" +
-              quantity +
-            "</td>" +
-
-            "<td>" +
-              rupiah(revenue) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(totalHpp) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(commission) +
-            "</td>" +
-
-            "<td>" +
-              rupiah(profit) +
-            "</td>" +
-
-            "<td>" +
-
-              "<span class='status " +
-                statusClass +
-              "'>" +
-
-                status +
-
-              "</span>" +
-
-            "</td>";
-
-
-          table.appendChild(row);
-
-        }
+    if (!response.ok) {
+      throw new Error(
+        "Supabase error " +
+        response.status +
+        ": " +
+        text
       );
-
     }
 
+    const transactions = JSON.parse(text);
 
-    // Jalankan saat halaman dibuka
-    loadRevenue();
+    console.log("Jumlah transaksi:", transactions.length);
+    console.log("Data transaksi:", transactions);
+
+    // =========================
+    // HITUNG TOTAL
+    // =========================
+
+    let totalRevenue = 0;
+    let totalHpp = 0;
+    let totalCommission = 0;
+
+    transactions.forEach(function(tx) {
+
+      const quantity = Number(tx.quantity) || 0;
+      const sellingPrice = Number(tx.selling_price) || 0;
+      const hpp = Number(tx.hpp) || 0;
+      const commission = Number(tx.commission) || 0;
+
+      totalRevenue += sellingPrice * quantity;
+      totalHpp += hpp * quantity;
+      totalCommission += commission;
+    });
+
+    const netProfit =
+      totalRevenue -
+      totalHpp -
+      totalCommission;
+
+    // =========================
+    // TAMPILKAN STATISTIK
+    // =========================
+
+    document.getElementById("totalRevenue").textContent =
+      rupiah(totalRevenue);
+
+    document.getElementById("mainRevenue").textContent =
+      rupiah(totalRevenue);
+
+    document.getElementById("totalHpp").textContent =
+      rupiah(totalHpp);
+
+    document.getElementById("totalCommission").textContent =
+      rupiah(totalCommission);
+
+    document.getElementById("totalTransactions").textContent =
+      transactions.length;
+
+    document.getElementById("netProfit").textContent =
+      rupiah(netProfit);
+
+    // =========================
+    // TAMPILKAN TABEL
+    // =========================
+
+    renderTransactions(transactions);
+
+  } catch (error) {
+
+    console.error("ERROR DASHBOARD:", error);
+
+    table.innerHTML =
+      "<tr>" +
+        "<td colspan='8' style='color:#ff9eb1;padding:25px;text-align:center'>" +
+          "❌ " + error.message +
+        "</td>" +
+      "</tr>";
+  }
+}
 
 
-    // Refresh otomatis setiap 30 detik
-    setInterval(
-      loadRevenue,
-      30000
-    );
+function renderTransactions(transactions) {
 
+  const table =
+    document.getElementById("transactionsTable");
+
+  if (!transactions || transactions.length === 0) {
+
+    table.innerHTML =
+      "<tr>" +
+        "<td colspan='8' style='text-align:center;color:#8aa8bd;padding:35px'>" +
+          "Belum ada transaksi." +
+        "</td>" +
+      "</tr>";
+
+    return;
+  }
+
+  table.innerHTML = "";
+
+  transactions.forEach(function(tx) {
+
+    const quantity =
+      Number(tx.quantity) || 0;
+
+    const sellingPrice =
+      Number(tx.selling_price) || 0;
+
+    const hpp =
+      Number(tx.hpp) || 0;
+
+    const commission =
+      Number(tx.commission) || 0;
+
+    const revenue =
+      sellingPrice * quantity;
+
+    const totalHpp =
+      hpp * quantity;
+
+    const profit =
+      revenue -
+      totalHpp -
+      commission;
+
+    const date =
+      tx.transaction_date
+        ? new Date(tx.transaction_date)
+            .toLocaleDateString("id-ID")
+        : "-";
+
+    const status =
+      tx.payment_status || "-";
+
+    let statusClass = "other";
+
+    if (status.toLowerCase() === "paid") {
+      statusClass = "paid";
+    }
+
+    if (status.toLowerCase() === "pending") {
+      statusClass = "pending";
+    }
+
+    const row =
+      document.createElement("tr");
+
+    row.innerHTML =
+
+      "<td>" +
+        date +
+      "</td>" +
+
+      "<td>" +
+        (tx.product_id || "-") +
+      "</td>" +
+
+      "<td>" +
+        quantity +
+      "</td>" +
+
+      "<td>" +
+        rupiah(revenue) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(totalHpp) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(commission) +
+      "</td>" +
+
+      "<td>" +
+        rupiah(profit) +
+      "</td>" +
+
+      "<td>" +
+        "<span class='status " +
+          statusClass +
+        "'>" +
+          status +
+        "</span>" +
+      "</td>";
+
+    table.appendChild(row);
+  });
+}
+
+
+// JALANKAN SAAT HALAMAN DIBUKA
+loadRevenue()
+
+
+// REFRESH SETIAP 30 DETIK
+setInterval(loadRevenue, 30000);
   </script>
 
 </body>
