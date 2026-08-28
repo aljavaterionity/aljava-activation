@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ALJAVA Admin Dashboard</title>
+  <title>ALJAVA TERIONITY • Admin</title>
 
   <style>
     * {
@@ -18,17 +18,10 @@
     body {
       margin: 0;
       min-height: 100vh;
-      padding: 24px 14px 45px;
-
-      font-family:
-        Inter,
-        Arial,
-        Helvetica,
-        sans-serif;
-
+      padding: 28px 16px 45px;
+      font-family: Arial, Helvetica, sans-serif;
       color: #ffffff;
       overflow-x: hidden;
-
       background: #010713;
     }
 
@@ -44,17 +37,17 @@
 
       background:
         radial-gradient(
-          ellipse at 50% 8%,
-          rgba(0, 130, 255, 0.38),
-          transparent 40%
+          ellipse at 50% 10%,
+          rgba(0, 130, 255, 0.40),
+          transparent 42%
         ),
         radial-gradient(
-          ellipse at 90% 35%,
-          rgba(0, 220, 255, 0.18),
-          transparent 30%
+          ellipse at 90% 45%,
+          rgba(0, 220, 255, 0.20),
+          transparent 32%
         ),
         radial-gradient(
-          ellipse at 10% 55%,
+          ellipse at 10% 70%,
           rgba(0, 100, 255, 0.18),
           transparent 32%
         ),
@@ -78,7 +71,7 @@
         ),
         radial-gradient(
           circle,
-          rgba(95,220,255,0.7) 0 1px,
+          rgba(80,220,255,0.65) 0 1px,
           transparent 1.5px
         );
 
@@ -90,49 +83,25 @@
         8px 3px,
         31px 42px;
 
-      opacity: 0.38;
+      opacity: 0.35;
     }
 
-    .glow-top {
+    .glow {
       position: absolute;
-
-      width: 500px;
-      height: 500px;
-
-      right: -150px;
-      top: -160px;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(0,220,255,0.18),
-          transparent 68%
-        );
-
-      filter: blur(20px);
-    }
-
-    .glow-bottom {
-      position: absolute;
-
       width: 600px;
       height: 300px;
-
       left: 50%;
-      bottom: -160px;
-
+      bottom: -120px;
       transform: translateX(-50%);
 
       background:
         radial-gradient(
           ellipse,
-          rgba(0,130,255,0.22),
-          transparent 70%
+          rgba(0,150,255,0.30),
+          transparent 68%
         );
 
-      filter: blur(30px);
+      filter: blur(35px);
     }
 
     /* =========================================
@@ -144,8 +113,7 @@
       z-index: 2;
 
       width: min(100%, 1050px);
-
-      margin: auto;
+      margin: 0 auto;
     }
 
     /* =========================================
@@ -153,149 +121,58 @@
        ========================================= */
 
     .header {
-      display: flex;
-
-      align-items: center;
-      justify-content: space-between;
-
-      gap: 20px;
-
-      margin: 10px 0 28px;
+      text-align: center;
+      margin: 12px auto 30px;
+      animation: fadeUp 0.6s ease both;
     }
 
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
+      display: inline-block;
 
-    .brand-mark {
-      width: 46px;
-      height: 46px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 14px;
-
-      border: 1px solid #29ddff;
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(0,160,255,0.30),
-          rgba(0,40,100,0.55)
-        );
-
-      box-shadow:
-        0 0 22px rgba(0,190,255,0.30),
-        inset 0 0 15px rgba(0,190,255,0.10);
-
-      color: #43e6ff;
-
-      font-size: 20px;
+      font-size: 28px;
       font-weight: 900;
-
-      text-shadow:
-        0 0 10px rgba(50,225,255,0.8);
-    }
-
-    .brand-name {
-      font-size: 22px;
-
-      font-weight: 900;
-
-      letter-spacing: 1.5px;
+      letter-spacing: 3px;
 
       background:
         linear-gradient(
           90deg,
           #ffffff,
-          #42ddff
+          #3be6ff,
+          #168cff,
+          #ffffff
         );
 
       -webkit-background-clip: text;
       background-clip: text;
-
       color: transparent;
-    }
-
-    .brand-subtitle {
-      margin-top: 3px;
-
-      color: #91b8d5;
-
-      font-size: 12px;
-
-      letter-spacing: 0.3px;
-    }
-
-    .admin-badge {
-      padding: 9px 13px;
-
-      border-radius: 999px;
-
-      border: 1px solid rgba(40,220,255,0.35);
-
-      background:
-        rgba(0,120,220,0.14);
-
-      color: #8cecff;
-
-      font-size: 11px;
-
-      font-weight: 800;
-
-      box-shadow:
-        0 0 15px rgba(0,180,255,0.12);
-    }
-
-    /* =========================================
-       HERO
-       ========================================= */
-
-    .hero {
-      margin-bottom: 26px;
-    }
-
-    .hero h1 {
-      margin: 0;
-
-      font-size: 34px;
-
-      line-height: 1.15;
-
-      font-weight: 850;
-
-      letter-spacing: -0.7px;
 
       text-shadow:
-        0 0 18px rgba(0,180,255,0.16);
+        0 0 20px rgba(0,190,255,0.20);
     }
 
-    .hero h1 span {
+    .brand-line {
+      width: 55px;
+      height: 3px;
+      margin: 10px auto 12px;
+
+      border-radius: 10px;
+
       background:
         linear-gradient(
           90deg,
-          #34dfff,
+          #00d9ff,
           #168cff,
-          #00e5ff
+          #35f4ff
         );
 
-      -webkit-background-clip: text;
-      background-clip: text;
-
-      color: transparent;
+      box-shadow:
+        0 0 14px rgba(0,200,255,0.7);
     }
 
-    .hero p {
-      margin: 9px 0 0;
-
-      color: #a9c6dc;
-
+    .subtitle {
+      color: #bcd5e8;
       font-size: 14px;
-
-      line-height: 1.6;
+      letter-spacing: 0.3px;
     }
 
     /* =========================================
@@ -304,39 +181,37 @@
 
     .stats {
       display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
 
-      margin-bottom: 20px;
+      margin-bottom: 22px;
+
+      animation: fadeUp 0.7s ease both;
     }
 
     .stat {
       position: relative;
-
       overflow: hidden;
 
-      padding: 21px;
+      padding: 22px;
 
       min-height: 125px;
 
       border-radius: 20px;
 
-      border: 1px solid rgba(47,207,255,0.32);
+      border: 1px solid rgba(45,210,255,0.38);
 
       background:
         linear-gradient(
           145deg,
-          rgba(5,29,80,0.88),
-          rgba(2,10,40,0.94)
+          rgba(5,30,80,0.88),
+          rgba(1,10,38,0.94)
         );
 
       box-shadow:
-        0 0 22px rgba(0,140,255,0.14),
-        0 18px 45px rgba(0,0,0,0.38),
-        inset 0 0 25px rgba(0,150,255,0.04);
+        0 0 25px rgba(0,150,255,0.14),
+        0 20px 45px rgba(0,0,0,0.35),
+        inset 0 0 25px rgba(0,150,255,0.05);
 
       backdrop-filter: blur(15px);
 
@@ -346,53 +221,49 @@
         box-shadow 0.2s ease;
     }
 
+    .stat:hover {
+      transform: translateY(-3px);
+
+      border-color: rgba(50,225,255,0.70);
+
+      box-shadow:
+        0 0 30px rgba(0,170,255,0.24),
+        0 20px 50px rgba(0,0,0,0.40);
+    }
+
     .stat::after {
       content: "";
 
       position: absolute;
 
-      width: 100px;
-      height: 100px;
+      width: 90px;
+      height: 90px;
 
       right: -35px;
-      top: -45px;
+      bottom: -35px;
 
       border-radius: 50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(0,220,255,0.20),
+          rgba(0,210,255,0.20),
           transparent 70%
         );
 
-      filter: blur(5px);
-    }
-
-    .stat:hover {
-      transform: translateY(-3px);
-
-      border-color:
-        rgba(45,225,255,0.58);
-
-      box-shadow:
-        0 0 28px rgba(0,170,255,0.20),
-        0 22px 48px rgba(0,0,0,0.45);
+      filter: blur(8px);
     }
 
     .stat-title {
       position: relative;
       z-index: 1;
 
-      color: #9ebbd2;
-
-      font-size: 12px;
-
+      color: #9ebbd0;
+      font-size: 13px;
       font-weight: 700;
 
       text-transform: uppercase;
-
-      letter-spacing: 0.8px;
+      letter-spacing: 0.7px;
     }
 
     .stat-number {
@@ -401,110 +272,121 @@
 
       margin-top: 9px;
 
-      font-size: 31px;
+      font-size: 34px;
+      line-height: 1;
 
-      font-weight: 850;
-
-      color: #ffffff;
-
-      text-shadow:
-        0 0 14px rgba(0,200,255,0.18);
-    }
-
-    .stat-line {
-      width: 45px;
-      height: 3px;
-
-      margin-top: 12px;
-
-      border-radius: 999px;
+      font-weight: 900;
 
       background:
         linear-gradient(
           90deg,
-          #00d9ff,
-          #167fff
+          #ffffff,
+          #35ddff
         );
 
-      box-shadow:
-        0 0 10px rgba(0,210,255,0.55);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+
+      text-shadow:
+        0 0 18px rgba(0,190,255,0.18);
+    }
+
+    .stat:nth-child(2) .stat-number {
+      background:
+        linear-gradient(
+          90deg,
+          #35ddff,
+          #168cff
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .stat:nth-child(3) .stat-number {
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #7ba8c9
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     /* =========================================
-       MAIN CARD
+       TABLE CARD
        ========================================= */
 
     .card {
-      padding: 25px;
+      padding: 24px;
 
       border-radius: 24px;
 
-      border: 1px solid #20d7ff;
+      border: 1px solid rgba(45,210,255,0.42);
 
       background:
         linear-gradient(
           145deg,
-          rgba(3,20,70,0.94),
-          rgba(1,7,32,0.97)
+          rgba(4,25,70,0.94),
+          rgba(1,8,32,0.97)
         );
 
       box-shadow:
-        0 0 32px rgba(0,160,255,0.27),
-        0 25px 75px rgba(0,0,0,0.60),
-        inset 0 0 30px rgba(0,150,255,0.06);
+        0 0 35px rgba(0,150,255,0.18),
+        0 25px 70px rgba(0,0,0,0.55),
+        inset 0 0 30px rgba(0,150,255,0.05);
 
-      backdrop-filter: blur(16px);
+      backdrop-filter: blur(18px);
+
+      animation: fadeUp 0.8s ease both;
     }
 
     .card-header {
       display: flex;
-
-      justify-content: space-between;
-
       align-items: center;
+      justify-content: space-between;
 
       gap: 15px;
 
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .card-title h2 {
-      margin: 0 0 5px;
-
-      font-size: 20px;
-
-      color: #ffffff;
-    }
-
-    .card-title p {
+    .card-title {
       margin: 0;
 
-      color: #8eafc8;
+      font-size: 21px;
+      font-weight: 800;
+    }
+
+    .card-description {
+      margin: 5px 0 0;
+
+      color: #91b1c9;
 
       font-size: 13px;
     }
 
     .live {
-      display: flex;
-
+      display: inline-flex;
       align-items: center;
-
       gap: 7px;
 
-      padding: 8px 11px;
+      padding: 7px 11px;
 
-      border-radius: 999px;
+      border-radius: 30px;
 
-      background:
-        rgba(0,200,255,0.08);
+      border: 1px solid rgba(40,220,255,0.35);
 
-      border:
-        1px solid rgba(0,210,255,0.25);
+      color: #6feaff;
 
-      color: #75eaff;
+      background: rgba(0,150,255,0.10);
 
       font-size: 11px;
-
       font-weight: 800;
     }
 
@@ -514,33 +396,28 @@
 
       border-radius: 50%;
 
-      background: #35e6ff;
+      background: #35eaff;
 
       box-shadow:
-        0 0 9px #35e6ff;
+        0 0 10px #35eaff;
     }
 
     /* =========================================
        TABLE
        ========================================= */
 
-    .table-wrap {
-      width: 100%;
-
+    .table-wrapper {
       overflow-x: auto;
 
-      border-radius: 15px;
+      border-radius: 16px;
 
-      border: 1px solid rgba(70,130,190,0.25);
-
-      background:
-        rgba(0,10,35,0.35);
+      border: 1px solid rgba(60,110,160,0.25);
     }
 
     table {
       width: 100%;
 
-      min-width: 620px;
+      min-width: 650px;
 
       border-collapse: collapse;
     }
@@ -552,57 +429,41 @@
       text-align: left;
 
       border-bottom:
-        1px solid rgba(70,130,190,0.16);
+        1px solid rgba(80,130,170,0.18);
 
       white-space: nowrap;
     }
 
     th {
-      color: #76a2bf;
+      color: #77a8c6;
+
+      background:
+        rgba(4,22,55,0.75);
 
       font-size: 11px;
 
       text-transform: uppercase;
 
       letter-spacing: 0.8px;
-
-      background:
-        rgba(0,70,130,0.16);
     }
 
     td {
-      color: #e8f7ff;
+      color: #e8f8ff;
 
-      font-size: 13px;
+      font-size: 14px;
     }
 
     tbody tr {
-      transition:
-        background 0.18s ease;
+      transition: background 0.18s ease;
     }
 
     tbody tr:hover {
       background:
-        rgba(0,150,255,0.07);
+        rgba(0,160,255,0.07);
     }
 
     tbody tr:last-child td {
       border-bottom: none;
-    }
-
-    /* =========================================
-       CODE
-       ========================================= */
-
-    .code {
-      color: #5fe7ff;
-
-      font-weight: 800;
-
-      letter-spacing: 1px;
-
-      text-shadow:
-        0 0 9px rgba(0,210,255,0.25);
     }
 
     /* =========================================
@@ -611,20 +472,20 @@
 
     .status {
       display: inline-flex;
-
       align-items: center;
-
       gap: 6px;
 
-      padding: 6px 10px;
+      padding: 6px 11px;
 
-      border-radius: 999px;
+      border-radius: 30px;
 
       font-size: 11px;
 
       font-weight: 800;
 
-      text-transform: capitalize;
+      text-transform: uppercase;
+
+      letter-spacing: 0.4px;
     }
 
     .status::before {
@@ -637,37 +498,34 @@
     }
 
     .active {
-      color: #6effd1;
+      color: #73efff;
 
       background:
-        rgba(0,220,160,0.09);
+        rgba(0,210,255,0.10);
 
       border:
-        1px solid rgba(40,230,170,0.25);
+        1px solid rgba(0,220,255,0.28);
     }
 
     .active::before {
-      background: #4dffc7;
+      background: #35eaff;
 
       box-shadow:
-        0 0 8px #4dffc7;
+        0 0 8px #35eaff;
     }
 
     .inactive {
-      color: #8fdcff;
+      color: #b9c7d4;
 
       background:
-        rgba(0,140,255,0.10);
+        rgba(120,150,175,0.10);
 
       border:
-        1px solid rgba(50,170,255,0.25);
+        1px solid rgba(120,150,175,0.25);
     }
 
     .inactive::before {
-      background: #45cfff;
-
-      box-shadow:
-        0 0 8px #45cfff;
+      background: #71879a;
     }
 
     /* =========================================
@@ -679,67 +537,26 @@
 
       text-align: center;
 
-      color: #66849c;
+      color: #7290a6;
 
       font-size: 11px;
 
-      line-height: 1.6;
-    }
-
-    footer strong {
-      color: #75c9e7;
+      animation: fadeUp 1s ease both;
     }
 
     /* =========================================
-       LOADING
+       ANIMATION
        ========================================= */
 
-    .loading {
-      padding: 30px !important;
-
-      text-align: center !important;
-
-      color: #75cce8 !important;
-    }
-
-    .loading-dot {
-      display: inline-block;
-
-      width: 7px;
-      height: 7px;
-
-      margin: 0 2px;
-
-      border-radius: 50%;
-
-      background: #37ddff;
-
-      box-shadow:
-        0 0 10px rgba(0,220,255,0.7);
-
-      animation:
-        pulse 1.1s infinite ease-in-out;
-    }
-
-    .loading-dot:nth-child(2) {
-      animation-delay: 0.15s;
-    }
-
-    .loading-dot:nth-child(3) {
-      animation-delay: 0.3s;
-    }
-
-    @keyframes pulse {
-      0%,
-      80%,
-      100% {
-        opacity: 0.3;
-        transform: scale(0.8);
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
       }
 
-      40% {
+      to {
         opacity: 1;
-        transform: scale(1);
+        transform: translateY(0);
       }
     }
 
@@ -750,84 +567,59 @@
     @media (max-width: 700px) {
 
       body {
-        padding: 18px 11px 32px;
+        padding: 22px 12px 35px;
       }
 
       .header {
-        margin-top: 5px;
-
-        align-items: flex-start;
+        margin-top: 8px;
+        margin-bottom: 24px;
       }
 
-      .brand-mark {
-        width: 42px;
-        height: 42px;
+      .brand {
+        font-size: 23px;
+        letter-spacing: 2.2px;
       }
 
-      .brand-name {
-        font-size: 18px;
-      }
-
-      .brand-subtitle {
-        font-size: 10px;
-      }
-
-      .admin-badge {
-        display: none;
-      }
-
-      .hero {
-        margin-bottom: 20px;
-      }
-
-      .hero h1 {
-        font-size: 28px;
-      }
-
-      .hero p {
-        font-size: 13px;
+      .subtitle {
+        font-size: 12px;
       }
 
       .stats {
         grid-template-columns: 1fr;
-
-        gap: 11px;
+        gap: 12px;
       }
 
       .stat {
-        min-height: 100px;
-
-        padding: 18px;
+        min-height: 105px;
+        padding: 19px;
+        border-radius: 18px;
       }
 
       .stat-number {
-        font-size: 27px;
+        font-size: 30px;
       }
 
       .card {
-        padding: 17px 12px;
+        padding: 18px 14px;
 
-        border-radius: 20px;
+        border-radius: 21px;
       }
 
       .card-header {
         align-items: flex-start;
-
-        margin: 2px 4px 17px;
       }
 
-      .card-title h2 {
+      .card-title {
         font-size: 18px;
       }
 
-      .card-title p {
+      .card-description {
         font-size: 12px;
       }
 
       .live {
         font-size: 9px;
-
-        padding: 7px 9px;
+        padding: 6px 8px;
       }
 
       th,
@@ -836,21 +628,14 @@
       }
     }
 
-    @media (min-width: 701px) {
+    @media (max-width: 390px) {
 
-      .stats .stat:first-child {
-        border-color:
-          rgba(40,210,255,0.42);
+      .live {
+        display: none;
       }
 
-      .stats .stat:nth-child(2) {
-        border-color:
-          rgba(40,255,190,0.30);
-      }
-
-      .stats .stat:nth-child(3) {
-        border-color:
-          rgba(50,170,255,0.30);
+      .brand {
+        font-size: 21px;
       }
     }
   </style>
@@ -863,18 +648,13 @@
        ========================================= -->
 
   <div class="scene" aria-hidden="true">
-
     <div class="stars"></div>
-
-    <div class="glow-top"></div>
-
-    <div class="glow-bottom"></div>
-
+    <div class="glow"></div>
   </div>
 
 
   <!-- =========================================
-       CONTENT
+       MAIN
        ========================================= -->
 
   <main class="container">
@@ -885,55 +665,23 @@
     <header class="header">
 
       <div class="brand">
-
-        <div class="brand-mark">
-          A
-        </div>
-
-        <div>
-
-          <div class="brand-name">
-            ALJAVA TERIONITY
-          </div>
-
-          <div class="brand-subtitle">
-            Digital Solution
-          </div>
-
-        </div>
-
+        ALJAVA TERIONITY
       </div>
 
-      <div class="admin-badge">
-        ADMIN DASHBOARD
+      <div class="brand-line"></div>
+
+      <div class="subtitle">
+        Admin Dashboard • Google Review Card
       </div>
 
     </header>
 
 
-    <!-- HERO -->
-
-    <section class="hero">
-
-      <h1>
-        Dashboard
-        <span>ALJAVA</span>
-      </h1>
-
-      <p>
-        Kelola dan pantau status kartu Google Review
-        Anda dalam satu tempat.
-      </p>
-
-    </section>
-
-
     <!-- =========================================
-         STATISTICS
+         STATS
          ========================================= -->
 
     <section class="stats">
-
 
       <div class="stat">
 
@@ -947,8 +695,6 @@
         >
           -
         </div>
-
-        <div class="stat-line"></div>
 
       </div>
 
@@ -966,8 +712,6 @@
           -
         </div>
 
-        <div class="stat-line"></div>
-
       </div>
 
 
@@ -984,32 +728,27 @@
           -
         </div>
 
-        <div class="stat-line"></div>
-
       </div>
-
 
     </section>
 
 
     <!-- =========================================
-         CARD LIST
+         TABLE
          ========================================= -->
 
     <section class="card">
 
-
       <div class="card-header">
 
-        <div class="card-title">
+        <div>
 
-          <h2>
+          <h2 class="card-title">
             Daftar Kartu
           </h2>
 
-          <p>
-            Pantau seluruh kartu yang terdaftar
-            di sistem ALJAVA.
+          <p class="card-description">
+            Pantau status kartu ALJAVA secara realtime.
           </p>
 
         </div>
@@ -1018,37 +757,24 @@
 
           <span class="live-dot"></span>
 
-          LIVE
+          SYSTEM
 
         </div>
 
       </div>
 
 
-      <div class="table-wrap">
+      <div class="table-wrapper">
 
         <table>
 
           <thead>
 
             <tr>
-
-              <th>
-                Kode
-              </th>
-
-              <th>
-                Status
-              </th>
-
-              <th>
-                Produk
-              </th>
-
-              <th>
-                Aktivasi
-              </th>
-
+              <th>Kode</th>
+              <th>Status</th>
+              <th>Produk</th>
+              <th>Aktivasi</th>
             </tr>
 
           </thead>
@@ -1058,17 +784,8 @@
 
             <tr>
 
-              <td
-                colspan="4"
-                class="loading"
-              >
-
-                Memuat data
-
-                <span class="loading-dot"></span>
-                <span class="loading-dot"></span>
-                <span class="loading-dot"></span>
-
+              <td colspan="4">
+                Memuat data...
               </td>
 
             </tr>
@@ -1085,13 +802,8 @@
     <!-- FOOTER -->
 
     <footer>
-
-      © 2024
-      <strong>ALJAVA TERIONITY</strong>
-      • Digital Solution
-
+      © 2024 ALJAVA TERIONITY • Admin System
     </footer>
-
 
   </main>
 
@@ -1106,7 +818,6 @@
     const SUPABASE_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co";
 
-
     const SUPABASE_KEY =
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
@@ -1115,28 +826,17 @@
 
       try {
 
-        const response =
-          await fetch(
-
-            SUPABASE_URL +
-            "/rest/v1/Cards?select=card_code,status,product_type,activated_at",
-
-            {
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  SUPABASE_KEY
-
-              }
-
+        const response = await fetch(
+          SUPABASE_URL +
+          "/rest/v1/Cards?select=card_code,status,product_type,activated_at",
+          {
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization":
+                "Bearer " + SUPABASE_KEY
             }
-
-          );
+          }
+        );
 
 
         if (!response.ok) {
@@ -1153,53 +853,39 @@
           await response.json();
 
 
-        /* =====================================
-           TOTAL
-           ===================================== */
+        /* TOTAL */
 
-        document
-          .getElementById("totalCards")
-          .textContent =
-            cards.length;
+        document.getElementById(
+          "totalCards"
+        ).textContent =
+          cards.length;
 
 
-        /* =====================================
-           ACTIVE
-           ===================================== */
+        /* ACTIVE */
 
-        document
-          .getElementById("activeCards")
-          .textContent =
+        document.getElementById(
+          "activeCards"
+        ).textContent =
+          cards.filter(function(card) {
 
-          cards.filter(
-            function(card) {
+            return card.status === "active";
 
-              return card.status === "active";
-
-            }
-          ).length;
+          }).length;
 
 
-        /* =====================================
-           INACTIVE
-           ===================================== */
+        /* INACTIVE */
 
-        document
-          .getElementById("inactiveCards")
-          .textContent =
+        document.getElementById(
+          "inactiveCards"
+        ).textContent =
+          cards.filter(function(card) {
 
-          cards.filter(
-            function(card) {
+            return card.status === "inactive";
 
-              return card.status === "inactive";
-
-            }
-          ).length;
+          }).length;
 
 
-        /* =====================================
-           TABLE
-           ===================================== */
+        /* TABLE */
 
         const table =
           document.getElementById(
@@ -1210,135 +896,98 @@
         table.innerHTML = "";
 
 
-        cards.forEach(
-          function(card) {
-
-
-            const row =
-              document.createElement("tr");
-
-
-            const statusClass =
-              card.status === "active"
-                ? "active"
-                : "inactive";
-
-
-            let activated = "-";
-
-
-            if (card.activated_at) {
-
-              activated =
-                new Date(
-                  card.activated_at
-                ).toLocaleDateString(
-                  "id-ID"
-                );
-
-            }
-
-
-            row.innerHTML =
-
-              "<td>" +
-
-              "<span class=\"code\">" +
-
-              (card.card_code || "-") +
-
-              "</span>" +
-
-              "</td>" +
-
-
-              "<td>" +
-
-              "<span class=\"status " +
-
-              statusClass +
-
-              "\">" +
-
-              (card.status || "-") +
-
-              "</span>" +
-
-              "</td>" +
-
-
-              "<td>" +
-
-              (card.product_type || "-") +
-
-              "</td>" +
-
-
-              "<td>" +
-
-              activated +
-
-              "</td>";
-
-
-            table.appendChild(row);
-
-
-          }
-        );
-
-
-        /* =====================================
-           EMPTY DATA
-           ===================================== */
-
-        if (cards.length === 0) {
+        if (!cards.length) {
 
           table.innerHTML =
-
             "<tr>" +
-
-            "<td colspan=\"4\" " +
-            "style=\"text-align:center;" +
-            "padding:35px;" +
-            "color:#7ea4bd;\">" +
-
-            "Belum ada kartu terdaftar."
-
-            + "</td>" +
-
+              "<td colspan=\"4\" style=\"text-align:center;color:#8aa8bd;padding:30px;\">" +
+                "Belum ada data kartu." +
+              "</td>" +
             "</tr>";
+
+          return;
 
         }
 
 
-      }
+        cards.forEach(function(card) {
+
+          const row =
+            document.createElement("tr");
 
 
-      catch (error) {
+          const statusClass =
+            card.status === "active"
+              ? "active"
+              : "inactive";
 
+
+          let activated = "-";
+
+
+          if (card.activated_at) {
+
+            activated =
+              new Date(
+                card.activated_at
+              ).toLocaleDateString(
+                "id-ID"
+              );
+
+          }
+
+
+          row.innerHTML =
+
+            "<td>" +
+              (card.card_code || "-") +
+            "</td>" +
+
+            "<td>" +
+
+              "<span class=\"status " +
+                statusClass +
+              "\">" +
+
+                (card.status || "-") +
+
+              "</span>" +
+
+            "</td>" +
+
+            "<td>" +
+              (card.product_type || "-") +
+            "</td>" +
+
+            "<td>" +
+              activated +
+            "</td>";
+
+
+          table.appendChild(row);
+
+        });
+
+
+      } catch (error) {
 
         console.error(error);
 
 
-        document
-          .getElementById("cardsTable")
-          .innerHTML =
+        document.getElementById(
+          "cardsTable"
+        ).innerHTML =
 
           "<tr>" +
 
-          "<td colspan=\"4\" " +
-          "style=\"text-align:center;" +
-          "padding:30px;" +
-          "color:#ff9caf;\">" +
+            "<td colspan=\"4\" style=\"color:#ff9eb1;padding:25px;\">" +
 
-          "❌ " +
-          error.message +
+              "❌ " +
+              error.message +
 
-          "</td>" +
+            "</td>" +
 
           "</tr>";
-
 
       }
 
