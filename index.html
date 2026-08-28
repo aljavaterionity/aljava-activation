@@ -2,25 +2,11 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-
-  <title>Aktivasi Kartu — ALJAVA TERIONITY</title>
-
-  <meta
-    name="description"
-    content="Aktivasi kartu Google Review ALJAVA TERIONITY."
-  >
+  <title>Aktivasi Kartu ALJAVA</title>
 
   <style>
-
-    /* =========================================================
-       RESET
-       ========================================================= */
-
     * {
       box-sizing: border-box;
     }
@@ -29,1665 +15,1496 @@
       scroll-behavior: smooth;
     }
 
+    :root {
+      --blue: #168cff;
+      --cyan: #25e4ff;
+      --blue-dark: #0757c9;
+      --bg: #010713;
+      --text: #ffffff;
+      --muted: #a9bfd4;
+      --border: rgba(50, 180, 255, 0.28);
+    }
+
     body {
       margin: 0;
       min-height: 100vh;
+      padding: 25px 14px 45px;
 
       font-family:
         Inter,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
+        Poppins,
         Arial,
+        Helvetica,
         sans-serif;
 
-      color: #0b1220;
+      color: var(--text);
+      overflow-x: hidden;
+
+      background: #010713;
+    }
+
+    /* =========================================
+       BACKGROUND
+       ========================================= */
+
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
 
       background:
         radial-gradient(
-          circle at 50% -10%,
-          rgba(0, 149, 255, 0.14),
-          transparent 35%
+          ellipse at 50% 10%,
+          rgba(0, 132, 255, 0.38),
+          transparent 42%
         ),
         radial-gradient(
-          circle at 100% 35%,
-          rgba(0, 200, 255, 0.08),
+          ellipse at 85% 35%,
+          rgba(0, 225, 255, 0.18),
           transparent 30%
+        ),
+        radial-gradient(
+          ellipse at 10% 55%,
+          rgba(0, 100, 255, 0.18),
+          transparent 32%
         ),
         linear-gradient(
           180deg,
-          #f8fbff 0%,
-          #f5f9fd 100%
+          #010817 0%,
+          #031b46 48%,
+          #010713 100%
         );
-
-      overflow-x: hidden;
     }
 
-    button,
-    input {
-      font: inherit;
-    }
+    /* =========================================
+       STARS
+       ========================================= */
 
-
-    /* =========================================================
-       BACKGROUND
-       ========================================================= */
-
-    .background {
-      position: fixed;
+    .stars {
+      position: absolute;
       inset: 0;
 
-      z-index: -1;
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255, 255, 255, 0.85) 0 1px,
+          transparent 1.5px
+        ),
+        radial-gradient(
+          circle,
+          rgba(80, 215, 255, 0.7) 0 1px,
+          transparent 1.5px
+        );
 
-      pointer-events: none;
+      background-size:
+        97px 83px,
+        151px 137px;
 
-      overflow: hidden;
+      background-position:
+        8px 3px,
+        31px 42px;
+
+      opacity: 0.38;
     }
 
-    .background::before {
-      content: "";
+    /* =========================================
+       GLOW
+       ========================================= */
 
+    .sun {
       position: absolute;
 
-      width: 520px;
-      height: 520px;
+      width: 420px;
+      height: 420px;
 
-      top: -260px;
-      left: 50%;
-
-      transform: translateX(-50%);
+      right: -100px;
+      top: 12%;
 
       border-radius: 50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(0, 145, 255, 0.15),
-          rgba(0, 145, 255, 0.04) 45%,
+          rgba(255, 255, 255, 0.9) 0 2%,
+          rgba(180, 245, 255, 0.55) 7%,
+          rgba(0, 210, 255, 0.28) 23%,
+          rgba(0, 140, 255, 0.12) 45%,
           transparent 70%
         );
 
-      filter: blur(18px);
+      filter: blur(1px);
+      opacity: 0.8;
     }
 
-    .background::after {
-      content: "";
+    /* =========================================
+       MOUNTAIN
+       ========================================= */
 
+    .mountain.back {
       position: absolute;
 
-      width: 330px;
-      height: 330px;
+      left: -5%;
+      bottom: 28%;
 
-      right: -170px;
-      bottom: 5%;
+      width: 110%;
+      height: 350px;
 
-      border-radius: 50%;
+      opacity: 0.42;
 
-      background:
-        radial-gradient(
-          circle,
-          rgba(0, 200, 255, 0.09),
-          transparent 70%
-        );
-
-      filter: blur(25px);
-    }
-
-
-    /* =========================================================
-       PAGE
-       ========================================================= */
-
-    .page {
-      width: 100%;
-      min-height: 100vh;
-
-      padding:
-        25px 16px
-        calc(35px + env(safe-area-inset-bottom));
-
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .content {
-      width: 100%;
-      max-width: 540px;
-
-      margin: auto;
-    }
-
-
-    /* =========================================================
-       HEADER / BRAND
-       ========================================================= */
-
-    .header {
-      text-align: center;
-
-      margin-bottom: 30px;
-
-      animation:
-        fadeUp 0.55s ease both;
-    }
-
-    .brand {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 10px;
-
-      margin-bottom: 23px;
-    }
-
-    .brand-mark {
-      width: 38px;
-      height: 38px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 11px;
-
-      color: #ffffff;
+      clip-path: polygon(
+        0 100%,
+        0 58%,
+        8% 32%,
+        13% 48%,
+        19% 27%,
+        26% 59%,
+        34% 39%,
+        42% 66%,
+        49% 37%,
+        57% 62%,
+        64% 33%,
+        72% 57%,
+        79% 22%,
+        86% 52%,
+        94% 15%,
+        100% 35%,
+        100% 100%
+      );
 
       background:
         linear-gradient(
           135deg,
-          #0b9aff,
-          #0067e8
+          #083a83,
+          #020d2b 72%
+        );
+    }
+
+    .mountain {
+      position: absolute;
+
+      left: -5%;
+      bottom: 24%;
+
+      width: 110%;
+      height: 430px;
+
+      clip-path: polygon(
+        0 100%,
+        0 58%,
+        8% 32%,
+        13% 48%,
+        19% 27%,
+        26% 59%,
+        34% 39%,
+        42% 66%,
+        49% 37%,
+        57% 62%,
+        64% 33%,
+        72% 57%,
+        79% 22%,
+        86% 52%,
+        94% 15%,
+        100% 35%,
+        100% 100%
+      );
+
+      background:
+        linear-gradient(
+          135deg,
+          rgba(10, 65, 145, 0.92),
+          rgba(1, 7, 28, 0.99) 72%
         );
 
-      font-size: 18px;
-      font-weight: 900;
+      filter:
+        drop-shadow(
+          0 -8px 20px rgba(0, 150, 255, 0.25)
+        );
+    }
 
-      box-shadow:
-        0 8px 20px rgba(0, 105, 235, 0.23);
+    /* =========================================
+       MIST
+       ========================================= */
 
-      text-shadow:
-        0 1px 2px rgba(0,0,0,0.15);
+    .mist {
+      position: absolute;
+
+      left: -10%;
+      bottom: 30%;
+
+      width: 120%;
+      height: 150px;
+
+      background:
+        radial-gradient(
+          ellipse at 20% 50%,
+          rgba(90, 210, 255, 0.18),
+          transparent 42%
+        ),
+        radial-gradient(
+          ellipse at 55% 30%,
+          rgba(50, 150, 255, 0.16),
+          transparent 42%
+        ),
+        radial-gradient(
+          ellipse at 85% 55%,
+          rgba(0, 210, 255, 0.14),
+          transparent 38%
+        );
+
+      filter: blur(20px);
+    }
+
+    /* =========================================
+       NEON WAVES
+       ========================================= */
+
+    .waves {
+      position: absolute;
+
+      left: -10%;
+      right: -10%;
+      bottom: -2%;
+
+      height: 49%;
+
+      opacity: 0.8;
+    }
+
+    .waves svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .waves path {
+      fill: none;
+
+      stroke: url(#waveGradient);
+
+      stroke-width: 1.4;
+    }
+
+    .glow {
+      position: absolute;
+
+      width: 70%;
+      height: 250px;
+
+      left: 15%;
+      bottom: 2%;
+
+      background:
+        radial-gradient(
+          ellipse,
+          rgba(0, 130, 255, 0.25),
+          transparent 68%
+        );
+
+      filter: blur(30px);
+    }
+
+    /* =========================================
+       CONTENT
+       ========================================= */
+
+    .content {
+      position: relative;
+      z-index: 2;
+
+      width: min(100%, 760px);
+
+      margin: 0 auto;
+    }
+
+    /* =========================================
+       BRAND
+       ========================================= */
+
+    .brand {
+      text-align: center;
+
+      margin: 5px auto 30px;
+
+      animation: fadeDown 0.7s ease both;
     }
 
     .brand-name {
-      display: flex;
+      display: inline-block;
 
-      flex-direction: column;
+      font-size: 20px;
+      font-weight: 900;
 
-      align-items: flex-start;
+      letter-spacing: 3px;
 
-      line-height: 1;
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #35e7ff,
+          #168cff,
+          #ffffff
+        );
 
-      gap: 4px;
+      background-size: 250% auto;
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+
+      animation: shine 5s linear infinite;
+
+      text-shadow:
+        0 0 25px rgba(0, 190, 255, 0.18);
     }
 
-    .brand-name strong {
-      color: #101828;
+    .brand-line {
+      width: 55px;
+      height: 2px;
 
-      font-size: 16px;
-
-      font-weight: 850;
-
-      letter-spacing: 0.5px;
-    }
-
-    .brand-name span {
-      color: #087ff5;
-
-      font-size: 9px;
-
-      font-weight: 800;
-
-      letter-spacing: 2px;
-    }
-
-
-    /* =========================================================
-       EYEBROW
-       ========================================================= */
-
-    .eyebrow {
-      display: inline-flex;
-
-      align-items: center;
-
-      gap: 7px;
-
-      margin-bottom: 13px;
-
-      padding:
-        7px 11px;
-
-      border:
-        1px solid rgba(0, 126, 255, 0.16);
+      margin: 8px auto 0;
 
       border-radius: 999px;
-
-      color: #0879e8;
-
-      background:
-        rgba(0, 135, 255, 0.055);
-
-      font-size: 11px;
-
-      font-weight: 750;
-
-      letter-spacing: 0.45px;
-    }
-
-    .eyebrow-dot {
-      width: 6px;
-      height: 6px;
-
-      border-radius: 50%;
-
-      background: #0a9cff;
-
-      box-shadow:
-        0 0 9px rgba(0, 156, 255, 0.8);
-    }
-
-
-    /* =========================================================
-       HERO
-       ========================================================= */
-
-    .header h1 {
-      margin: 0;
-
-      color: #08111f;
-
-      font-size:
-        clamp(30px, 8vw, 43px);
-
-      line-height: 1.08;
-
-      letter-spacing: -1.7px;
-
-      font-weight: 850;
-    }
-
-    .header h1 span {
-      color: #087ff5;
-    }
-
-    .header-description {
-      max-width: 430px;
-
-      margin:
-        14px auto 0;
-
-      color: #667085;
-
-      font-size: 14px;
-
-      line-height: 1.65;
-    }
-
-
-    /* =========================================================
-       MAIN CARD
-       ========================================================= */
-
-    .activation-card {
-      position: relative;
-
-      padding: 25px;
-
-      border:
-        1px solid rgba(15, 90, 170, 0.12);
-
-      border-radius: 22px;
-
-      background:
-        rgba(255, 255, 255, 0.90);
-
-      box-shadow:
-        0 22px 65px rgba(15, 45, 85, 0.09),
-        0 3px 12px rgba(15, 45, 85, 0.04);
-
-      backdrop-filter:
-        blur(18px);
-
-      -webkit-backdrop-filter:
-        blur(18px);
-
-      animation:
-        fadeUp 0.65s 0.05s ease both;
-    }
-
-    .activation-card::before {
-      content: "";
-
-      position: absolute;
-
-      left: 10%;
-      right: 10%;
-      top: -1px;
-
-      height: 1px;
 
       background:
         linear-gradient(
           90deg,
           transparent,
-          rgba(0, 143, 255, 0.55),
+          #25e4ff,
           transparent
         );
+
+      box-shadow:
+        0 0 12px rgba(37, 228, 255, 0.7);
     }
 
+    /* =========================================
+       HERO
+       ========================================= */
 
-    /* =========================================================
-       CARD HEADING
-       ========================================================= */
+    .hero {
+      text-align: center;
 
-    .card-heading {
-      margin-bottom: 25px;
+      margin: 0 auto 30px;
+
+      animation: fadeUp 0.8s ease both;
     }
 
-    .card-heading h2 {
-      margin:
-        0 0 6px;
-
-      color: #101828;
-
-      font-size: 20px;
-
-      letter-spacing: -0.4px;
-
-      font-weight: 800;
-    }
-
-    .card-heading p {
+    .hero h1 {
       margin: 0;
 
-      color: #667085;
+      font-size: 40px;
+
+      line-height: 1.15;
+
+      font-weight: 850;
+
+      letter-spacing: -1px;
+
+      text-shadow:
+        0 0 15px rgba(0, 190, 255, 0.22);
+    }
+
+    .hero h1 span {
+      background:
+        linear-gradient(
+          90deg,
+          #34dfff,
+          #168cff,
+          #00e5ff
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+    }
+
+    .hero p {
+      margin: 13px auto 0;
+
+      max-width: 620px;
+
+      color: #d6e9f7;
+
+      font-size: 15px;
+
+      line-height: 1.65;
+    }
+
+    /* =========================================
+       CARD
+       ========================================= */
+
+    .card {
+      width: min(100%, 625px);
+
+      margin: 0 auto;
+
+      padding: 28px 30px 24px;
+
+      border-radius: 24px;
+
+      border: 1px solid rgba(55, 210, 255, 0.55);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(4, 25, 72, 0.82),
+          rgba(1, 8, 35, 0.94)
+        );
+
+      box-shadow:
+        0 0 35px rgba(0, 160, 255, 0.22),
+        0 25px 75px rgba(0, 0, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+
+      animation: cardIn 0.9s ease both;
+    }
+
+    /* =========================================
+       SECTION TITLE
+       ========================================= */
+
+    .section-head {
+      margin-bottom: 20px;
+    }
+
+    .section-head h2 {
+      margin: 0 0 6px;
+
+      font-size: 21px;
+
+      color: #ffffff;
+
+      letter-spacing: -0.3px;
+    }
+
+    .section-head p {
+      margin: 0;
+
+      color: #9db7cc;
 
       font-size: 13px;
-
-      line-height: 1.5;
     }
 
-
-    /* =========================================================
-       SECTION TITLE
-       ========================================================= */
-
-    .section-title {
-      margin:
-        26px 0 15px;
-
-      color: #344054;
-
-      font-size: 12px;
-
-      font-weight: 800;
-
-      text-transform: uppercase;
-
-      letter-spacing: 0.7px;
-    }
-
-
-    /* =========================================================
-       FIELD
-       ========================================================= */
-
-    .field-group {
-      margin-bottom: 16px;
-    }
+    /* =========================================
+       LABEL
+       ========================================= */
 
     label {
       display: block;
 
-      margin-bottom: 7px;
+      margin: 0 0 8px;
 
-      color: #344054;
+      color: #bfefff;
 
-      font-size: 12px;
+      font-size: 13px;
 
       font-weight: 750;
     }
 
+    /* =========================================
+       FIELD
+       ========================================= */
 
-    /* =========================================================
-       INPUT WRAPPER
-       ========================================================= */
-
-    .input-wrapper {
+    .field {
       position: relative;
+
+      margin-bottom: 16px;
     }
-
-
-    /* =========================================================
-       INPUT
-       ========================================================= */
 
     input {
       width: 100%;
-      height: 55px;
 
-      padding:
-        0 46px 0 43px;
+      height: 56px;
 
-      border:
-        1px solid #dce3ec;
+      padding: 0 15px;
+
+      border: 1px solid rgba(100, 145, 190, 0.45);
 
       border-radius: 13px;
 
       outline: none;
 
-      color: #101828;
+      color: #f7fdff;
 
       background:
-        rgba(255, 255, 255, 0.95);
+        rgba(5, 20, 54, 0.78);
 
-      font-size: 14px;
+      font-family: inherit;
+
+      font-size: 15px;
 
       transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
-        background 0.2s ease;
+        background 0.2s ease,
+        transform 0.2s ease;
     }
 
     input::placeholder {
-      color: #98a2b3;
+      color: #8098ad;
     }
 
     input:hover {
-      border-color: #c6d2df;
+      border-color: rgba(80, 180, 255, 0.6);
     }
 
     input:focus {
-      border-color: #1595ff;
+      border-color: #25ddff;
 
-      background: #ffffff;
+      background:
+        rgba(6, 28, 70, 0.9);
 
       box-shadow:
-        0 0 0 3px rgba(21, 149, 255, 0.10),
-        0 7px 20px rgba(21, 149, 255, 0.06);
+        0 0 0 3px rgba(0, 190, 255, 0.10),
+        0 0 20px rgba(0, 170, 255, 0.18);
     }
 
-
-    /* =========================================================
+    /* =========================================
        CARD CODE
-       ========================================================= */
+       ========================================= */
 
     #card_code {
-      padding-left: 15px;
-      padding-right: 46px;
+      color: #eaffff;
 
-      color: #0878e8;
+      font-weight: 800;
+
+      letter-spacing: 1.5px;
 
       background:
         linear-gradient(
           135deg,
-          #f4faff,
-          #edf7ff
+          rgba(13, 53, 111, 0.8),
+          rgba(8, 27, 68, 0.9)
         );
 
       border-color:
-        rgba(0, 132, 255, 0.22);
-
-      font-weight: 800;
-
-      letter-spacing: 1.4px;
-    }
-
-
-    /* =========================================================
-       FIELD ICON
-       ========================================================= */
-
-    .field-icon {
-      position: absolute;
-
-      left: 15px;
-      top: 50%;
-
-      transform:
-        translateY(-50%);
-
-      width: 20px;
-
-      display: flex;
-
-      justify-content: center;
-      align-items: center;
-
-      color: #0796f7;
-
-      font-size: 18px;
-
-      pointer-events: none;
-
-      text-shadow:
-        0 0 8px rgba(0, 164, 255, 0.25);
-    }
-
-
-    /* =========================================================
-       CHECK ICON
-       ========================================================= */
-
-    .check-icon {
-      position: absolute;
-
-      right: 14px;
-      top: 50%;
-
-      transform:
-        translateY(-50%);
-
-      width: 25px;
-      height: 25px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 50%;
-
-      color: #ffffff;
-
-      background:
-        #1597ee;
-
-      font-size: 13px;
-
-      font-weight: 900;
+        rgba(48, 190, 255, 0.52);
 
       box-shadow:
-        0 4px 12px rgba(0, 145, 230, 0.20);
+        inset 0 0 18px rgba(0, 170, 255, 0.07);
     }
 
+    /* =========================================
+       PEMISAH
+       ========================================= */
 
-    /* =========================================================
-       DIVIDER
-       ========================================================= */
+    hr {
+      border: 0;
 
-    .divider {
       height: 1px;
 
-      margin:
-        25px 0;
+      margin: 25px 0;
 
       background:
         linear-gradient(
           90deg,
           transparent,
-          #e4e9ef 15%,
-          #e4e9ef 85%,
+          rgba(55, 180, 255, 0.35),
           transparent
         );
     }
 
-
-    /* =========================================================
+    /* =========================================
        BUTTON
-       ========================================================= */
+       ========================================= */
 
-    .submit-button {
-      position: relative;
-
+    button {
       width: 100%;
-      height: 56px;
 
-      margin-top: 7px;
+      height: 58px;
 
-      border: 0;
+      margin-top: 8px;
 
-      border-radius: 13px;
+      border: 1px solid rgba(85, 235, 255, 0.85);
+
+      border-radius: 14px;
 
       color: #ffffff;
 
-      background:
-        linear-gradient(
-          135deg,
-          #078bff,
-          #0669e8
-        );
+      font-family: inherit;
 
-      box-shadow:
-        0 11px 25px rgba(0, 115, 235, 0.20);
-
-      font-size: 15px;
+      font-size: 17px;
 
       font-weight: 800;
+
+      letter-spacing: 0.2px;
 
       cursor: pointer;
 
-      overflow: hidden;
-
-      transition:
-        transform 0.18s ease,
-        box-shadow 0.18s ease,
-        filter 0.18s ease;
-    }
-
-    .submit-button::after {
-      content: "";
-
-      position: absolute;
-
-      top: 0;
-      left: -100%;
-
-      width: 60%;
-      height: 100%;
-
       background:
         linear-gradient(
-          90deg,
-          transparent,
-          rgba(255,255,255,0.20),
-          transparent
+          100deg,
+          #007dff 0%,
+          #1454ff 45%,
+          #00cfff 100%
         );
 
-      transform:
-        skewX(-20deg);
+      box-shadow:
+        0 0 25px rgba(0, 160, 255, 0.38),
+        0 10px 25px rgba(0, 60, 180, 0.2);
 
       transition:
-        left 0.55s ease;
+        transform 0.2s ease,
+        filter 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
-    .submit-button:hover {
-      transform:
-        translateY(-1px);
+    button:hover {
+      transform: translateY(-2px);
+
+      filter: brightness(1.1);
 
       box-shadow:
-        0 14px 30px rgba(0, 115, 235, 0.27);
-
-      filter:
-        brightness(1.03);
+        0 0 34px rgba(0, 210, 255, 0.5),
+        0 12px 30px rgba(0, 60, 180, 0.28);
     }
 
-    .submit-button:hover::after {
-      left: 130%;
+    button:active {
+      transform: scale(0.985);
     }
 
-    .submit-button:active {
-      transform:
-        scale(0.985);
-
-      box-shadow:
-        0 7px 18px rgba(0, 115, 235, 0.20);
-    }
-
-    .submit-button:disabled {
-      opacity: 0.72;
+    button:disabled {
+      opacity: 0.6;
 
       cursor: not-allowed;
 
       transform: none;
 
+      filter: none;
+
       box-shadow:
-        0 7px 18px rgba(0, 115, 235, 0.13);
+        0 0 15px rgba(0, 160, 255, 0.18);
     }
 
-
-    /* =========================================================
-       LOADING
-       ========================================================= */
-
-    .loading-content {
-      display: inline-flex;
-
-      align-items: center;
-      justify-content: center;
-
-      gap: 9px;
-    }
-
-    .spinner {
-      width: 16px;
-      height: 16px;
-
-      border:
-        2px solid rgba(255,255,255,0.40);
-
-      border-top-color:
-        #ffffff;
-
-      border-radius: 50%;
-
-      animation:
-        spin 0.7s linear infinite;
-    }
-
-
-    /* =========================================================
+    /* =========================================
        NOTICE
-       ========================================================= */
+       ========================================= */
 
     .notice {
-      display: flex;
+      text-align: center;
 
-      justify-content: center;
-      align-items: center;
+      margin-top: 15px;
 
-      gap: 6px;
-
-      margin-top: 14px;
-
-      color: #98a2b3;
+      color: #8faac0;
 
       font-size: 11px;
 
       line-height: 1.5;
-
-      text-align: center;
     }
 
-    .notice-icon {
-      color: #1595ff;
-
-      font-size: 13px;
-    }
-
-
-    /* =========================================================
+    /* =========================================
        MESSAGE
-       ========================================================= */
+       ========================================= */
 
     #message {
       display: none;
 
-      margin-top: 16px;
+      margin-top: 17px;
 
-      padding: 17px;
+      padding: 18px;
 
-      border-radius: 14px;
+      border-radius: 15px;
 
       text-align: center;
 
-      animation:
-        fadeUp 0.3s ease both;
+      animation: fadeUp 0.35s ease both;
     }
 
     .success {
-      color: #087443;
-
-      border:
-        1px solid #b7ebd0;
+      color: #dfffff;
 
       background:
-        #f1fcf6;
+        linear-gradient(
+          135deg,
+          rgba(0, 215, 255, 0.13),
+          rgba(0, 120, 255, 0.09)
+        );
+
+      border:
+        1px solid rgba(50, 225, 255, 0.5);
+
+      box-shadow:
+        0 0 24px rgba(0, 190, 255, 0.12);
     }
 
     .error {
-      color: #b42318;
-
-      border:
-        1px solid #f5c2c0;
+      color: #ffdce4;
 
       background:
-        #fff6f5;
+        rgba(220, 40, 75, 0.11);
+
+      border:
+        1px solid rgba(255, 90, 120, 0.42);
     }
 
     .success-icon {
-      width: 34px;
-      height: 34px;
-
-      margin:
-        0 auto 9px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 50%;
-
-      color: #ffffff;
-
-      background:
-        #18a86b;
-
-      font-size: 16px;
-
-      font-weight: 800;
+      font-size: 30px;
+      margin-bottom: 7px;
     }
 
     .success-title {
-      margin-bottom: 5px;
-
-      color: #087443;
-
-      font-size: 15px;
-
+      font-size: 17px;
       font-weight: 800;
+      margin-bottom: 6px;
     }
 
     .success-text {
-      color: #47705d;
-
-      font-size: 12px;
-
+      font-size: 13px;
+      font-weight: 400;
       line-height: 1.5;
     }
 
-
-    /* =========================================================
+    /* =========================================
        REVIEW BUTTON
-       ========================================================= */
+       ========================================= */
 
     .review-button {
       display: none;
 
       width: 100%;
 
-      margin-top: 11px;
+      margin-top: 14px;
 
-      padding: 14px;
+      padding: 15px;
 
-      border:
-        1px solid #d8e2ed;
+      border: 1px solid rgba(45, 220, 255, 0.7);
 
       border-radius: 13px;
 
-      color: #101828;
+      color: #ffffff;
 
       background:
-        #ffffff;
+        linear-gradient(
+          135deg,
+          rgba(0, 120, 255, 0.28),
+          rgba(0, 210, 255, 0.16)
+        );
 
       text-align: center;
 
       text-decoration: none;
 
-      font-size: 13px;
+      font-size: 14px;
 
       font-weight: 800;
 
       box-shadow:
-        0 5px 16px rgba(16, 24, 40, 0.05);
+        0 0 20px rgba(0, 180, 255, 0.12);
 
       transition:
-        transform 0.18s ease,
-        border-color 0.18s ease,
-        box-shadow 0.18s ease;
+        transform 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     .review-button:hover {
-      transform:
-        translateY(-1px);
+      transform: translateY(-2px);
 
-      border-color:
-        #9ecfff;
+      background:
+        rgba(0, 140, 240, 0.38);
 
       box-shadow:
-        0 8px 20px rgba(16, 24, 40, 0.08);
+        0 0 25px rgba(0, 190, 255, 0.22);
     }
 
-
-    /* =========================================================
+    /* =========================================
        BENEFITS
-       ========================================================= */
+       ========================================= */
 
     .benefits {
+      width: min(100%, 760px);
+
+      margin: 35px auto 0;
+
       display: grid;
 
       grid-template-columns:
         repeat(3, 1fr);
 
-      gap: 10px;
+      gap: 18px;
 
-      margin-top: 17px;
-
-      animation:
-        fadeUp 0.75s 0.1s ease both;
+      animation: fadeUp 1s ease both;
     }
 
     .benefit {
-      min-width: 0;
+      padding: 14px 0;
 
-      padding:
-        14px 11px;
+      display: flex;
 
-      border:
-        1px solid rgba(15, 90, 170, 0.08);
+      align-items: center;
 
-      border-radius: 14px;
-
-      background:
-        rgba(255, 255, 255, 0.62);
-
-      text-align: center;
+      gap: 12px;
     }
 
     .benefit-icon {
-      width: 32px;
-      height: 32px;
+      width: 48px;
+      height: 48px;
 
-      margin:
-        0 auto 8px;
+      flex: none;
 
       display: grid;
+
       place-items: center;
 
-      border-radius: 9px;
+      border:
+        1px solid rgba(45, 220, 255, 0.5);
 
-      color: #078eea;
+      border-radius: 13px;
+
+      color: #39e4ff;
 
       background:
-        #edf8ff;
+        rgba(0, 70, 130, 0.25);
 
-      font-size: 16px;
+      font-size: 22px;
 
-      font-weight: 800;
+      box-shadow:
+        0 0 17px rgba(0, 190, 255, 0.16);
     }
 
     .benefit strong {
       display: block;
 
-      margin-bottom: 3px;
+      margin-bottom: 4px;
 
-      color: #344054;
-
-      font-size: 11px;
-
-      font-weight: 800;
+      font-size: 13px;
     }
 
     .benefit span {
       display: block;
 
-      color: #98a2b3;
-
-      font-size: 9px;
-
-      line-height: 1.4;
-    }
-
-
-    /* =========================================================
-       FOOTER
-       ========================================================= */
-
-    .footer {
-      margin-top: 22px;
-
-      color: #98a2b3;
+      color: #9eb7ca;
 
       font-size: 10px;
 
-      text-align: center;
-
-      animation:
-        fadeUp 0.8s 0.15s ease both;
+      line-height: 1.45;
     }
 
+    /* =========================================
+       FOOTER
+       ========================================= */
 
-    /* =========================================================
+    footer {
+      margin-top: 35px;
+
+      text-align: center;
+
+      color: #7792a7;
+
+      font-size: 11px;
+
+      letter-spacing: 0.2px;
+    }
+
+    /* =========================================
        ANIMATIONS
-       ========================================================= */
+       ========================================= */
 
     @keyframes fadeUp {
-
       from {
         opacity: 0;
-
-        transform:
-          translateY(10px);
+        transform: translateY(15px);
       }
 
       to {
         opacity: 1;
-
-        transform:
-          translateY(0);
+        transform: translateY(0);
       }
-
     }
 
-    @keyframes spin {
+    @keyframes fadeDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
 
       to {
-        transform:
-          rotate(360deg);
+        opacity: 1;
+        transform: translateY(0);
       }
-
     }
 
-
-    /* =========================================================
-       MOBILE
-       ========================================================= */
-
-    @media (max-width: 480px) {
-
-      .page {
-        padding:
-          21px 12px
-          calc(28px + env(safe-area-inset-bottom));
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.985);
       }
 
-      .header {
-        margin-bottom: 22px;
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    @keyframes shine {
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 250% center;
+      }
+    }
+
+    /* =========================================
+       MOBILE
+       ========================================= */
+
+    @media (max-width: 700px) {
+
+      body {
+        padding:
+          20px 12px 32px;
       }
 
       .brand {
-        margin-bottom: 18px;
+        margin-bottom: 25px;
       }
 
-      .header h1 {
-        font-size: 31px;
-
-        letter-spacing:
-          -1.2px;
+      .brand-name {
+        font-size: 17px;
+        letter-spacing: 2.4px;
       }
 
-      .header-description {
-        margin-top: 11px;
+      .hero {
+        margin-bottom: 24px;
+      }
 
+      .hero h1 {
+        font-size: 30px;
+        letter-spacing: -0.7px;
+      }
+
+      .hero p {
         font-size: 13px;
+        line-height: 1.6;
+        padding: 0 5px;
       }
 
-      .activation-card {
-        padding:
-          21px 17px;
-
-        border-radius:
-          19px;
+      .hero p br {
+        display: none;
       }
 
-      .card-heading h2 {
-        font-size: 18px;
+      .card {
+        padding: 23px 17px 21px;
+
+        border-radius: 21px;
+      }
+
+      .section-head h2 {
+        font-size: 19px;
+      }
+
+      .section-head p {
+        font-size: 12px;
+      }
+
+      label {
+        font-size: 12px;
       }
 
       input {
-        height: 54px;
-
-        font-size: 14px;
+        height: 55px;
+        font-size: 15px;
+        border-radius: 12px;
       }
 
-      .submit-button {
-        height: 56px;
-      }
-
-      .benefits {
-        gap: 7px;
-      }
-
-      .benefit {
-        padding:
-          12px 7px;
-      }
-
-      .benefit-icon {
-        width: 29px;
-        height: 29px;
-
-        font-size: 14px;
-      }
-
-      .benefit strong {
-        font-size: 10px;
-      }
-
-      .benefit span {
-        font-size: 8px;
-      }
-
-    }
-
-
-    /* =========================================================
-       SMALL PHONE
-       ========================================================= */
-
-    @media (max-width: 360px) {
-
-      .page {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      .header h1 {
-        font-size: 28px;
-      }
-
-      .activation-card {
-        padding:
-          19px 14px;
+      button {
+        height: 57px;
+        font-size: 16px;
       }
 
       .benefits {
-        grid-template-columns:
-          1fr;
+        grid-template-columns: 1fr;
+        gap: 4px;
 
-        gap: 7px;
+        margin-top: 28px;
       }
 
       .benefit {
-        display: flex;
-
-        align-items: center;
-
-        text-align: left;
-
-        gap: 9px;
+        padding: 10px 4px;
       }
 
       .benefit-icon {
-        margin: 0;
-
-        flex:
-          0 0 auto;
+        width: 45px;
+        height: 45px;
       }
 
-    }
-
-
-    /* =========================================================
-       REDUCE MOTION
-       ========================================================= */
-
-    @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-
-        animation-duration:
-          0.01ms !important;
-
-        animation-iteration-count:
-          1 !important;
-
-        scroll-behavior:
-          auto !important;
-
-        transition-duration:
-          0.01ms !important;
-
+      .mountain {
+        bottom: 29%;
+        height: 300px;
       }
 
+      .mountain.back {
+        bottom: 28%;
+        height: 260px;
+      }
+
+      .waves {
+        height: 40%;
+      }
+
+      .sun {
+        width: 300px;
+        height: 300px;
+        right: -120px;
+        top: 15%;
+      }
     }
 
+    /* =========================================
+       VERY SMALL PHONE
+       ========================================= */
+
+    @media (max-width: 380px) {
+
+      body {
+        padding-left: 9px;
+        padding-right: 9px;
+      }
+
+      .hero h1 {
+        font-size: 27px;
+      }
+
+      .card {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      input {
+        height: 53px;
+      }
+
+      button {
+        height: 55px;
+      }
+    }
   </style>
 </head>
 
-
 <body>
 
-
-  <!-- =========================================================
+  <!-- =====================================
        BACKGROUND
-       ========================================================= -->
+       ===================================== -->
 
-  <div
-    class="background"
-    aria-hidden="true"
-  ></div>
+  <div class="scene" aria-hidden="true">
+
+    <div class="stars"></div>
+
+    <div class="sun"></div>
+
+    <div class="mountain back"></div>
+
+    <div class="mountain"></div>
+
+    <div class="mist"></div>
+
+    <div class="waves">
+
+      <svg
+        viewBox="0 0 1600 520"
+        preserveAspectRatio="none"
+      >
+
+        <defs>
+
+          <linearGradient
+            id="waveGradient"
+            x1="0"
+            y1="0"
+            x2="1"
+            y2="0"
+          >
+
+            <stop
+              offset="0"
+              stop-color="#00d9ff"
+            />
+
+            <stop
+              offset=".5"
+              stop-color="#168cff"
+            />
+
+            <stop
+              offset="1"
+              stop-color="#35f4ff"
+            />
+
+          </linearGradient>
+
+        </defs>
+
+        <path d="M-30 400 C150 220 260 470 470 320 S770 150 960 350 S1250 490 1630 160"/>
+
+        <path d="M-30 420 C150 240 260 490 470 340 S770 170 960 370 S1250 510 1630 180"/>
+
+        <path d="M-30 440 C150 260 260 510 470 360 S770 190 960 390 S1250 530 1630 200"/>
+
+        <path d="M-30 460 C150 280 260 530 470 380 S770 210 960 410 S1250 550 1630 220"/>
+
+        <path d="M-30 480 C150 300 260 550 470 400 S770 230 960 430 S1250 570 1630 240"/>
+
+        <path d="M-30 500 C150 320 260 570 470 420 S770 250 960 450 S1250 590 1630 260"/>
+
+        <path d="M-30 520 C150 340 260 590 470 440 S770 270 960 470 S1250 610 1630 280"/>
+
+      </svg>
+
+    </div>
+
+    <div class="glow"></div>
+
+  </div>
 
 
-  <main class="page">
+  <!-- =====================================
+       CONTENT
+       ===================================== -->
 
-    <div class="content">
+  <main class="content">
 
+    <!-- BRAND -->
 
-      <!-- =====================================================
-           HEADER
-           ===================================================== -->
+    <div class="brand">
 
-      <header class="header">
+      <div class="brand-name">
+        ALJAVA TERIONITY
+      </div>
 
+      <div class="brand-line"></div>
 
-        <!-- LOGO / BRAND -->
-
-        <div class="brand">
-
-          <div class="brand-mark">
-            A
-          </div>
-
-          <div class="brand-name">
-
-            <strong>
-              ALJAVA
-            </strong>
-
-            <span>
-              TERIONITY
-            </span>
-
-          </div>
-
-        </div>
+    </div>
 
 
-        <!-- BADGE -->
+    <!-- HERO -->
 
-        <div class="eyebrow">
+    <section class="hero">
 
-          <span class="eyebrow-dot"></span>
+      <h1>
+        Aktivasi Kartu
+        <span>ALJAVA</span>
+      </h1>
 
-          GOOGLE REVIEW CARD
+      <p>
+        Isi data di bawah ini untuk mengaktifkan kartu Anda
+        <br>
+        dan mulai menikmati semua keuntungannya.
+      </p>
 
-        </div>
-
-
-        <!-- TITLE -->
-
-        <h1>
-          Aktivasi Kartu
-          <span>ALJAVA</span>
-        </h1>
+    </section>
 
 
-        <!-- DESCRIPTION -->
+    <!-- FORM CARD -->
 
-        <p class="header-description">
-          Hubungkan kartu Anda ke Google Review bisnis
-          dengan proses aktivasi yang cepat dan mudah.
+    <section class="card">
+
+      <!-- INFORMASI KARTU -->
+
+      <div class="section-head">
+
+        <h2>
+          Informasi Kartu
+        </h2>
+
+        <p>
+          Kode kartu Anda terdeteksi otomatis
         </p>
 
-
-      </header>
-
-
-      <!-- =====================================================
-           ACTIVATION CARD
-           ===================================================== -->
-
-      <section class="activation-card">
+      </div>
 
 
-        <!-- CARD TITLE -->
+      <form id="activationForm">
 
-        <div class="card-heading">
+        <!-- KODE KARTU -->
+
+        <label for="card_code">
+          Kode Kartu
+        </label>
+
+        <div class="field">
+
+          <input
+            type="text"
+            id="card_code"
+            placeholder="Kode kartu"
+            readonly
+            required
+          >
+
+        </div>
+
+
+        <hr>
+
+
+        <!-- DATA PELANGGAN -->
+
+        <div class="section-head">
 
           <h2>
-            Informasi Aktivasi
+            Data Pelanggan
           </h2>
 
           <p>
-            Lengkapi data di bawah untuk mengaktifkan kartu Anda.
+            Lengkapi data bisnis Anda dengan benar
           </p>
 
         </div>
 
 
-        <!-- ===================================================
-             FORM
-             =================================================== -->
-
-        <form id="activationForm">
-
-
-          <!-- =================================================
-               CARD CODE
-               ================================================= -->
-
-          <div class="field-group">
-
-            <label for="card_code">
-              Kode Kartu
-            </label>
-
-
-            <div class="input-wrapper">
-
-              <!-- Tidak ada logo kotak di sini -->
-
-              <input
-                type="text"
-                id="card_code"
-                placeholder="Kode kartu"
-                readonly
-                required
-              >
-
-
-              <span class="check-icon">
-                ✓
-              </span>
-
-            </div>
-
-          </div>
-
-
-          <!-- DIVIDER -->
-
-          <div class="divider"></div>
-
-
-          <!-- =================================================
-               BUSINESS DATA
-               ================================================= -->
-
-          <div class="section-title">
-            Data Bisnis
-          </div>
-
-
-          <!-- =================================================
-               BUSINESS NAME
-               ================================================= -->
-
-          <div class="field-group">
-
-            <label for="business_name">
-              Nama Bisnis
-            </label>
-
-
-            <div class="input-wrapper">
-
-              <span class="field-icon">
-                ⌂
-              </span>
-
-
-              <input
-                type="text"
-                id="business_name"
-                placeholder="Contoh: Kopi Alpin"
-                autocomplete="organization"
-                required
-              >
-
-            </div>
-
-          </div>
-
-
-          <!-- =================================================
-               OWNER NAME
-               ================================================= -->
-
-          <div class="field-group">
-
-            <label for="owner_name">
-              Nama Pemilik
-            </label>
-
-
-            <div class="input-wrapper">
-
-              <span class="field-icon">
-                ♙
-              </span>
-
-
-              <input
-                type="text"
-                id="owner_name"
-                placeholder="Masukkan nama pemilik"
-                autocomplete="name"
-                required
-              >
-
-            </div>
-
-          </div>
-
-
-          <!-- =================================================
-               WHATSAPP
-               ================================================= -->
-
-          <div class="field-group">
-
-            <label for="whatsapp">
-              WhatsApp
-            </label>
-
-
-            <div class="input-wrapper">
-
-              <!-- Ikon telepon sekarang mengikuti warna biru -->
-
-              <span class="field-icon">
-                ☎
-              </span>
-
-
-              <input
-                type="tel"
-                id="whatsapp"
-                placeholder="08123456789"
-                autocomplete="tel"
-                inputmode="tel"
-                required
-              >
-
-            </div>
-
-          </div>
-
-
-          <!-- =================================================
-               GOOGLE REVIEW URL
-               ================================================= -->
-
-          <div class="field-group">
-
-            <label for="google_review_url">
-              Link Google Review
-            </label>
-
-
-            <div class="input-wrapper">
-
-              <span class="field-icon">
-                ★
-              </span>
-
-
-              <input
-                type="url"
-                id="google_review_url"
-                placeholder="https://g.page/r/..."
-                autocomplete="url"
-                inputmode="url"
-                required
-              >
-
-            </div>
-
-          </div>
-
-
-          <!-- =================================================
-               SUBMIT BUTTON
-               ================================================= -->
-
-          <button
-            type="submit"
-            id="submitButton"
-            class="submit-button"
+        <!-- NAMA BISNIS -->
+
+        <label for="business_name">
+          Nama Bisnis
+        </label>
+
+        <div class="field">
+
+          <input
+            type="text"
+            id="business_name"
+            placeholder="Contoh: Kopi Alpin"
+            autocomplete="organization"
+            required
           >
-            Aktifkan Kartu
-          </button>
+
+        </div>
 
 
-          <!-- NOTICE -->
+        <!-- NAMA PEMILIK -->
 
-          <div class="notice">
+        <label for="owner_name">
+          Nama Pemilik
+        </label>
 
-            <span class="notice-icon">
-              ✓
-            </span>
+        <div class="field">
 
-            Data Anda diproses dengan aman.
+          <input
+            type="text"
+            id="owner_name"
+            placeholder="Nama pemilik"
+            autocomplete="name"
+            required
+          >
 
-          </div>
-
-
-        </form>
-
-
-        <!-- ===================================================
-             MESSAGE
-             =================================================== -->
-
-        <div id="message"></div>
+        </div>
 
 
-        <!-- ===================================================
-             REVIEW BUTTON
-             =================================================== -->
+        <!-- WHATSAPP -->
 
-        <a
-          id="reviewButton"
-          class="review-button"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
+        <label for="whatsapp">
+          WhatsApp
+        </label>
+
+        <div class="field">
+
+          <input
+            type="tel"
+            id="whatsapp"
+            placeholder="08123456789"
+            autocomplete="tel"
+            inputmode="tel"
+            required
+          >
+
+        </div>
+
+
+        <!-- GOOGLE REVIEW -->
+
+        <label for="google_review_url">
+          Link Google Review
+        </label>
+
+        <div class="field">
+
+          <input
+            type="url"
+            id="google_review_url"
+            placeholder="https://g.page/r/..."
+            autocomplete="url"
+            required
+          >
+
+        </div>
+
+
+        <!-- BUTTON -->
+
+        <button
+          type="submit"
+          id="submitButton"
         >
-          ⭐ &nbsp; Buka Google Review
-        </a>
+          Aktifkan Kartu
+        </button>
 
 
-      </section>
+        <!-- NOTICE -->
+
+        <div class="notice">
+          Data Anda aman dan terlindungi
+        </div>
+
+      </form>
 
 
-      <!-- =====================================================
-           BENEFITS
-           ===================================================== -->
+      <!-- MESSAGE -->
 
-      <section class="benefits">
+      <div id="message"></div>
 
 
-        <div class="benefit">
+      <!-- GOOGLE REVIEW -->
 
-          <div class="benefit-icon">
-            ✓
-          </div>
+      <a
+        id="reviewButton"
+        class="review-button"
+        href="#"
+        target="_blank"
+        rel="noopener"
+      >
+        ⭐ &nbsp; Buka Google Review
+      </a>
 
-          <div>
+    </section>
 
-            <strong>
-              Aman
-            </strong>
 
-            <span>
-              Data diproses dengan aman
-            </span>
+    <!-- BENEFITS -->
 
-          </div>
+    <section class="benefits">
+
+      <div class="benefit">
+
+        <div class="benefit-icon">
+          ◇
+        </div>
+
+        <div>
+
+          <strong>
+            Aman &amp; Terpercaya
+          </strong>
+
+          <span>
+            Sistem keamanan berlapis
+          </span>
 
         </div>
 
+      </div>
 
-        <div class="benefit">
 
-          <div class="benefit-icon">
-            ϟ
-          </div>
+      <div class="benefit">
 
-          <div>
+        <div class="benefit-icon">
+          ϟ
+        </div>
 
-            <strong>
-              Cepat
-            </strong>
+        <div>
 
-            <span>
-              Aktivasi dalam hitungan detik
-            </span>
+          <strong>
+            Proses Cepat
+          </strong>
 
-          </div>
+          <span>
+            Aktivasi instan dalam hitungan detik
+          </span>
 
         </div>
 
+      </div>
 
-        <div class="benefit">
 
-          <div class="benefit-icon">
-            ★
-          </div>
+      <div class="benefit">
 
-          <div>
+        <div class="benefit-icon">
+          ☆
+        </div>
 
-            <strong>
-              Praktis
-            </strong>
+        <div>
 
-            <span>
-              Langsung terhubung ke Review
-            </span>
+          <strong>
+            Banyak Keuntungan
+          </strong>
 
-          </div>
+          <span>
+            Nikmati berbagai benefit menarik dari ALJAVA
+          </span>
 
         </div>
 
+      </div>
 
-      </section>
-
-
-      <!-- =====================================================
-           FOOTER
-           ===================================================== -->
-
-      <footer class="footer">
-
-        © 2024 ALJAVA TERIONITY · Digital Solution
-
-      </footer>
+    </section>
 
 
-    </div>
+    <!-- FOOTER -->
+
+    <footer>
+      © 2024 ALJAVA TERIONITY • Digital Solution
+    </footer>
 
   </main>
 
 
-  <!-- =========================================================
+  <!-- =====================================
        JAVASCRIPT
-       ========================================================= -->
+       BACKEND TETAP SAMA
+       ===================================== -->
 
   <script>
 
-
-    /* =========================================================
-       BACKEND CONFIG
-       ========================================================= */
+    /* =====================================
+       SUPABASE
+       ===================================== */
 
     const FUNCTION_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
 
-
     const CHECK_FUNCTION_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/check_card";
-
 
     const SUPABASE_KEY =
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
 
-    /* =========================================================
-       GET URL PARAMETER
-       ========================================================= */
+    /* =====================================
+       AMBIL CODE DARI URL
+       ===================================== */
 
     const urlParams =
       new URLSearchParams(
         window.location.search
       );
 
-
     const cardCode =
       urlParams.get("code");
 
 
-    /* =========================================================
-       SHOW CARD CODE
-       ========================================================= */
+    /* =====================================
+       TAMPILKAN CODE KARTU
+       ===================================== */
 
     if (cardCode) {
 
       document
         .getElementById("card_code")
-        .value =
-        cardCode;
+        .value = cardCode;
 
     }
 
 
-    /* =========================================================
-       CHECK CARD STATUS
-       ========================================================= */
+    /* =====================================
+       CEK STATUS KARTU
+       ===================================== */
 
     async function checkCardStatus() {
 
@@ -1695,13 +1512,13 @@
         return;
       }
 
-
       try {
 
         const response =
           await fetch(
             CHECK_FUNCTION_URL,
             {
+
               method: "POST",
 
               headers: {
@@ -1720,10 +1537,8 @@
 
               body:
                 JSON.stringify({
-
                   card_code:
                     cardCode
-
                 })
 
             }
@@ -1747,9 +1562,7 @@
         }
 
 
-        /* =====================================
-           ACTIVE CARD
-           ===================================== */
+        /* KALAU SUDAH AKTIF */
 
         if (
           result.status === "active" &&
@@ -1764,7 +1577,6 @@
         }
 
       }
-
 
       catch (error) {
 
@@ -1781,9 +1593,9 @@
     checkCardStatus();
 
 
-    /* =========================================================
-       FORM SUBMIT
-       ========================================================= */
+    /* =====================================
+       FORM AKTIVASI
+       ===================================== */
 
     document
       .getElementById("activationForm")
@@ -1794,21 +1606,15 @@
           event.preventDefault();
 
 
-          /* ===================================
-             ELEMENTS
-             =================================== */
-
           const button =
             document.getElementById(
               "submitButton"
             );
 
-
           const message =
             document.getElementById(
               "message"
             );
-
 
           const reviewButton =
             document.getElementById(
@@ -1816,38 +1622,29 @@
             );
 
 
-          /* ===================================
-             LOADING STATE
-             =================================== */
+          /* CEGAH DOUBLE SUBMIT */
 
-          button.disabled =
-            true;
+          if (button.disabled) {
+            return;
+          }
 
 
-          button.innerHTML = `
+          button.disabled = true;
 
-            <span class="loading-content">
-
-              <span class="spinner"></span>
-
-              Mengaktifkan...
-
-            </span>
-
-          `;
+          button.innerText =
+            "Mengaktifkan...";
 
 
           message.style.display =
             "none";
 
-
           reviewButton.style.display =
             "none";
 
 
-          /* ===================================
-             FORM DATA
-             =================================== */
+          /* =================================
+             DATA FORM
+             ================================= */
 
           const data = {
 
@@ -1859,7 +1656,6 @@
                 .value
                 .trim(),
 
-
             business_name:
               document
                 .getElementById(
@@ -1867,7 +1663,6 @@
                 )
                 .value
                 .trim(),
-
 
             owner_name:
               document
@@ -1877,7 +1672,6 @@
                 .value
                 .trim(),
 
-
             whatsapp:
               document
                 .getElementById(
@@ -1885,7 +1679,6 @@
                 )
                 .value
                 .trim(),
-
 
             google_review_url:
               document
@@ -1898,9 +1691,9 @@
           };
 
 
-          /* ===================================
-             SEND TO BACKEND
-             =================================== */
+          /* =================================
+             KIRIM DATA KE SUPABASE
+             ================================= */
 
           try {
 
@@ -1937,7 +1730,7 @@
 
 
             /* =================================
-               CHECK RESPONSE
+               CEK HASIL
                ================================= */
 
             if (
@@ -1954,12 +1747,11 @@
 
 
             /* =================================
-               SUCCESS MESSAGE
+               BERHASIL
                ================================= */
 
             message.className =
               "success";
-
 
             message.style.display =
               "block";
@@ -1976,15 +1768,15 @@
               </div>
 
               <div class="success-text">
-                Kartu Anda sudah aktif dan
-                siap digunakan untuk Google Review.
+                Kartu Anda sudah siap digunakan
+                untuk Google Review.
               </div>
 
             `;
 
 
             /* =================================
-               REVIEW LINK
+               LINK GOOGLE REVIEW
                ================================= */
 
             reviewButton.href =
@@ -2016,61 +1808,35 @@
                   "card_code"
                 )
                 .value =
-                cardCode;
+                  cardCode;
 
             }
 
           }
 
 
-          /* ===================================
-             ERROR
-             =================================== */
-
           catch (error) {
 
             message.className =
               "error";
 
-
             message.style.display =
               "block";
 
-
-            message.innerHTML = `
-
-              <strong>
-                Aktivasi belum berhasil
-              </strong>
-
-              <div
-                style="
-                  margin-top:5px;
-                  font-size:12px;
-                  font-weight:400;
-                  line-height:1.5;
-                "
-              >
-                ${
-                  error.message ||
-                  "Silakan coba lagi."
-                }
-              </div>
-
-            `;
+            message.innerText =
+              "Aktivasi gagal. " +
+              (
+                error.message ||
+                "Silakan coba lagi."
+              );
 
           }
 
-
-          /* ===================================
-             RESTORE BUTTON
-             =================================== */
 
           finally {
 
             button.disabled =
               false;
-
 
             button.innerText =
               "Aktifkan Kartu";
