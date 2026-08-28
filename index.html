@@ -2,19 +2,21 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
   >
 
-  <title>Aktivasi Kartu — ALJAVA</title>
+  <title>Aktivasi Kartu — ALJAVA TERIONITY</title>
 
   <meta
     name="description"
-    content="Aktivasi kartu Google Review ALJAVA."
+    content="Aktivasi kartu Google Review ALJAVA TERIONITY."
   >
 
   <style>
+
     /* =========================================================
        RESET
        ========================================================= */
@@ -54,7 +56,11 @@
           rgba(0, 200, 255, 0.08),
           transparent 30%
         ),
-        #f7faff;
+        linear-gradient(
+          180deg,
+          #f8fbff 0%,
+          #f5f9fd 100%
+        );
 
       overflow-x: hidden;
     }
@@ -64,8 +70,9 @@
       font: inherit;
     }
 
+
     /* =========================================================
-       BACKGROUND DECORATION
+       BACKGROUND
        ========================================================= */
 
     .background {
@@ -87,7 +94,7 @@
       width: 520px;
       height: 520px;
 
-      top: -250px;
+      top: -260px;
       left: 50%;
 
       transform: translateX(-50%);
@@ -97,12 +104,12 @@
       background:
         radial-gradient(
           circle,
-          rgba(0, 145, 255, 0.14),
-          rgba(0, 145, 255, 0.03) 45%,
+          rgba(0, 145, 255, 0.15),
+          rgba(0, 145, 255, 0.04) 45%,
           transparent 70%
         );
 
-      filter: blur(15px);
+      filter: blur(18px);
     }
 
     .background::after {
@@ -110,10 +117,10 @@
 
       position: absolute;
 
-      width: 300px;
-      height: 300px;
+      width: 330px;
+      height: 330px;
 
-      right: -150px;
+      right: -170px;
       bottom: 5%;
 
       border-radius: 50%;
@@ -121,12 +128,13 @@
       background:
         radial-gradient(
           circle,
-          rgba(0, 210, 255, 0.08),
+          rgba(0, 200, 255, 0.09),
           transparent 70%
         );
 
       filter: blur(25px);
     }
+
 
     /* =========================================================
        PAGE
@@ -137,7 +145,7 @@
       min-height: 100vh;
 
       padding:
-        26px 16px
+        25px 16px
         calc(35px + env(safe-area-inset-bottom));
 
       display: flex;
@@ -152,8 +160,9 @@
       margin: auto;
     }
 
+
     /* =========================================================
-       HEADER
+       HEADER / BRAND
        ========================================================= */
 
     .header {
@@ -169,60 +178,91 @@
       display: inline-flex;
 
       align-items: center;
-      gap: 9px;
+
+      gap: 10px;
 
       margin-bottom: 23px;
     }
 
     .brand-mark {
-      width: 35px;
-      height: 35px;
+      width: 38px;
+      height: 38px;
 
       display: grid;
       place-items: center;
 
-      border-radius: 10px;
+      border-radius: 11px;
 
-      color: white;
-
-      font-size: 18px;
-      font-weight: 800;
+      color: #ffffff;
 
       background:
         linear-gradient(
           135deg,
-          #0b8cff,
-          #0065e8
+          #0b9aff,
+          #0067e8
         );
 
+      font-size: 18px;
+      font-weight: 900;
+
       box-shadow:
-        0 7px 18px rgba(0, 105, 235, 0.22);
+        0 8px 20px rgba(0, 105, 235, 0.23);
+
+      text-shadow:
+        0 1px 2px rgba(0,0,0,0.15);
     }
 
     .brand-name {
-      font-size: 15px;
-      font-weight: 800;
+      display: flex;
 
-      letter-spacing: 0.8px;
+      flex-direction: column;
 
+      align-items: flex-start;
+
+      line-height: 1;
+
+      gap: 4px;
+    }
+
+    .brand-name strong {
       color: #101828;
+
+      font-size: 16px;
+
+      font-weight: 850;
+
+      letter-spacing: 0.5px;
     }
 
     .brand-name span {
       color: #087ff5;
+
+      font-size: 9px;
+
+      font-weight: 800;
+
+      letter-spacing: 2px;
     }
+
+
+    /* =========================================================
+       EYEBROW
+       ========================================================= */
 
     .eyebrow {
       display: inline-flex;
 
       align-items: center;
+
       gap: 7px;
 
       margin-bottom: 13px;
 
-      padding: 7px 11px;
+      padding:
+        7px 11px;
 
-      border: 1px solid rgba(0, 126, 255, 0.16);
+      border:
+        1px solid rgba(0, 126, 255, 0.16);
 
       border-radius: 999px;
 
@@ -232,9 +272,10 @@
         rgba(0, 135, 255, 0.055);
 
       font-size: 11px;
-      font-weight: 700;
 
-      letter-spacing: 0.4px;
+      font-weight: 750;
+
+      letter-spacing: 0.45px;
     }
 
     .eyebrow-dot {
@@ -249,18 +290,24 @@
         0 0 9px rgba(0, 156, 255, 0.8);
     }
 
+
+    /* =========================================================
+       HERO
+       ========================================================= */
+
     .header h1 {
       margin: 0;
 
       color: #08111f;
 
-      font-size: clamp(30px, 8vw, 43px);
+      font-size:
+        clamp(30px, 8vw, 43px);
 
       line-height: 1.08;
 
       letter-spacing: -1.7px;
 
-      font-weight: 800;
+      font-weight: 850;
     }
 
     .header h1 span {
@@ -270,7 +317,8 @@
     .header-description {
       max-width: 430px;
 
-      margin: 14px auto 0;
+      margin:
+        14px auto 0;
 
       color: #667085;
 
@@ -278,6 +326,7 @@
 
       line-height: 1.65;
     }
+
 
     /* =========================================================
        MAIN CARD
@@ -294,14 +343,17 @@
       border-radius: 22px;
 
       background:
-        rgba(255, 255, 255, 0.88);
+        rgba(255, 255, 255, 0.90);
 
       box-shadow:
         0 22px 65px rgba(15, 45, 85, 0.09),
         0 3px 12px rgba(15, 45, 85, 0.04);
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
 
       animation:
         fadeUp 0.65s 0.05s ease both;
@@ -322,10 +374,11 @@
         linear-gradient(
           90deg,
           transparent,
-          rgba(0, 143, 255, 0.5),
+          rgba(0, 143, 255, 0.55),
           transparent
         );
     }
+
 
     /* =========================================================
        CARD HEADING
@@ -336,7 +389,8 @@
     }
 
     .card-heading h2 {
-      margin: 0 0 6px;
+      margin:
+        0 0 6px;
 
       color: #101828;
 
@@ -357,8 +411,9 @@
       line-height: 1.5;
     }
 
+
     /* =========================================================
-       SECTION
+       SECTION TITLE
        ========================================================= */
 
     .section-title {
@@ -376,8 +431,9 @@
       letter-spacing: 0.7px;
     }
 
+
     /* =========================================================
-       LABEL
+       FIELD
        ========================================================= */
 
     .field-group {
@@ -396,6 +452,7 @@
       font-weight: 750;
     }
 
+
     /* =========================================================
        INPUT WRAPPER
        ========================================================= */
@@ -403,6 +460,7 @@
     .input-wrapper {
       position: relative;
     }
+
 
     /* =========================================================
        INPUT
@@ -425,15 +483,14 @@
       color: #101828;
 
       background:
-        rgba(255, 255, 255, 0.94);
+        rgba(255, 255, 255, 0.95);
 
       font-size: 14px;
 
       transition:
         border-color 0.2s ease,
         box-shadow 0.2s ease,
-        background 0.2s ease,
-        transform 0.2s ease;
+        background 0.2s ease;
     }
 
     input::placeholder {
@@ -454,11 +511,15 @@
         0 7px 20px rgba(21, 149, 255, 0.06);
     }
 
+
     /* =========================================================
        CARD CODE
        ========================================================= */
 
     #card_code {
+      padding-left: 15px;
+      padding-right: 46px;
+
       color: #0878e8;
 
       background:
@@ -476,6 +537,7 @@
       letter-spacing: 1.4px;
     }
 
+
     /* =========================================================
        FIELD ICON
        ========================================================= */
@@ -486,7 +548,8 @@
       left: 15px;
       top: 50%;
 
-      transform: translateY(-50%);
+      transform:
+        translateY(-50%);
 
       width: 20px;
 
@@ -497,13 +560,14 @@
 
       color: #0796f7;
 
-      font-size: 19px;
+      font-size: 18px;
 
       pointer-events: none;
 
       text-shadow:
         0 0 8px rgba(0, 164, 255, 0.25);
     }
+
 
     /* =========================================================
        CHECK ICON
@@ -515,7 +579,8 @@
       right: 14px;
       top: 50%;
 
-      transform: translateY(-50%);
+      transform:
+        translateY(-50%);
 
       width: 25px;
       height: 25px;
@@ -528,14 +593,16 @@
       color: #ffffff;
 
       background:
-        #18a7f5;
+        #1597ee;
 
       font-size: 13px;
+
       font-weight: 900;
 
       box-shadow:
         0 4px 12px rgba(0, 145, 230, 0.20);
     }
+
 
     /* =========================================================
        DIVIDER
@@ -556,6 +623,7 @@
           transparent
         );
     }
+
 
     /* =========================================================
        BUTTON
@@ -618,18 +686,22 @@
           transparent
         );
 
-      transform: skewX(-20deg);
+      transform:
+        skewX(-20deg);
 
-      transition: left 0.55s ease;
+      transition:
+        left 0.55s ease;
     }
 
     .submit-button:hover {
-      transform: translateY(-1px);
+      transform:
+        translateY(-1px);
 
       box-shadow:
         0 14px 30px rgba(0, 115, 235, 0.27);
 
-      filter: brightness(1.03);
+      filter:
+        brightness(1.03);
     }
 
     .submit-button:hover::after {
@@ -637,7 +709,8 @@
     }
 
     .submit-button:active {
-      transform: scale(0.985);
+      transform:
+        scale(0.985);
 
       box-shadow:
         0 7px 18px rgba(0, 115, 235, 0.20);
@@ -654,8 +727,9 @@
         0 7px 18px rgba(0, 115, 235, 0.13);
     }
 
+
     /* =========================================================
-       BUTTON LOADING
+       LOADING
        ========================================================= */
 
     .loading-content {
@@ -672,15 +746,17 @@
       height: 16px;
 
       border:
-        2px solid rgba(255,255,255,0.4);
+        2px solid rgba(255,255,255,0.40);
 
-      border-top-color: #ffffff;
+      border-top-color:
+        #ffffff;
 
       border-radius: 50%;
 
       animation:
         spin 0.7s linear infinite;
     }
+
 
     /* =========================================================
        NOTICE
@@ -710,6 +786,7 @@
 
       font-size: 13px;
     }
+
 
     /* =========================================================
        MESSAGE
@@ -754,7 +831,8 @@
       width: 34px;
       height: 34px;
 
-      margin: 0 auto 9px;
+      margin:
+        0 auto 9px;
 
       display: grid;
       place-items: center;
@@ -763,9 +841,11 @@
 
       color: #ffffff;
 
-      background: #18a86b;
+      background:
+        #18a86b;
 
       font-size: 16px;
+
       font-weight: 800;
     }
 
@@ -787,6 +867,7 @@
       line-height: 1.5;
     }
 
+
     /* =========================================================
        REVIEW BUTTON
        ========================================================= */
@@ -807,7 +888,8 @@
 
       color: #101828;
 
-      background: #ffffff;
+      background:
+        #ffffff;
 
       text-align: center;
 
@@ -827,13 +909,16 @@
     }
 
     .review-button:hover {
-      transform: translateY(-1px);
+      transform:
+        translateY(-1px);
 
-      border-color: #9ecfff;
+      border-color:
+        #9ecfff;
 
       box-shadow:
         0 8px 20px rgba(16, 24, 40, 0.08);
     }
+
 
     /* =========================================================
        BENEFITS
@@ -856,7 +941,8 @@
     .benefit {
       min-width: 0;
 
-      padding: 14px 11px;
+      padding:
+        14px 11px;
 
       border:
         1px solid rgba(15, 90, 170, 0.08);
@@ -873,7 +959,8 @@
       width: 32px;
       height: 32px;
 
-      margin: 0 auto 8px;
+      margin:
+        0 auto 8px;
 
       display: grid;
       place-items: center;
@@ -912,6 +999,7 @@
       line-height: 1.4;
     }
 
+
     /* =========================================================
        FOOTER
        ========================================================= */
@@ -929,27 +1017,38 @@
         fadeUp 0.8s 0.15s ease both;
     }
 
+
     /* =========================================================
-       ANIMATION
+       ANIMATIONS
        ========================================================= */
 
     @keyframes fadeUp {
+
       from {
         opacity: 0;
-        transform: translateY(10px);
+
+        transform:
+          translateY(10px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+          translateY(0);
       }
+
     }
 
     @keyframes spin {
+
       to {
-        transform: rotate(360deg);
+        transform:
+          rotate(360deg);
       }
+
     }
+
 
     /* =========================================================
        MOBILE
@@ -974,7 +1073,8 @@
       .header h1 {
         font-size: 31px;
 
-        letter-spacing: -1.2px;
+        letter-spacing:
+          -1.2px;
       }
 
       .header-description {
@@ -984,9 +1084,11 @@
       }
 
       .activation-card {
-        padding: 21px 17px;
+        padding:
+          21px 17px;
 
-        border-radius: 19px;
+        border-radius:
+          19px;
       }
 
       .card-heading h2 {
@@ -1026,10 +1128,12 @@
       .benefit span {
         font-size: 8px;
       }
+
     }
 
+
     /* =========================================================
-       VERY SMALL PHONE
+       SMALL PHONE
        ========================================================= */
 
     @media (max-width: 360px) {
@@ -1049,7 +1153,8 @@
       }
 
       .benefits {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+          1fr;
 
         gap: 7px;
       }
@@ -1066,9 +1171,13 @@
 
       .benefit-icon {
         margin: 0;
-        flex: 0 0 auto;
+
+        flex:
+          0 0 auto;
       }
+
     }
+
 
     /* =========================================================
        REDUCE MOTION
@@ -1079,17 +1188,29 @@
       *,
       *::before,
       *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: 0.01ms !important;
+
+        animation-duration:
+          0.01ms !important;
+
+        animation-iteration-count:
+          1 !important;
+
+        scroll-behavior:
+          auto !important;
+
+        transition-duration:
+          0.01ms !important;
+
       }
+
     }
+
   </style>
 </head>
 
 
 <body>
+
 
   <!-- =========================================================
        BACKGROUND
@@ -1112,6 +1233,9 @@
 
       <header class="header">
 
+
+        <!-- LOGO / BRAND -->
+
         <div class="brand">
 
           <div class="brand-mark">
@@ -1119,11 +1243,21 @@
           </div>
 
           <div class="brand-name">
-            ALJAVA <span>TERIONITY</span>
+
+            <strong>
+              ALJAVA
+            </strong>
+
+            <span>
+              TERIONITY
+            </span>
+
           </div>
 
         </div>
 
+
+        <!-- BADGE -->
 
         <div class="eyebrow">
 
@@ -1134,16 +1268,21 @@
         </div>
 
 
+        <!-- TITLE -->
+
         <h1>
           Aktivasi Kartu
           <span>ALJAVA</span>
         </h1>
 
 
+        <!-- DESCRIPTION -->
+
         <p class="header-description">
           Hubungkan kartu Anda ke Google Review bisnis
           dengan proses aktivasi yang cepat dan mudah.
         </p>
+
 
       </header>
 
@@ -1154,6 +1293,8 @@
 
       <section class="activation-card">
 
+
+        <!-- CARD TITLE -->
 
         <div class="card-heading">
 
@@ -1168,11 +1309,15 @@
         </div>
 
 
+        <!-- ===================================================
+             FORM
+             =================================================== -->
+
         <form id="activationForm">
 
 
           <!-- =================================================
-               KODE KARTU
+               CARD CODE
                ================================================= -->
 
           <div class="field-group">
@@ -1181,11 +1326,10 @@
               Kode Kartu
             </label>
 
+
             <div class="input-wrapper">
 
-              <span class="field-icon">
-                ▣
-              </span>
+              <!-- Tidak ada logo kotak di sini -->
 
               <input
                 type="text"
@@ -1194,6 +1338,7 @@
                 readonly
                 required
               >
+
 
               <span class="check-icon">
                 ✓
@@ -1204,11 +1349,13 @@
           </div>
 
 
+          <!-- DIVIDER -->
+
           <div class="divider"></div>
 
 
           <!-- =================================================
-               DATA PELANGGAN
+               BUSINESS DATA
                ================================================= -->
 
           <div class="section-title">
@@ -1216,7 +1363,9 @@
           </div>
 
 
-          <!-- NAMA BISNIS -->
+          <!-- =================================================
+               BUSINESS NAME
+               ================================================= -->
 
           <div class="field-group">
 
@@ -1224,11 +1373,13 @@
               Nama Bisnis
             </label>
 
+
             <div class="input-wrapper">
 
               <span class="field-icon">
                 ⌂
               </span>
+
 
               <input
                 type="text"
@@ -1243,7 +1394,9 @@
           </div>
 
 
-          <!-- NAMA PEMILIK -->
+          <!-- =================================================
+               OWNER NAME
+               ================================================= -->
 
           <div class="field-group">
 
@@ -1251,11 +1404,13 @@
               Nama Pemilik
             </label>
 
+
             <div class="input-wrapper">
 
               <span class="field-icon">
                 ♙
               </span>
+
 
               <input
                 type="text"
@@ -1270,7 +1425,9 @@
           </div>
 
 
-          <!-- WHATSAPP -->
+          <!-- =================================================
+               WHATSAPP
+               ================================================= -->
 
           <div class="field-group">
 
@@ -1278,11 +1435,15 @@
               WhatsApp
             </label>
 
+
             <div class="input-wrapper">
+
+              <!-- Ikon telepon sekarang mengikuti warna biru -->
 
               <span class="field-icon">
                 ☎
               </span>
+
 
               <input
                 type="tel"
@@ -1298,7 +1459,9 @@
           </div>
 
 
-          <!-- GOOGLE REVIEW -->
+          <!-- =================================================
+               GOOGLE REVIEW URL
+               ================================================= -->
 
           <div class="field-group">
 
@@ -1306,11 +1469,13 @@
               Link Google Review
             </label>
 
+
             <div class="input-wrapper">
 
               <span class="field-icon">
                 ★
               </span>
+
 
               <input
                 type="url"
@@ -1327,7 +1492,7 @@
 
 
           <!-- =================================================
-               SUBMIT
+               SUBMIT BUTTON
                ================================================= -->
 
           <button
@@ -1351,6 +1516,7 @@
 
           </div>
 
+
         </form>
 
 
@@ -1362,7 +1528,7 @@
 
 
         <!-- ===================================================
-             GOOGLE REVIEW BUTTON
+             REVIEW BUTTON
              =================================================== -->
 
         <a
@@ -1374,6 +1540,7 @@
         >
           ⭐ &nbsp; Buka Google Review
         </a>
+
 
       </section>
 
@@ -1456,7 +1623,9 @@
            ===================================================== -->
 
       <footer class="footer">
+
         © 2024 ALJAVA TERIONITY · Digital Solution
+
       </footer>
 
 
@@ -1471,25 +1640,25 @@
 
   <script>
 
+
     /* =========================================================
        BACKEND CONFIG
-       Tetap menggunakan endpoint yang sudah kamu pakai.
        ========================================================= */
 
     const FUNCTION_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/activate-card";
 
+
     const CHECK_FUNCTION_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co/functions/v1/check_card";
+
 
     const SUPABASE_KEY =
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
 
     /* =========================================================
-       AMBIL CODE DARI URL
-       Contoh:
-       ?code=ALV000006
+       GET URL PARAMETER
        ========================================================= */
 
     const urlParams =
@@ -1497,25 +1666,27 @@
         window.location.search
       );
 
+
     const cardCode =
       urlParams.get("code");
 
 
     /* =========================================================
-       TAMPILKAN CODE KARTU
+       SHOW CARD CODE
        ========================================================= */
 
     if (cardCode) {
 
       document
         .getElementById("card_code")
-        .value = cardCode;
+        .value =
+        cardCode;
 
     }
 
 
     /* =========================================================
-       CEK STATUS KARTU
+       CHECK CARD STATUS
        ========================================================= */
 
     async function checkCardStatus() {
@@ -1523,6 +1694,7 @@
       if (!cardCode) {
         return;
       }
+
 
       try {
 
@@ -1533,6 +1705,7 @@
               method: "POST",
 
               headers: {
+
                 "Content-Type":
                   "application/json",
 
@@ -1542,13 +1715,17 @@
                 "Authorization":
                   "Bearer " +
                   SUPABASE_KEY
+
               },
 
               body:
                 JSON.stringify({
+
                   card_code:
                     cardCode
+
                 })
+
             }
           );
 
@@ -1571,7 +1748,7 @@
 
 
         /* =====================================
-           JIKA KARTU SUDAH AKTIF
+           ACTIVE CARD
            ===================================== */
 
         if (
@@ -1587,6 +1764,7 @@
         }
 
       }
+
 
       catch (error) {
 
@@ -1616,15 +1794,21 @@
           event.preventDefault();
 
 
+          /* ===================================
+             ELEMENTS
+             =================================== */
+
           const button =
             document.getElementById(
               "submitButton"
             );
 
+
           const message =
             document.getElementById(
               "message"
             );
+
 
           const reviewButton =
             document.getElementById(
@@ -1632,31 +1816,38 @@
             );
 
 
-          /* =====================================
-             DISABLE BUTTON
-             ===================================== */
+          /* ===================================
+             LOADING STATE
+             =================================== */
 
-          button.disabled = true;
+          button.disabled =
+            true;
 
 
           button.innerHTML = `
+
             <span class="loading-content">
+
               <span class="spinner"></span>
+
               Mengaktifkan...
+
             </span>
+
           `;
 
 
           message.style.display =
             "none";
 
+
           reviewButton.style.display =
             "none";
 
 
-          /* =====================================
-             AMBIL DATA FORM
-             ===================================== */
+          /* ===================================
+             FORM DATA
+             =================================== */
 
           const data = {
 
@@ -1668,6 +1859,7 @@
                 .value
                 .trim(),
 
+
             business_name:
               document
                 .getElementById(
@@ -1675,6 +1867,7 @@
                 )
                 .value
                 .trim(),
+
 
             owner_name:
               document
@@ -1684,6 +1877,7 @@
                 .value
                 .trim(),
 
+
             whatsapp:
               document
                 .getElementById(
@@ -1691,6 +1885,7 @@
                 )
                 .value
                 .trim(),
+
 
             google_review_url:
               document
@@ -1703,9 +1898,9 @@
           };
 
 
-          /* =====================================
-             KIRIM KE BACKEND
-             ===================================== */
+          /* ===================================
+             SEND TO BACKEND
+             =================================== */
 
           try {
 
@@ -1713,9 +1908,11 @@
               await fetch(
                 FUNCTION_URL,
                 {
+
                   method: "POST",
 
                   headers: {
+
                     "Content-Type":
                       "application/json",
 
@@ -1725,10 +1922,12 @@
                     "Authorization":
                       "Bearer " +
                       SUPABASE_KEY
+
                   },
 
                   body:
                     JSON.stringify(data)
+
                 }
               );
 
@@ -1738,7 +1937,7 @@
 
 
             /* =================================
-               VALIDASI RESPONSE
+               CHECK RESPONSE
                ================================= */
 
             if (
@@ -1755,11 +1954,12 @@
 
 
             /* =================================
-               SUCCESS
+               SUCCESS MESSAGE
                ================================= */
 
             message.className =
               "success";
+
 
             message.style.display =
               "block";
@@ -1784,7 +1984,7 @@
 
 
             /* =================================
-               GOOGLE REVIEW
+               REVIEW LINK
                ================================= */
 
             reviewButton.href =
@@ -1816,27 +2016,29 @@
                   "card_code"
                 )
                 .value =
-                  cardCode;
+                cardCode;
 
             }
 
           }
 
 
-          /* =====================================
+          /* ===================================
              ERROR
-             ===================================== */
+             =================================== */
 
           catch (error) {
 
             message.className =
               "error";
 
+
             message.style.display =
               "block";
 
 
             message.innerHTML = `
+
               <strong>
                 Aktivasi belum berhasil
               </strong>
@@ -1854,19 +2056,21 @@
                   "Silakan coba lagi."
                 }
               </div>
+
             `;
 
           }
 
 
-          /* =====================================
-             KEMBALIKAN BUTTON
-             ===================================== */
+          /* ===================================
+             RESTORE BUTTON
+             =================================== */
 
           finally {
 
             button.disabled =
               false;
+
 
             button.innerText =
               "Aktifkan Kartu";
