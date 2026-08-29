@@ -54,13 +54,13 @@
     const rows=$('customerRows'), msg=$('customerMsg'); if(!rows) return;
     rows.innerHTML='<tr><td colspan="6" class="muted">Memuat data customer...</td></tr>';
     try{
-      const {data,error}=await supabase.from('Customers').select('id,business_name,product_type,google_review_url,total_reviews').order('created_at',{ascending:false});
+      const {data,error}=await sb.from('Customers').select('id,business_name,product_type,google_review_url,total_reviews').order('created_at',{ascending:false});
       if(error) throw error;
       const customers=data||[];
       const ids=customers.map(x=>x.id).filter(Boolean);
       let counts={};
       if(ids.length){
-        const {data:cards,error:ce}=await supabase.from('Cards').select('customer_id,product_type').in('customer_id',ids);
+        const {data:cards,error:ce}=await sb.from('Cards').select('customer_id,product_type').in('customer_id',ids);
         if(ce) throw ce;
         (cards||[]).forEach(c=>{counts[c.customer_id]??={qty:0,types:{}};counts[c.customer_id].qty++;if(c.product_type) counts[c.customer_id].types[c.product_type]=(counts[c.customer_id].types[c.product_type]||0)+1;});
       }
