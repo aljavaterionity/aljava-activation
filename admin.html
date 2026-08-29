@@ -42,7 +42,7 @@
     const rows=$('customerRows'), msg=$('customerMsg'); if(!rows) return;
     rows.innerHTML='<tr><td colspan="6" class="muted">Memuat data customer...</td></tr>';
     try{
-      const {data,error}=await supabase.from('Customers').select('id,business_name,product_type,google_review_url').order('created_at',{ascending:false});
+      const {data,error}=await supabase.from('Customers').select('id,business_name,product_type,google_review_url,total_reviews').order('created_at',{ascending:false});
       if(error) throw error;
       const customers=data||[];
       const ids=customers.map(x=>x.id).filter(Boolean);
@@ -52,7 +52,7 @@
         if(ce) throw ce;
         (cards||[]).forEach(c=>{counts[c.customer_id]??={qty:0,types:{}};counts[c.customer_id].qty++;if(c.product_type) counts[c.customer_id].types[c.product_type]=(counts[c.customer_id].types[c.product_type]||0)+1;});
       }
-      customerData=customers.map(c=>({id:c.id,business_name:c.business_name||'-',product_type:c.product_type||Object.keys(counts[c.id]?.types||{}).join(', ')||'-',qty:counts[c.id]?.qty||0,reviews:0,url:c.google_review_url||''}));
+      customerData=customers.map(c=>({id:c.id,business_name:c.business_name||'-',product_type:c.product_type||Object.keys(counts[c.id]?.types||{}).join(', ')||'-',qty:counts[c.id]?.qty||0,reviews:0,url:c.google_review_url||'',reviews:Number.isFinite(Number(c.total_reviews))?Number(c.total_reviews):0}));
       renderCustomers();
     }catch(e){rows.innerHTML='<tr><td colspan="6"><div class="notice err">Gagal memuat database customer: '+esc(e.message)+'</div></td></tr>';if(msg)msg.innerHTML='';}
   }
