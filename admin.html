@@ -1,47 +1,150 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Admin Dashboard - ALJAVA TERIONITY</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin Dashboard - ALJAVA TERIONITY</title>
 <style>
 *{box-sizing:border-box}:root{--blue:#168cff;--cyan:#25e4ff;--bg:#010713;--text:#fff;--muted:#9db7cc;--border:rgba(55,210,255,.35)}
 body{margin:0;min-height:100vh;font-family:Inter,Poppins,Arial,sans-serif;color:var(--text);background:radial-gradient(ellipse at 50% 0%,rgba(0,132,255,.32),transparent 40%),radial-gradient(ellipse at 100% 30%,rgba(0,225,255,.14),transparent 30%),linear-gradient(180deg,#010817 0%,#031b46 50%,#010713 100%)}
 .stars{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.8) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(80,215,255,.6) 0 1px,transparent 1.5px);background-size:97px 83px,151px 137px;background-position:8px 3px,31px 42px;opacity:.25}.page{position:relative;z-index:1;width:min(1200px,100%);margin:auto;padding:25px 18px 50px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:25px}.brand-name{font-size:21px;font-weight:900;letter-spacing:2.5px;background:linear-gradient(90deg,#fff,#35e7ff,#168cff,#fff);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}.brand-sub{margin-top:5px;color:var(--muted);font-size:12px}.top-actions{display:flex;gap:9px}.top-actions button{border-radius:10px;padding:10px 15px;color:#fff;font-family:inherit;font-size:12px;font-weight:800;cursor:pointer}.refresh-button{border:1px solid rgba(45,220,255,.5);background:rgba(0,130,255,.15)}.logout-button{border:1px solid rgba(255,100,130,.45);background:rgba(180,30,70,.16)}.welcome{margin-bottom:25px}.welcome h1{margin:0 0 6px;font-size:30px}.welcome p{margin:0;color:var(--muted);font-size:13px}
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:25px}.stat-card,.glass-card{border:1px solid var(--border);border-radius:20px;background:linear-gradient(145deg,rgba(4,25,72,.82),rgba(1,8,35,.94));box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(15px);overflow:hidden}.stat-card{padding:20px}.stat-top{display:flex;align-items:center;justify-content:space-between}.stat-icon{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(45,220,255,.38);border-radius:11px;background:rgba(0,100,180,.18);font-size:18px}.stat-label{color:var(--muted);font-size:12px}.stat-number{margin-top:10px;font-size:28px;font-weight:900;color:#35e7ff;text-shadow:0 0 18px rgba(0,200,255,.18)}.stat-desc{margin-top:5px;color:#7894a9;font-size:10px}.dashboard-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;margin-bottom:20px}.card-header{padding:20px;border-bottom:1px solid rgba(55,180,255,.2)}.card-header h2{margin:0;font-size:19px}.card-header p{margin:5px 0 0;color:var(--muted);font-size:11px}.revenue-body,.status-body{padding:20px}.revenue-total-label{color:var(--muted);font-size:11px}.revenue-total-value{margin-top:5px;font-size:28px;font-weight:900}.chart{width:100%;height:245px}.chart svg{width:100%;height:100%;overflow:visible}.chart-grid{stroke:rgba(100,180,230,.12)}.chart-line{fill:none;stroke:#25e4ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-area{fill:url(#revenueFill)}.chart-point{fill:#031b46;stroke:#35e7ff;stroke-width:2}.chart-label{fill:#7693a9;font-size:10px}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:12px}.status-ring{display:flex;justify-content:center;min-height:205px;position:relative}.ring{margin-top:20px;width:155px;height:155px;border-radius:50%;background:conic-gradient(#25e4ff,#168cff,#0757c9 270deg,rgba(255,255,255,.08) 270deg);display:grid;place-items:center}.ring::before{content:"";width:112px;height:112px;position:absolute;border-radius:50%;background:#041333}.ring-content{position:relative;text-align:center}.ring-number{font-size:27px;font-weight:900}.ring-text{color:var(--muted);font-size:10px}.status-list{display:grid;gap:10px}.status-row{display:flex;justify-content:space-between;padding:10px 12px;border:1px solid rgba(70,150,210,.15);border-radius:10px;background:rgba(0,60,130,.1)}.status-name{color:#cfe8f7;font-size:11px}.status-count{font-weight:800;font-size:12px}.subscription-card{margin-bottom:20px}.table-wrapper{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:700px}th{padding:13px 16px;text-align:left;color:#bfefff;background:rgba(0,90,180,.12);font-size:10px;white-space:nowrap}td{padding:14px 16px;border-top:1px solid rgba(100,150,200,.12);color:#e8f8ff;font-size:11px}.status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:800}.status-active{color:#caffff;background:rgba(0,210,255,.12);border:1px solid rgba(50,225,255,.35)}.status-pending{color:#ffe9b5;background:rgba(255,180,40,.1);border:1px solid rgba(255,190,50,.3)}.status-other{color:#ffdce4;background:rgba(220,40,75,.1);border:1px solid rgba(255,90,120,.3)}.review-link{color:#35e7ff;text-decoration:none;font-weight:700}.empty,.loading{text-align:center;padding:45px 20px;font-size:13px;color:var(--muted)}.loading{color:#35e7ff}.error{margin:20px;padding:14px;border:1px solid rgba(255,90,120,.4);border-radius:10px;background:rgba(220,40,75,.1);color:#ffdce4;font-size:12px}footer{margin-top:30px;text-align:center;color:#7792a7;font-size:11px}@keyframes shine{0%{background-position:0 center}100%{background-position:250% center}}@media(max-width:750px){.page{padding:20px 12px 35px}.stats{grid-template-columns:1fr}.dashboard-grid{grid-template-columns:1fr}.welcome h1{font-size:25px}}@media(max-width:480px){.topbar{flex-direction:column;align-items:flex-start}.top-actions{width:100%}.top-actions button{flex:1}}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:25px}.stat-card,.glass-card{border:1px solid var(--border);border-radius:20px;background:linear-gradient(145deg,rgba(4,25,72,.82),rgba(1,8,35,.94));box-shadow:0 20px 60px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.04);backdrop-filter:blur(15px);overflow:hidden}.stat-card{padding:20px}.stat-top{display:flex;align-items:center;justify-content:space-between}.stat-icon{width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(45,220,255,.38);border-radius:11px;background:rgba(0,100,180,.18);font-size:18px}.stat-label{color:var(--muted);font-size:12px}.stat-number{margin-top:10px;font-size:28px;font-weight:900;color:#35e7ff;text-shadow:0 0 18px rgba(0,200,255,.18)}.stat-desc{margin-top:5px;color:#7894a9;font-size:10px}.dashboard-grid{display:grid;grid-template-columns:minmax(0,2fr) minmax(280px,1fr);gap:18px;margin-bottom:20px}.card-header{padding:20px;border-bottom:1px solid rgba(55,180,255,.2)}.card-header h2{margin:0;font-size:19px}.card-header p{margin:5px 0 0;color:var(--muted);font-size:11px}.revenue-body,.status-body{padding:20px}.revenue-total-label{color:var(--muted);font-size:11px}.revenue-total-value{margin-top:5px;font-size:28px;font-weight:900}.chart{width:100%;height:245px}.chart svg{width:100%;height:100%;overflow:visible}.chart-grid{stroke:rgba(100,180,230,.12)}.chart-line{fill:none;stroke:#25e4ff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}.chart-point{fill:#031b46;stroke:#35e7ff;stroke-width:2}.chart-label{fill:#7693a9;font-size:10px}.empty-chart{height:100%;display:grid;place-items:center;color:var(--muted);font-size:12px}.status-ring{display:flex;justify-content:center;min-height:205px;position:relative}.ring{margin-top:20px;width:155px;height:155px;border-radius:50%;background:conic-gradient(#25e4ff,#168cff,#0757c9 270deg,rgba(255,255,255,.08) 270deg);display:grid;place-items:center}.ring:before{content:"";width:112px;height:112px;position:absolute;border-radius:50%;background:#041333}.ring-content{position:relative;text-align:center}.ring-number{font-size:27px;font-weight:900}.ring-text{color:var(--muted);font-size:10px}.status-list{display:grid;gap:10px}.status-row{display:flex;justify-content:space-between;padding:10px 12px;border:1px solid rgba(70,150,210,.15);border-radius:10px;background:rgba(0,60,130,.1)}.status-name{color:#cfe8f7;font-size:11px}.status-count{font-weight:800;font-size:12px}.subscription-card{margin-bottom:20px}.table-wrapper{width:100%;overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:700px}th{padding:13px 16px;text-align:left;color:#bfefff;background:rgba(0,90,180,.12);font-size:10px;white-space:nowrap}td{padding:14px 16px;border-top:1px solid rgba(100,150,200,.12);color:#e8f8ff;font-size:11px}.status{display:inline-block;padding:5px 9px;border-radius:999px;font-size:9px;font-weight:800}.status-active{color:#caffff;background:rgba(0,210,255,.12);border:1px solid rgba(50,225,255,.35)}.status-pending{color:#ffe9b5;background:rgba(255,180,40,.1);border:1px solid rgba(255,190,50,.3)}.status-other{color:#ffdce4;background:rgba(220,40,75,.1);border:1px solid rgba(255,90,120,.3)}.review-link{color:#35e7ff;text-decoration:none;font-weight:700}.empty,.loading{text-align:center;padding:45px 20px;font-size:13px;color:var(--muted)}.loading{color:#35e7ff}.error{margin:20px;padding:14px;border:1px solid rgba(255,90,120,.4);border-radius:10px;background:rgba(220,40,75,.1);color:#ffdce4;font-size:12px}footer{margin-top:30px;text-align:center;color:#7792a7;font-size:11px}@keyframes shine{0%{background-position:0 center}100%{background-position:250% center}}@media(max-width:750px){.page{padding:20px 12px 35px}.stats{grid-template-columns:1fr}.dashboard-grid{grid-template-columns:1fr}.welcome h1{font-size:25px}}@media(max-width:480px){.topbar{flex-direction:column;align-items:flex-start}.top-actions{width:100%}.top-actions button{flex:1}}
 </style>
 </head>
-<body><div class="stars"></div><main class="page">
+<body>
+<div class="stars"></div>
+<main class="page">
 <header class="topbar"><div><div class="brand-name">ALJAVA TERIONITY</div><div class="brand-sub">Admin Dashboard</div></div><div class="top-actions"><button class="refresh-button" id="refreshButton">↻ Refresh</button><button class="logout-button" id="logoutButton">Keluar</button></div></header>
 <section class="welcome"><h1>Dashboard Admin</h1><p id="adminEmail">Memuat akun...</p></section>
 <section class="stats">
 <div class="stat-card"><div class="stat-top"><div class="stat-label">Total Revenue</div><div class="stat-icon">💰</div></div><div class="stat-number" id="totalRevenue">Rp 0</div><div class="stat-desc">Total transaksi paid</div></div>
-<div class="stat-card"><div class="stat-top"><div class="stat-label">Revenue Aktif</div><div class="stat-icon">💵</div></div><div class="stat-number" id="activeRevenue">Rp 0</div><div class="stat-desc">Revenue transaksi paid</div></div>
+<div class="stat-card"><div class="stat-top"><div class="stat-label">Revenue Aktif</div><div class="stat-icon">💵</div></div><div class="stat-number" id="activeRevenue">Rp 0</div><div class="stat-desc">Transaksi paid</div></div>
 <div class="stat-card"><div class="stat-top"><div class="stat-label">Customers</div><div class="stat-icon">👥</div></div><div class="stat-number" id="customers">0</div><div class="stat-desc">Total pelanggan</div></div>
 <div class="stat-card"><div class="stat-top"><div class="stat-label">Cards Aktif</div><div class="stat-icon">🪪</div></div><div class="stat-number" id="activeCards">0</div><div class="stat-desc">Kartu status active</div></div>
 <div class="stat-card"><div class="stat-top"><div class="stat-label">Products</div><div class="stat-icon">📦</div></div><div class="stat-number" id="products">0</div><div class="stat-desc">Total produk</div></div>
 <div class="stat-card"><div class="stat-top"><div class="stat-label">Transactions</div><div class="stat-icon">💳</div></div><div class="stat-number" id="transactions">0</div><div class="stat-desc">Total transaksi</div></div>
 </section>
-<section class="dashboard-grid"><div class="glass-card"><div class="card-header"><h2>Revenue Overview</h2><p>Revenue dari transaksi yang berstatus paid</p></div><div class="revenue-body"><div class="revenue-total-label">Total revenue</div><div class="revenue-total-value" id="revenueHeadline">Rp 0</div><div class="chart" id="revenueChart"><div class="empty-chart">Memuat grafik revenue...</div></div></div></div>
-<div class="glass-card"><div class="card-header"><h2>Subscription Status</h2><p>Kondisi subscription saat ini</p></div><div class="status-body"><div class="status-ring"><div class="ring"><div class="ring-content"><div class="ring-number" id="subscriptionTotal">0</div><div class="ring-text">Subscriptions</div></div></div></div><div class="status-list"><div class="status-row"><div class="status-name">● Active</div><div class="status-count" id="subActive">0</div></div><div class="status-row"><div class="status-name">● Pending</div><div class="status-count" id="subPending">0</div></div><div class="status-row"><div class="status-name">● Expired</div><div class="status-count" id="subExpired">0</div></div></div></div></div></section>
+<section class="dashboard-grid">
+<div class="glass-card"><div class="card-header"><h2>Revenue Overview</h2><p>Revenue berdasarkan transaksi yang berstatus paid</p></div><div class="revenue-body"><div class="revenue-total-label">Total revenue</div><div class="revenue-total-value" id="revenueHeadline">Rp 0</div><div class="chart" id="revenueChart"><div class="empty-chart">Memuat grafik revenue...</div></div></div></div>
+<div class="glass-card"><div class="card-header"><h2>Subscription Status</h2><p>Kondisi subscription saat ini</p></div><div class="status-body"><div class="status-ring"><div class="ring"><div class="ring-content"><div class="ring-number" id="subscriptionTotal">0</div><div class="ring-text">Subscriptions</div></div></div></div><div class="status-list"><div class="status-row"><div class="status-name">● Active</div><div class="status-count" id="subActive">0</div></div><div class="status-row"><div class="status-name">● Pending</div><div class="status-count" id="subPending">0</div></div><div class="status-row"><div class="status-name">● Expired</div><div class="status-count" id="subExpired">0</div></div></div></div></div>
+</section>
 <section class="glass-card subscription-card"><div class="card-header"><h2>Subscription Terbaru</h2><p>Data subscription terbaru dari database</p></div><div id="subscriptionContent"><div class="loading">Memuat data...</div></div></section>
 <section class="glass-card"><div class="card-header"><h2>Data Kartu</h2><p>Menggunakan tabel cards lama untuk status aktivasi</p></div><div id="tableContent"><div class="loading">Memuat data...</div></div></section>
-<footer>© 2026 ALJAVA TERIONITY • Digital Solution</footer></main>
+<footer>© 2026 ALJAVA TERIONITY • Digital Solution</footer>
+</main>
 <script>
-const URL="https://lbzwmcxwxummitldxucj.supabase.co",KEY="sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";let access=localStorage.getItem("supabase_access_token"),refresh=localStorage.getItem("supabase_refresh_token");
-try{const u=JSON.parse(localStorage.getItem("supabase_user")||"{}");document.getElementById("adminEmail").textContent="Login sebagai: "+(u.email||"Admin")}catch(e){document.getElementById("adminEmail").textContent="Admin"}
-const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0),esc=v=>String(v??"-").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/\"/g,"&quot;").replace(/'/g,"&#039;");
-async function renew(){if(!refresh)return false;try{const r=await fetch(URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refresh})}),d=await r.json();if(!r.ok||!d.access_token)return false;access=d.access_token;refresh=d.refresh_token||refresh;localStorage.setItem("supabase_access_token",access);localStorage.setItem("supabase_refresh_token",refresh);if(d.user)localStorage.setItem("supabase_user",JSON.stringify(d.user));return true}catch(e){return false}}
-async function authGet(path){let r=await fetch(URL+path,{headers:{apikey:KEY,Authorization:"Bearer "+access}});if(r.status===401&&await renew())r=await fetch(URL+path,{headers:{apikey:KEY,Authorization:"Bearer "+access}});if(!r.ok)throw new Error((await r.json().catch(()=>({}))).message||"Gagal mengambil data");return r.json()}
-async function publicGet(path){const r=await fetch(URL+path,{headers:{apikey:KEY}});if(!r.ok)throw new Error((await r.json().catch(()=>({}))).message||"Gagal mengambil transaksi");return r.json()}
-function monthKey(v){const d=new Date(v);return isNaN(d)?null:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")}function monthLabel(k){const [y,m]=k.split("-");return new Intl.DateTimeFormat("id-ID",{month:"short",year:"2-digit",timeZone:"UTC"}).format(new Date(Date.UTC(+y,+m-1,1)))}
-function drawRevenue(map){const el=document.getElementById("revenueChart"),now=new Date(),keys=[];for(let i=11;i>=0;i--){const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()-i,1));keys.push(d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0"))}const vals=keys.map(k=>map[k]||0),max=Math.max(...vals,1),w=900,h=245,p=28,pts=vals.map((v,i)=>[p+i*(w-p*2)/11,h-p-v/max*(h-p*2)]),line=pts.map((q,i)=>(i?"L":"M")+q[0].toFixed(1)+" "+q[1].toFixed(1)).join(" ");el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25e4ff" stop-opacity=".28"/><stop offset="1" stop-color="#168cff" stop-opacity="0"/></linearGradient></defs><line class="chart-grid" x1="${p}" y1="${p}" x2="${w-p}" y2="${p}"/><line class="chart-grid" x1="${p}" y1="${h/2}" x2="${w-p}" y2="${h/2}"/><line class="chart-grid" x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}"/><path class="chart-area" d="${line} L ${w-p} ${h-p} L ${p} ${h-p} Z"/><path class="chart-line" d="${line}"/>${pts.map((q,i)=>`<circle class="chart-point" cx="${q[0]}" cy="${q[1]}" r="3.5"><title>${monthLabel(keys[i])}: ${rupiah(vals[i])}</title></circle><text class="chart-label" x="${q[0]}" y="${h-7}" text-anchor="middle">${monthLabel(keys[i])}</text>`).join("")}</svg>`}
-function sc(s){s=String(s||"").toLowerCase();return s==="active"?"status-active":s==="pending"?"status-pending":"status-other"}
-function renderCards(rows){const el=document.getElementById("tableContent");if(!rows.length){el.innerHTML='<div class="empty">Belum ada data kartu.</div>';return}let h='<div class="table-wrapper"><table><thead><tr><th>Kode Kartu</th><th>Nama Bisnis</th><th>Pemilik</th><th>WhatsApp</th><th>Status</th><th>Google Review</th></tr></thead><tbody>';rows.forEach(c=>h+=`<tr><td>${esc(c.card_code)}</td><td>${esc(c.business_name)}</td><td>${esc(c.owner_name)}</td><td>${esc(c.whatsapp)}</td><td><span class="status ${sc(c.status)}">${esc(c.status)}</span></td><td>${c.google_review_url?`<a class="review-link" href="${esc(c.google_review_url)}" target="_blank" rel="noopener">Buka Review</a>`:"-"}</td></tr>`);el.innerHTML=h+'</tbody></table></div>'}
-function renderSubs(rows){const el=document.getElementById("subscriptionContent");if(!rows.length){el.innerHTML='<div class="empty">Belum ada subscription.</div>';return}let h='<div class="table-wrapper"><table><thead><tr><th>ID</th><th>Status</th><th>Mulai</th><th>Berakhir</th><th>Amount</th><th>Dibuat</th></tr></thead><tbody>';rows.slice(0,10).forEach(x=>h+=`<tr><td>${esc(String(x.id).slice(0,8))}...</td><td><span class="status ${sc(x.status)}">${esc(x.status)}</span></td><td>${esc(x.start_date)}</td><td>${esc(x.end_date)}</td><td>${rupiah(x.amount)}</td><td>${esc(new Date(x.created_at).toLocaleString("id-ID"))}</td></tr>`);el.innerHTML=h+'</tbody></table></div>'}
-async function load(){document.getElementById("tableContent").innerHTML='<div class="loading">Memuat data...</div>';document.getElementById("subscriptionContent").innerHTML='<div class="loading">Memuat data...</div>';
-let tx=[],subs=[],cards=[],customers=[],products=[];
-const a=await Promise.allSettled([publicGet('/rest/v1/"Transactions"?select=id,quantity,selling_price,payment_status,transaction_date,customer_id,card_id,product_id&order=transaction_date.desc'),authGet('/rest/v1/"Subscriptions"?select=id,customer_id,status,start_date,end_date,amount,created_at&order=created_at.desc'),authGet('/rest/v1/cards?select=id,card_code,business_name,owner_name,whatsapp,status,google_review_url,created_at&order=card_code.asc'),authGet('/rest/v1/"Customers"?select=id'),authGet('/rest/v1/"Product"?select=id')]);
-if(a[0].status==='fulfilled')tx=a[0].value;if(a[1].status==='fulfilled')subs=a[1].value;if(a[2].status==='fulfilled')cards=a[2].value;if(a[3].status==='fulfilled')customers=a[3].value;if(a[4].status==='fulfilled')products=a[4].value;
-const paid=tx.filter(x=>String(x.payment_status||'').toLowerCase()==='paid'),total=paid.reduce((s,x)=>s+(Number(x.selling_price)||0)*(Number(x.quantity)||1),0);document.getElementById("totalRevenue").textContent=rupiah(total);document.getElementById("activeRevenue").textContent=rupiah(total);document.getElementById("revenueHeadline").textContent=rupiah(total);document.getElementById("transactions").textContent=tx.length;document.getElementById("activeCards").textContent=cards.filter(x=>String(x.status).toLowerCase()==='active').length;document.getElementById("customers").textContent=customers.length;document.getElementById("products").textContent=products.length;const map={};paid.forEach(x=>{const k=monthKey(x.transaction_date);if(k)map[k]=(map[k]||0)+(Number(x.selling_price)||0)*(Number(x.quantity)||1)});drawRevenue(map);document.getElementById("subscriptionTotal").textContent=subs.length;document.getElementById("subActive").textContent=subs.filter(x=>String(x.status).toLowerCase()==='active').length;document.getElementById("subPending").textContent=subs.filter(x=>String(x.status).toLowerCase()==='pending').length;document.getElementById("subExpired").textContent=subs.filter(x=>String(x.status).toLowerCase()==='expired').length;renderSubs(subs);renderCards(cards);
-if(!tx.length)document.getElementById("revenueChart").innerHTML='<div class="empty-chart">Belum ada transaksi paid.</div>';}
-document.getElementById("refreshButton").onclick=load;document.getElementById("logoutButton").onclick=()=>{localStorage.removeItem("supabase_access_token");localStorage.removeItem("supabase_refresh_token");localStorage.removeItem("supabase_user");location.href="login.html"};if(access)load();else location.href="login.html";
-</script></body></html>
+const SUPABASE_URL="https://lbzwmcxwxummitldxucj.supabase.co";
+const SUPABASE_KEY="sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+let accessToken=localStorage.getItem("supabase_access_token");
+let refreshToken=localStorage.getItem("supabase_refresh_token");
+
+function setEmail(){try{const u=JSON.parse(localStorage.getItem("supabase_user")||"{}");document.getElementById("adminEmail").textContent="Login sebagai: "+(u.email||"Admin")}catch(e){document.getElementById("adminEmail").textContent="Admin"}}
+setEmail();
+
+const rupiah=n=>new Intl.NumberFormat("id-ID",{style:"currency",currency:"IDR",maximumFractionDigits:0}).format(Number(n)||0);
+const esc=v=>String(v??"-").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
+
+async function refreshSession(){
+ if(!refreshToken)return false;
+ try{
+  const r=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:SUPABASE_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:refreshToken})});
+  const d=await r.json();
+  if(!r.ok||!d.access_token)return false;
+  accessToken=d.access_token;refreshToken=d.refresh_token||refreshToken;
+  localStorage.setItem("supabase_access_token",accessToken);localStorage.setItem("supabase_refresh_token",refreshToken);
+  if(d.user)localStorage.setItem("supabase_user",JSON.stringify(d.user));
+  setEmail();return true;
+ }catch(e){return false}
+}
+
+async function getJson(path,auth=true){
+ const headers={apikey:SUPABASE_KEY};
+ if(auth&&accessToken)headers.Authorization="Bearer "+accessToken;
+ let r=await fetch(SUPABASE_URL+path,{headers});
+ if(r.status===401&&auth&&await refreshSession()){
+  headers.Authorization="Bearer "+accessToken;
+  r=await fetch(SUPABASE_URL+path,{headers});
+ }
+ const text=await r.text();let d={};try{d=text?JSON.parse(text):{}}catch(e){d={message:text}};
+ if(!r.ok)throw new Error(d.message||d.hint||d.error_description||"Gagal mengambil data");
+ return d;
+}
+
+function monthKey(v){const d=new Date(v);return isNaN(d)?null:d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0")}
+function monthLabel(k){const [y,m]=k.split("-");return new Intl.DateTimeFormat("id-ID",{month:"short",year:"2-digit",timeZone:"UTC"}).format(new Date(Date.UTC(+y,+m-1,1)))}
+
+function drawRevenue(rows){
+ const el=document.getElementById("revenueChart"),now=new Date(),keys=[];
+ for(let i=11;i>=0;i--){const d=new Date(Date.UTC(now.getUTCFullYear(),now.getUTCMonth()-i,1));keys.push(d.getUTCFullYear()+"-"+String(d.getUTCMonth()+1).padStart(2,"0"))}
+ const map={};rows.forEach(t=>{if(String(t.payment_status||"").toLowerCase()!=="paid")return;const k=monthKey(t.transaction_date);if(k)map[k]=(map[k]||0)+(Number(t.selling_price)||0)*(Number(t.quantity)||1)});
+ const vals=keys.map(k=>map[k]||0),max=Math.max(...vals,1),w=900,h=245,p=30,step=(w-p*2)/(keys.length-1);
+ const pts=vals.map((v,i)=>[p+i*step,h-p-(v/max)*(h-p*2)]),line=pts.map((q,i)=>(i?"L":"M")+q[0].toFixed(1)+" "+q[1].toFixed(1)).join(" ");
+ el.innerHTML=`<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="none"><defs><linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#25e4ff" stop-opacity=".28"/><stop offset="1" stop-color="#168cff" stop-opacity="0"/></linearGradient></defs><line class="chart-grid" x1="${p}" y1="${p}" x2="${w-p}" y2="${p}"/><line class="chart-grid" x1="${p}" y1="${h/2}" x2="${w-p}" y2="${h/2}"/><line class="chart-grid" x1="${p}" y1="${h-p}" x2="${w-p}" y2="${h-p}"/><path class="chart-area" d="${line} L ${w-p} ${h-p} L ${p} ${h-p} Z"/><path class="chart-line" d="${line}"/>${pts.map((q,i)=>`<circle class="chart-point" cx="${q[0]}" cy="${q[1]}" r="3.5"><title>${monthLabel(keys[i])}: ${rupiah(vals[i])}</title></circle><text class="chart-label" x="${q[0]}" y="${h-7}" text-anchor="middle">${monthLabel(keys[i])}</text>`).join("")}</svg>`;
+}
+
+function statusClass(s){const x=String(s||"").toLowerCase();return x==="active"?"status-active":x==="pending"?"status-pending":"status-other"}
+
+function renderSubscriptions(rows){
+ const box=document.getElementById("subscriptionContent");
+ if(!rows.length){box.innerHTML='<div class="empty">Belum ada data subscription.</div>';return}
+ let h='<div class="table-wrapper"><table><thead><tr><th>Customer ID</th><th>Status</th><th>Mulai</th><th>Berakhir</th><th>Amount</th><th>Dibuat</th></tr></thead><tbody>';
+ rows.slice(0,20).forEach(s=>{h+=`<tr><td>${esc(s.customer_id)}</td><td><span class="status ${statusClass(s.status)}">${esc(s.status)}</span></td><td>${esc(s.start_date)}</td><td>${esc(s.end_date)}</td><td>${rupiah(s.amount)}</td><td>${esc(s.created_at?new Date(s.created_at).toLocaleString("id-ID"):"-")}</td></tr>`});
+ h+='</tbody></table></div>';box.innerHTML=h;
+}
+
+function renderCards(cards){
+ const box=document.getElementById("tableContent");
+ const active=cards.filter(c=>String(c.status||"").toLowerCase()==="active").length;
+ document.getElementById("activeCards").textContent=active;
+ if(!cards.length){box.innerHTML='<div class="empty">Belum ada data kartu.</div>';return}
+ let h='<div class="table-wrapper"><table><thead><tr><th>Kode Kartu</th><th>Nama Bisnis</th><th>Pemilik</th><th>WhatsApp</th><th>Status</th><th>Google Review</th></tr></thead><tbody>';
+ cards.forEach(c=>{const url=c.google_review_url||"";h+=`<tr><td>${esc(c.card_code)}</td><td>${esc(c.business_name)}</td><td>${esc(c.owner_name)}</td><td>${esc(c.whatsapp)}</td><td><span class="status ${statusClass(c.status)}">${esc(c.status)}</span></td><td>${url?`<a class="review-link" href="${esc(url)}" target="_blank" rel="noopener">Buka Review</a>`:"-"}</td></tr>`});
+ h+='</tbody></table></div>';box.innerHTML=h;
+}
+
+async function loadDashboard(){
+ document.getElementById("tableContent").innerHTML='<div class="loading">Memuat data kartu...</div>';
+ document.getElementById("subscriptionContent").innerHTML='<div class="loading">Memuat subscription...</div>';
+ try{
+  // Revenue memakai tabel Transactions yang memang menyimpan selling_price, quantity, payment_status, dan transaction_date.
+  // Dibaca tanpa JWT karena project saat ini memiliki policy public-read untuk Transactions.
+  const [transactions,cards,customers,products,subscriptions]=await Promise.all([
+   getJson('/rest/v1/Transactions?select=*&order=transaction_date.desc',false),
+   // INI TABEL CARDS LAMA, bukan Cards baru.
+   getJson('/rest/v1/cards?select=*&order=id.asc',false),
+   getJson('/rest/v1/Customers?select=id',true),
+   getJson('/rest/v1/Product?select=id',true),
+   getJson('/rest/v1/Subscriptions?select=*&order=created_at.desc',true)
+  ]);
+  const paid=transactions.filter(t=>String(t.payment_status||"").toLowerCase()==="paid");
+  const revenue=paid.reduce((sum,t)=>sum+(Number(t.selling_price)||0)*(Number(t.quantity)||1),0);
+  document.getElementById("totalRevenue").textContent=rupiah(revenue);
+  document.getElementById("activeRevenue").textContent=rupiah(revenue);
+  document.getElementById("revenueHeadline").textContent=rupiah(revenue);
+  document.getElementById("transactions").textContent=transactions.length;
+  document.getElementById("customers").textContent=customers.length;
+  document.getElementById("products").textContent=products.length;
+  renderCards(cards);
+  renderSubscriptions(subscriptions);
+  const sa=subscriptions.filter(s=>String(s.status||"").toLowerCase()==="active").length;
+  const sp=subscriptions.filter(s=>String(s.status||"").toLowerCase()==="pending").length;
+  const se=subscriptions.filter(s=>String(s.status||"").toLowerCase()==="expired").length;
+  document.getElementById("subscriptionTotal").textContent=subscriptions.length;
+  document.getElementById("subActive").textContent=sa;
+  document.getElementById("subPending").textContent=sp;
+  document.getElementById("subExpired").textContent=se;
+  drawRevenue(transactions);
+ }catch(error){
+  console.error(error);
+  document.getElementById("subscriptionContent").innerHTML=`<div class="error">❌ Gagal memuat dashboard: ${esc(error.message)}</div>`;
+  document.getElementById("tableContent").innerHTML=`<div class="error">❌ Gagal memuat data kartu: ${esc(error.message)}</div>`;
+ }
+}
+
+document.getElementById("refreshButton").addEventListener("click",loadDashboard);
+document.getElementById("logoutButton").addEventListener("click",()=>{localStorage.removeItem("supabase_access_token");localStorage.removeItem("supabase_refresh_token");localStorage.removeItem("supabase_user");window.location.href="login.html"});
+
+if(!accessToken&&!refreshToken){window.location.href="login.html"}else{loadDashboard()}
+</script>
+</body>
+</html>
