@@ -1,4 +1,4 @@
-name: Fix admin Supabase URL shadowing
+name: Fix admin Supabase URL and match activation blue-light
 
 on:
   push:
@@ -8,32 +8,50 @@ permissions:
   contents: write
 
 jobs:
-  fix-admin-url:
+  fix-admin:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Fix global URL shadowing in admin.html
+      - name: Patch admin login
         run: |
-          if grep -q "const SUPABASE_URL=" admin.html; then
-            echo "Already fixed"
-            exit 0
-          fi
           python - <<'PY'
           from pathlib import Path
           p = Path('admin.html')
           s = p.read_text(encoding='utf-8')
+
           old = "const URL='https://lbzwmcxwxummitldxucj.supabase.co',KEY="
           new = "const SUPABASE_URL='https://lbzwmcxwxummitldxucj.supabase.co',KEY="
-          if old not in s:
-              raise SystemExit('Expected Supabase URL declaration not found')
-          s = s.replace(old, new, 1)
-          s = s.replace('window.supabase.createClient(URL,KEY)', 'window.supabase.createClient(SUPABASE_URL,KEY)', 1)
+          if old in s:
+              s = s.replace(old, new, 1)
+              s = s.replace('window.supabase.createClient(URL,KEY)', 'window.supabase.createClient(SUPABASE_URL,KEY)', 1)
+
+          marker = '</style>'
+          if '/* Admin login: match Aktivasi Kartu ALJAVA blue-light design */' not in s:
+              css = r'''
+          /* Admin login: match Aktivasi Kartu ALJAVA blue-light design */
+          .login{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 0%,rgba(115,220,255,.48),transparent 40%),radial-gradient(ellipse at 100% 30%,rgba(180,240,255,.55),transparent 30%),linear-gradient(180deg,#effcff,#dff6ff 50%,#c8efff);backdrop-filter:none;-webkit-backdrop-filter:none}
+          .login:after{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.95) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(60,190,235,.4) 0 1px,transparent 1.5px);background-size:97px 83px,151px 137px;opacity:.35}
+          .loginbox{width:min(625px,100%);padding:27px 28px 23px;border:1px solid rgba(55,180,225,.3);border-radius:21px;background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(220,247,255,.5));box-shadow:0 20px 60px rgba(38,139,177,.16),inset 0 1px 0 rgba(255,255,255,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;position:relative;animation:cardIn .7s ease both}
+          .loginbox:before{content:'';display:block;width:55px;height:2px;margin:0 auto 18px;border-radius:999px;background:linear-gradient(90deg,transparent,#35c9f2,transparent);box-shadow:0 0 12px rgba(53,201,242,.7)}
+          .loginbox .brand{display:block;text-align:center;font-size:21px;font-weight:900;letter-spacing:2.5px;background:linear-gradient(90deg,#0879b8,#35c9f2,#0879b8);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
+          .loginbox .muted{color:#58788f;text-align:center;font-size:13px;line-height:1.6;margin:10px 0 25px}
+          .loginbox .field{width:100%;height:55px;margin:0 0 15px;padding:0 14px;border:1px solid rgba(39,163,211,.28);border-radius:12px;outline:none;color:#17324d;background:rgba(255,255,255,.58);font:15px Inter,Poppins,Arial,sans-serif;box-shadow:inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s ease}
+          .loginbox .field::placeholder{color:#7893a6}.loginbox .field:hover{border-color:rgba(39,163,211,.55)}.loginbox .field:focus{border-color:#35c9f2;background:rgba(255,255,255,.82);box-shadow:0 0 0 3px rgba(53,201,242,.12),0 0 22px rgba(53,201,242,.18)}
+          .loginbox button{width:100%;height:57px;margin-top:7px;border:1px solid rgba(53,201,242,.75);border-radius:13px;color:#fff;background:linear-gradient(100deg,#0879b8,#159bd0 50%,#35c9f2);font:800 16px Inter,Poppins,Arial,sans-serif;cursor:pointer;box-shadow:0 0 25px rgba(53,201,242,.22),0 10px 25px rgba(38,139,177,.16);transition:.2s ease}
+          .loginbox button:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 0 34px rgba(53,201,242,.34),0 12px 30px rgba(38,139,177,.22)}.loginbox button:active{transform:scale(.985)}.loginbox button:disabled{opacity:.6;cursor:not-allowed}
+          .loginbox #loginMsg{margin-top:14px}.loginbox #loginMsg .notice.err{border:1px solid rgba(190,65,90,.32);background:rgba(255,225,232,.72);color:#9b3047;text-align:center}.loginbox #loginMsg .notice.ok{border:1px solid rgba(50,190,150,.3);background:rgba(50,190,150,.16);color:#176c5a;text-align:center}
+          @media(max-width:700px){.login{padding:20px 12px}.loginbox{padding:21px 16px 19px;border-radius:18px}.loginbox .brand{font-size:17px;letter-spacing:2.4px}.loginbox .muted{font-size:11px}.loginbox .field{height:54px;font-size:15px;border-radius:11px}.loginbox button{height:56px;font-size:16px}}
+          '''
+              if marker not in s:
+                  raise SystemExit('No closing style tag found')
+              s = s.replace(marker, css + marker, 1)
+
           p.write_text(s, encoding='utf-8')
           PY
 
-      - name: Commit fix
+      - name: Commit patch
         run: |
           if git diff --quiet -- admin.html; then
             echo "No changes"
@@ -42,5 +60,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add admin.html
-          git commit -m "fix: avoid shadowing browser URL constructor in admin login"
+          git commit -m "style: match admin login to activation blue light"
           git push
