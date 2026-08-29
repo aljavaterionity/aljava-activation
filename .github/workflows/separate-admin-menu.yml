@@ -1,0 +1,66 @@
+name: Separate Admin Menu
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-menu:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-menu-layout]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Separate admin menu into hamburger drawer
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* ALJAVA ADMIN MENU LAYOUT V2 */'
+          if marker in s:
+              print('Menu layout already installed')
+              raise SystemExit(0)
+
+          extra_css = r'''
+          /* ALJAVA ADMIN MENU LAYOUT V2 */
+          .admin-menu-toggle{position:fixed;left:18px;top:18px;z-index:45;width:48px;height:48px;padding:0;border:1px solid rgba(39,163,211,.32);border-radius:12px;background:rgba(255,255,255,.82);color:#0879b8;box-shadow:0 12px 30px rgba(38,139,177,.18);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;font-size:25px;font-weight:900;line-height:1}
+          .admin-menu-toggle:hover{transform:translateY(-1px);box-shadow:0 15px 34px rgba(38,139,177,.24)}
+          .admin-menu-toggle span{display:block;line-height:7px}
+          .admin-menu{position:fixed!important;left:18px!important;top:76px!important;z-index:44!important;width:250px!important;margin:0!important;padding:16px!important;transform:translateX(calc(-100% - 30px));opacity:0;pointer-events:none;transition:transform .22s ease,opacity .22s ease;box-shadow:0 24px 70px rgba(38,139,177,.24)!important}
+          .admin-menu.menu-open{transform:translateX(0);opacity:1;pointer-events:auto}
+          #app{padding-left:20px!important}
+          .admin-menu-backdrop{position:fixed;inset:0;z-index:43;background:rgba(11,48,75,.12);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);display:none}
+          .admin-menu-backdrop.show{display:block}
+          @media(max-width:850px){.admin-menu{top:74px!important}.admin-menu-grid{grid-template-columns:1fr!important}.admin-menu-toggle{left:12px;top:12px}.admin-menu{left:12px!important}}
+          '''
+          html = r'''<button id="adminMenuToggle" class="admin-menu-toggle" type="button" aria-label="Buka Main Menu" aria-expanded="false"><span>☰</span></button><div id="adminMenuBackdrop" class="admin-menu-backdrop"></div>'''
+          js = r'''<script id="aljava-admin-menu-layout-script">
+          (()=>{
+            const toggle=document.getElementById('adminMenuToggle');
+            const menu=document.querySelector('.admin-menu');
+            const backdrop=document.getElementById('adminMenuBackdrop');
+            if(!toggle||!menu||!backdrop)return;
+            const close=()=>{menu.classList.remove('menu-open');backdrop.classList.remove('show');toggle.setAttribute('aria-expanded','false');};
+            const open=()=>{menu.classList.add('menu-open');backdrop.classList.add('show');toggle.setAttribute('aria-expanded','true');};
+            toggle.addEventListener('click',()=>menu.classList.contains('menu-open')?close():open());
+            backdrop.addEventListener('click',close);
+            document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+            menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{if(b.id!=='adminAddAccount')close();}));
+          })();
+          </script>'''
+          s = s.replace('</style>', extra_css + '\n</style>', 1)
+          s = s.replace('<body>', '<body>' + html, 1)
+          s = s.replace('</main>', js + '</main>', 1)
+          p.write_text(s, encoding='utf-8')
+          print('patched separate hamburger menu')
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: separate admin menu with hamburger drawer [admin-menu-layout]"
+          git push
