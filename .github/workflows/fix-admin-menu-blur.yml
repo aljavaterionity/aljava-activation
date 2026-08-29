@@ -1,0 +1,63 @@
+name: Fix Admin Menu Blur
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-menu-blur-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove menu backdrop blur and harden closed state
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* ALJAVA ADMIN MENU BLUR FIX */'
+          if marker in s:
+              print('Blur fix already installed')
+              raise SystemExit(0)
+          css = r'''
+          /* ALJAVA ADMIN MENU BLUR FIX */
+          .admin-menu-backdrop{background:transparent!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;display:none!important;pointer-events:none!important}
+          .admin-menu-backdrop.show{display:block!important;pointer-events:auto!important;background:rgba(10,70,100,.06)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+          .admin-menu{filter:none!important}
+          .admin-menu-toggle{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+          '''
+          js = r'''<script id="aljava-admin-menu-blur-fix">
+          (()=>{
+            const toggle=document.getElementById('adminMenuToggle');
+            const menu=document.querySelector('.admin-menu');
+            const backdrop=document.getElementById('adminMenuBackdrop');
+            if(!toggle||!menu||!backdrop)return;
+            const sync=()=>{
+              const open=menu.classList.contains('menu-open');
+              backdrop.classList.toggle('show',open);
+              document.documentElement.style.overflow=open?'hidden':'';
+              document.body.style.overflow=open?'hidden':'';
+            };
+            const close=()=>{menu.classList.remove('menu-open');toggle.setAttribute('aria-expanded','false');sync();};
+            const open=()=>{menu.classList.add('menu-open');toggle.setAttribute('aria-expanded','true');sync();};
+            toggle.onclick=()=>menu.classList.contains('menu-open')?close():open();
+            backdrop.onclick=close;
+            document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
+            close();
+          })();
+          </script>'''
+          s = s.replace('</style>', css + '\n</style>', 1)
+          s = s.replace('</main>', js + '</main>', 1)
+          p.write_text(s, encoding='utf-8')
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: remove admin menu blur [admin-menu-blur-fix]"
+          git push
