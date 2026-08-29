@@ -59,8 +59,6 @@
       overflow: hidden;
     }
 
-    /* BACKGROUND */
-
     .stars {
       position: fixed;
       inset: 0;
@@ -110,8 +108,6 @@
       filter: blur(10px);
     }
 
-    /* LOGIN */
-
     .login-container {
       position: relative;
       z-index: 2;
@@ -123,7 +119,6 @@
 
     .brand {
       text-align: center;
-
       margin-bottom: 25px;
     }
 
@@ -335,27 +330,7 @@
       transform: none;
     }
 
-    .error-box {
-      display: none;
-
-      margin-bottom: 15px;
-      padding: 12px 14px;
-
-      border-radius: 10px;
-
-      border:
-        1px solid rgba(255,90,120,0.4);
-
-      background:
-        rgba(220,40,75,0.10);
-
-      color: #ffdce4;
-
-      font-size: 12px;
-
-      line-height: 1.5;
-    }
-
+    .error-box,
     .success-box {
       display: none;
 
@@ -364,6 +339,22 @@
 
       border-radius: 10px;
 
+      font-size: 12px;
+
+      line-height: 1.5;
+    }
+
+    .error-box {
+      border:
+        1px solid rgba(255,90,120,0.4);
+
+      background:
+        rgba(220,40,75,0.10);
+
+      color: #ffdce4;
+    }
+
+    .success-box {
       border:
         1px solid rgba(50,230,255,0.4);
 
@@ -371,10 +362,6 @@
         rgba(0,210,255,0.10);
 
       color: #bffcff;
-
-      font-size: 12px;
-
-      line-height: 1.5;
     }
 
     .footer {
@@ -456,20 +443,13 @@
         Masuk untuk mengakses Dashboard ALJAVA TERIONITY.
       </p>
 
-      <div
-        id="errorBox"
-        class="error-box"
-      ></div>
+      <div id="errorBox" class="error-box"></div>
 
-      <div
-        id="successBox"
-        class="success-box"
-      ></div>
+      <div id="successBox" class="success-box"></div>
 
       <form id="loginForm">
 
         <div class="form-group">
-
           <label for="email">
             Email
           </label>
@@ -481,11 +461,9 @@
             autocomplete="email"
             required
           >
-
         </div>
 
         <div class="form-group">
-
           <label for="password">
             Password
           </label>
@@ -497,7 +475,6 @@
             autocomplete="current-password"
             required
           >
-
         </div>
 
         <button
@@ -518,12 +495,7 @@
 
   </main>
 
-
   <script>
-
-    /* =====================================================
-       SUPABASE
-    ===================================================== */
 
     const SUPABASE_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co";
@@ -531,10 +503,6 @@
     const SUPABASE_KEY =
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
-
-    /* =====================================================
-       ELEMENT
-    ===================================================== */
 
     const loginForm =
       document.getElementById("loginForm");
@@ -549,10 +517,6 @@
       document.getElementById("successBox");
 
 
-    /* =====================================================
-       LOGIN
-    ===================================================== */
-
     loginForm.addEventListener(
       "submit",
       async function(event) {
@@ -563,10 +527,15 @@
         successBox.style.display = "none";
 
         const email =
-          document.getElementById("email").value.trim();
+          document
+            .getElementById("email")
+            .value
+            .trim();
 
         const password =
-          document.getElementById("password").value;
+          document
+            .getElementById("password")
+            .value;
 
 
         loginButton.disabled = true;
@@ -614,12 +583,6 @@
           }
 
 
-          /*
-           * Simpan session.
-           * Access token akan digunakan
-           * untuk request ke Supabase.
-           */
-
           localStorage.setItem(
             "supabase_access_token",
             data.access_token
@@ -647,7 +610,7 @@
             function() {
 
               window.location.href =
-                "dashboard.html";
+                "admin.html";
 
             },
             500
@@ -663,7 +626,8 @@
           );
 
           errorBox.textContent =
-            "❌ " + error.message;
+            "❌ " +
+            error.message;
 
           errorBox.style.display =
             "block";
