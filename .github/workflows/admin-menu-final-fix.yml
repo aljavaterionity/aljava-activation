@@ -1,0 +1,79 @@
+name: Admin Menu Final Fix
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-menu-final-fix]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix hamburger menu interaction
+        shell: python
+        run: |
+          from pathlib import Path
+
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = '/* ALJAVA ADMIN MENU FINAL FIX */'
+          if marker in s:
+              print('Final menu fix already present')
+              raise SystemExit(0)
+
+          css = r'''
+          /* ALJAVA ADMIN MENU FINAL FIX */
+          #adminMenuToggle{position:fixed!important;z-index:2147483647!important;pointer-events:auto!important;touch-action:manipulation!important}
+          #adminMenuBackdrop{display:none!important;pointer-events:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+          .admin-menu{position:fixed!important;z-index:2147483646!important;display:none!important;visibility:visible!important;opacity:1!important;transform:none!important;pointer-events:auto!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+          .admin-menu.is-open{display:block!important}
+          '''
+
+          js = r'''
+          <script id="aljava-admin-menu-final-fix-script">
+          (()=>{
+            const ready=()=>{
+              const oldToggle=document.getElementById('adminMenuToggle');
+              const menu=document.querySelector('.admin-menu');
+              if(!oldToggle||!menu||oldToggle.dataset.finalBound==='1') return;
+              const backdrop=document.getElementById('adminMenuBackdrop');
+              const toggle=oldToggle.cloneNode(true);
+              oldToggle.replaceWith(toggle);
+              if(backdrop) backdrop.remove();
+              document.body.appendChild(menu);
+              menu.classList.remove('menu-open','show');
+              menu.classList.remove('is-open');
+              toggle.setAttribute('aria-expanded','false');
+              toggle.dataset.finalBound='1';
+              const close=()=>{menu.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
+              const open=()=>{menu.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
+              toggle.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();});
+              document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
+              const add=(id,fn)=>document.getElementById(id)?.addEventListener('click',fn);
+              add('adminCustomerTop',()=>{close();document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});});
+              add('adminLogout',()=>document.getElementById('logout')?.click());
+              add('adminReset',()=>document.getElementById('refresh')?.click());
+              add('adminAddAccount',()=>{});
+            };
+            if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true}); else ready();
+            setTimeout(ready,500);
+          })();
+          </script>
+          '''
+
+          s = s.replace('</style>', css + '\n</style>', 1)
+          s = s.replace('</body>', js + '\n</body>', 1)
+          p.write_text(s, encoding='utf-8')
+          print('patched final hamburger menu')
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: make admin hamburger menu clickable and remove blur [admin-menu-final-fix]"
+          git push
