@@ -1,0 +1,46 @@
+name: Fix admin Supabase URL shadowing
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  fix-admin-url:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Fix global URL shadowing in admin.html
+        run: |
+          if grep -q "const SUPABASE_URL=" admin.html; then
+            echo "Already fixed"
+            exit 0
+          fi
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          old = "const URL='https://lbzwmcxwxummitldxucj.supabase.co',KEY="
+          new = "const SUPABASE_URL='https://lbzwmcxwxummitldxucj.supabase.co',KEY="
+          if old not in s:
+              raise SystemExit('Expected Supabase URL declaration not found')
+          s = s.replace(old, new, 1)
+          s = s.replace('window.supabase.createClient(URL,KEY)', 'window.supabase.createClient(SUPABASE_URL,KEY)', 1)
+          p.write_text(s, encoding='utf-8')
+          PY
+
+      - name: Commit fix
+        run: |
+          if git diff --quiet -- admin.html; then
+            echo "No changes"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git commit -m "fix: avoid shadowing browser URL constructor in admin login"
+          git push
