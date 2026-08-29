@@ -28,8 +28,8 @@
   </div>
 </section>
 <section id="customerDatabase" class="glass customer-panel panel">
-  <div class="head"><div class="customer-toolbar"><div><h2 style="margin:0">Database Customer</h2><p class="muted">ID, usaha, jenis kartu, jumlah kartu, total ulasan, dan link Google Review.</p></div><input id="customerSearch" class="field customer-search" placeholder="Cari nama usaha / ID..."></div></div>
-  <div class="body"><div class="table-wrap"><table class="customer-table"><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Jumlah Dimiliki</th><th>Total Ulasan</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat data customer...</td></tr></tbody></table></div><div id="customerMsg"></div></div>
+  <div class="head"><div class="customer-toolbar"><div><h2 style="margin:0">Database Customer</h2><p class="muted">ID, usaha, jenis kartu, status, total scan/tap, dan link Google Review.</p></div><input id="customerSearch" class="field customer-search" placeholder="Cari nama usaha / ID..."></div></div>
+  <div class="body"><div class="table-wrap"><table class="customer-table"><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Status</th><th>Total Scan/Tap</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat data customer...</td></tr></tbody></table></div><div id="customerMsg"></div></div>
 </section>
 <div id="adminModal" class="admin-modal"><div class="glass admin-modal-card"><h3 id="adminModalTitle">Pengaturan</h3><div id="adminModalBody"></div><div class="actions"><button id="adminModalClose" class="btn">Tutup</button></div></div></div>
 <script id="aljava-admin-menu-script">
@@ -59,7 +59,7 @@
   function renderCustomers(){
     const rows=$('customerRows'), q=($('customerSearch')?.value||'').toLowerCase().trim(); if(!rows)return;
     const list=customerData.filter(c=>!q||c.business_name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q));
-    rows.innerHTML=list.length?list.map(c=>`<tr><td>${esc(c.id)}</td><td><b>${esc(c.business_name)}</b></td><td>${esc(c.product_type)}</td><td>${c.qty}</td><td>${c.reviews}</td><td>${c.url?`<a class="link-btn" href="${esc(c.url)}" target="_blank" rel="noopener">🔗 Buka Review</a>`:'<span class="muted">Belum ada link</span>'}</td></tr>`).join(''):'<tr><td colspan="6" class="muted">Tidak ada customer.</td></tr>';
+    rows.innerHTML=list.length?list.map(c=>`<tr><td>${esc(c.id)}</td><td><b>${esc(c.business_name)}</b></td><td>${esc(c.product_type)}</td><td><span class="${String(c.status).toLowerCase()==='active'?'active':String(c.status).toLowerCase()==='expired'?'expired':'pending'}">${esc(c.status)}</span></td><td>${c.scans}</td><td>${c.url?`<a class="link-btn" href="${esc(c.url)}" target="_blank" rel="noopener">🔗 Buka Review</a>`:'<span class="muted">Belum ada link</span>'}</td></tr>`).join(''):'<tr><td colspan="6" class="muted">Tidak ada customer.</td></tr>';
   }
   function modal(title,body){$('adminModalTitle').textContent=title;$('adminModalBody').innerHTML=body;$('adminModal').classList.add('show');}
   function wire(){
