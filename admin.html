@@ -6,6 +6,9 @@
 
   <title>Admin Dashboard - ALJAVA TERIONITY</title>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
     * {
       box-sizing: border-box;
@@ -14,16 +17,23 @@
     :root {
       --blue: #168cff;
       --cyan: #25e4ff;
-      --blue-dark: #0757c9;
+      --cyan2: #35e7ff;
+
       --bg: #010713;
-      --glass: rgba(4, 25, 72, 0.68);
-      --glass-strong: rgba(3, 18, 55, 0.84);
+      --bg2: #031b46;
+
+      --card: rgba(4, 25, 72, 0.82);
+      --card2: rgba(1, 8, 35, 0.94);
+
       --text: #ffffff;
-      --muted: #91abc1;
-      --border: rgba(55, 210, 255, 0.28);
-      --success: #35e7c3;
-      --warning: #ffc857;
-      --danger: #ff6584;
+      --muted: #9db7cc;
+
+      --border: rgba(55, 210, 255, 0.35);
+
+      --green: #36e69b;
+      --yellow: #ffc857;
+      --red: #ff5575;
+      --purple: #9b7cff;
     }
 
     html {
@@ -33,8 +43,16 @@
     body {
       margin: 0;
       min-height: 100vh;
+
+      font-family:
+        Inter,
+        Poppins,
+        Arial,
+        Helvetica,
+        sans-serif;
+
       color: var(--text);
-      font-family: Inter, Poppins, Arial, Helvetica, sans-serif;
+
       background:
         radial-gradient(
           ellipse at 50% 0%,
@@ -42,50 +60,37 @@
           transparent 40%
         ),
         radial-gradient(
-          ellipse at 100% 25%,
-          rgba(0, 225, 255, 0.13),
+          ellipse at 100% 30%,
+          rgba(0, 225, 255, 0.14),
           transparent 30%
-        ),
-        radial-gradient(
-          ellipse at 0% 70%,
-          rgba(0, 100, 255, 0.12),
-          transparent 35%
         ),
         linear-gradient(
           180deg,
           #010817 0%,
-          #031b46 48%,
+          #031b46 50%,
           #010713 100%
         );
-
-      overflow-x: hidden;
     }
 
-    /* ================================
-       BACKGROUND
-    ================================= */
+    /* =========================
+       STARS
+    ========================= */
 
-    .scene {
+    .stars {
       position: fixed;
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      overflow: hidden;
-    }
-
-    .stars {
-      position: absolute;
-      inset: 0;
 
       background-image:
         radial-gradient(
           circle,
-          rgba(255,255,255,.8) 0 1px,
+          rgba(255,255,255,0.8) 0 1px,
           transparent 1.5px
         ),
         radial-gradient(
           circle,
-          rgba(80,215,255,.6) 0 1px,
+          rgba(80,215,255,0.6) 0 1px,
           transparent 1.5px
         );
 
@@ -97,48 +102,12 @@
         8px 3px,
         31px 42px;
 
-      opacity: .24;
+      opacity: 0.22;
     }
 
-    .glow-one {
-      position: absolute;
-      width: 500px;
-      height: 500px;
-      right: -180px;
-      top: 80px;
-
-      border-radius: 50%;
-
-      background:
-        radial-gradient(
-          circle,
-          rgba(0,210,255,.18),
-          transparent 68%
-        );
-
-      filter: blur(30px);
-    }
-
-    .glow-two {
-      position: absolute;
-      width: 600px;
-      height: 350px;
-      left: -250px;
-      bottom: -100px;
-
-      background:
-        radial-gradient(
-          ellipse,
-          rgba(0,110,255,.18),
-          transparent 68%
-        );
-
-      filter: blur(35px);
-    }
-
-    /* ================================
-       LAYOUT
-    ================================= */
+    /* =========================
+       PAGE
+    ========================= */
 
     .page {
       position: relative;
@@ -147,12 +116,12 @@
       width: min(1400px, 100%);
       margin: 0 auto;
 
-      padding: 24px 22px 50px;
+      padding: 25px 20px 60px;
     }
 
-    /* ================================
+    /* =========================
        TOPBAR
-    ================================= */
+    ========================= */
 
     .topbar {
       display: flex;
@@ -161,46 +130,11 @@
 
       gap: 20px;
 
-      margin-bottom: 30px;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
-
-    .brand-logo {
-      width: 46px;
-      height: 46px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 14px;
-
-      border:
-        1px solid rgba(60,220,255,.55);
-
-      background:
-        linear-gradient(
-          145deg,
-          rgba(0,180,255,.25),
-          rgba(0,70,180,.14)
-        );
-
-      box-shadow:
-        0 0 25px rgba(0,180,255,.18),
-        inset 0 1px 0 rgba(255,255,255,.08);
-
-      color: #35e7ff;
-
-      font-size: 22px;
-      font-weight: 900;
+      margin-bottom: 28px;
     }
 
     .brand-name {
-      font-size: 20px;
+      font-size: 21px;
       font-weight: 900;
 
       letter-spacing: 2.5px;
@@ -225,11 +159,11 @@
     }
 
     .brand-sub {
-      margin-top: 4px;
+      margin-top: 5px;
 
       color: var(--muted);
 
-      font-size: 11px;
+      font-size: 12px;
     }
 
     .top-actions {
@@ -238,71 +172,57 @@
       gap: 10px;
     }
 
-    .icon-button,
+    .refresh-button,
     .logout-button {
-      height: 40px;
-
       border-radius: 10px;
 
+      padding: 10px 15px;
+
+      color: #ffffff;
+
       font-family: inherit;
+      font-size: 12px;
       font-weight: 800;
 
       cursor: pointer;
 
-      transition: .2s ease;
+      transition: 0.2s ease;
     }
 
-    .icon-button {
-      width: 40px;
-
-      border:
-        1px solid rgba(55,210,255,.3);
+    .refresh-button {
+      border: 1px solid rgba(45,220,255,0.5);
 
       background:
-        rgba(0,120,255,.10);
-
-      color: #bfefff;
-
-      font-size: 16px;
+        rgba(0,130,255,0.15);
     }
 
-    .icon-button:hover {
+    .refresh-button:hover {
       background:
-        rgba(0,150,255,.2);
+        rgba(0,150,255,0.28);
 
       transform: translateY(-1px);
     }
 
     .logout-button {
-      padding: 0 15px;
-
-      color: #fff;
-
       border:
-        1px solid rgba(255,100,130,.4);
+        1px solid rgba(255,100,130,0.45);
 
       background:
-        rgba(180,30,70,.13);
-
-      font-size: 11px;
+        rgba(180, 30, 70, 0.16);
     }
 
     .logout-button:hover {
       background:
-        rgba(220,40,75,.25);
+        rgba(220, 40, 75, 0.28);
+
+      transform: translateY(-1px);
     }
 
-    /* ================================
+    /* =========================
        WELCOME
-    ================================= */
+    ========================= */
 
     .welcome {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-
-      gap: 20px;
-
       margin-bottom: 25px;
     }
 
@@ -311,8 +231,6 @@
 
       font-size: 31px;
       line-height: 1.15;
-
-      letter-spacing: -.7px;
     }
 
     .welcome p {
@@ -323,34 +241,17 @@
       font-size: 13px;
     }
 
-    .date-box {
-      padding: 10px 14px;
-
-      border:
-        1px solid rgba(55,210,255,.22);
-
-      border-radius: 11px;
-
-      background:
-        rgba(0,80,160,.10);
-
-      color: #bfefff;
-
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    /* ================================
+    /* =========================
        STAT GRID
-    ================================= */
+    ========================= */
 
     .stats {
       display: grid;
 
       grid-template-columns:
-        repeat(4, 1fr);
+        repeat(6, 1fr);
 
-      gap: 16px;
+      gap: 14px;
 
       margin-bottom: 22px;
     }
@@ -358,41 +259,33 @@
     .stat-card {
       position: relative;
 
-      min-height: 145px;
-
-      padding: 20px;
-
       overflow: hidden;
+
+      min-height: 140px;
+
+      padding: 18px;
 
       border:
         1px solid var(--border);
 
-      border-radius: 19px;
+      border-radius: 18px;
 
       background:
         linear-gradient(
           145deg,
-          rgba(4,25,72,.72),
-          rgba(1,8,35,.86)
+          rgba(4,25,72,0.78),
+          rgba(1,8,35,0.9)
         );
 
       box-shadow:
-        0 15px 45px rgba(0,0,0,.28),
-        inset 0 1px 0 rgba(255,255,255,.05);
+        0 15px 40px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.05);
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(15px);
 
       transition:
-        transform .2s ease,
-        border-color .2s ease;
-    }
-
-    .stat-card:hover {
-      transform: translateY(-3px);
-
-      border-color:
-        rgba(55,220,255,.48);
+        transform 0.2s ease,
+        border-color 0.2s ease;
     }
 
     .stat-card::after {
@@ -400,112 +293,107 @@
 
       position: absolute;
 
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
 
-      right: -50px;
-      bottom: -50px;
+      right: -45px;
+      top: -45px;
 
       border-radius: 50%;
 
       background:
-        radial-gradient(
-          circle,
-          rgba(0,200,255,.15),
-          transparent 68%
-        );
+        rgba(37,228,255,0.10);
+
+      filter: blur(4px);
     }
 
-    .stat-top {
+    .stat-card:hover {
+      transform: translateY(-3px);
+
+      border-color:
+        rgba(55,230,255,0.55);
+    }
+
+    .stat-icon {
+      width: 34px;
+      height: 34px;
+
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
 
-      gap: 10px;
+      margin-bottom: 12px;
+
+      border-radius: 10px;
+
+      color: var(--cyan2);
+
+      background:
+        rgba(0,180,255,0.12);
+
+      border:
+        1px solid rgba(50,220,255,0.2);
+
+      font-size: 16px;
     }
 
     .stat-label {
       color: var(--muted);
 
       font-size: 11px;
-      font-weight: 700;
-    }
-
-    .stat-icon {
-      width: 35px;
-      height: 35px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 10px;
-
-      border:
-        1px solid rgba(55,220,255,.25);
-
-      background:
-        rgba(0,130,255,.11);
-
-      color: #35e7ff;
-
-      font-size: 16px;
+      font-weight: 600;
     }
 
     .stat-number {
-      margin-top: 13px;
+      margin-top: 6px;
 
-      font-size: 28px;
+      color: #ffffff;
+
+      font-size: 23px;
       font-weight: 900;
 
-      letter-spacing: -.5px;
-
-      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .stat-number.revenue {
-      color: #35e7ff;
+      color: var(--cyan2);
+
+      font-size: 20px;
     }
 
-    .stat-bottom {
-      display: flex;
-      align-items: center;
+    .stat-desc {
+      margin-top: 7px;
 
-      gap: 7px;
-
-      margin-top: 8px;
+      color: #718ca1;
 
       font-size: 10px;
     }
 
-    .positive {
-      color: var(--success);
-    }
-
-    .negative {
-      color: var(--danger);
-    }
-
-    .neutral {
-      color: var(--muted);
-    }
-
-    /* ================================
-       MAIN GRID
-    ================================= */
+    /* =========================
+       DASHBOARD GRID
+    ========================= */
 
     .dashboard-grid {
       display: grid;
 
       grid-template-columns:
-        minmax(0, 1.7fr)
-        minmax(300px, .8fr);
+        minmax(0, 2fr)
+        minmax(300px, 1fr);
 
       gap: 18px;
 
-      margin-bottom: 22px;
+      margin-bottom: 20px;
     }
 
-    .glass-card {
+    /* =========================
+       PANEL
+    ========================= */
+
+    .panel {
+      overflow: hidden;
+
       border:
         1px solid var(--border);
 
@@ -514,267 +402,98 @@
       background:
         linear-gradient(
           145deg,
-          rgba(4,25,72,.76),
-          rgba(1,8,35,.9)
+          rgba(4,25,72,0.82),
+          rgba(1,8,35,0.94)
         );
 
       box-shadow:
-        0 20px 60px rgba(0,0,0,.35),
-        inset 0 1px 0 rgba(255,255,255,.04);
+        0 20px 60px rgba(0,0,0,0.4);
 
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      backdrop-filter: blur(15px);
     }
 
-    /* ================================
-       REVENUE
-    ================================= */
-
-    .revenue-card {
-      padding: 21px;
-    }
-
-    .card-header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-
-      gap: 15px;
-
-      margin-bottom: 15px;
-    }
-
-    .card-title {
-      margin: 0 0 5px;
-
-      font-size: 17px;
-      font-weight: 850;
-    }
-
-    .card-description {
-      margin: 0;
-
-      color: var(--muted);
-
-      font-size: 11px;
-    }
-
-    .period-select {
-      padding: 8px 11px;
-
-      border:
-        1px solid rgba(55,210,255,.28);
-
-      border-radius: 9px;
-
-      outline: none;
-
-      background:
-        rgba(0,90,180,.12);
-
-      color: #dffaff;
-
-      font-family: inherit;
-
-      font-size: 10px;
-      font-weight: 700;
-    }
-
-    .revenue-summary {
-      margin: 3px 0 15px;
-
-      display: flex;
-      align-items: baseline;
-
-      gap: 9px;
-    }
-
-    .revenue-total {
-      font-size: 27px;
-      font-weight: 900;
-
-      color: #fff;
-    }
-
-    .revenue-change {
-      color: var(--success);
-
-      font-size: 10px;
-      font-weight: 800;
-    }
-
-    .chart-wrap {
-      position: relative;
-
-      width: 100%;
-      height: 270px;
-
-      padding-top: 10px;
-    }
-
-    #revenueChart {
-      width: 100%;
-      height: 100%;
-    }
-
-    /* ================================
-       QUICK SUMMARY
-    ================================= */
-
-    .summary-card {
-      padding: 21px;
-    }
-
-    .summary-list {
-      display: flex;
-      flex-direction: column;
-
-      gap: 14px;
-
-      margin-top: 18px;
-    }
-
-    .summary-item {
+    .panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
 
       gap: 15px;
 
-      padding-bottom: 14px;
+      padding: 19px 20px;
 
       border-bottom:
-        1px solid rgba(100,160,200,.1);
+        1px solid rgba(55,180,255,0.2);
     }
 
-    .summary-item:last-child {
-      padding-bottom: 0;
-      border-bottom: 0;
-    }
+    .panel-title {
+      margin: 0;
 
-    .summary-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .summary-icon {
-      width: 35px;
-      height: 35px;
-
-      display: grid;
-      place-items: center;
-
-      border-radius: 10px;
-
-      background:
-        rgba(0,130,255,.12);
-
-      border:
-        1px solid rgba(55,210,255,.2);
-
-      color: #35e7ff;
-    }
-
-    .summary-name {
-      font-size: 11px;
+      font-size: 17px;
       font-weight: 800;
     }
 
-    .summary-sub {
-      margin-top: 3px;
-
-      color: var(--muted);
-
-      font-size: 9px;
-    }
-
-    .summary-value {
-      color: #eaffff;
-
-      font-size: 12px;
-      font-weight: 850;
-    }
-
-    /* ================================
-       ACTIVITY
-    ================================= */
-
-    .activity-card {
-      padding: 21px;
-
-      margin-bottom: 22px;
-    }
-
-    .activity-list {
-      display: grid;
-
-      grid-template-columns:
-        repeat(3, 1fr);
-
-      gap: 13px;
-
-      margin-top: 16px;
-    }
-
-    .activity {
-      padding: 15px;
-
-      border-radius: 13px;
-
-      border:
-        1px solid rgba(55,180,255,.15);
-
-      background:
-        rgba(0,80,160,.07);
-    }
-
-    .activity-top {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .activity-dot {
-      width: 8px;
-      height: 8px;
-
-      border-radius: 50%;
-
-      background: #35e7ff;
-
-      box-shadow:
-        0 0 10px rgba(53,231,255,.7);
-    }
-
-    .activity-title {
-      font-size: 11px;
-      font-weight: 800;
-    }
-
-    .activity-text {
-      margin-top: 9px;
+    .panel-subtitle {
+      margin-top: 4px;
 
       color: var(--muted);
 
       font-size: 10px;
-      line-height: 1.5;
     }
 
-    .activity-time {
-      margin-top: 8px;
+    .panel-badge {
+      padding: 6px 9px;
 
-      color: #6f8ba2;
+      border-radius: 999px;
+
+      color: #bff8ff;
+
+      background:
+        rgba(0,210,255,0.09);
+
+      border:
+        1px solid rgba(50,225,255,0.22);
 
       font-size: 9px;
+      font-weight: 800;
     }
 
-    /* ================================
+    .chart-container {
+      position: relative;
+
+      height: 320px;
+
+      padding: 18px 20px 20px;
+    }
+
+    .chart-container.small {
+      height: 320px;
+    }
+
+    /* =========================
        TABLE
-    ================================= */
+    ========================= */
 
     .table-card {
       overflow: hidden;
+
+      border:
+        1px solid var(--border);
+
+      border-radius: 20px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(4,25,72,0.82),
+          rgba(1,8,35,0.94)
+        );
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,0.4);
+
+      backdrop-filter: blur(15px);
+
+      margin-bottom: 20px;
     }
 
     .table-header {
@@ -784,67 +503,30 @@
 
       gap: 15px;
 
-      padding: 20px;
+      padding: 19px 20px;
 
       border-bottom:
-        1px solid rgba(55,180,255,.16);
+        1px solid rgba(55,180,255,0.2);
     }
 
-    .table-title {
-      margin: 0 0 5px;
-
-      font-size: 18px;
-    }
-
-    .table-subtitle {
+    .table-header h2 {
       margin: 0;
 
-      color: var(--muted);
-
-      font-size: 10px;
-    }
-
-    .refresh-button {
-      border:
-        1px solid rgba(45,220,255,.45);
-
-      border-radius: 9px;
-
-      padding: 9px 13px;
-
-      color: #ffffff;
-
-      background:
-        rgba(0,130,255,.13);
-
-      font-family: inherit;
-
-      font-size: 10px;
-      font-weight: 800;
-
-      cursor: pointer;
-
-      transition: .2s ease;
-    }
-
-    .refresh-button:hover {
-      background:
-        rgba(0,150,255,.24);
-
-      transform: translateY(-1px);
+      font-size: 17px;
     }
 
     .table-wrapper {
       width: 100%;
+
       overflow-x: auto;
     }
 
     table {
       width: 100%;
 
-      min-width: 950px;
-
       border-collapse: collapse;
+
+      min-width: 850px;
     }
 
     th {
@@ -852,10 +534,10 @@
 
       text-align: left;
 
-      color: #9ddfff;
+      color: #bfefff;
 
       background:
-        rgba(0,90,180,.10);
+        rgba(0,90,180,0.12);
 
       font-size: 10px;
 
@@ -866,7 +548,7 @@
       padding: 14px 16px;
 
       border-top:
-        1px solid rgba(100,150,200,.1);
+        1px solid rgba(100,150,200,0.12);
 
       color: #e8f8ff;
 
@@ -877,13 +559,11 @@
 
     tr:hover td {
       background:
-        rgba(0,150,255,.045);
+        rgba(0,150,255,0.05);
     }
 
     .status {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
+      display: inline-block;
 
       padding: 5px 9px;
 
@@ -893,126 +573,135 @@
       font-weight: 800;
     }
 
-    .status::before {
-      content: "";
-
-      width: 5px;
-      height: 5px;
-
-      border-radius: 50%;
-    }
-
     .status-active {
       color: #caffff;
 
       background:
-        rgba(0,210,255,.10);
+        rgba(0,210,255,0.12);
 
       border:
-        1px solid rgba(50,225,255,.28);
-    }
-
-    .status-active::before {
-      background: #35e7ff;
-      box-shadow: 0 0 7px #35e7ff;
+        1px solid rgba(50,225,255,0.35);
     }
 
     .status-pending {
       color: #ffe9b5;
 
       background:
-        rgba(255,180,40,.09);
+        rgba(255,180,40,0.10);
 
       border:
-        1px solid rgba(255,190,50,.25);
-    }
-
-    .status-pending::before {
-      background: var(--warning);
+        1px solid rgba(255,190,50,0.3);
     }
 
     .status-other {
       color: #ffdce4;
 
       background:
-        rgba(220,40,75,.09);
+        rgba(220,40,75,0.10);
 
       border:
-        1px solid rgba(255,90,120,.25);
-    }
-
-    .status-other::before {
-      background: var(--danger);
+        1px solid rgba(255,90,120,0.3);
     }
 
     .review-link {
-      color: #35e7ff;
+      color: var(--cyan2);
 
       text-decoration: none;
 
-      font-weight: 800;
+      font-weight: 700;
     }
 
     .review-link:hover {
       text-decoration: underline;
     }
 
-    /* ================================
-       EMPTY / ERROR
-    ================================= */
+    .money {
+      color: #35e7ff;
 
-    .empty,
+      font-weight: 800;
+    }
+
+    /* =========================
+       LOADING
+    ========================= */
+
     .loading {
-      padding: 45px 20px;
+      padding: 50px 20px;
 
       text-align: center;
+
+      color: var(--cyan2);
 
       font-size: 12px;
     }
 
-    .empty {
-      color: var(--muted);
+    .loading::after {
+      content: "";
+
+      display: block;
+
+      width: 24px;
+      height: 24px;
+
+      margin: 15px auto 0;
+
+      border:
+        2px solid rgba(53,231,255,0.2);
+
+      border-top-color:
+        var(--cyan2);
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
     }
 
-    .loading {
-      color: #35e7ff;
+    .empty {
+      padding: 45px 20px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 12px;
     }
 
     .error {
-      margin: 20px;
+      margin: 18px;
 
       padding: 14px;
 
       border:
-        1px solid rgba(255,90,120,.4);
+        1px solid rgba(255,90,120,0.4);
 
       border-radius: 10px;
 
       background:
-        rgba(220,40,75,.10);
+        rgba(220,40,75,0.10);
 
       color: #ffdce4;
 
       font-size: 11px;
     }
 
-    /* ================================
+    /* =========================
        FOOTER
-    ================================= */
+    ========================= */
 
     footer {
-      margin-top: 30px;
+      margin-top: 28px;
 
       text-align: center;
 
-      color: #6f8ba2;
+      color: #7792a7;
 
       font-size: 10px;
     }
 
-    /* ================================
+    /* =========================
        ANIMATION
-    ================================= */
+    ========================= */
 
     @keyframes shine {
       0% {
@@ -1024,114 +713,72 @@
       }
     }
 
-    @keyframes fadeUp {
-      from {
-        opacity: 0;
-        transform: translateY(12px);
-      }
-
+    @keyframes spin {
       to {
-        opacity: 1;
-        transform: translateY(0);
+        transform: rotate(360deg);
       }
     }
 
-    .stat-card,
-    .glass-card {
-      animation:
-        fadeUp .55s ease both;
+    /* =========================
+       RESPONSIVE
+    ========================= */
+
+    @media (max-width: 1150px) {
+      .stats {
+        grid-template-columns:
+          repeat(3, 1fr);
+      }
     }
 
-    /* ================================
-       MOBILE
-    ================================= */
-
-    @media (max-width: 1050px) {
+    @media (max-width: 850px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
 
       .stats {
         grid-template-columns:
           repeat(2, 1fr);
       }
-
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
-    @media (max-width: 750px) {
-
+    @media (max-width: 600px) {
       .page {
         padding:
-          20px 12px 35px;
+          18px 12px 40px;
       }
 
       .topbar {
         align-items: flex-start;
-      }
 
-      .brand-name {
-        font-size: 16px;
-        letter-spacing: 1.8px;
-      }
-
-      .brand-logo {
-        width: 40px;
-        height: 40px;
-      }
-
-      .welcome {
-        align-items: flex-start;
         flex-direction: column;
-      }
-
-      .welcome h1 {
-        font-size: 25px;
-      }
-
-      .activity-list {
-        grid-template-columns: 1fr;
-      }
-
-      .chart-wrap {
-        height: 230px;
-      }
-    }
-
-    @media (max-width: 520px) {
-
-      .stats {
-        grid-template-columns: 1fr;
       }
 
       .top-actions {
         width: 100%;
       }
 
+      .refresh-button,
       .logout-button {
         flex: 1;
       }
 
-      .date-box {
-        width: 100%;
+      .brand-name {
+        font-size: 17px;
+
+        letter-spacing: 2px;
       }
 
-      .table-header {
-        align-items: flex-start;
-        flex-direction: column;
+      .welcome h1 {
+        font-size: 25px;
       }
 
-      .refresh-button {
-        width: 100%;
+      .stats {
+        grid-template-columns: 1fr;
       }
 
-      .revenue-card,
-      .summary-card,
-      .activity-card {
-        padding: 17px;
-      }
-
-      .revenue-total {
-        font-size: 23px;
+      .chart-container,
+      .chart-container.small {
+        height: 280px;
       }
     }
   </style>
@@ -1139,52 +786,33 @@
 
 <body>
 
-  <!-- ================================
-       BACKGROUND
-  ================================= -->
-
-  <div class="scene" aria-hidden="true">
-    <div class="stars"></div>
-    <div class="glow-one"></div>
-    <div class="glow-two"></div>
-  </div>
-
+  <div class="stars"></div>
 
   <main class="page">
 
-    <!-- ================================
+    <!-- =========================
          TOPBAR
-    ================================= -->
+    ========================== -->
 
     <header class="topbar">
 
-      <div class="brand">
-
-        <div class="brand-logo">
-          A
+      <div>
+        <div class="brand-name">
+          ALJAVA TERIONITY
         </div>
 
-        <div>
-          <div class="brand-name">
-            ALJAVA TERIONITY
-          </div>
-
-          <div class="brand-sub">
-            Admin Dashboard
-          </div>
+        <div class="brand-sub">
+          Admin Dashboard
         </div>
-
       </div>
-
 
       <div class="top-actions">
 
         <button
-          class="icon-button"
-          id="refreshTop"
-          title="Refresh"
+          class="refresh-button"
+          id="refreshButton"
         >
-          ↻
+          ↻ Refresh
         </button>
 
         <button
@@ -1199,54 +827,39 @@
     </header>
 
 
-    <!-- ================================
+    <!-- =========================
          WELCOME
-    ================================= -->
+    ========================== -->
 
     <section class="welcome">
 
-      <div>
+      <h1>
+        Dashboard Admin
+      </h1>
 
-        <h1>
-          Dashboard Admin
-        </h1>
-
-        <p id="adminEmail">
-          Memuat akun...
-        </p>
-
-      </div>
-
-      <div
-        class="date-box"
-        id="currentDate"
-      >
-        Memuat tanggal...
-      </div>
+      <p id="adminEmail">
+        Memuat akun...
+      </p>
 
     </section>
 
 
-    <!-- ================================
+    <!-- =========================
          STATISTICS
-    ================================= -->
+    ========================== -->
 
     <section class="stats">
 
-      <!-- REVENUE -->
+      <!-- Revenue -->
 
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          💰
+        </div>
 
-          <div class="stat-label">
-            Total Revenue
-          </div>
-
-          <div class="stat-icon">
-            Rp
-          </div>
-
+        <div class="stat-label">
+          Total Revenue
         </div>
 
         <div
@@ -1256,129 +869,138 @@
           Rp 0
         </div>
 
-        <div class="stat-bottom">
-          <span class="positive">
-            ●
-          </span>
-
-          <span class="neutral">
-            Revenue sistem
-          </span>
+        <div class="stat-desc">
+          Total nilai subscription
         </div>
 
       </div>
 
 
-      <!-- CARDS -->
+      <!-- MRR -->
 
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          💵
+        </div>
 
-          <div class="stat-label">
-            Total Kartu
-          </div>
-
-          <div class="stat-icon">
-            ◇
-          </div>
-
+        <div class="stat-label">
+          Revenue Aktif
         </div>
 
         <div
-          class="stat-number"
-          id="totalCards"
+          class="stat-number revenue"
+          id="activeRevenue"
         >
-          -
+          Rp 0
         </div>
 
-        <div class="stat-bottom">
-          <span class="positive">
-            ●
-          </span>
-
-          <span class="neutral">
-            Semua kartu
-          </span>
+        <div class="stat-desc">
+          Subscription aktif
         </div>
 
       </div>
 
 
-      <!-- ACTIVE -->
+      <!-- Customers -->
 
       <div class="stat-card">
 
-        <div class="stat-top">
-
-          <div class="stat-label">
-            Kartu Aktif
-          </div>
-
-          <div class="stat-icon">
-            ✓
-          </div>
-
+        <div class="stat-icon">
+          👥
         </div>
 
-        <div
-          class="stat-number"
-          id="activeCards"
-        >
-          -
-        </div>
-
-        <div class="stat-bottom">
-
-          <span
-            class="positive"
-            id="activePercentage"
-          >
-            -
-          </span>
-
-          <span class="neutral">
-            dari total kartu
-          </span>
-
-        </div>
-
-      </div>
-
-
-      <!-- CUSTOMERS -->
-
-      <div class="stat-card">
-
-        <div class="stat-top">
-
-          <div class="stat-label">
-            Pelanggan
-          </div>
-
-          <div class="stat-icon">
-            ◎
-          </div>
-
+        <div class="stat-label">
+          Customers
         </div>
 
         <div
           class="stat-number"
           id="totalCustomers"
         >
-          -
+          0
         </div>
 
-        <div class="stat-bottom">
+        <div class="stat-desc">
+          Total pelanggan
+        </div>
 
-          <span class="positive">
-            ●
-          </span>
+      </div>
 
-          <span class="neutral">
-            Bisnis terdaftar
-          </span>
 
+      <!-- Cards -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          🪪
+        </div>
+
+        <div class="stat-label">
+          Cards Aktif
+        </div>
+
+        <div
+          class="stat-number"
+          id="activeCards"
+        >
+          0
+        </div>
+
+        <div class="stat-desc">
+          Kartu dengan status active
+        </div>
+
+      </div>
+
+
+      <!-- Products -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          📦
+        </div>
+
+        <div class="stat-label">
+          Products
+        </div>
+
+        <div
+          class="stat-number"
+          id="totalProducts"
+        >
+          0
+        </div>
+
+        <div class="stat-desc">
+          Total produk
+        </div>
+
+      </div>
+
+
+      <!-- Transactions -->
+
+      <div class="stat-card">
+
+        <div class="stat-icon">
+          💳
+        </div>
+
+        <div class="stat-label">
+          Transactions
+        </div>
+
+        <div
+          class="stat-number"
+          id="totalTransactions"
+        >
+          0
+        </div>
+
+        <div class="stat-desc">
+          Total transaksi
         </div>
 
       </div>
@@ -1386,235 +1008,68 @@
     </section>
 
 
-    <!-- ================================
-         REVENUE + SUMMARY
-    ================================= -->
+    <!-- =========================
+         CHARTS
+    ========================== -->
 
     <section class="dashboard-grid">
 
+      <!-- Revenue Chart -->
 
-      <!-- REVENUE CHART -->
+      <div class="panel">
 
-      <div class="glass-card revenue-card">
-
-        <div class="card-header">
+        <div class="panel-header">
 
           <div>
-
-            <h2 class="card-title">
+            <h2 class="panel-title">
               Revenue Overview
             </h2>
 
-            <p class="card-description">
-              Performa revenue berdasarkan data transaksi
-            </p>
-
+            <div class="panel-subtitle">
+              Revenue berdasarkan subscription yang dibuat per bulan
+            </div>
           </div>
 
-
-          <select
-            class="period-select"
-            id="revenuePeriod"
-          >
-
-            <option value="7">
-              7 Hari
-            </option>
-
-            <option value="30" selected>
-              30 Hari
-            </option>
-
-            <option value="90">
-              90 Hari
-            </option>
-
-          </select>
-
-        </div>
-
-
-        <div class="revenue-summary">
-
-          <div
-            class="revenue-total"
-            id="chartRevenueTotal"
-          >
-            Rp 0
-          </div>
-
-          <div
-            class="revenue-change"
-            id="revenueChange"
-          >
-            --
+          <div class="panel-badge">
+            SUBSCRIPTIONS
           </div>
 
         </div>
 
+        <div class="chart-container">
 
-        <div class="chart-wrap">
-
-          <canvas
-            id="revenueChart"
-          ></canvas>
+          <canvas id="revenueChart"></canvas>
 
         </div>
 
       </div>
 
 
-      <!-- QUICK SUMMARY -->
+      <!-- Subscription Chart -->
 
-      <div class="glass-card summary-card">
+      <div class="panel">
 
-        <div class="card-header">
+        <div class="panel-header">
 
           <div>
-
-            <h2 class="card-title">
-              Ringkasan
+            <h2 class="panel-title">
+              Subscription Status
             </h2>
 
-            <p class="card-description">
-              Kondisi sistem saat ini
-            </p>
+            <div class="panel-subtitle">
+              Kondisi subscription saat ini
+            </div>
+          </div>
 
+          <div class="panel-badge">
+            STATUS
           </div>
 
         </div>
 
+        <div class="chart-container small">
 
-        <div class="summary-list">
-
-
-          <div class="summary-item">
-
-            <div class="summary-left">
-
-              <div class="summary-icon">
-                ✓
-              </div>
-
-              <div>
-
-                <div class="summary-name">
-                  Kartu Aktif
-                </div>
-
-                <div class="summary-sub">
-                  Status aktivasi
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="summary-value"
-              id="summaryActive"
-            >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="summary-item">
-
-            <div class="summary-left">
-
-              <div class="summary-icon">
-                ◇
-              </div>
-
-              <div>
-
-                <div class="summary-name">
-                  Kartu Pending
-                </div>
-
-                <div class="summary-sub">
-                  Menunggu aktivasi
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="summary-value"
-              id="summaryPending"
-            >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="summary-item">
-
-            <div class="summary-left">
-
-              <div class="summary-icon">
-                ★
-              </div>
-
-              <div>
-
-                <div class="summary-name">
-                  Google Review
-                </div>
-
-                <div class="summary-sub">
-                  Link tersedia
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="summary-value"
-              id="summaryReview"
-            >
-              -
-            </div>
-
-          </div>
-
-
-          <div class="summary-item">
-
-            <div class="summary-left">
-
-              <div class="summary-icon">
-                ↗
-              </div>
-
-              <div>
-
-                <div class="summary-name">
-                  Aktivasi Rate
-                </div>
-
-                <div class="summary-sub">
-                  Rasio kartu aktif
-                </div>
-
-              </div>
-
-            </div>
-
-            <div
-              class="summary-value"
-              id="summaryRate"
-            >
-              -
-            </div>
-
-          </div>
-
+          <canvas id="subscriptionChart"></canvas>
 
         </div>
 
@@ -1623,148 +1078,75 @@
     </section>
 
 
-    <!-- ================================
-         RECENT ACTIVITY
-    ================================= -->
+    <!-- =========================
+         SUBSCRIPTIONS TABLE
+    ========================== -->
 
-    <section class="glass-card activity-card">
-
-      <div class="card-header">
-
-        <div>
-
-          <h2 class="card-title">
-            Aktivitas Terbaru
-          </h2>
-
-          <p class="card-description">
-            Aktivitas terbaru pada sistem ALJAVA
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <div
-        class="activity-list"
-        id="activityList"
-      >
-
-        <div class="activity">
-
-          <div class="activity-top">
-
-            <div class="activity-dot"></div>
-
-            <div class="activity-title">
-              Sistem siap
-            </div>
-
-          </div>
-
-          <div class="activity-text">
-            Menunggu data aktivitas dari Supabase.
-          </div>
-
-          <div class="activity-time">
-            Sekarang
-          </div>
-
-        </div>
-
-
-        <div class="activity">
-
-          <div class="activity-top">
-
-            <div class="activity-dot"></div>
-
-            <div class="activity-title">
-              Dashboard
-            </div>
-
-          </div>
-
-          <div class="activity-text">
-            Dashboard berhasil dimuat.
-          </div>
-
-          <div class="activity-time">
-            Sekarang
-          </div>
-
-        </div>
-
-
-        <div class="activity">
-
-          <div class="activity-top">
-
-            <div class="activity-dot"></div>
-
-            <div class="activity-title">
-              Database
-            </div>
-
-          </div>
-
-          <div class="activity-text">
-            Menunggu sinkronisasi data.
-          </div>
-
-          <div class="activity-time">
-            Sekarang
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ================================
-         CARD TABLE
-    ================================= -->
-
-    <section class="glass-card table-card">
+    <section class="table-card">
 
       <div class="table-header">
 
         <div>
 
-          <h2 class="table-title">
-            Data Kartu
+          <h2>
+            Subscription Terbaru
           </h2>
 
-          <p class="table-subtitle">
-            Daftar kartu dan status pelanggan
-          </p>
+          <div class="panel-subtitle">
+            Data subscription terbaru dari database
+          </div>
 
         </div>
 
-
-        <button
-          class="refresh-button"
-          id="refreshButton"
-        >
-          ↻ Refresh Data
-        </button>
-
       </div>
 
-
-      <div id="tableContent">
+      <div id="subscriptionTable">
 
         <div class="loading">
-          Memuat data...
+          Memuat subscription...
         </div>
 
       </div>
 
     </section>
 
+
+    <!-- =========================
+         CARDS TABLE
+    ========================== -->
+
+    <section class="table-card">
+
+      <div class="table-header">
+
+        <div>
+
+          <h2>
+            Data Kartu
+          </h2>
+
+          <div class="panel-subtitle">
+            Daftar kartu digital
+          </div>
+
+        </div>
+
+      </div>
+
+      <div id="cardsTable">
+
+        <div class="loading">
+          Memuat kartu...
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
 
     <footer>
       © 2026 ALJAVA TERIONITY • Digital Solution
@@ -1773,19 +1155,11 @@
   </main>
 
 
-  <!--
-    Chart.js
-    Dipakai hanya untuk grafik revenue.
-  -->
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-
   <script>
 
-    /* =====================================
-       SUPABASE
-    ===================================== */
+    /* =====================================================
+       SUPABASE CONFIG
+    ===================================================== */
 
     const SUPABASE_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co";
@@ -1794,9 +1168,9 @@
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
 
-    /* =====================================
-       LOGIN
-    ===================================== */
+    /* =====================================================
+       AUTH
+    ===================================================== */
 
     const accessToken =
       localStorage.getItem(
@@ -1817,9 +1191,9 @@
     }
 
 
-    /* =====================================
-       USER
-    ===================================== */
+    /* =====================================================
+       ADMIN EMAIL
+    ===================================================== */
 
     if (storedUser) {
 
@@ -1851,28 +1225,22 @@
     }
 
 
-    /* =====================================
-       DATE
-    ===================================== */
+    /* =====================================================
+       CHART VARIABLES
+    ===================================================== */
 
-    document.getElementById(
-      "currentDate"
-    ).textContent =
-      new Intl.DateTimeFormat(
-        "id-ID",
-        {
-          dateStyle: "full"
-        }
-      ).format(
-        new Date()
-      );
+    let revenueChart = null;
+    let subscriptionChart = null;
 
 
-    /* =====================================
+    /* =====================================================
        FORMAT RUPIAH
-    ===================================== */
+    ===================================================== */
 
     function formatRupiah(value) {
+
+      const number =
+        Number(value) || 0;
 
       return new Intl.NumberFormat(
         "id-ID",
@@ -1881,6 +1249,19 @@
           currency: "IDR",
           maximumFractionDigits: 0
         }
+      ).format(number);
+
+    }
+
+
+    /* =====================================================
+       FORMAT NUMBER
+    ===================================================== */
+
+    function formatNumber(value) {
+
+      return new Intl.NumberFormat(
+        "id-ID"
       ).format(
         Number(value) || 0
       );
@@ -1888,701 +1269,511 @@
     }
 
 
-    /* =====================================
-       LOAD CARDS
-    ===================================== */
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
 
-    async function loadCards() {
+    function escapeHtml(value) {
 
-      const tableContent =
-        document.getElementById(
-          "tableContent"
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    /* =====================================================
+       SUPABASE FETCH
+    ===================================================== */
+
+    async function supabaseFetch(
+      table,
+      query = ""
+    ) {
+
+      const response =
+        await fetch(
+          SUPABASE_URL +
+          "/rest/v1/" +
+          table +
+          query,
+          {
+            method: "GET",
+
+            headers: {
+
+              "apikey":
+                SUPABASE_KEY,
+
+              "Authorization":
+                "Bearer " +
+                accessToken,
+
+              "Content-Type":
+                "application/json"
+
+            }
+
+          }
         );
 
 
-      tableContent.innerHTML =
-        '<div class="loading">Memuat data...</div>';
+      const data =
+        await response.json();
 
+
+      if (!response.ok) {
+
+        throw new Error(
+          data.message ||
+          data.hint ||
+          (
+            "Gagal mengambil data " +
+            table
+          )
+        );
+
+      }
+
+
+      return data;
+
+    }
+
+
+    /* =====================================================
+       LOAD ALL DATA
+    ===================================================== */
+
+    async function loadDashboard() {
 
       try {
 
-        const response =
-          await fetch(
-            SUPABASE_URL +
-            "/rest/v1/cards?select=*&order=card_code.asc",
-            {
-
-              method: "GET",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken,
-
-                "Content-Type":
-                  "application/json"
-
-              }
-
-            }
-          );
+        document.getElementById(
+          "refreshButton"
+        ).textContent =
+          "⟳ Memuat...";
 
 
-        const data =
-          await response.json();
+        /*
+         * Mengambil semua tabel
+         */
+
+        const results =
+          await Promise.all([
+
+            supabaseFetch(
+              "cards",
+              "?select=*&order=created_at.desc"
+            ),
+
+            supabaseFetch(
+              "customers",
+              "?select=*&order=created_at.desc"
+            ),
+
+            supabaseFetch(
+              "Product",
+              "?select=*&order=created_at.desc"
+            ),
+
+            supabaseFetch(
+              "Sales",
+              "?select=*&order=created_at.desc"
+            ),
+
+            supabaseFetch(
+              "Subscriptions",
+              "?select=*&order=created_at.desc"
+            )
+
+          ]);
 
 
-        if (!response.ok) {
+        const cards =
+          results[0] || [];
 
-          throw new Error(
-            data.message ||
-            data.hint ||
-            "Gagal mengambil data."
-          );
+        const customers =
+          results[1] || [];
 
-        }
+        const products =
+          results[2] || [];
+
+        const sales =
+          results[3] || [];
+
+        const subscriptions =
+          results[4] || [];
 
 
-        renderCards(data);
+        /*
+         * Render dashboard
+         */
+
+        updateStats(
+          cards,
+          customers,
+          products,
+          sales,
+          subscriptions
+        );
+
+
+        renderRevenueChart(
+          subscriptions
+        );
+
+
+        renderSubscriptionChart(
+          subscriptions
+        );
+
+
+        renderSubscriptionTable(
+          subscriptions,
+          customers
+        );
+
+
+        renderCardsTable(
+          cards
+        );
+
 
       }
 
       catch (error) {
 
         console.error(
-          "LOAD CARDS ERROR:",
+          "DASHBOARD ERROR:",
           error
         );
 
 
-        tableContent.innerHTML =
-          '<div class="error">' +
-          "❌ Gagal mengambil data: " +
-          escapeHtml(
-            error.message
-          ) +
-          "</div>";
+        showGlobalError(
+          error.message
+        );
 
       }
 
-    }
+      finally {
 
-
-    /* =====================================
-       RENDER CARDS
-    ===================================== */
-
-    function renderCards(cards) {
-
-      const tableContent =
         document.getElementById(
-          "tableContent"
-        );
-
-
-      const total =
-        cards.length;
-
-
-      const active =
-        cards.filter(
-          card =>
-            String(
-              card.status || ""
-            ).toLowerCase() ===
-            "active"
-        ).length;
-
-
-      const pending =
-        cards.filter(
-          card =>
-            String(
-              card.status || ""
-            ).toLowerCase() ===
-            "pending"
-        ).length;
-
-
-      const review =
-        cards.filter(
-          card =>
-            Boolean(
-              card.google_review_url
-            )
-        ).length;
-
-
-      const rate =
-        total > 0
-          ? (
-              active /
-              total *
-              100
-            ).toFixed(1)
-          : 0;
-
-
-      /* STAT */
-
-      document.getElementById(
-        "totalCards"
-      ).textContent =
-        total;
-
-
-      document.getElementById(
-        "activeCards"
-      ).textContent =
-        active;
-
-
-      document.getElementById(
-        "totalCustomers"
-      ).textContent =
-        new Set(
-          cards
-            .map(
-              card =>
-                String(
-                  card.business_name || ""
-                ).trim()
-            )
-            .filter(Boolean)
-        ).size;
-
-
-      document.getElementById(
-        "activePercentage"
-      ).textContent =
-        rate + "%";
-
-
-      /* SUMMARY */
-
-      document.getElementById(
-        "summaryActive"
-      ).textContent =
-        active;
-
-
-      document.getElementById(
-        "summaryPending"
-      ).textContent =
-        pending;
-
-
-      document.getElementById(
-        "summaryReview"
-      ).textContent =
-        review;
-
-
-      document.getElementById(
-        "summaryRate"
-      ).textContent =
-        rate + "%";
-
-
-      /* TABLE */
-
-      if (!cards.length) {
-
-        tableContent.innerHTML =
-          '<div class="empty">' +
-          "Belum ada data kartu." +
-          "</div>";
-
-        return;
+          "refreshButton"
+        ).textContent =
+          "↻ Refresh";
 
       }
-
-
-      let html = "";
-
-
-      html +=
-        '<div class="table-wrapper">';
-
-
-      html +=
-        "<table>";
-
-
-      html +=
-        "<thead>";
-
-
-      html +=
-        "<tr>" +
-        "<th>Kode Kartu</th>" +
-        "<th>Nama Bisnis</th>" +
-        "<th>Pemilik</th>" +
-        "<th>WhatsApp</th>" +
-        "<th>Status</th>" +
-        "<th>Google Review</th>" +
-        "</tr>";
-
-
-      html +=
-        "</thead>";
-
-
-      html +=
-        "<tbody>";
-
-
-      cards.forEach(
-        card => {
-
-          const status =
-            String(
-              card.status ||
-              "-"
-            );
-
-
-          let statusClass =
-            "status-other";
-
-
-          if (
-            status.toLowerCase() ===
-            "active"
-          ) {
-
-            statusClass =
-              "status-active";
-
-          }
-
-          else if (
-            status.toLowerCase() ===
-            "pending"
-          ) {
-
-            statusClass =
-              "status-pending";
-
-          }
-
-
-          const reviewUrl =
-            card.google_review_url ||
-            "";
-
-
-          html +=
-            "<tr>";
-
-
-          html +=
-            "<td>" +
-            escapeHtml(
-              card.card_code ||
-              "-"
-            ) +
-            "</td>";
-
-
-          html +=
-            "<td>" +
-            escapeHtml(
-              card.business_name ||
-              "-"
-            ) +
-            "</td>";
-
-
-          html +=
-            "<td>" +
-            escapeHtml(
-              card.owner_name ||
-              "-"
-            ) +
-            "</td>";
-
-
-          html +=
-            "<td>" +
-            escapeHtml(
-              card.whatsapp ||
-              "-"
-            ) +
-            "</td>";
-
-
-          html +=
-            "<td>" +
-            '<span class="status ' +
-            statusClass +
-            '">' +
-            escapeHtml(
-              status
-            ) +
-            "</span>" +
-            "</td>";
-
-
-          if (reviewUrl) {
-
-            html +=
-              "<td>" +
-              '<a ' +
-              'class="review-link" ' +
-              'href="' +
-              escapeAttribute(
-                reviewUrl
-              ) +
-              '" ' +
-              'target="_blank" ' +
-              'rel="noopener">' +
-              "Buka Review" +
-              "</a>" +
-              "</td>";
-
-          }
-
-          else {
-
-            html +=
-              "<td>-</td>";
-
-          }
-
-
-          html +=
-            "</tr>";
-
-        }
-      );
-
-
-      html +=
-        "</tbody>";
-
-
-      html +=
-        "</table>";
-
-
-      html +=
-        "</div>";
-
-
-      tableContent.innerHTML =
-        html;
 
     }
 
 
-    /* =====================================
-       REVENUE
-       
-       PENTING:
-       Revenue belum bisa dihitung dari
-       tabel cards karena kode sebelumnya
-       tidak mempunyai field transaksi/revenue.
+    /* =====================================================
+       UPDATE STATISTICS
+    ===================================================== */
 
-       Fungsi ini mencoba mengambil data
-       dari tabel "transactions".
+    function updateStats(
+      cards,
+      customers,
+      products,
+      sales,
+      subscriptions
+    ) {
 
-       Jika tabel tersebut belum ada,
-       revenue tetap Rp 0.
-    ===================================== */
+      /*
+       * TOTAL REVENUE
+       *
+       * Diambil dari subscriptions.amount
+       */
 
-    async function loadRevenue() {
+      const totalRevenue =
+        subscriptions.reduce(
+          (
+            total,
+            subscription
+          ) => {
 
-      try {
-
-        const response =
-          await fetch(
-            SUPABASE_URL +
-            "/rest/v1/transactions?select=*",
-            {
-
-              method: "GET",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Authorization":
-                  "Bearer " +
-                  accessToken,
-
-                "Content-Type":
-                  "application/json"
-
-              }
-
-            }
-          );
-
-
-        if (!response.ok) {
-
-          console.warn(
-            "Tabel transactions belum tersedia."
-          );
-
-          setRevenue(
-            [],
-            0
-          );
-
-          return;
-
-        }
-
-
-        const transactions =
-          await response.json();
-
-
-        const normalized =
-          transactions
-            .map(
-              item => {
-
-                const amount =
-                  Number(
-                    item.amount ??
-                    item.revenue ??
-                    item.total ??
-                    0
-                  );
-
-
-                const date =
-                  item.created_at ??
-                  item.date ??
-                  item.transaction_date ??
-                  null;
-
-
-                return {
-                  amount,
-                  date
-                };
-
-              }
-            )
-            .filter(
-              item =>
-                item.amount > 0 &&
-                item.date
+            return (
+              total +
+              Number(
+                subscription.amount
+              || 0
+              )
             );
 
-
-        const total =
-          normalized.reduce(
-            (
-              sum,
-              item
-            ) =>
-              sum +
-              item.amount,
-            0
-          );
-
-
-        setRevenue(
-          normalized,
-          total
-        );
-
-      }
-
-      catch (error) {
-
-        console.warn(
-          "Revenue belum tersedia:",
-          error
-        );
-
-        setRevenue(
-          [],
+          },
           0
         );
 
-      }
 
-    }
+      /*
+       * ACTIVE REVENUE
+       */
+
+      const activeRevenue =
+        subscriptions
+          .filter(
+            subscription =>
+              String(
+                subscription.status ||
+                ""
+              ).toLowerCase()
+              === "active"
+          )
+          .reduce(
+            (
+              total,
+              subscription
+            ) => {
+
+              return (
+                total +
+                Number(
+                  subscription.amount
+                || 0
+                )
+              );
+
+            },
+            0
+          );
 
 
-    /* =====================================
-       REVENUE CHART
-    ===================================== */
+      /*
+       * ACTIVE CARDS
+       */
 
-    let revenueChart = null;
+      const activeCards =
+        cards.filter(
+          card =>
+            String(
+              card.status ||
+              ""
+            ).toLowerCase()
+            === "active"
+        ).length;
 
 
-    function setRevenue(
-      transactions,
-      total
-    ) {
+      /*
+       * SET STAT
+       */
 
       document.getElementById(
         "totalRevenue"
       ).textContent =
         formatRupiah(
-          total
+          totalRevenue
         );
 
 
       document.getElementById(
-        "chartRevenueTotal"
+        "activeRevenue"
       ).textContent =
         formatRupiah(
-          total
+          activeRevenue
         );
 
 
-      drawRevenueChart(
-        transactions
-      );
+      document.getElementById(
+        "totalCustomers"
+      ).textContent =
+        formatNumber(
+          customers.length
+        );
+
+
+      document.getElementById(
+        "activeCards"
+      ).textContent =
+        formatNumber(
+          activeCards
+        );
+
+
+      document.getElementById(
+        "totalProducts"
+      ).textContent =
+        formatNumber(
+          products.length
+        );
+
+
+      document.getElementById(
+        "totalTransactions"
+      ).textContent =
+        formatNumber(
+          sales.length
+        );
 
     }
 
 
-    function drawRevenueChart(
-      transactions
+    /* =====================================================
+       REVENUE CHART
+    ===================================================== */
+
+    function renderRevenueChart(
+      subscriptions
     ) {
 
-      const canvas =
-        document.getElementById(
-          "revenueChart"
+      /*
+       * 12 bulan terakhir
+       */
+
+      const months = [];
+
+      const revenue = [];
+
+
+      const now =
+        new Date();
+
+
+      for (
+        let i = 11;
+        i >= 0;
+        i--
+      ) {
+
+        const date =
+          new Date(
+            now.getFullYear(),
+            now.getMonth() - i,
+            1
+          );
+
+
+        const key =
+          date.getFullYear() +
+          "-" +
+          String(
+            date.getMonth() + 1
+          ).padStart(2, "0");
+
+
+        months.push({
+          key: key,
+          label:
+            date.toLocaleDateString(
+              "id-ID",
+              {
+                month: "short",
+                year: "2-digit"
+              }
+            )
+        });
+
+
+        revenue.push(0);
+
+      }
+
+
+      /*
+       * Masukkan subscription
+       * ke bulan masing-masing
+       */
+
+      subscriptions.forEach(
+        subscription => {
+
+          if (
+            !subscription.created_at
+          ) {
+            return;
+          }
+
+
+          const date =
+            new Date(
+              subscription.created_at
+            );
+
+
+          if (
+            Number.isNaN(
+              date.getTime()
+            )
+          ) {
+            return;
+          }
+
+
+          const key =
+            date.getFullYear() +
+            "-" +
+            String(
+              date.getMonth() + 1
+            ).padStart(2, "0");
+
+
+          const index =
+            months.findIndex(
+              month =>
+                month.key === key
+            );
+
+
+          if (index !== -1) {
+
+            revenue[index] +=
+              Number(
+                subscription.amount
+              || 0
+              );
+
+          }
+
+        }
+      );
+
+
+      const labels =
+        months.map(
+          month =>
+            month.label
         );
 
 
-      if (
-        revenueChart
-      ) {
+      if (revenueChart) {
 
         revenueChart.destroy();
 
       }
 
 
-      const days =
-        Number(
-          document.getElementById(
-            "revenuePeriod"
-          ).value
-        );
-
-
-      const labels = [];
-      const values = [];
-
-
-      for (
-        let i = days - 1;
-        i >= 0;
-        i--
-      ) {
-
-        const date =
-          new Date();
-
-
-        date.setHours(
-          0,
-          0,
-          0,
-          0
-        );
-
-
-        date.setDate(
-          date.getDate() - i
-        );
-
-
-        labels.push(
-          date.toLocaleDateString(
-            "id-ID",
-            {
-              day: "2-digit",
-              month: "short"
-            }
-          )
-        );
-
-
-        const key =
-          date
-            .toISOString()
-            .slice(
-              0,
-              10
-            );
-
-
-        const dayRevenue =
-          transactions
-            .filter(
-              item => {
-
-                return (
-                  item.date
-                    .slice(
-                      0,
-                      10
-                    ) ===
-                  key
-                );
-
-              }
-            )
-            .reduce(
-              (
-                sum,
-                item
-              ) =>
-                sum +
-                item.amount,
-              0
-            );
-
-
-        values.push(
-          dayRevenue
-        );
-
-      }
-
-
       const ctx =
-        canvas.getContext(
-          "2d"
-        );
+        document
+          .getElementById(
+            "revenueChart"
+          )
+          .getContext("2d");
 
+
+      /*
+       * Gradient
+       */
 
       const gradient =
         ctx.createLinearGradient(
           0,
           0,
           0,
-          270
+          320
         );
 
 
       gradient.addColorStop(
         0,
-        "rgba(37,228,255,.32)"
+        "rgba(37,228,255,0.40)"
       );
-
 
       gradient.addColorStop(
         1,
-        "rgba(22,140,255,0)"
+        "rgba(37,228,255,0.01)"
       );
 
 
@@ -2590,46 +1781,39 @@
         new Chart(
           ctx,
           {
-
             type: "line",
 
             data: {
 
-              labels,
+              labels: labels,
 
               datasets: [
 
                 {
-
                   label:
                     "Revenue",
 
                   data:
-                    values,
+                    revenue,
 
                   borderColor:
-                    "#25e4ff",
+                    "#35e7ff",
 
                   backgroundColor:
                     gradient,
 
-                  borderWidth:
-                    2,
+                  borderWidth: 2,
 
-                  fill:
-                    true,
+                  fill: true,
 
-                  tension:
-                    .42,
+                  tension: 0.4,
 
-                  pointRadius:
-                    2,
+                  pointRadius: 3,
 
-                  pointHoverRadius:
-                    5,
+                  pointHoverRadius: 6,
 
                   pointBackgroundColor:
-                    "#25e4ff",
+                    "#35e7ff",
 
                   pointBorderColor:
                     "#ffffff",
@@ -2645,8 +1829,7 @@
 
             options: {
 
-              responsive:
-                true,
+              responsive: true,
 
               maintainAspectRatio:
                 false,
@@ -2664,17 +1847,19 @@
               plugins: {
 
                 legend: {
+
                   display:
                     false
+
                 },
 
                 tooltip: {
 
                   backgroundColor:
-                    "rgba(1,8,35,.94)",
+                    "rgba(1,8,35,0.95)",
 
                   borderColor:
-                    "rgba(37,228,255,.3)",
+                    "rgba(53,231,255,0.35)",
 
                   borderWidth:
                     1,
@@ -2683,22 +1868,20 @@
                     "#ffffff",
 
                   bodyColor:
-                    "#bfefff",
+                    "#35e7ff",
 
                   padding:
-                    11,
+                    12,
 
                   callbacks: {
 
                     label:
-                      function(
-                        context
-                      ) {
+                      function(context) {
 
                         return (
-                          " " +
+                          "Revenue: " +
                           formatRupiah(
-                            context.parsed.y
+                            context.raw
                           )
                         );
 
@@ -2716,23 +1899,21 @@
 
                   grid: {
 
-                    display:
-                      false
+                    color:
+                      "rgba(100,180,220,0.08)"
 
                   },
 
                   ticks: {
 
                     color:
-                      "#6f8ba2",
+                      "#7896aa",
 
                     font: {
-                      size:
-                        9
-                    },
 
-                    maxTicksLimit:
-                      8
+                      size: 9
+
+                    }
 
                   }
 
@@ -2746,65 +1927,25 @@
                   grid: {
 
                     color:
-                      "rgba(100,170,220,.08)"
+                      "rgba(100,180,220,0.08)"
 
                   },
 
                   ticks: {
 
                     color:
-                      "#6f8ba2",
+                      "#7896aa",
 
                     font: {
-                      size:
-                        9
+
+                      size: 9
+
                     },
 
                     callback:
-                      function(
-                        value
-                      ) {
+                      function(value) {
 
-                        if (
-                          value >=
-                          1000000
-                        ) {
-
-                          return (
-                            "Rp " +
-                            (
-                              value /
-                              1000000
-                            ).toFixed(
-                              1
-                            ) +
-                            "jt"
-                          );
-
-                        }
-
-
-                        if (
-                          value >=
-                          1000
-                        ) {
-
-                          return (
-                            "Rp " +
-                            (
-                              value /
-                              1000
-                            ).toFixed(
-                              0
-                            ) +
-                            "rb"
-                          );
-
-                        }
-
-
-                        return (
-                          "Rp " +
+                        return formatCompactRupiah(
                           value
                         );
 
@@ -2821,100 +1962,837 @@
           }
         );
 
-
-      const chartTotal =
-        values.reduce(
-          (
-            sum,
-            value
-          ) =>
-            sum +
-            value,
-          0
-        );
-
-
-      document.getElementById(
-        "chartRevenueTotal"
-      ).textContent =
-        formatRupiah(
-          chartTotal
-        );
-
-
-      document.getElementById(
-        "revenueChange"
-      ).textContent =
-        transactions.length
-          ? "● Data tersedia"
-          : "○ Belum ada transaksi";
-
     }
 
 
-    /* =====================================
-       ESCAPE
-    ===================================== */
+    /* =====================================================
+       COMPACT RUPIAH
+    ===================================================== */
 
-    function escapeHtml(
+    function formatCompactRupiah(
       value
     ) {
 
-      return String(
-        value
-      )
+      const number =
+        Number(value) || 0;
 
-        .replace(
-          /&/g,
-          "&amp;"
-        )
 
-        .replace(
-          /</g,
-          "&lt;"
-        )
+      if (number >= 1000000000) {
 
-        .replace(
-          />/g,
-          "&gt;"
-        )
+        return (
+          "Rp " +
+          (
+            number / 1000000000
+          ).toFixed(1) +
+          " M"
+        );
 
-        .replace(
-          /"/g,
-          "&quot;"
-        )
+      }
 
-        .replace(
-          /'/g,
-          "&#039;"
+
+      if (number >= 1000000) {
+
+        return (
+          "Rp " +
+          (
+            number / 1000000
+          ).toFixed(1) +
+          " jt"
+        );
+
+      }
+
+
+      if (number >= 1000) {
+
+        return (
+          "Rp " +
+          (
+            number / 1000
+          ).toFixed(0) +
+          " rb"
+        );
+
+      }
+
+
+      return (
+        "Rp " +
+        number
+      );
+
+    }
+
+
+    /* =====================================================
+       SUBSCRIPTION STATUS CHART
+    ===================================================== */
+
+    function renderSubscriptionChart(
+      subscriptions
+    ) {
+
+      const counts = {
+
+        active: 0,
+
+        pending: 0,
+
+        expired: 0,
+
+        other: 0
+
+      };
+
+
+      subscriptions.forEach(
+        subscription => {
+
+          const status =
+            String(
+              subscription.status ||
+              "other"
+            ).toLowerCase();
+
+
+          if (
+            status === "active"
+          ) {
+
+            counts.active++;
+
+          }
+
+          else if (
+            status === "pending"
+          ) {
+
+            counts.pending++;
+
+          }
+
+          else if (
+            status === "expired"
+          ) {
+
+            counts.expired++;
+
+          }
+
+          else {
+
+            counts.other++;
+
+          }
+
+        }
+      );
+
+
+      if (subscriptionChart) {
+
+        subscriptionChart.destroy();
+
+      }
+
+
+      const ctx =
+        document
+          .getElementById(
+            "subscriptionChart"
+          )
+          .getContext("2d");
+
+
+      subscriptionChart =
+        new Chart(
+          ctx,
+          {
+            type: "doughnut",
+
+            data: {
+
+              labels: [
+
+                "Active",
+
+                "Pending",
+
+                "Expired",
+
+                "Other"
+
+              ],
+
+              datasets: [
+
+                {
+
+                  data: [
+
+                    counts.active,
+
+                    counts.pending,
+
+                    counts.expired,
+
+                    counts.other
+
+                  ],
+
+                  backgroundColor: [
+
+                    "#35e7ff",
+
+                    "#ffc857",
+
+                    "#ff5575",
+
+                    "#7d8da0"
+
+                  ],
+
+                  borderColor:
+                    "#031b46",
+
+                  borderWidth:
+                    4
+
+                }
+
+              ]
+
+            },
+
+            options: {
+
+              responsive: true,
+
+              maintainAspectRatio:
+                false,
+
+              cutout:
+                "68%",
+
+              plugins: {
+
+                legend: {
+
+                  position:
+                    "bottom",
+
+                  labels: {
+
+                    color:
+                      "#a9c2d4",
+
+                    padding:
+                      15,
+
+                    font: {
+
+                      size: 10
+
+                    },
+
+                    usePointStyle:
+                      true
+
+                  }
+
+                },
+
+                tooltip: {
+
+                  backgroundColor:
+                    "rgba(1,8,35,0.95)",
+
+                  padding:
+                    10
+
+                }
+
+              }
+
+            }
+
+          }
         );
 
     }
 
+
+    /* =====================================================
+       SUBSCRIPTION TABLE
+    ===================================================== */
+
+    function renderSubscriptionTable(
+      subscriptions,
+      customers
+    ) {
+
+      const container =
+        document.getElementById(
+          "subscriptionTable"
+        );
+
+
+      if (
+        !subscriptions.length
+      ) {
+
+        container.innerHTML =
+          `
+          <div class="empty">
+            Belum ada data subscription.
+          </div>
+          `;
+
+        return;
+
+      }
+
+
+      /*
+       * Ambil maksimal 10 terbaru
+       */
+
+      const latest =
+        subscriptions.slice(
+          0,
+          10
+        );
+
+
+      let html = "";
+
+
+      html +=
+        `<div class="table-wrapper">`;
+
+      html +=
+        `<table>`;
+
+      html +=
+        `<thead>`;
+
+      html +=
+        `<tr>
+          <th>ID</th>
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Mulai</th>
+          <th>Berakhir</th>
+          <th>Amount</th>
+          <th>Dibuat</th>
+        </tr>`;
+
+      html +=
+        `</thead>`;
+
+      html +=
+        `<tbody>`;
+
+
+      latest.forEach(
+        subscription => {
+
+          const status =
+            String(
+              subscription.status ||
+              "-"
+            );
+
+
+          let statusClass =
+            "status-other";
+
+
+          if (
+            status.toLowerCase()
+            === "active"
+          ) {
+
+            statusClass =
+              "status-active";
+
+          }
+
+          else if (
+            status.toLowerCase()
+            === "pending"
+          ) {
+
+            statusClass =
+              "status-pending";
+
+          }
+
+
+          const customer =
+            customers.find(
+              customer =>
+                customer.id ===
+                subscription.customer_id
+            );
+
+
+          const customerName =
+            customer
+              ? (
+                customer.business_name ||
+                customer.owner_name ||
+                customer.email ||
+                "-"
+              )
+              : (
+                subscription.customer_id ||
+                "-"
+              );
+
+
+          html +=
+            `<tr>`;
+
+
+          html +=
+            `<td>
+              ${escapeHtml(
+                shortId(
+                  subscription.id
+                )
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${escapeHtml(
+                customerName
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              <span class="status ${statusClass}">
+                ${escapeHtml(status)}
+              </span>
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDate(
+                subscription.start_date
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDate(
+                subscription.end_date
+              )}
+            </td>`;
+
+
+          html +=
+            `<td class="money">
+              ${formatRupiah(
+                subscription.amount
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDateTime(
+                subscription.created_at
+              )}
+            </td>`;
+
+
+          html +=
+            `</tr>`;
+
+        }
+      );
+
+
+      html +=
+        `</tbody>`;
+
+      html +=
+        `</table>`;
+
+      html +=
+        `</div>`;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =====================================================
+       CARDS TABLE
+    ===================================================== */
+
+    function renderCardsTable(
+      cards
+    ) {
+
+      const container =
+        document.getElementById(
+          "cardsTable"
+        );
+
+
+      if (!cards.length) {
+
+        container.innerHTML =
+          `
+          <div class="empty">
+            Belum ada data kartu.
+          </div>
+          `;
+
+        return;
+
+      }
+
+
+      const latest =
+        cards.slice(
+          0,
+          15
+        );
+
+
+      let html = "";
+
+
+      html +=
+        `<div class="table-wrapper">`;
+
+      html +=
+        `<table>`;
+
+      html +=
+        `<thead>`;
+
+      html +=
+        `<tr>
+          <th>Kode Kartu</th>
+          <th>Status</th>
+          <th>Product Type</th>
+          <th>Customer ID</th>
+          <th>Aktif</th>
+          <th>Expired</th>
+          <th>Dibuat</th>
+          <th>Google Review</th>
+        </tr>`;
+
+      html +=
+        `</thead>`;
+
+      html +=
+        `<tbody>`;
+
+
+      latest.forEach(
+        card => {
+
+          const status =
+            String(
+              card.status ||
+              "-"
+            );
+
+
+          let statusClass =
+            "status-other";
+
+
+          if (
+            status.toLowerCase()
+            === "active"
+          ) {
+
+            statusClass =
+              "status-active";
+
+          }
+
+          else if (
+            status.toLowerCase()
+            === "pending"
+          ) {
+
+            statusClass =
+              "status-pending";
+
+          }
+
+
+          const reviewUrl =
+            card.google_review_url ||
+            "";
+
+
+          html +=
+            `<tr>`;
+
+
+          html +=
+            `<td>
+              <strong>
+                ${escapeHtml(
+                  card.card_code ||
+                  "-"
+                )}
+              </strong>
+            </td>`;
+
+
+          html +=
+            `<td>
+              <span class="status ${statusClass}">
+                ${escapeHtml(status)}
+              </span>
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${escapeHtml(
+                card.product_type ||
+                "-"
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${escapeHtml(
+                shortId(
+                  card.customer_id
+                )
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDate(
+                card.activated_at
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDate(
+                card.expires_at
+              )}
+            </td>`;
+
+
+          html +=
+            `<td>
+              ${formatDateTime(
+                card.created_at
+              )}
+            </td>`;
+
+
+          if (reviewUrl) {
+
+            html +=
+              `<td>
+                <a
+                  class="review-link"
+                  href="${escapeAttribute(
+                    reviewUrl
+                  )}"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  Buka Review
+                </a>
+              </td>`;
+
+          }
+
+          else {
+
+            html +=
+              `<td>-</td>`;
+
+          }
+
+
+          html +=
+            `</tr>`;
+
+        }
+      );
+
+
+      html +=
+        `</tbody>`;
+
+      html +=
+        `</table>`;
+
+      html +=
+        `</div>`;
+
+
+      container.innerHTML =
+        html;
+
+    }
+
+
+    /* =====================================================
+       DATE FORMAT
+    ===================================================== */
+
+    function formatDate(
+      value
+    ) {
+
+      if (!value) {
+        return "-";
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return "-";
+
+      }
+
+
+      return date.toLocaleDateString(
+        "id-ID",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       DATETIME FORMAT
+    ===================================================== */
+
+    function formatDateTime(
+      value
+    ) {
+
+      if (!value) {
+        return "-";
+      }
+
+
+      const date =
+        new Date(value);
+
+
+      if (
+        Number.isNaN(
+          date.getTime()
+        )
+      ) {
+
+        return "-";
+
+      }
+
+
+      return date.toLocaleDateString(
+        "id-ID",
+        {
+          day: "2-digit",
+          month: "short",
+          year: "numeric"
+        }
+      );
+
+    }
+
+
+    /* =====================================================
+       SHORT UUID
+    ===================================================== */
+
+    function shortId(
+      value
+    ) {
+
+      if (!value) {
+        return "-";
+      }
+
+
+      const text =
+        String(value);
+
+
+      if (text.length <= 12) {
+        return text;
+      }
+
+
+      return (
+        text.substring(0, 8) +
+        "..." +
+        text.substring(
+          text.length - 4
+        )
+      );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE ATTRIBUTE
+    ===================================================== */
 
     function escapeAttribute(
       value
     ) {
 
       return String(
-        value
+        value ?? ""
       )
-
         .replace(
           /&/g,
           "&amp;"
         )
-
         .replace(
           /"/g,
           "&quot;"
         )
-
         .replace(
           /</g,
           "&lt;"
         )
-
         .replace(
           />/g,
           "&gt;"
@@ -2923,17 +2801,41 @@
     }
 
 
-    /* =====================================
-       REFRESH
-    ===================================== */
+    /* =====================================================
+       GLOBAL ERROR
+    ===================================================== */
 
-    function refreshDashboard() {
+    function showGlobalError(
+      message
+    ) {
 
-      loadCards();
-      loadRevenue();
+      const html =
+        `
+        <div class="error">
+          ❌ Gagal memuat dashboard:
+          <br><br>
+          ${escapeHtml(message)}
+        </div>
+        `;
+
+
+      document.getElementById(
+        "subscriptionTable"
+      ).innerHTML =
+        html;
+
+
+      document.getElementById(
+        "cardsTable"
+      ).innerHTML =
+        html;
 
     }
 
+
+    /* =====================================================
+       REFRESH
+    ===================================================== */
 
     document
       .getElementById(
@@ -2941,33 +2843,13 @@
       )
       .addEventListener(
         "click",
-        refreshDashboard
+        loadDashboard
       );
 
 
-    document
-      .getElementById(
-        "refreshTop"
-      )
-      .addEventListener(
-        "click",
-        refreshDashboard
-      );
-
-
-    document
-      .getElementById(
-        "revenuePeriod"
-      )
-      .addEventListener(
-        "change",
-        loadRevenue
-      );
-
-
-    /* =====================================
+    /* =====================================================
        LOGOUT
-    ===================================== */
+    ===================================================== */
 
     document
       .getElementById(
@@ -2997,15 +2879,13 @@
       );
 
 
-    /* =====================================
+    /* =====================================================
        START
-    ===================================== */
+    ===================================================== */
 
     if (accessToken) {
 
-      loadCards();
-
-      loadRevenue();
+      loadDashboard();
 
     }
 
