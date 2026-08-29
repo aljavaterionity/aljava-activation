@@ -443,13 +443,20 @@
         Masuk untuk mengakses Dashboard ALJAVA TERIONITY.
       </p>
 
-      <div id="errorBox" class="error-box"></div>
+      <div
+        id="errorBox"
+        class="error-box"
+      ></div>
 
-      <div id="successBox" class="success-box"></div>
+      <div
+        id="successBox"
+        class="success-box"
+      ></div>
 
       <form id="loginForm">
 
         <div class="form-group">
+
           <label for="email">
             Email
           </label>
@@ -461,9 +468,11 @@
             autocomplete="email"
             required
           >
+
         </div>
 
         <div class="form-group">
+
           <label for="password">
             Password
           </label>
@@ -475,6 +484,7 @@
             autocomplete="current-password"
             required
           >
+
         </div>
 
         <button
@@ -539,7 +549,8 @@
 
 
         loginButton.disabled = true;
-        loginButton.textContent = "Memproses...";
+        loginButton.textContent =
+          "Memproses...";
 
 
         try {
@@ -615,7 +626,6 @@
             },
             500
           );
-
 
         }
         catch (error) {
