@@ -392,24 +392,21 @@
       text-decoration: underline;
     }
 
-    .empty {
-      padding: 45px 20px;
-
-      text-align: center;
-
-      color: var(--muted);
-
-      font-size: 13px;
-    }
-
+    .empty,
     .loading {
       padding: 45px 20px;
 
       text-align: center;
 
-      color: #35e7ff;
-
       font-size: 13px;
+    }
+
+    .empty {
+      color: var(--muted);
+    }
+
+    .loading {
+      color: #35e7ff;
     }
 
     .error {
@@ -506,6 +503,7 @@
     <header class="topbar">
 
       <div>
+
         <div class="brand-name">
           ALJAVA TERIONITY
         </div>
@@ -513,6 +511,7 @@
         <div class="brand-sub">
           Admin Dashboard
         </div>
+
       </div>
 
       <button
@@ -648,9 +647,9 @@
 
 
     /*
-     * =========================================
+     * =====================================================
      * CEK LOGIN
-     * =========================================
+     * =====================================================
      */
 
     if (!accessToken) {
@@ -662,9 +661,9 @@
 
 
     /*
-     * =========================================
-     * TAMPILKAN EMAIL ADMIN
-     * =========================================
+     * =====================================================
+     * EMAIL ADMIN
+     * =====================================================
      */
 
     if (storedUser) {
@@ -697,12 +696,9 @@
 
 
     /*
-     * =========================================
+     * =====================================================
      * LOAD DATA
-     *
-     * GANTI "cards" kalau nama tabel
-     * Supabase lu berbeda.
-     * =========================================
+     * =====================================================
      */
 
     async function loadCards() {
@@ -711,6 +707,7 @@
         document.getElementById(
           "tableContent"
         );
+
 
       tableContent.innerHTML =
         '<div class="loading">Memuat data...</div>';
@@ -721,7 +718,7 @@
         const response =
           await fetch(
             SUPABASE_URL +
-            "/rest/v1/cards?select=*",
+            "/rest/v1/cards?select=*&order=card_code.asc",
             {
               method: "GET",
 
@@ -779,9 +776,9 @@
 
 
     /*
-     * =========================================
-     * RENDER DATA
-     * =========================================
+     * =====================================================
+     * RENDER
+     * =====================================================
      */
 
     function renderCards(cards) {
@@ -948,7 +945,7 @@
 
 
           html +=
-            '<td>' +
+            "<td>" +
             '<span class="status ' +
             statusClass +
             '">' +
@@ -960,13 +957,11 @@
           if (reviewUrl) {
 
             html +=
-              '<td>' +
+              "<td>" +
               '<a ' +
               'class="review-link" ' +
               'href="' +
-              escapeAttribute(
-                reviewUrl
-              ) +
+              escapeAttribute(reviewUrl) +
               '" ' +
               'target="_blank" ' +
               'rel="noopener">' +
@@ -1007,34 +1002,19 @@
 
 
     /*
-     * =========================================
-     * ESCAPE HTML
-     * =========================================
+     * =====================================================
+     * ESCAPE
+     * =====================================================
      */
 
     function escapeHtml(value) {
 
       return String(value)
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /'/g,
-          "&#039;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
 
     }
 
@@ -1042,36 +1022,22 @@
     function escapeAttribute(value) {
 
       return String(value)
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-        .replace(
-          /</g,
-          "&lt;"
-        )
-        .replace(
-          />/g,
-          "&gt;"
-        );
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
 
     }
 
 
     /*
-     * =========================================
+     * =====================================================
      * REFRESH
-     * =========================================
+     * =====================================================
      */
 
     document
-      .getElementById(
-        "refreshButton"
-      )
+      .getElementById("refreshButton")
       .addEventListener(
         "click",
         loadCards
@@ -1079,15 +1045,13 @@
 
 
     /*
-     * =========================================
+     * =====================================================
      * LOGOUT
-     * =========================================
+     * =====================================================
      */
 
     document
-      .getElementById(
-        "logoutButton"
-      )
+      .getElementById("logoutButton")
       .addEventListener(
         "click",
         function() {
@@ -1113,13 +1077,15 @@
 
 
     /*
-     * =========================================
+     * =====================================================
      * JALANKAN
-     * =========================================
+     * =====================================================
      */
 
     if (accessToken) {
+
       loadCards();
+
     }
 
   </script>
