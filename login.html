@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Login - ALJAVA TERIONITY</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    :root {
+      --blue: #168cff;
+      --cyan: #25e4ff;
+      --bg: #010713;
+      --text: #ffffff;
+      --muted: #9db7cc;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      padding: 20px;
+
+      font-family:
+        Inter,
+        Poppins,
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      color: var(--text);
+
+      background:
+        radial-gradient(
+          ellipse at 50% 10%,
+          rgba(0, 132, 255, 0.38),
+          transparent 42%
+        ),
+        radial-gradient(
+          ellipse at 85% 35%,
+          rgba(0, 225, 255, 0.18),
+          transparent 30%
+        ),
+        linear-gradient(
+          180deg,
+          #010817 0%,
+          #031b46 48%,
+          #010713 100%
+        );
+
+      overflow: hidden;
+    }
+
+    /* BACKGROUND */
+
+    .stars {
+      position: fixed;
+      inset: 0;
+
+      background-image:
+        radial-gradient(
+          circle,
+          rgba(255,255,255,0.85) 0 1px,
+          transparent 1.5px
+        ),
+        radial-gradient(
+          circle,
+          rgba(80,215,255,0.7) 0 1px,
+          transparent 1.5px
+        );
+
+      background-size:
+        97px 83px,
+        151px 137px;
+
+      background-position:
+        8px 3px,
+        31px 42px;
+
+      opacity: 0.38;
+    }
+
+    .glow {
+      position: fixed;
+
+      width: 500px;
+      height: 500px;
+
+      right: -180px;
+      top: -100px;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0,210,255,0.35),
+          rgba(0,140,255,0.12) 40%,
+          transparent 70%
+        );
+
+      filter: blur(10px);
+    }
+
+    /* LOGIN */
+
+    .login-container {
+      position: relative;
+      z-index: 2;
+
+      width: min(100%, 420px);
+
+      animation: loginIn 0.8s ease both;
+    }
+
+    .brand {
+      text-align: center;
+
+      margin-bottom: 25px;
+    }
+
+    .brand-name {
+      display: inline-block;
+
+      font-size: 20px;
+      font-weight: 900;
+
+      letter-spacing: 3px;
+
+      background:
+        linear-gradient(
+          90deg,
+          #ffffff,
+          #35e7ff,
+          #168cff,
+          #ffffff
+        );
+
+      background-size: 250% auto;
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+
+      animation: shine 5s linear infinite;
+    }
+
+    .brand-line {
+      width: 55px;
+      height: 2px;
+
+      margin: 8px auto 0;
+
+      border-radius: 999px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          #25e4ff,
+          transparent
+        );
+
+      box-shadow:
+        0 0 12px rgba(37,228,255,0.7);
+    }
+
+    .login-card {
+      padding: 30px;
+
+      border-radius: 24px;
+
+      border:
+        1px solid rgba(55,210,255,0.55);
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(4,25,72,0.84),
+          rgba(1,8,35,0.95)
+        );
+
+      box-shadow:
+        0 0 35px rgba(0,160,255,0.22),
+        0 25px 75px rgba(0,0,0,0.6),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .login-title {
+      margin: 0;
+
+      text-align: center;
+
+      font-size: 28px;
+      font-weight: 850;
+    }
+
+    .login-title span {
+      background:
+        linear-gradient(
+          90deg,
+          #34dfff,
+          #168cff,
+          #00e5ff
+        );
+
+      -webkit-background-clip: text;
+      background-clip: text;
+
+      color: transparent;
+    }
+
+    .login-subtitle {
+      margin: 10px 0 25px;
+
+      text-align: center;
+
+      color: var(--muted);
+
+      font-size: 13px;
+
+      line-height: 1.6;
+    }
+
+    .form-group {
+      margin-bottom: 17px;
+    }
+
+    label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      color: #bfefff;
+
+      font-size: 12px;
+      font-weight: 750;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+
+      padding: 0 14px;
+
+      border:
+        1px solid rgba(100,145,190,0.45);
+
+      border-radius: 12px;
+
+      outline: none;
+
+      color: #ffffff;
+
+      background:
+        rgba(5,20,54,0.9);
+
+      font-family: inherit;
+      font-size: 14px;
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+    }
+
+    input::placeholder {
+      color: #637f96;
+    }
+
+    input:focus {
+      border-color: #25ddff;
+
+      box-shadow:
+        0 0 0 3px rgba(0,190,255,0.10),
+        0 0 20px rgba(0,170,255,0.18);
+    }
+
+    .login-button {
+      width: 100%;
+      height: 50px;
+
+      margin-top: 5px;
+
+      border: 0;
+      border-radius: 12px;
+
+      color: #ffffff;
+
+      background:
+        linear-gradient(
+          90deg,
+          #0757c9,
+          #168cff,
+          #25dfff
+        );
+
+      font-family: inherit;
+
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 8px 25px rgba(0,140,255,0.25);
+
+      transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+    }
+
+    .login-button:hover {
+      transform: translateY(-2px);
+
+      box-shadow:
+        0 12px 30px rgba(0,180,255,0.35);
+    }
+
+    .login-button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .error-box {
+      display: none;
+
+      margin-bottom: 15px;
+      padding: 12px 14px;
+
+      border-radius: 10px;
+
+      border:
+        1px solid rgba(255,90,120,0.4);
+
+      background:
+        rgba(220,40,75,0.10);
+
+      color: #ffdce4;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+    }
+
+    .success-box {
+      display: none;
+
+      margin-bottom: 15px;
+      padding: 12px 14px;
+
+      border-radius: 10px;
+
+      border:
+        1px solid rgba(50,230,255,0.4);
+
+      background:
+        rgba(0,210,255,0.10);
+
+      color: #bffcff;
+
+      font-size: 12px;
+
+      line-height: 1.5;
+    }
+
+    .footer {
+      margin-top: 20px;
+
+      text-align: center;
+
+      color: #7792a7;
+
+      font-size: 11px;
+    }
+
+    @keyframes loginIn {
+      from {
+        opacity: 0;
+        transform:
+          translateY(20px)
+          scale(0.98);
+      }
+
+      to {
+        opacity: 1;
+        transform:
+          translateY(0)
+          scale(1);
+      }
+    }
+
+    @keyframes shine {
+      0% {
+        background-position: 0% center;
+      }
+
+      100% {
+        background-position: 250% center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .login-card {
+        padding: 24px 18px;
+        border-radius: 21px;
+      }
+
+      .brand-name {
+        font-size: 17px;
+        letter-spacing: 2.4px;
+      }
+
+      .login-title {
+        font-size: 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="stars"></div>
+  <div class="glow"></div>
+
+  <main class="login-container">
+
+    <div class="brand">
+      <div class="brand-name">
+        ALJAVA TERIONITY
+      </div>
+
+      <div class="brand-line"></div>
+    </div>
+
+    <section class="login-card">
+
+      <h1 class="login-title">
+        Login <span>Dashboard</span>
+      </h1>
+
+      <p class="login-subtitle">
+        Masuk untuk mengakses Dashboard ALJAVA TERIONITY.
+      </p>
+
+      <div
+        id="errorBox"
+        class="error-box"
+      ></div>
+
+      <div
+        id="successBox"
+        class="success-box"
+      ></div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+
+          <label for="email">
+            Email
+          </label>
+
+          <input
+            type="email"
+            id="email"
+            placeholder="Masukkan email"
+            autocomplete="email"
+            required
+          >
+
+        </div>
+
+        <div class="form-group">
+
+          <label for="password">
+            Password
+          </label>
+
+          <input
+            type="password"
+            id="password"
+            placeholder="Masukkan password"
+            autocomplete="current-password"
+            required
+          >
+
+        </div>
+
+        <button
+          type="submit"
+          class="login-button"
+          id="loginButton"
+        >
+          Masuk
+        </button>
+
+      </form>
+
+    </section>
+
+    <div class="footer">
+      © 2026 ALJAVA TERIONITY • Digital Solution
+    </div>
+
+  </main>
+
+
+  <script>
+
+    /* =====================================================
+       SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL =
+      "https://lbzwmcxwxummitldxucj.supabase.co";
+
+    const SUPABASE_KEY =
+      "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+
+
+    /* =====================================================
+       ELEMENT
+    ===================================================== */
+
+    const loginForm =
+      document.getElementById("loginForm");
+
+    const loginButton =
+      document.getElementById("loginButton");
+
+    const errorBox =
+      document.getElementById("errorBox");
+
+    const successBox =
+      document.getElementById("successBox");
+
+
+    /* =====================================================
+       LOGIN
+    ===================================================== */
+
+    loginForm.addEventListener(
+      "submit",
+      async function(event) {
+
+        event.preventDefault();
+
+        errorBox.style.display = "none";
+        successBox.style.display = "none";
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const password =
+          document.getElementById("password").value;
+
+
+        loginButton.disabled = true;
+        loginButton.textContent = "Memproses...";
+
+
+        try {
+
+          const response =
+            await fetch(
+              SUPABASE_URL +
+              "/auth/v1/token?grant_type=password",
+              {
+                method: "POST",
+
+                headers: {
+                  "Content-Type":
+                    "application/json",
+
+                  "apikey":
+                    SUPABASE_KEY
+                },
+
+                body: JSON.stringify({
+                  email: email,
+                  password: password
+                })
+              }
+            );
+
+
+          const data =
+            await response.json();
+
+
+          if (!response.ok) {
+
+            throw new Error(
+              data.error_description ||
+              data.msg ||
+              data.message ||
+              "Email atau password salah."
+            );
+
+          }
+
+
+          /*
+           * Simpan session.
+           * Access token akan digunakan
+           * untuk request ke Supabase.
+           */
+
+          localStorage.setItem(
+            "supabase_access_token",
+            data.access_token
+          );
+
+          localStorage.setItem(
+            "supabase_refresh_token",
+            data.refresh_token
+          );
+
+          localStorage.setItem(
+            "supabase_user",
+            JSON.stringify(data.user)
+          );
+
+
+          successBox.textContent =
+            "Login berhasil. Mengalihkan...";
+
+          successBox.style.display =
+            "block";
+
+
+          setTimeout(
+            function() {
+
+              window.location.href =
+                "dashboard.html";
+
+            },
+            500
+          );
+
+
+        }
+        catch (error) {
+
+          console.error(
+            "LOGIN ERROR:",
+            error
+          );
+
+          errorBox.textContent =
+            "❌ " + error.message;
+
+          errorBox.style.display =
+            "block";
+
+          loginButton.disabled =
+            false;
+
+          loginButton.textContent =
+            "Masuk";
+
+        }
+
+      }
+    );
+
+  </script>
+
+</body>
+</html>
