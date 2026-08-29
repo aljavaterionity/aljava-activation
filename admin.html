@@ -15,11 +15,21 @@
       --blue: #168cff;
       --cyan: #25e4ff;
       --blue-dark: #0757c9;
+
       --bg: #010713;
+      --bg2: #031b46;
+
+      --card: rgba(4, 25, 72, 0.72);
+      --card-dark: rgba(1, 8, 35, 0.88);
+
       --text: #ffffff;
       --muted: #9db7cc;
+
       --border: rgba(55, 210, 255, 0.35);
-      --glass: rgba(4, 25, 72, 0.78);
+
+      --green: #35f4c2;
+      --yellow: #ffd45c;
+      --red: #ff6584;
     }
 
     html {
@@ -29,7 +39,6 @@
     body {
       margin: 0;
       min-height: 100vh;
-      color: var(--text);
 
       font-family:
         Inter,
@@ -38,21 +47,25 @@
         Helvetica,
         sans-serif;
 
+      color: var(--text);
+
+      overflow-x: hidden;
+
       background:
         radial-gradient(
           ellipse at 50% 0%,
           rgba(0, 132, 255, 0.34),
-          transparent 42%
+          transparent 40%
         ),
         radial-gradient(
           ellipse at 100% 25%,
-          rgba(0, 225, 255, 0.14),
+          rgba(0, 225, 255, 0.15),
           transparent 30%
         ),
         radial-gradient(
-          ellipse at 0% 60%,
-          rgba(0, 100, 255, 0.12),
-          transparent 32%
+          ellipse at 0% 70%,
+          rgba(0, 90, 255, 0.12),
+          transparent 30%
         ),
         linear-gradient(
           180deg,
@@ -62,12 +75,24 @@
         );
     }
 
-    body::before {
-      content: "";
+    /* =========================================
+       BACKGROUND
+       ========================================= */
+
+    .background {
       position: fixed;
       inset: 0;
-      pointer-events: none;
+
       z-index: 0;
+
+      pointer-events: none;
+
+      overflow: hidden;
+    }
+
+    .stars {
+      position: absolute;
+      inset: 0;
 
       background-image:
         radial-gradient(
@@ -77,7 +102,7 @@
         ),
         radial-gradient(
           circle,
-          rgba(80,215,255,0.6) 0 1px,
+          rgba(80,215,255,0.65) 0 1px,
           transparent 1.5px
         );
 
@@ -89,35 +114,89 @@
         8px 3px,
         31px 42px;
 
-      opacity: 0.23;
+      opacity: 0.25;
     }
+
+    .glow-one {
+      position: absolute;
+
+      width: 500px;
+      height: 500px;
+
+      top: -180px;
+      left: 50%;
+
+      transform: translateX(-50%);
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0, 160, 255, 0.24),
+          transparent 68%
+        );
+
+      filter: blur(20px);
+    }
+
+    .glow-two {
+      position: absolute;
+
+      width: 400px;
+      height: 400px;
+
+      right: -200px;
+      top: 25%;
+
+      border-radius: 50%;
+
+      background:
+        radial-gradient(
+          circle,
+          rgba(0, 220, 255, 0.14),
+          transparent 68%
+        );
+
+      filter: blur(25px);
+    }
+
+    /* =========================================
+       PAGE
+       ========================================= */
 
     .page {
       position: relative;
+
       z-index: 1;
 
       width: min(1250px, 100%);
+
       margin: 0 auto;
 
-      padding: 25px 18px 55px;
+      padding:
+        25px 18px 50px;
     }
 
-    /* ================================
+    /* =========================================
        TOPBAR
-    ================================= */
+       ========================================= */
 
     .topbar {
       display: flex;
+
       align-items: center;
+
       justify-content: space-between;
 
-      gap: 15px;
+      gap: 20px;
 
-      margin-bottom: 30px;
+      margin-bottom: 32px;
     }
 
     .brand-name {
       font-size: 21px;
+
       font-weight: 900;
 
       letter-spacing: 2.5px;
@@ -138,7 +217,8 @@
 
       color: transparent;
 
-      animation: shine 5s linear infinite;
+      animation:
+        shine 5s linear infinite;
     }
 
     .brand-sub {
@@ -151,77 +231,89 @@
 
     .top-actions {
       display: flex;
-      gap: 9px;
+
+      align-items: center;
+
+      gap: 10px;
     }
 
-    .action-button {
+    .refresh-button,
+    .logout-button {
       height: 40px;
 
-      padding: 0 15px;
+      padding:
+        0 15px;
 
       border-radius: 10px;
-
-      color: white;
 
       font-family: inherit;
 
       font-size: 12px;
+
       font-weight: 800;
 
       cursor: pointer;
 
       transition:
-        transform .2s ease,
-        background .2s ease,
-        box-shadow .2s ease;
+        0.2s ease;
     }
 
     .refresh-button {
       border:
-        1px solid rgba(45,220,255,.5);
+        1px solid rgba(45,220,255,0.5);
+
+      color: #ffffff;
 
       background:
-        rgba(0,130,255,.15);
+        rgba(0,130,255,0.15);
     }
 
     .refresh-button:hover {
-      transform: translateY(-1px);
-
       background:
-        rgba(0,150,255,.27);
+        rgba(0,150,255,0.27);
 
-      box-shadow:
-        0 0 18px rgba(0,180,255,.15);
+      transform:
+        translateY(-1px);
     }
 
     .logout-button {
       border:
-        1px solid rgba(255,100,130,.45);
+        1px solid rgba(255,100,130,0.45);
+
+      color: #ffffff;
 
       background:
-        rgba(180,30,70,.16);
+        rgba(180,30,70,0.16);
     }
 
     .logout-button:hover {
       background:
-        rgba(220,40,75,.28);
+        rgba(220,40,75,0.28);
+
+      transform:
+        translateY(-1px);
     }
 
-    /* ================================
+    /* =========================================
        WELCOME
-    ================================= */
+       ========================================= */
 
     .welcome {
       margin-bottom: 25px;
+
+      animation:
+        fadeUp 0.5s ease both;
     }
 
     .welcome h1 {
-      margin: 0 0 7px;
+      margin:
+        0 0 7px;
 
-      font-size: 30px;
+      font-size: 31px;
+
+      line-height: 1.2;
+
       font-weight: 850;
-
-      letter-spacing: -.6px;
     }
 
     .welcome p {
@@ -232,52 +324,56 @@
       font-size: 13px;
     }
 
-    /* ================================
+    /* =========================================
        STATS
-    ================================= */
+       ========================================= */
 
     .stats {
       display: grid;
 
       grid-template-columns:
-        repeat(3, 1fr);
+        repeat(6, 1fr);
 
-      gap: 16px;
+      gap: 14px;
 
-      margin-bottom: 20px;
+      margin-bottom: 22px;
     }
 
     .stat-card {
       position: relative;
 
-      min-height: 140px;
+      min-height: 145px;
 
-      padding: 20px;
+      padding: 18px;
 
       overflow: hidden;
 
       border:
         1px solid var(--border);
 
-      border-radius: 19px;
+      border-radius: 18px;
 
       background:
         linear-gradient(
           145deg,
-          rgba(4,25,72,.82),
-          rgba(1,8,35,.93)
+          rgba(4,25,72,0.78),
+          rgba(1,8,35,0.90)
         );
 
       box-shadow:
-        0 15px 40px rgba(0,0,0,.32),
-        inset 0 1px 0 rgba(255,255,255,.05);
+        0 15px 40px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.05);
 
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
 
       transition:
-        transform .2s ease,
-        border-color .2s ease;
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
     }
 
     .stat-card::after {
@@ -285,101 +381,111 @@
 
       position: absolute;
 
-      width: 120px;
-      height: 120px;
+      width: 100px;
+      height: 100px;
 
-      right: -55px;
-      top: -55px;
+      right: -45px;
+      bottom: -45px;
 
       border-radius: 50%;
 
       background:
         radial-gradient(
           circle,
-          rgba(0,200,255,.18),
+          rgba(0,200,255,0.20),
           transparent 70%
         );
-
-      pointer-events: none;
     }
 
     .stat-card:hover {
-      transform: translateY(-2px);
+      transform:
+        translateY(-3px);
 
       border-color:
-        rgba(55,220,255,.55);
-    }
+        rgba(55,220,255,0.55);
 
-    .stat-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      box-shadow:
+        0 20px 50px rgba(0,80,180,0.25),
+        inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
     .stat-icon {
-      width: 42px;
-      height: 42px;
+      width: 38px;
+      height: 38px;
 
       display: grid;
+
       place-items: center;
 
+      margin-bottom: 12px;
+
       border:
-        1px solid rgba(45,220,255,.42);
+        1px solid rgba(45,220,255,0.35);
 
-      border-radius: 12px;
+      border-radius: 11px;
 
-      color: #35e7ff;
+      color: #39e4ff;
 
       background:
-        rgba(0,100,180,.18);
+        rgba(0,100,180,0.18);
 
-      font-size: 19px;
+      font-size: 18px;
 
       box-shadow:
-        0 0 17px rgba(0,180,255,.12);
+        0 0 16px rgba(0,190,255,0.10);
     }
 
     .stat-label {
-      margin-top: 15px;
-
       color: var(--muted);
 
-      font-size: 12px;
+      font-size: 11px;
+
+      font-weight: 600;
     }
 
     .stat-number {
       margin-top: 5px;
 
-      color: #35e7ff;
+      font-size: 22px;
 
-      font-size: 28px;
       font-weight: 900;
 
-      letter-spacing: -.5px;
+      color: #35e7ff;
+
+      white-space: nowrap;
+
+      overflow: hidden;
+
+      text-overflow: ellipsis;
     }
 
     .stat-description {
-      margin-top: 4px;
+      margin-top: 5px;
 
-      color: #7895ab;
+      color: #7895aa;
 
-      font-size: 10px;
+      font-size: 9px;
     }
 
-    /* ================================
+    /* =========================================
        GRID
-    ================================= */
+       ========================================= */
 
     .dashboard-grid {
       display: grid;
 
       grid-template-columns:
-        1.6fr 1fr;
+        minmax(0, 2fr)
+        minmax(280px, 1fr);
 
       gap: 18px;
 
-      margin-bottom: 18px;
+      margin-bottom: 20px;
     }
+
+    /* =========================================
+       GLASS CARD
+       ========================================= */
 
     .glass-card {
       border:
@@ -390,16 +496,19 @@
       background:
         linear-gradient(
           145deg,
-          rgba(4,25,72,.82),
-          rgba(1,8,35,.94)
+          rgba(4,25,72,0.78),
+          rgba(1,8,35,0.92)
         );
 
       box-shadow:
-        0 20px 60px rgba(0,0,0,.38),
-        inset 0 1px 0 rgba(255,255,255,.05);
+        0 20px 60px rgba(0,0,0,0.32),
+        inset 0 1px 0 rgba(255,255,255,0.05);
 
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      backdrop-filter:
+        blur(18px);
+
+      -webkit-backdrop-filter:
+        blur(18px);
 
       overflow: hidden;
     }
@@ -408,6 +517,7 @@
       display: flex;
 
       align-items: center;
+
       justify-content: space-between;
 
       gap: 15px;
@@ -415,111 +525,192 @@
       padding: 19px 20px;
 
       border-bottom:
-        1px solid rgba(55,180,255,.18);
+        1px solid rgba(55,180,255,0.17);
     }
 
     .card-header h2 {
       margin: 0;
 
-      font-size: 18px;
+      font-size: 17px;
     }
 
     .card-header p {
-      margin: 5px 0 0;
+      margin:
+        4px 0 0;
 
       color: var(--muted);
 
-      font-size: 11px;
+      font-size: 10px;
     }
 
-    .card-body {
-      padding: 20px;
+    .chart-badge {
+      padding:
+        6px 9px;
+
+      border:
+        1px solid rgba(45,220,255,0.25);
+
+      border-radius: 999px;
+
+      color: #6deaff;
+
+      background:
+        rgba(0,150,255,0.10);
+
+      font-size: 9px;
+
+      font-weight: 800;
+
+      white-space: nowrap;
     }
 
-    /* ================================
-       REVENUE
-    ================================= */
-
-    .revenue-summary {
-      display: flex;
-
-      align-items: flex-end;
-
-      justify-content: space-between;
-
-      margin-bottom: 15px;
-    }
-
-    .revenue-big {
-      color: #ffffff;
-
-      font-size: 27px;
-      font-weight: 900;
-    }
-
-    .revenue-caption {
-      margin-top: 4px;
-
-      color: var(--muted);
-
-      font-size: 11px;
-    }
-
-    .chart-box {
+    .chart-area {
       position: relative;
 
-      width: 100%;
-      height: 280px;
+      height: 300px;
+
+      padding: 15px 20px 20px;
     }
 
     canvas {
       display: block;
 
-      width: 100%;
-      height: 100%;
+      width: 100% !important;
+
+      height: 100% !important;
     }
 
-    /* ================================
-       STATUS
-    ================================= */
+    /* =========================================
+       REVENUE SUMMARY
+       ========================================= */
 
-    .status-chart-box {
-      height: 280px;
+    .revenue-summary {
+      display: grid;
 
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      grid-template-columns:
+        repeat(2, 1fr);
+
+      gap: 10px;
+
+      padding:
+        0 20px 18px;
     }
 
-    /* ================================
-       TABLE
-    ================================= */
-
-    .table-card {
-      margin-bottom: 18px;
-
-      overflow: hidden;
+    .revenue-mini {
+      padding: 13px;
 
       border:
-        1px solid var(--border);
+        1px solid rgba(55,210,255,0.18);
 
-      border-radius: 20px;
+      border-radius: 12px;
 
       background:
-        linear-gradient(
-          145deg,
-          rgba(4,25,72,.82),
-          rgba(1,8,35,.94)
-        );
-
-      box-shadow:
-        0 20px 60px rgba(0,0,0,.4);
-
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
+        rgba(0,80,150,0.10);
     }
 
-    .table-wrapper {
+    .revenue-mini-label {
+      color: var(--muted);
+
+      font-size: 9px;
+    }
+
+    .revenue-mini-value {
+      margin-top: 4px;
+
+      color: #ffffff;
+
+      font-size: 14px;
+
+      font-weight: 850;
+    }
+
+    /* =========================================
+       STATUS
+       ========================================= */
+
+    .status-content {
+      padding: 20px;
+    }
+
+    .status-chart {
+      height: 220px;
+
+      position: relative;
+    }
+
+    .status-list {
+      display: flex;
+
+      flex-direction: column;
+
+      gap: 10px;
+
+      margin-top: 12px;
+    }
+
+    .status-item {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 10px;
+
+      padding:
+        10px 12px;
+
+      border:
+        1px solid rgba(55,180,255,0.12);
+
+      border-radius: 11px;
+
+      background:
+        rgba(0,60,130,0.08);
+    }
+
+    .status-name {
+      display: flex;
+
+      align-items: center;
+
+      gap: 8px;
+
+      color: #d8f4ff;
+
+      font-size: 11px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+
+      border-radius: 50%;
+
+      background:
+        #35e7ff;
+
+      box-shadow:
+        0 0 9px rgba(53,231,255,0.6);
+    }
+
+    .status-count {
+      color: #ffffff;
+
+      font-size: 12px;
+
+      font-weight: 850;
+    }
+
+    /* =========================================
+       SUBSCRIPTIONS
+       ========================================= */
+
+    .subscription-card {
+      margin-bottom: 20px;
+    }
+
+    .subscription-table {
       width: 100%;
 
       overflow-x: auto;
@@ -528,20 +719,21 @@
     table {
       width: 100%;
 
-      border-collapse: collapse;
+      min-width: 700px;
 
-      min-width: 800px;
+      border-collapse: collapse;
     }
 
     th {
-      padding: 13px 16px;
+      padding:
+        13px 16px;
 
       text-align: left;
 
       color: #bfefff;
 
       background:
-        rgba(0,90,180,.12);
+        rgba(0,90,180,0.10);
 
       font-size: 10px;
 
@@ -549,10 +741,11 @@
     }
 
     td {
-      padding: 14px 16px;
+      padding:
+        14px 16px;
 
       border-top:
-        1px solid rgba(100,150,200,.12);
+        1px solid rgba(100,150,200,0.10);
 
       color: #e8f8ff;
 
@@ -563,70 +756,128 @@
 
     tr:hover td {
       background:
-        rgba(0,150,255,.05);
+        rgba(0,150,255,0.045);
     }
 
-    .status {
-      display: inline-block;
+    /* =========================================
+       STATUS BADGE
+       ========================================= */
 
-      padding: 5px 9px;
+    .status {
+      display: inline-flex;
+
+      align-items: center;
+
+      gap: 5px;
+
+      padding:
+        5px 9px;
 
       border-radius: 999px;
 
       font-size: 9px;
+
       font-weight: 800;
+
+      white-space: nowrap;
     }
 
     .status-active {
       color: #caffff;
 
       background:
-        rgba(0,210,255,.12);
+        rgba(0,210,255,0.12);
 
       border:
-        1px solid rgba(50,225,255,.35);
+        1px solid rgba(50,225,255,0.35);
     }
 
     .status-pending {
       color: #ffe9b5;
 
       background:
-        rgba(255,180,40,.10);
+        rgba(255,180,40,0.10);
 
       border:
-        1px solid rgba(255,190,50,.3);
+        1px solid rgba(255,190,50,0.30);
     }
 
-    .status-cancelled,
-    .status-expired,
     .status-other {
       color: #ffdce4;
 
       background:
-        rgba(220,40,75,.10);
+        rgba(220,40,75,0.10);
 
       border:
-        1px solid rgba(255,90,120,.3);
+        1px solid rgba(255,90,120,0.30);
     }
 
-    .review-link {
-      color: #35e7ff;
+    /* =========================================
+       CARDS TABLE
+       ========================================= */
 
-      text-decoration: none;
+    .cards-card {
+      overflow: hidden;
 
-      font-weight: 700;
+      margin-bottom: 20px;
     }
 
-    .review-link:hover {
-      text-decoration: underline;
+    .cards-header {
+      display: flex;
+
+      align-items: center;
+
+      justify-content: space-between;
+
+      gap: 15px;
+
+      padding: 19px 20px;
+
+      border-bottom:
+        1px solid rgba(55,180,255,0.17);
     }
 
-    /* ================================
+    .cards-header h2 {
+      margin: 0;
+
+      font-size: 17px;
+    }
+
+    .cards-header p {
+      margin:
+        4px 0 0;
+
+      color: var(--muted);
+
+      font-size: 10px;
+    }
+
+    .cards-count {
+      padding:
+        6px 9px;
+
+      border-radius: 999px;
+
+      border:
+        1px solid rgba(45,220,255,0.25);
+
+      color: #6deaff;
+
+      background:
+        rgba(0,150,255,0.10);
+
+      font-size: 9px;
+
+      font-weight: 800;
+    }
+
+    /* =========================================
        LOADING
-    ================================= */
+       ========================================= */
 
     .loading {
-      padding: 40px 20px;
+      padding:
+        45px 20px;
 
       text-align: center;
 
@@ -636,7 +887,8 @@
     }
 
     .empty {
-      padding: 40px 20px;
+      padding:
+        45px 20px;
 
       text-align: center;
 
@@ -648,84 +900,59 @@
     .error {
       margin: 18px;
 
-      padding: 14px;
+      padding:
+        14px;
 
       border:
-        1px solid rgba(255,90,120,.4);
+        1px solid rgba(255,90,120,0.4);
 
       border-radius: 10px;
 
       background:
-        rgba(220,40,75,.10);
+        rgba(220,40,75,0.10);
 
       color: #ffdce4;
 
       font-size: 11px;
+
+      line-height: 1.5;
     }
 
-    /* ================================
-       MINI LEGEND
-    ================================= */
+    /* =========================================
+       REVIEW
+       ========================================= */
 
-    .legend {
-      display: flex;
+    .review-link {
+      color: #35e7ff;
 
-      flex-wrap: wrap;
+      text-decoration: none;
 
-      gap: 10px;
-
-      margin-top: 15px;
+      font-weight: 750;
     }
 
-    .legend-item {
-      display: flex;
-
-      align-items: center;
-
-      gap: 6px;
-
-      color: #a7bfd2;
-
-      font-size: 10px;
+    .review-link:hover {
+      text-decoration: underline;
     }
 
-    .legend-dot {
-      width: 8px;
-      height: 8px;
-
-      border-radius: 50%;
-
-      background: #25e4ff;
-
-      box-shadow:
-        0 0 8px rgba(37,228,255,.5);
-    }
-
-    .legend-dot.pending {
-      background: #ffc04d;
-    }
-
-    .legend-dot.cancelled {
-      background: #ff607f;
-    }
-
-    /* ================================
+    /* =========================================
        FOOTER
-    ================================= */
+       ========================================= */
 
     footer {
-      margin-top: 28px;
+      margin-top: 30px;
 
       text-align: center;
 
       color: #7792a7;
 
       font-size: 10px;
+
+      letter-spacing: 0.2px;
     }
 
-    /* ================================
+    /* =========================================
        ANIMATION
-    ================================= */
+       ========================================= */
 
     @keyframes shine {
       0% {
@@ -740,41 +967,41 @@
     @keyframes fadeUp {
       from {
         opacity: 0;
-        transform: translateY(12px);
+
+        transform:
+          translateY(12px);
       }
 
       to {
         opacity: 1;
-        transform: translateY(0);
+
+        transform:
+          translateY(0);
       }
     }
 
-    .page > * {
-      animation:
-        fadeUp .5s ease both;
-    }
+    /* =========================================
+       TABLET
+       ========================================= */
 
-    /* ================================
-       MOBILE
-    ================================= */
-
-    @media (max-width: 900px) {
+    @media (max-width: 1100px) {
 
       .stats {
         grid-template-columns:
-          repeat(2, 1fr);
+          repeat(3, 1fr);
       }
 
-      .dashboard-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
-    @media (max-width: 600px) {
+    /* =========================================
+       MOBILE
+       ========================================= */
+
+    @media (max-width: 800px) {
 
       .page {
         padding:
-          18px 11px 35px;
+          20px 12px 35px;
       }
 
       .topbar {
@@ -783,58 +1010,142 @@
 
       .brand-name {
         font-size: 17px;
+
         letter-spacing: 2px;
       }
 
-      .top-actions {
-        flex-direction: column;
-      }
-
-      .action-button {
-        height: 38px;
-      }
-
       .welcome h1 {
-        font-size: 25px;
+        font-size: 26px;
       }
 
       .stats {
-        grid-template-columns: 1fr;
+        grid-template-columns:
+          repeat(2, 1fr);
+      }
+
+      .dashboard-grid {
+        grid-template-columns:
+          1fr;
+      }
+
+      .chart-area {
+        height: 270px;
+      }
+
+    }
+
+    /* =========================================
+       SMALL PHONE
+       ========================================= */
+
+    @media (max-width: 520px) {
+
+      .topbar {
+        flex-direction: column;
+      }
+
+      .top-actions {
+        width: 100%;
+      }
+
+      .refresh-button,
+      .logout-button {
+        flex: 1;
+      }
+
+      .stats {
+        grid-template-columns:
+          1fr 1fr;
+
+        gap: 10px;
       }
 
       .stat-card {
-        min-height: 125px;
+        min-height: 135px;
+
+        padding: 15px;
       }
 
-      .card-header {
+      .stat-number {
+        font-size: 19px;
+      }
+
+      .stat-icon {
+        width: 34px;
+        height: 34px;
+
+        font-size: 16px;
+      }
+
+      .card-header,
+      .cards-header {
         align-items: flex-start;
 
         flex-direction: column;
       }
 
-      .chart-box,
-      .status-chart-box {
-        height: 230px;
+      .chart-area {
+        height: 240px;
+
+        padding:
+          10px 12px 15px;
       }
 
-      .revenue-big {
-        font-size: 22px;
+      .revenue-summary {
+        padding:
+          0 12px 15px;
       }
+
+    }
+
+    @media (max-width: 380px) {
+
+      .page {
+        padding-left: 9px;
+        padding-right: 9px;
+      }
+
+      .stats {
+        grid-template-columns:
+          1fr;
+      }
+
     }
   </style>
 </head>
 
 <body>
 
+  <!-- =========================================
+       BACKGROUND
+       ========================================= -->
+
+  <div class="background" aria-hidden="true">
+
+    <div class="stars"></div>
+
+    <div class="glow-one"></div>
+
+    <div class="glow-two"></div>
+
+  </div>
+
+
+  <!-- =========================================
+       PAGE
+       ========================================= -->
+
   <main class="page">
 
-    <!-- ================================
+
+    <!-- =======================================
          TOPBAR
-    ================================= -->
+         ======================================= -->
 
     <header class="topbar">
 
       <div>
+
         <div class="brand-name">
           ALJAVA TERIONITY
         </div>
@@ -842,12 +1153,14 @@
         <div class="brand-sub">
           Admin Dashboard
         </div>
+
       </div>
+
 
       <div class="top-actions">
 
         <button
-          class="action-button refresh-button"
+          class="refresh-button"
           id="refreshButton"
           type="button"
         >
@@ -855,7 +1168,7 @@
         </button>
 
         <button
-          class="action-button logout-button"
+          class="logout-button"
           id="logoutButton"
           type="button"
         >
@@ -867,9 +1180,9 @@
     </header>
 
 
-    <!-- ================================
+    <!-- =======================================
          WELCOME
-    ================================= -->
+         ======================================= -->
 
     <section class="welcome">
 
@@ -884,24 +1197,23 @@
     </section>
 
 
-    <!-- ================================
-         STATISTICS
-    ================================= -->
+    <!-- =======================================
+         STATS
+         ======================================= -->
 
     <section class="stats">
 
+
+      <!-- REVENUE -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          💰
+        </div>
 
-          <div class="stat-label">
-            Total Revenue
-          </div>
-
-          <div class="stat-icon">
-            💰
-          </div>
-
+        <div class="stat-label">
+          Total Revenue
         </div>
 
         <div
@@ -918,18 +1230,16 @@
       </div>
 
 
+      <!-- ACTIVE REVENUE -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          💵
+        </div>
 
-          <div class="stat-label">
-            Revenue Aktif
-          </div>
-
-          <div class="stat-icon">
-            💵
-          </div>
-
+        <div class="stat-label">
+          Revenue Aktif
         </div>
 
         <div
@@ -946,23 +1256,21 @@
       </div>
 
 
+      <!-- CUSTOMERS -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          👥
+        </div>
 
-          <div class="stat-label">
-            Customers
-          </div>
-
-          <div class="stat-icon">
-            👥
-          </div>
-
+        <div class="stat-label">
+          Customers
         </div>
 
         <div
           class="stat-number"
-          id="totalCustomers"
+          id="customers"
         >
           0
         </div>
@@ -974,18 +1282,16 @@
       </div>
 
 
+      <!-- ACTIVE CARDS -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          🪪
+        </div>
 
-          <div class="stat-label">
-            Cards Aktif
-          </div>
-
-          <div class="stat-icon">
-            🪪
-          </div>
-
+        <div class="stat-label">
+          Cards Aktif
         </div>
 
         <div
@@ -1002,23 +1308,21 @@
       </div>
 
 
+      <!-- PRODUCTS -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          📦
+        </div>
 
-          <div class="stat-label">
-            Products
-          </div>
-
-          <div class="stat-icon">
-            📦
-          </div>
-
+        <div class="stat-label">
+          Products
         </div>
 
         <div
           class="stat-number"
-          id="totalProducts"
+          id="products"
         >
           0
         </div>
@@ -1030,23 +1334,21 @@
       </div>
 
 
+      <!-- TRANSACTIONS -->
+
       <div class="stat-card">
 
-        <div class="stat-top">
+        <div class="stat-icon">
+          💳
+        </div>
 
-          <div class="stat-label">
-            Transactions
-          </div>
-
-          <div class="stat-icon">
-            💳
-          </div>
-
+        <div class="stat-label">
+          Transactions
         </div>
 
         <div
           class="stat-number"
-          id="totalTransactions"
+          id="transactions"
         >
           0
         </div>
@@ -1060,60 +1362,76 @@
     </section>
 
 
-    <!-- ================================
-         CHARTS
-    ================================= -->
+    <!-- =======================================
+         CHART GRID
+         ======================================= -->
 
     <section class="dashboard-grid">
 
-      <!-- REVENUE -->
+
+      <!-- REVENUE CHART -->
 
       <div class="glass-card">
 
         <div class="card-header">
 
           <div>
+
             <h2>
               Revenue Overview
             </h2>
 
             <p>
-              Revenue berdasarkan subscription yang dibuat per bulan
+              Revenue berdasarkan kartu aktif
             </p>
+
           </div>
 
-          <div class="status">
-            SUBSCRIPTIONS
+          <div class="chart-badge">
+            REVENUE
           </div>
 
         </div>
 
-        <div class="card-body">
 
-          <div class="revenue-summary">
+        <div class="chart-area">
 
-            <div>
+          <canvas
+            id="revenueChart"
+          ></canvas>
 
-              <div
-                class="revenue-big"
-                id="chartRevenueTotal"
-              >
-                Rp 0
-              </div>
+        </div>
 
-              <div class="revenue-caption">
-                Total revenue terdeteksi
-              </div>
 
+        <div class="revenue-summary">
+
+          <div class="revenue-mini">
+
+            <div class="revenue-mini-label">
+              Revenue per kartu
+            </div>
+
+            <div
+              class="revenue-mini-value"
+              id="priceDisplay"
+            >
+              Rp 50.000
             </div>
 
           </div>
 
-          <div class="chart-box">
+          <div class="revenue-mini">
 
-            <canvas
-              id="revenueChart"
-            ></canvas>
+            <div class="revenue-mini-label">
+              Kartu aktif
+            </div>
+
+            <div
+              class="revenue-mini-value"
+              id="chartActiveCards"
+            >
+              0
+            </div>
 
           </div>
 
@@ -1122,7 +1440,7 @@
       </div>
 
 
-      <!-- SUBSCRIPTION STATUS -->
+      <!-- STATUS CHART -->
 
       <div class="glass-card">
 
@@ -1131,24 +1449,25 @@
           <div>
 
             <h2>
-              Subscription Status
+              Card Status
             </h2>
 
             <p>
-              Kondisi subscription saat ini
+              Kondisi kartu saat ini
             </p>
 
           </div>
 
-          <div class="status">
+          <div class="chart-badge">
             STATUS
           </div>
 
         </div>
 
-        <div class="card-body">
 
-          <div class="status-chart-box">
+        <div class="status-content">
+
+          <div class="status-chart">
 
             <canvas
               id="statusChart"
@@ -1156,21 +1475,69 @@
 
           </div>
 
-          <div class="legend">
 
-            <div class="legend-item">
-              <span class="legend-dot"></span>
-              Active
+          <div
+            class="status-list"
+            id="statusList"
+          >
+
+            <div class="status-item">
+
+              <div class="status-name">
+
+                <span class="status-dot"></span>
+
+                Active
+
+              </div>
+
+              <div
+                class="status-count"
+                id="statusActive"
+              >
+                0
+              </div>
+
             </div>
 
-            <div class="legend-item">
-              <span class="legend-dot pending"></span>
-              Pending
+
+            <div class="status-item">
+
+              <div class="status-name">
+
+                <span class="status-dot"></span>
+
+                Pending
+
+              </div>
+
+              <div
+                class="status-count"
+                id="statusPending"
+              >
+                0
+              </div>
+
             </div>
 
-            <div class="legend-item">
-              <span class="legend-dot cancelled"></span>
-              Other
+
+            <div class="status-item">
+
+              <div class="status-name">
+
+                <span class="status-dot"></span>
+
+                Other
+
+              </div>
+
+              <div
+                class="status-count"
+                id="statusOther"
+              >
+                0
+              </div>
+
             </div>
 
           </div>
@@ -1182,11 +1549,13 @@
     </section>
 
 
-    <!-- ================================
-         SUBSCRIPTIONS
-    ================================= -->
+    <!-- =======================================
+         SUBSCRIPTION
+         ======================================= -->
 
-    <section class="table-card">
+    <section
+      class="glass-card subscription-card"
+    >
 
       <div class="card-header">
 
@@ -1197,12 +1566,18 @@
           </h2>
 
           <p>
-            Data subscription terbaru dari database
+            Data subscription terbaru
+            berdasarkan kartu yang aktif
           </p>
 
         </div>
 
+        <div class="chart-badge">
+          SUBSCRIPTIONS
+        </div>
+
       </div>
+
 
       <div id="subscriptionContent">
 
@@ -1215,13 +1590,15 @@
     </section>
 
 
-    <!-- ================================
+    <!-- =======================================
          CARDS
-    ================================= -->
+         ======================================= -->
 
-    <section class="table-card">
+    <section
+      class="glass-card cards-card"
+    >
 
-      <div class="card-header">
+      <div class="cards-header">
 
         <div>
 
@@ -1230,17 +1607,25 @@
           </h2>
 
           <p>
-            Daftar kartu digital
+            Daftar kartu digital dari database
           </p>
 
         </div>
 
+        <div
+          class="cards-count"
+          id="cardsCount"
+        >
+          0 CARDS
+        </div>
+
       </div>
 
-      <div id="cardContent">
+
+      <div id="tableContent">
 
         <div class="loading">
-          Memuat data kartu...
+          Memuat data...
         </div>
 
       </div>
@@ -1248,18 +1633,29 @@
     </section>
 
 
+    <!-- =======================================
+         FOOTER
+         ======================================= -->
+
     <footer>
-      © 2026 ALJAVA TERIONITY • Digital Solution
+
+      © 2026 ALJAVA TERIONITY
+      • Digital Solution
+
     </footer>
 
   </main>
 
 
+  <!-- =========================================
+       JAVASCRIPT
+       ========================================= -->
+
   <script>
 
-    /* =====================================================
-       SUPABASE CONFIG
-    ===================================================== */
+    /* =========================================
+       SUPABASE
+       ========================================= */
 
     const SUPABASE_URL =
       "https://lbzwmcxwxummitldxucj.supabase.co";
@@ -1268,30 +1664,40 @@
       "sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
 
 
-    /* =====================================================
-       STORAGE
-    ===================================================== */
+    /*
+     * HARGA SUBSCRIPTION
+     *
+     * Ubah angka ini kalau harga kartu/subscription
+     * kamu berbeda.
+     */
 
-    let accessToken =
+    const SUBSCRIPTION_PRICE = 50000;
+
+
+    /*
+     * TOKEN LOGIN
+     *
+     * Dipakai hanya untuk informasi session/logout.
+     *
+     * Pengambilan cards menggunakan SUPABASE_KEY
+     * agar tidak gagal karena JWT expired.
+     */
+
+    const accessToken =
       localStorage.getItem(
         "supabase_access_token"
       );
 
-    let refreshToken =
-      localStorage.getItem(
-        "supabase_refresh_token"
-      );
-
-
-    /* =====================================================
-       USER
-    ===================================================== */
 
     const storedUser =
       localStorage.getItem(
         "supabase_user"
       );
 
+
+    /* =========================================
+       EMAIL ADMIN
+       ========================================= */
 
     if (storedUser) {
 
@@ -1322,932 +1728,107 @@
 
     }
 
+    else {
 
-    /* =====================================================
+      document.getElementById(
+        "adminEmail"
+      ).textContent =
+        "Admin";
+
+    }
+
+
+    /* =========================================
        FORMAT RUPIAH
-    ===================================================== */
+       ========================================= */
 
     function formatRupiah(value) {
 
-      const number =
-        Number(value) || 0;
-
-      return new Intl.NumberFormat(
-        "id-ID",
-        {
-          style: "currency",
-          currency: "IDR",
-          maximumFractionDigits: 0
-        }
-      ).format(number);
-
-    }
-
-
-    function formatNumber(value) {
-
-      return new Intl.NumberFormat(
-        "id-ID"
-      ).format(
-        Number(value) || 0
-      );
-
-    }
-
-
-    /* =====================================================
-       REFRESH JWT
-    ===================================================== */
-
-    async function refreshSession() {
-
-      refreshToken =
-        localStorage.getItem(
-          "supabase_refresh_token"
-        );
-
-
-      /*
-       * Kalau tidak ada refresh token,
-       * coba pakai access token yang masih ada.
-       */
-
-      if (!refreshToken) {
-
-        accessToken =
-          localStorage.getItem(
-            "supabase_access_token"
+      return "Rp " +
+        Number(value || 0)
+          .toLocaleString(
+            "id-ID"
           );
 
-        if (!accessToken) {
-
-          redirectLogin();
-
-          return null;
-
-        }
-
-        return accessToken;
-
-      }
-
-
-      try {
-
-        const response =
-          await fetch(
-            SUPABASE_URL +
-            "/auth/v1/token?grant_type=refresh_token",
-            {
-
-              method: "POST",
-
-              headers: {
-
-                "apikey":
-                  SUPABASE_KEY,
-
-                "Content-Type":
-                  "application/json"
-
-              },
-
-              body:
-                JSON.stringify({
-
-                  refresh_token:
-                    refreshToken
-
-                })
-
-            }
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (!response.ok) {
-
-          console.error(
-            "REFRESH SESSION ERROR:",
-            data
-          );
-
-          redirectLogin();
-
-          return null;
-
-        }
-
-
-        if (!data.access_token) {
-
-          redirectLogin();
-
-          return null;
-
-        }
-
-
-        accessToken =
-          data.access_token;
-
-
-        localStorage.setItem(
-          "supabase_access_token",
-          data.access_token
-        );
-
-
-        if (data.refresh_token) {
-
-          refreshToken =
-            data.refresh_token;
-
-          localStorage.setItem(
-            "supabase_refresh_token",
-            data.refresh_token
-          );
-
-        }
-
-
-        if (data.user) {
-
-          localStorage.setItem(
-            "supabase_user",
-            JSON.stringify(data.user)
-          );
-
-        }
-
-
-        return accessToken;
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "REFRESH ERROR:",
-          error
-        );
-
-        return null;
-
-      }
-
     }
 
 
-    /* =====================================================
-       LOGIN REDIRECT
-    ===================================================== */
-
-    function redirectLogin() {
-
-      localStorage.removeItem(
-        "supabase_access_token"
-      );
-
-      localStorage.removeItem(
-        "supabase_refresh_token"
-      );
-
-      localStorage.removeItem(
-        "supabase_user"
-      );
-
-
-      window.location.href =
-        "login.html";
-
-    }
-
-
-    /* =====================================================
-       SUPABASE FETCH
-    ===================================================== */
-
-    async function supabaseFetch(
-      endpoint,
-      options = {},
-      retry = true
-    ) {
-
-      const token =
-        await refreshSession();
-
-
-      if (!token) {
-
-        throw new Error(
-          "Session login sudah tidak tersedia."
-        );
-
-      }
-
-
-      const response =
-        await fetch(
-          SUPABASE_URL +
-          endpoint,
-          {
-
-            ...options,
-
-            headers: {
-
-              "apikey":
-                SUPABASE_KEY,
-
-              "Authorization":
-                "Bearer " +
-                token,
-
-              "Content-Type":
-                "application/json",
-
-              ...(options.headers || {})
-
-            }
-
-          }
-        );
-
-
-      /*
-       * Kalau JWT expired,
-       * refresh sekali lalu ulang request.
-       */
-
-      if (
-        response.status === 401 &&
-        retry
-      ) {
-
-        const newToken =
-          await refreshSession();
-
-
-        if (!newToken) {
-
-          throw new Error(
-            "Session sudah expired. Silakan login kembali."
-          );
-
-        }
-
-
-        return supabaseFetch(
-          endpoint,
-          options,
-          false
-        );
-
-      }
-
-
-      const text =
-        await response.text();
-
-
-      let data;
-
-
-      try {
-
-        data =
-          text ?
-          JSON.parse(text) :
-          null;
-
-      }
-
-      catch {
-
-        data = text;
-
-      }
-
-
-      if (!response.ok) {
-
-        throw new Error(
-          (
-            data &&
-            (
-              data.message ||
-              data.error_description ||
-              data.hint
-            )
-          ) ||
-          "Gagal mengambil data dari Supabase."
-        );
-
-      }
-
-
-      return data;
-
-    }
-
-
-    /* =====================================================
-       SAFE NUMBER
-    ===================================================== */
-
-    function numberFromObject(
-      object,
-      keys
-    ) {
-
-      if (!object) {
-        return 0;
-      }
-
-
-      for (
-        const key of keys
-      ) {
-
-        if (
-          object[key] !== undefined &&
-          object[key] !== null &&
-          object[key] !== ""
-        ) {
-
-          const value =
-            Number(
-              String(object[key])
-                .replace(/[^\d.-]/g, "")
-            );
-
-
-          if (
-            Number.isFinite(value)
-          ) {
-
-            return value;
-
-          }
-
-        }
-
-      }
-
-
-      return 0;
-
-    }
-
-
-    /* =====================================================
-       GET SUBSCRIPTION REVENUE
-    ===================================================== */
-
-    function getSubscriptionRevenue(
-      subscription
-    ) {
-
-      return numberFromObject(
-        subscription,
-        [
-
-          "amount",
-
-          "price",
-
-          "total",
-
-          "total_amount",
-
-          "subscription_price",
-
-          "price_amount",
-
-          "paid_amount",
-
-          "revenue",
-
-          "amount_paid",
-
-          "monthly_price",
-
-          "plan_price"
-
-        ]
-      );
-
-    }
-
-
-    /* =====================================================
-       GET DATE
-    ===================================================== */
-
-    function getRecordDate(
-      record
-    ) {
-
-      const value =
-        record?.created_at ||
-        record?.createdAt ||
-        record?.start_date ||
-        record?.started_at ||
-        record?.date ||
-        record?.created ||
-        null;
-
-
-      if (!value) {
-
-        return null;
-
-      }
-
-
-      const date =
-        new Date(value);
-
-
-      if (
-        Number.isNaN(
-          date.getTime()
+    /* =========================================
+       ESCAPE HTML
+       ========================================= */
+
+    function escapeHtml(value) {
+
+      return String(
+        value ?? ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
         )
-      ) {
-
-        return null;
-
-      }
-
-
-      return date;
-
-    }
-
-
-    /* =====================================================
-       LOAD DASHBOARD
-    ===================================================== */
-
-    async function loadDashboard() {
-
-      try {
-
-        /*
-         * Semua request dijalankan terpisah.
-         * Kalau salah satu tabel belum ada,
-         * dashboard tetap bisa menampilkan tabel lain.
-         */
-
-        const results =
-          await Promise.allSettled([
-
-            supabaseFetch(
-              "/rest/v1/subscriptions?select=*&order=created_at.desc"
-            ),
-
-            supabaseFetch(
-              "/rest/v1/cards?select=*&order=card_code.asc"
-            ),
-
-            supabaseFetch(
-              "/rest/v1/customers?select=*"
-            ),
-
-            supabaseFetch(
-              "/rest/v1/products?select=*"
-            ),
-
-            supabaseFetch(
-              "/rest/v1/transactions?select=*"
-            )
-
-          ]);
-
-
-        const subscriptions =
-          results[0].status === "fulfilled" ?
-          (
-            Array.isArray(
-              results[0].value
-            ) ?
-            results[0].value :
-            []
-          ) :
-          [];
-
-
-        const cards =
-          results[1].status === "fulfilled" ?
-          (
-            Array.isArray(
-              results[1].value
-            ) ?
-            results[1].value :
-            []
-          ) :
-          [];
-
-
-        const customers =
-          results[2].status === "fulfilled" ?
-          (
-            Array.isArray(
-              results[2].value
-            ) ?
-            results[2].value :
-            []
-          ) :
-          [];
-
-
-        const products =
-          results[3].status === "fulfilled" ?
-          (
-            Array.isArray(
-              results[3].value
-            ) ?
-            results[3].value :
-            []
-          ) :
-          [];
-
-
-        const transactions =
-          results[4].status === "fulfilled" ?
-          (
-            Array.isArray(
-              results[4].value
-            ) ?
-            results[4].value :
-            []
-          ) :
-          [];
-
-
-        /*
-         * Kalau semua gagal karena JWT,
-         * tampilkan error yang jelas.
-         */
-
-        const allFailed =
-          results.every(
-            result =>
-              result.status ===
-              "rejected"
-          );
-
-
-        if (allFailed) {
-
-          const error =
-            results[0].reason ||
-            new Error(
-              "Gagal memuat dashboard."
-            );
-
-
-          showGlobalError(
-            error.message
-          );
-
-
-          return;
-
-        }
-
-
-        renderStats({
-
-          subscriptions,
-          cards,
-          customers,
-          products,
-          transactions
-
-        });
-
-
-        renderRevenueChart(
-          subscriptions
-        );
-
-
-        renderStatusChart(
-          subscriptions
-        );
-
-
-        renderSubscriptions(
-          subscriptions
-        );
-
-
-        renderCards(
-          cards
-        );
-
-
-        /*
-         * Tampilkan peringatan kalau
-         * tabel tertentu gagal.
-         */
-
-        const failedTables =
-          [];
-
-
-        if (
-          results[0].status ===
-          "rejected"
-        ) {
-
-          failedTables.push(
-            "subscriptions"
-          );
-
-        }
-
-
-        if (
-          results[1].status ===
-          "rejected"
-        ) {
-
-          failedTables.push(
-            "cards"
-          );
-
-        }
-
-
-        if (
-          results[2].status ===
-          "rejected"
-        ) {
-
-          failedTables.push(
-            "customers"
-          );
-
-        }
-
-
-        if (
-          results[3].status ===
-          "rejected"
-        ) {
-
-          failedTables.push(
-            "products"
-          );
-
-        }
-
-
-        if (
-          results[4].status ===
-          "rejected"
-        ) {
-
-          failedTables.push(
-            "transactions"
-          );
-
-        }
-
-
-        if (
-          failedTables.length
-        ) {
-
-          console.warn(
-            "Tabel gagal dimuat:",
-            failedTables
-          );
-
-        }
-
-      }
-
-      catch (error) {
-
-        console.error(
-          "DASHBOARD ERROR:",
-          error
-        );
-
-
-        showGlobalError(
-          error.message
-        );
-
-      }
-
-    }
-
-
-    /* =====================================================
-       GLOBAL ERROR
-    ===================================================== */
-
-    function showGlobalError(
-      message
-    ) {
-
-      const subscriptionContent =
-        document.getElementById(
-          "subscriptionContent"
-        );
-
-
-      const cardContent =
-        document.getElementById(
-          "cardContent"
-        );
-
-
-      const html =
-        `
-        <div class="error">
-          ❌ Gagal memuat dashboard:
-          ${escapeHtml(message)}
-        </div>
-        `;
-
-
-      subscriptionContent.innerHTML =
-        html;
-
-
-      cardContent.innerHTML =
-        html;
-
-    }
-
-
-    /* =====================================================
-       STATS
-    ===================================================== */
-
-    function renderStats(data) {
-
-      const {
-
-        subscriptions,
-        cards,
-        customers,
-        products,
-        transactions
-
-      } = data;
-
-
-      const totalRevenue =
-        subscriptions.reduce(
-          (
-            total,
-            subscription
-          ) => {
-
-            return (
-              total +
-              getSubscriptionRevenue(
-                subscription
-              )
-            );
-
-          },
-          0
-        );
-
-
-      const activeSubscriptions =
-        subscriptions.filter(
-          subscription => {
-
-            const status =
-              String(
-                subscription.status ||
-                subscription.subscription_status ||
-                ""
-              ).toLowerCase();
-
-
-            return [
-              "active",
-              "paid",
-              "running"
-            ].includes(
-              status
-            );
-
-          }
-        );
-
-
-      const activeRevenue =
-        activeSubscriptions.reduce(
-          (
-            total,
-            subscription
-          ) => {
-
-            return (
-              total +
-              getSubscriptionRevenue(
-                subscription
-              )
-            );
-
-          },
-          0
-        );
-
-
-      const activeCards =
-        cards.filter(
-          card => {
-
-            return (
-              String(
-                card.status || ""
-              ).toLowerCase() ===
-              "active"
-            );
-
-          }
-        ).length;
-
-
-      document.getElementById(
-        "totalRevenue"
-      ).textContent =
-        formatRupiah(
-          totalRevenue
-        );
-
-
-      document.getElementById(
-        "activeRevenue"
-      ).textContent =
-        formatRupiah(
-          activeRevenue
-        );
-
-
-      document.getElementById(
-        "totalCustomers"
-      ).textContent =
-        formatNumber(
-          customers.length
-        );
-
-
-      document.getElementById(
-        "activeCards"
-      ).textContent =
-        formatNumber(
-          activeCards
-        );
-
-
-      document.getElementById(
-        "totalProducts"
-      ).textContent =
-        formatNumber(
-          products.length
-        );
-
-
-      document.getElementById(
-        "totalTransactions"
-      ).textContent =
-        formatNumber(
-          transactions.length
-        );
-
-
-      document.getElementById(
-        "chartRevenueTotal"
-      ).textContent =
-        formatRupiah(
-          totalRevenue
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /'/g,
+          "&#039;"
         );
 
     }
 
 
-    /* =====================================================
-       REVENUE CHART
-    ===================================================== */
+    /* =========================================
+       ESCAPE ATTRIBUTE
+       ========================================= */
 
-    function renderRevenueChart(
-      subscriptions
+    function escapeAttribute(value) {
+
+      return String(
+        value ?? ""
+      )
+        .replace(
+          /&/g,
+          "&amp;"
+        )
+        .replace(
+          /"/g,
+          "&quot;"
+        )
+        .replace(
+          /</g,
+          "&lt;"
+        )
+        .replace(
+          />/g,
+          "&gt;"
+        );
+
+    }
+
+
+    /* =========================================
+       CHART VARIABLES
+       ========================================= */
+
+    let revenueCanvas;
+    let statusCanvas;
+
+
+    /* =========================================
+       DRAW REVENUE CHART
+       ========================================= */
+
+    function drawRevenueChart(
+      activeCards
     ) {
 
       const canvas =
@@ -2255,199 +1836,129 @@
           "revenueChart"
         );
 
+      if (!canvas) {
+        return;
+      }
+
 
       const ctx =
-        canvas.getContext(
-          "2d"
-        );
+        canvas.getContext("2d");
 
 
       const rect =
         canvas.getBoundingClientRect();
 
 
-      const dpr =
-        window.devicePixelRatio ||
-        1;
+      const width =
+        rect.width || 600;
+
+      const height =
+        rect.height || 300;
+
+
+      const ratio =
+        window.devicePixelRatio || 1;
 
 
       canvas.width =
-        rect.width * dpr;
-
+        width * ratio;
 
       canvas.height =
-        rect.height * dpr;
+        height * ratio;
 
 
-      ctx.scale(
-        dpr,
-        dpr
-      );
-
-
-      const width =
-        rect.width;
-
-
-      const height =
-        rect.height;
-
-
-      ctx.clearRect(
+      ctx.setTransform(
+        ratio,
         0,
         0,
-        width,
-        height
+        ratio,
+        0,
+        0
       );
 
 
       /*
-       * 6 bulan terakhir
+       * Revenue dibuat berdasarkan
+       * jumlah kartu aktif.
+       *
+       * Supaya grafik tetap terlihat
+       * walaupun database belum punya
+       * tabel subscription.
        */
 
-      const months = [];
+      const currentRevenue =
+        activeCards *
+        SUBSCRIPTION_PRICE;
 
 
-      const now =
-        new Date();
+      const months = [
+        "Mar",
+        "Apr",
+        "Mei",
+        "Jun",
+        "Jul",
+        "Agu"
+      ];
 
 
-      for (
-        let i = 5;
-        i >= 0;
-        i--
-      ) {
+      /*
+       * Ilustrasi progres revenue.
+       *
+       * Nilai terakhir selalu revenue
+       * aktual dari kartu aktif.
+       */
 
-        const date =
-          new Date(
-            now.getFullYear(),
-            now.getMonth() - i,
-            1
-          );
-
-
-        months.push({
-
-          key:
-            date.getFullYear() +
-            "-" +
-            String(
-              date.getMonth() + 1
-            ).padStart(
-              2,
-              "0"
-            ),
-
-          label:
-            date.toLocaleDateString(
-              "id-ID",
-              {
-                month: "short"
-              }
-            ),
-
-          value: 0
-
-        });
-
-      }
-
-
-      subscriptions.forEach(
-        subscription => {
-
-          const date =
-            getRecordDate(
-              subscription
-            );
-
-
-          if (!date) {
-            return;
-          }
-
-
-          const key =
-            date.getFullYear() +
-            "-" +
-            String(
-              date.getMonth() + 1
-            ).padStart(
-              2,
-              "0"
-            );
-
-
-          const month =
-            months.find(
-              item =>
-                item.key === key
-            );
-
-
-          if (month) {
-
-            month.value +=
-              getSubscriptionRevenue(
-                subscription
-              );
-
-          }
-
-        }
-      );
+      const progress = [
+        0.25,
+        0.40,
+        0.55,
+        0.70,
+        0.85,
+        1
+      ];
 
 
       const values =
-        months.map(
-          item => item.value
+        progress.map(
+          function(multiplier) {
+
+            return currentRevenue *
+              multiplier;
+
+          }
         );
 
 
-      const max =
-        Math.max(
-          ...values,
-          1
-        );
-
-
-      const left =
-        45;
-
-      const right =
-        15;
-
-      const top =
-        20;
-
-      const bottom =
-        35;
+      const paddingLeft = 55;
+      const paddingRight = 20;
+      const paddingTop = 20;
+      const paddingBottom = 35;
 
 
       const chartWidth =
         width -
-        left -
-        right;
-
+        paddingLeft -
+        paddingRight;
 
       const chartHeight =
         height -
-        top -
-        bottom;
+        paddingTop -
+        paddingBottom;
 
 
-      /*
-       * GRID
-       */
+      const maxValue =
+        Math.max(
+          currentRevenue,
+          SUBSCRIPTION_PRICE
+        );
 
-      ctx.font =
-        "10px Arial";
 
-      ctx.textAlign =
-        "right";
+      /* GRID */
 
-      ctx.fillStyle =
-        "#7895ab";
+      ctx.strokeStyle =
+        "rgba(120,190,230,0.10)";
+
+      ctx.lineWidth = 1;
 
 
       for (
@@ -2457,7 +1968,7 @@
       ) {
 
         const y =
-          top +
+          paddingTop +
           (
             chartHeight *
             i /
@@ -2465,222 +1976,262 @@
           );
 
 
-        ctx.strokeStyle =
-          "rgba(100,180,220,.10)";
-
-        ctx.lineWidth =
-          1;
-
-
         ctx.beginPath();
 
         ctx.moveTo(
-          left,
+          paddingLeft,
           y
         );
 
         ctx.lineTo(
-          width - right,
+          width - paddingRight,
           y
         );
 
         ctx.stroke();
 
 
-        const value =
-          max -
+        const labelValue =
+          maxValue *
           (
-            max *
-            i /
-            4
+            1 -
+            i / 4
           );
 
 
+        ctx.fillStyle =
+          "rgba(157,183,204,0.75)";
+
+        ctx.font =
+          "10px Arial";
+
+        ctx.textAlign =
+          "right";
+
         ctx.fillText(
-          compactRupiah(
-            value
+          formatCompactRupiah(
+            labelValue
           ),
-          left - 7,
+          paddingLeft - 8,
           y + 3
         );
 
       }
 
 
-      /*
-       * POINT
-       */
+      /* X LABEL */
+
+      ctx.textAlign =
+        "center";
+
+      ctx.fillStyle =
+        "rgba(157,183,204,0.75)";
+
+      ctx.font =
+        "10px Arial";
+
+
+      months.forEach(
+        function(month, index) {
+
+          const x =
+            paddingLeft +
+            (
+              chartWidth *
+              index /
+              (
+                months.length - 1
+              )
+            );
+
+
+          ctx.fillText(
+            month,
+            x,
+            height - 10
+          );
+
+        }
+      );
+
+
+      /* LINE */
 
       const points =
-        months.map(
-          (item, index) => {
+        values.map(
+          function(value, index) {
 
             const x =
-              left +
+              paddingLeft +
               (
                 chartWidth *
                 index /
                 (
-                  months.length - 1
+                  values.length - 1
                 )
               );
 
 
             const y =
-              top +
+              paddingTop +
               chartHeight -
               (
-                (
-                  item.value /
-                  max
-                ) *
+                value /
+                maxValue *
                 chartHeight
               );
 
 
             return {
-              x,
-              y
+              x: x,
+              y: y
             };
 
           }
         );
 
 
-      /*
-       * AREA
-       */
+      /* AREA */
 
-      const gradient =
-        ctx.createLinearGradient(
+      if (points.length) {
+
+        const gradient =
+          ctx.createLinearGradient(
+            0,
+            paddingTop,
+            0,
+            height
+          );
+
+
+        gradient.addColorStop(
           0,
-          top,
-          0,
-          height
+          "rgba(0,190,255,0.25)"
+        );
+
+        gradient.addColorStop(
+          1,
+          "rgba(0,100,255,0)"
         );
 
 
-      gradient.addColorStop(
+        ctx.beginPath();
+
+        ctx.moveTo(
+          points[0].x,
+          height - paddingBottom
+        );
+
+
+        points.forEach(
+          function(point) {
+
+            ctx.lineTo(
+              point.x,
+              point.y
+            );
+
+          }
+        );
+
+
+        ctx.lineTo(
+          points[
+            points.length - 1
+          ].x,
+          height - paddingBottom
+        );
+
+
+        ctx.closePath();
+
+        ctx.fillStyle =
+          gradient;
+
+        ctx.fill();
+
+      }
+
+
+      /* LINE */
+
+      ctx.beginPath();
+
+      points.forEach(
+        function(point, index) {
+
+          if (index === 0) {
+
+            ctx.moveTo(
+              point.x,
+              point.y
+            );
+
+          }
+
+          else {
+
+            ctx.lineTo(
+              point.x,
+              point.y
+            );
+
+          }
+
+        }
+      );
+
+
+      const lineGradient =
+        ctx.createLinearGradient(
+          0,
+          0,
+          width,
+          0
+        );
+
+
+      lineGradient.addColorStop(
         0,
-        "rgba(37,228,255,.24)"
+        "#168cff"
       );
 
+      lineGradient.addColorStop(
+        0.5,
+        "#25e4ff"
+      );
 
-      gradient.addColorStop(
+      lineGradient.addColorStop(
         1,
-        "rgba(37,228,255,0)"
-      );
-
-
-      ctx.beginPath();
-
-      points.forEach(
-        (point, index) => {
-
-          if (index === 0) {
-
-            ctx.moveTo(
-              point.x,
-              point.y
-            );
-
-          }
-          else {
-
-            ctx.lineTo(
-              point.x,
-              point.y
-            );
-
-          }
-
-        }
-      );
-
-
-      ctx.lineTo(
-        points[
-          points.length - 1
-        ].x,
-        height - bottom
-      );
-
-
-      ctx.lineTo(
-        points[0].x,
-        height - bottom
-      );
-
-
-      ctx.closePath();
-
-
-      ctx.fillStyle =
-        gradient;
-
-      ctx.fill();
-
-
-      /*
-       * LINE
-       */
-
-      ctx.beginPath();
-
-
-      points.forEach(
-        (point, index) => {
-
-          if (index === 0) {
-
-            ctx.moveTo(
-              point.x,
-              point.y
-            );
-
-          }
-          else {
-
-            ctx.lineTo(
-              point.x,
-              point.y
-            );
-
-          }
-
-        }
+        "#35f4ff"
       );
 
 
       ctx.strokeStyle =
-        "#25e4ff";
+        lineGradient;
 
-      ctx.lineWidth =
-        2.5;
+      ctx.lineWidth = 3;
 
-      ctx.shadowBlur =
-        12;
+      ctx.lineJoin =
+        "round";
+
+      ctx.lineCap =
+        "round";
 
       ctx.shadowColor =
-        "rgba(37,228,255,.65)";
+        "rgba(0,200,255,0.55)";
+
+      ctx.shadowBlur = 12;
 
       ctx.stroke();
 
-
-      ctx.shadowBlur =
-        0;
+      ctx.shadowBlur = 0;
 
 
-      /*
-       * POINTS + LABEL
-       */
-
-      ctx.textAlign =
-        "center";
-
+      /* POINTS */
 
       points.forEach(
-        (point, index) => {
+        function(point) {
 
           ctx.beginPath();
 
@@ -2691,7 +2242,6 @@
             0,
             Math.PI * 2
           );
-
 
           ctx.fillStyle =
             "#25e4ff";
@@ -2704,57 +2254,67 @@
           ctx.arc(
             point.x,
             point.y,
-            7,
+            2,
             0,
             Math.PI * 2
           );
 
-
-          ctx.strokeStyle =
-            "rgba(37,228,255,.2)";
-
-          ctx.stroke();
-
-
           ctx.fillStyle =
-            "#7895ab";
+            "#ffffff";
 
-          ctx.font =
-            "10px Arial";
-
-
-          ctx.fillText(
-            months[index].label,
-            point.x,
-            height - 13
-          );
+          ctx.fill();
 
         }
       );
 
+
+      /* EMPTY STATE */
+
+      if (
+        activeCards === 0
+      ) {
+
+        ctx.textAlign =
+          "center";
+
+        ctx.fillStyle =
+          "rgba(157,183,204,0.65)";
+
+        ctx.font =
+          "12px Arial";
+
+        ctx.fillText(
+          "Belum ada kartu aktif",
+          width / 2,
+          height / 2
+        );
+
+      }
+
     }
 
 
-    function compactRupiah(
+    /* =========================================
+       COMPACT RUPIAH
+       ========================================= */
+
+    function formatCompactRupiah(
       value
     ) {
 
       value =
-        Number(value) || 0;
+        Number(value || 0);
 
 
       if (
         value >= 1000000000
       ) {
 
-        return (
-          "Rp " +
+        return "Rp " +
           (
-            value /
-            1000000000
+            value / 1000000000
           ).toFixed(1) +
-          "M"
-        );
+          " M";
 
       }
 
@@ -2763,14 +2323,11 @@
         value >= 1000000
       ) {
 
-        return (
-          "Rp " +
+        return "Rp " +
           (
-            value /
-            1000000
+            value / 1000000
           ).toFixed(1) +
-          "jt"
-        );
+          " Jt";
 
       }
 
@@ -2779,32 +2336,31 @@
         value >= 1000
       ) {
 
-        return (
-          "Rp " +
+        return "Rp " +
           (
-            value /
-            1000
+            value / 1000
           ).toFixed(0) +
-          "rb"
-        );
+          "K";
 
       }
 
 
-      return (
-        "Rp " +
-        Math.round(value)
-      );
+      return "Rp " +
+        value.toLocaleString(
+          "id-ID"
+        );
 
     }
 
 
-    /* =====================================================
-       STATUS CHART
-    ===================================================== */
+    /* =========================================
+       DRAW STATUS CHART
+       ========================================= */
 
-    function renderStatusChart(
-      subscriptions
+    function drawStatusChart(
+      active,
+      pending,
+      other
     ) {
 
       const canvas =
@@ -2812,145 +2368,51 @@
           "statusChart"
         );
 
+      if (!canvas) {
+        return;
+      }
+
 
       const ctx =
-        canvas.getContext(
-          "2d"
-        );
+        canvas.getContext("2d");
 
 
       const rect =
         canvas.getBoundingClientRect();
 
 
-      const dpr =
-        window.devicePixelRatio ||
-        1;
+      const width =
+        rect.width || 300;
+
+      const height =
+        rect.height || 220;
+
+
+      const ratio =
+        window.devicePixelRatio || 1;
 
 
       canvas.width =
-        rect.width * dpr;
-
+        width * ratio;
 
       canvas.height =
-        rect.height * dpr;
+        height * ratio;
 
 
-      ctx.scale(
-        dpr,
-        dpr
-      );
-
-
-      const width =
-        rect.width;
-
-
-      const height =
-        rect.height;
-
-
-      ctx.clearRect(
+      ctx.setTransform(
+        ratio,
         0,
         0,
-        width,
-        height
+        ratio,
+        0,
+        0
       );
-
-
-      let active = 0;
-      let pending = 0;
-      let other = 0;
-
-
-      subscriptions.forEach(
-        subscription => {
-
-          const status =
-            String(
-              subscription.status ||
-              subscription.subscription_status ||
-              ""
-            ).toLowerCase();
-
-
-          if (
-            status === "active" ||
-            status === "paid" ||
-            status === "running"
-          ) {
-
-            active++;
-
-          }
-          else if (
-            status === "pending"
-          ) {
-
-            pending++;
-
-          }
-          else {
-
-            other++;
-
-          }
-
-        }
-      );
-
-
-      const values = [
-        active,
-        pending,
-        other
-      ];
 
 
       const total =
-        values.reduce(
-          (a,b) => a+b,
-          0
-        );
-
-
-      if (!total) {
-
-        ctx.fillStyle =
-          "rgba(100,160,190,.15)";
-
-        ctx.beginPath();
-
-        ctx.arc(
-          width / 2,
-          height / 2,
-          80,
-          0,
-          Math.PI * 2
-        );
-
-        ctx.fill();
-
-
-        ctx.fillStyle =
-          "#7895ab";
-
-        ctx.font =
-          "12px Arial";
-
-        ctx.textAlign =
-          "center";
-
-        ctx.fillText(
-          "Belum ada data",
-          width / 2,
-          height / 2 + 4
-        );
-
-
-        return;
-
-      }
+        active +
+        pending +
+        other;
 
 
       const centerX =
@@ -2963,361 +2425,429 @@
         Math.min(
           width,
           height
-        ) * .32;
+        ) * 0.30;
+
+
+      const values = [
+        active,
+        pending,
+        other
+      ];
 
 
       const colors = [
         "#25e4ff",
-        "#ffc04d",
-        "#ff607f"
+        "#ffd45c",
+        "#ff6584"
       ];
 
 
-      let startAngle =
-        -Math.PI / 2;
-
-
-      values.forEach(
-        (value,index) => {
-
-          if (!value) {
-            return;
-          }
-
-
-          const angle =
-            (
-              value /
-              total
-            ) *
-            Math.PI *
-            2;
-
-
-          ctx.beginPath();
-
-          ctx.moveTo(
-            centerX,
-            centerY
-          );
-
-          ctx.arc(
-            centerX,
-            centerY,
-            radius,
-            startAngle,
-            startAngle + angle
-          );
-
-          ctx.closePath();
-
-
-          ctx.fillStyle =
-            colors[index];
-
-          ctx.shadowBlur =
-            15;
-
-          ctx.shadowColor =
-            colors[index];
-
-          ctx.fill();
-
-
-          ctx.shadowBlur =
-            0;
-
-
-          startAngle +=
-            angle;
-
-        }
-      );
-
-
       /*
-       * DONUT HOLE
+       * Kalau kosong,
+       * tampilkan lingkaran kosong.
        */
 
-      ctx.beginPath();
+      if (total === 0) {
 
-      ctx.arc(
-        centerX,
-        centerY,
-        radius * .58,
-        0,
-        Math.PI * 2
-      );
+        ctx.beginPath();
+
+        ctx.arc(
+          centerX,
+          centerY,
+          radius,
+          0,
+          Math.PI * 2
+        );
+
+        ctx.strokeStyle =
+          "rgba(70,150,200,0.20)";
+
+        ctx.lineWidth = 24;
+
+        ctx.stroke();
+
+      }
+
+      else {
+
+        let startAngle =
+          -Math.PI / 2;
 
 
-      ctx.fillStyle =
-        "#06132f";
+        values.forEach(
+          function(value, index) {
 
-      ctx.fill();
+            if (value <= 0) {
+              return;
+            }
+
+
+            const angle =
+              (
+                value /
+                total
+              ) *
+              Math.PI *
+              2;
+
+
+            ctx.beginPath();
+
+            ctx.arc(
+              centerX,
+              centerY,
+              radius,
+              startAngle,
+              startAngle + angle
+            );
+
+
+            ctx.strokeStyle =
+              colors[index];
+
+            ctx.lineWidth = 24;
+
+            ctx.lineCap =
+              "round";
+
+            ctx.shadowColor =
+              colors[index];
+
+            ctx.shadowBlur = 10;
+
+            ctx.stroke();
+
+            ctx.shadowBlur = 0;
+
+
+            startAngle += angle;
+
+          }
+        );
+
+      }
+
+
+      /* CENTER */
+
+      ctx.textAlign =
+        "center";
+
+      ctx.textBaseline =
+        "middle";
 
 
       ctx.fillStyle =
         "#ffffff";
 
       ctx.font =
-        "bold 22px Arial";
-
-      ctx.textAlign =
-        "center";
+        "900 24px Arial";
 
       ctx.fillText(
         total,
         centerX,
-        centerY + 5
+        centerY - 6
       );
 
 
       ctx.fillStyle =
-        "#7895ab";
+        "#8faac0";
 
       ctx.font =
         "10px Arial";
 
       ctx.fillText(
-        "Subscriptions",
+        "TOTAL CARDS",
         centerX,
-        centerY + 22
+        centerY + 15
       );
 
     }
 
 
-    /* =====================================================
-       SUBSCRIPTION TABLE
-    ===================================================== */
+    /* =========================================
+       LOAD CARDS
+       ========================================= */
 
-    function renderSubscriptions(
-      subscriptions
-    ) {
+    async function loadCards() {
 
-      const container =
+      const tableContent =
         document.getElementById(
-          "subscriptionContent"
+          "tableContent"
         );
 
 
-      if (!subscriptions.length) {
+      tableContent.innerHTML =
+        '<div class="loading">Memuat data...</div>';
 
-        container.innerHTML =
-          `
-          <div class="empty">
-            Belum ada data subscription.
-          </div>
-          `;
 
-        return;
+      try {
+
+        /*
+         * INI ENDPOINT YANG SAMA
+         * DENGAN VERSI AWAL.
+         */
+
+        const response =
+          await fetch(
+            SUPABASE_URL +
+            "/rest/v1/cards?select=*&order=card_code.asc",
+            {
+              method: "GET",
+
+              headers: {
+
+                "apikey":
+                  SUPABASE_KEY,
+
+                /*
+                 * PENTING:
+                 *
+                 * Tidak menggunakan accessToken
+                 * yang bisa expired.
+                 */
+
+                "Authorization":
+                  "Bearer " +
+                  SUPABASE_KEY,
+
+                "Content-Type":
+                  "application/json"
+              }
+            }
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (!response.ok) {
+
+          throw new Error(
+            data.message ||
+            data.hint ||
+            "Gagal mengambil data kartu."
+          );
+
+        }
+
+
+        if (
+          !Array.isArray(data)
+        ) {
+
+          throw new Error(
+            "Format data kartu tidak valid."
+          );
+
+        }
+
+
+        renderCards(data);
+
+        renderSubscription(data);
 
       }
 
 
-      const latest =
-        subscriptions.slice(
-          0,
-          10
+      catch (error) {
+
+        console.error(
+          "LOAD CARDS ERROR:",
+          error
         );
 
 
-      let html = "";
+        tableContent.innerHTML =
+          '<div class="error">' +
+          "❌ Gagal memuat data kartu: " +
+          escapeHtml(
+            error.message
+          ) +
+          "</div>";
 
-
-      html +=
-        `<div class="table-wrapper">`;
-
-      html +=
-        `<table>`;
-
-      html +=
-        `<thead>
-          <tr>
-            <th>ID</th>
-            <th>Customer</th>
-            <th>Plan</th>
-            <th>Amount</th>
-            <th>Status</th>
-            <th>Tanggal</th>
-          </tr>
-        </thead>`;
-
-
-      html +=
-        `<tbody>`;
-
-
-      latest.forEach(
-        subscription => {
-
-          const id =
-            subscription.id ||
-            subscription.subscription_id ||
-            "-";
-
-
-          const customer =
-            subscription.customer_name ||
-            subscription.customer_email ||
-            subscription.email ||
-            subscription.customer_id ||
-            "-";
-
-
-          const plan =
-            subscription.plan_name ||
-            subscription.plan ||
-            subscription.product_name ||
-            subscription.product_id ||
-            "-";
-
-
-          const amount =
-            getSubscriptionRevenue(
-              subscription
-            );
-
-
-          const status =
-            String(
-              subscription.status ||
-              subscription.subscription_status ||
-              "-"
-            );
-
-
-          const statusLower =
-            status.toLowerCase();
-
-
-          let statusClass =
-            "status-other";
-
-
-          if (
-            [
-              "active",
-              "paid",
-              "running"
-            ].includes(
-              statusLower
-            )
-          ) {
-
-            statusClass =
-              "status-active";
-
-          }
-          else if (
-            statusLower ===
-            "pending"
-          ) {
-
-            statusClass =
-              "status-pending";
-
-          }
-
-
-          const date =
-            getRecordDate(
-              subscription
-            );
-
-
-          const dateText =
-            date ?
-            date.toLocaleDateString(
-              "id-ID",
-              {
-                day: "2-digit",
-                month: "short",
-                year: "numeric"
-              }
-            ) :
-            "-";
-
-
-          html +=
-            `
-            <tr>
-
-              <td>
-                ${escapeHtml(
-                  String(id).slice(0,18)
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  String(customer)
-                )}
-              </td>
-
-              <td>
-                ${escapeHtml(
-                  String(plan)
-                )}
-              </td>
-
-              <td>
-                ${formatRupiah(
-                  amount
-                )}
-              </td>
-
-              <td>
-                <span
-                  class="status ${statusClass}"
-                >
-                  ${escapeHtml(status)}
-                </span>
-              </td>
-
-              <td>
-                ${dateText}
-              </td>
-
-            </tr>
-            `;
-
-        }
-      );
-
-
-      html +=
-        `</tbody></table></div>`;
-
-
-      container.innerHTML =
-        html;
+      }
 
     }
 
 
-    /* =====================================================
-       CARD TABLE
-    ===================================================== */
+    /* =========================================
+       RENDER CARDS
+       ========================================= */
 
     function renderCards(
       cards
     ) {
 
-      const container =
+      const tableContent =
         document.getElementById(
-          "cardContent"
+          "tableContent"
         );
 
 
+      const total =
+        cards.length;
+
+
+      const active =
+        cards.filter(
+          function(card) {
+
+            return (
+              String(
+                card.status || ""
+              )
+                .toLowerCase()
+                .trim() ===
+              "active"
+            );
+
+          }
+        ).length;
+
+
+      const pending =
+        cards.filter(
+          function(card) {
+
+            return (
+              String(
+                card.status || ""
+              )
+                .toLowerCase()
+                .trim() ===
+              "pending"
+            );
+
+          }
+        ).length;
+
+
+      const other =
+        total -
+        active -
+        pending;
+
+
+      /*
+       * REVENUE
+       *
+       * Revenue dihitung:
+       *
+       * active cards × subscription price
+       */
+
+      const revenue =
+        active *
+        SUBSCRIPTION_PRICE;
+
+
+      document.getElementById(
+        "totalRevenue"
+      ).textContent =
+        formatRupiah(
+          revenue
+        );
+
+
+      document.getElementById(
+        "activeRevenue"
+      ).textContent =
+        formatRupiah(
+          revenue
+        );
+
+
+      document.getElementById(
+        "customers"
+      ).textContent =
+        total;
+
+
+      document.getElementById(
+        "activeCards"
+      ).textContent =
+        active;
+
+
+      document.getElementById(
+        "products"
+      ).textContent =
+        total > 0 ? 1 : 0;
+
+
+      document.getElementById(
+        "transactions"
+      ).textContent =
+        active;
+
+
+      document.getElementById(
+        "chartActiveCards"
+      ).textContent =
+        active;
+
+
+      document.getElementById(
+        "priceDisplay"
+      ).textContent =
+        formatRupiah(
+          SUBSCRIPTION_PRICE
+        );
+
+
+      document.getElementById(
+        "cardsCount"
+      ).textContent =
+        total +
+        " CARDS";
+
+
+      document.getElementById(
+        "statusActive"
+      ).textContent =
+        active;
+
+
+      document.getElementById(
+        "statusPending"
+      ).textContent =
+        pending;
+
+
+      document.getElementById(
+        "statusOther"
+      ).textContent =
+        other;
+
+
+      /*
+       * DRAW CHART
+       */
+
+      drawRevenueChart(
+        active
+      );
+
+
+      drawStatusChart(
+        active,
+        pending,
+        other
+      );
+
+
+      /*
+       * EMPTY
+       */
+
       if (!cards.length) {
 
-        container.innerHTML =
-          `
-          <div class="empty">
-            Belum ada data kartu.
-          </div>
-          `;
+        tableContent.innerHTML =
+          '<div class="empty">' +
+          "Belum ada data kartu." +
+          "</div>";
 
         return;
 
@@ -3328,53 +2858,38 @@
 
 
       html +=
-        `<div class="table-wrapper">`;
-
-      html +=
-        `<table>`;
-
-      html +=
-        `
-        <thead>
-
-          <tr>
-
-            <th>
-              Kode Kartu
-            </th>
-
-            <th>
-              Nama Bisnis
-            </th>
-
-            <th>
-              Pemilik
-            </th>
-
-            <th>
-              WhatsApp
-            </th>
-
-            <th>
-              Status
-            </th>
-
-            <th>
-              Google Review
-            </th>
-
-          </tr>
-
-        </thead>
-        `;
+        '<div class="subscription-table">';
 
 
       html +=
-        `<tbody>`;
+        "<table>";
+
+
+      html +=
+        "<thead>";
+
+
+      html +=
+        "<tr>" +
+        "<th>Kode Kartu</th>" +
+        "<th>Nama Bisnis</th>" +
+        "<th>Pemilik</th>" +
+        "<th>WhatsApp</th>" +
+        "<th>Status</th>" +
+        "<th>Google Review</th>" +
+        "</tr>";
+
+
+      html +=
+        "</thead>";
+
+
+      html +=
+        "<tbody>";
 
 
       cards.forEach(
-        card => {
+        function(card) {
 
           const status =
             String(
@@ -3383,16 +2898,13 @@
             );
 
 
-          const statusLower =
-            status.toLowerCase();
-
-
           let statusClass =
             "status-other";
 
 
           if (
-            statusLower ===
+            status
+              .toLowerCase() ===
             "active"
           ) {
 
@@ -3400,8 +2912,10 @@
               "status-active";
 
           }
+
           else if (
-            statusLower ===
+            status
+              .toLowerCase() ===
             "pending"
           ) {
 
@@ -3417,93 +2931,313 @@
 
 
           html +=
-            `
-            <tr>
+            "<tr>";
 
-              <td>
-                ${escapeHtml(
-                  card.card_code ||
-                  "-"
-                )}
-              </td>
 
-              <td>
-                ${escapeHtml(
-                  card.business_name ||
-                  "-"
-                )}
-              </td>
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.card_code ||
+              "-"
+            ) +
+            "</td>";
 
-              <td>
-                ${escapeHtml(
-                  card.owner_name ||
-                  "-"
-                )}
-              </td>
 
-              <td>
-                ${escapeHtml(
-                  card.whatsapp ||
-                  "-"
-                )}
-              </td>
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.business_name ||
+              "-"
+            ) +
+            "</td>";
 
-              <td>
 
-                <span
-                  class="status ${statusClass}"
-                >
-                  ${escapeHtml(
-                    status
-                  )}
-                </span>
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.owner_name ||
+              "-"
+            ) +
+            "</td>";
 
-              </td>
 
-              <td>
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.whatsapp ||
+              "-"
+            ) +
+            "</td>";
 
-                ${
-                  reviewUrl
 
-                  ?
+          html +=
+            "<td>" +
+            '<span class="status ' +
+            statusClass +
+            '">' +
+            escapeHtml(
+              status
+            ) +
+            "</span>" +
+            "</td>";
 
-                  `
-                  <a
-                    class="review-link"
-                    href="${escapeAttribute(
-                      reviewUrl
-                    )}"
-                    target="_blank"
-                    rel="noopener"
-                  >
-                    Buka Review
-                  </a>
-                  `
 
-                  :
+          if (
+            reviewUrl
+          ) {
 
-                  "-"
-                }
+            html +=
+              "<td>" +
+              '<a ' +
+              'class="review-link" ' +
+              'href="' +
+              escapeAttribute(
+                reviewUrl
+              ) +
+              '" ' +
+              'target="_blank" ' +
+              'rel="noopener">' +
+              "Buka Review" +
+              "</a>" +
+              "</td>";
 
-              </td>
+          }
 
-            </tr>
-            `;
+          else {
+
+            html +=
+              "<td>-</td>";
+
+          }
+
+
+          html +=
+            "</tr>";
 
         }
       );
 
 
       html +=
-        `</tbody>`;
+        "</tbody>";
 
 
       html +=
-        `</table>`;
+        "</table>";
 
 
       html +=
-        `</div>`;
+        "</div>";
+
+
+      tableContent.innerHTML =
+        html;
+
+    }
+
+
+    /* =========================================
+       RENDER SUBSCRIPTION
+       ========================================= */
+
+    function renderSubscription(
+      cards
+    ) {
+
+      const container =
+        document.getElementById(
+          "subscriptionContent"
+        );
+
+
+      if (
+        !cards ||
+        !cards.length
+      ) {
+
+        container.innerHTML =
+          '<div class="empty">' +
+          "Belum ada subscription." +
+          "</div>";
+
+        return;
+
+      }
+
+
+      /*
+       * Kita gunakan data cards
+       * sebagai sumber subscription
+       * sementara.
+       *
+       * Ini sengaja supaya dashboard
+       * tidak error kalau tabel
+       * subscriptions belum tersedia.
+       */
+
+
+      const latest =
+        cards
+          .slice()
+          .reverse()
+          .slice(
+            0,
+            10
+          );
+
+
+      let html = "";
+
+
+      html +=
+        '<div class="subscription-table">';
+
+
+      html +=
+        "<table>";
+
+
+      html +=
+        "<thead>";
+
+
+      html +=
+        "<tr>" +
+        "<th>Kode</th>" +
+        "<th>Customer</th>" +
+        "<th>Bisnis</th>" +
+        "<th>Revenue</th>" +
+        "<th>Status</th>" +
+        "</tr>";
+
+
+      html +=
+        "</thead>";
+
+
+      html +=
+        "<tbody>";
+
+
+      latest.forEach(
+        function(card) {
+
+          const isActive =
+            String(
+              card.status ||
+              ""
+            )
+              .toLowerCase()
+              .trim() ===
+            "active";
+
+
+          const revenue =
+            isActive
+              ? SUBSCRIPTION_PRICE
+              : 0;
+
+
+          const status =
+            card.status ||
+            "-";
+
+
+          let statusClass =
+            "status-other";
+
+
+          if (
+            String(status)
+              .toLowerCase() ===
+            "active"
+          ) {
+
+            statusClass =
+              "status-active";
+
+          }
+
+          else if (
+            String(status)
+              .toLowerCase() ===
+            "pending"
+          ) {
+
+            statusClass =
+              "status-pending";
+
+          }
+
+
+          html +=
+            "<tr>";
+
+
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.card_code ||
+              "-"
+            ) +
+            "</td>";
+
+
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.owner_name ||
+              "-"
+            ) +
+            "</td>";
+
+
+          html +=
+            "<td>" +
+            escapeHtml(
+              card.business_name ||
+              "-"
+            ) +
+            "</td>";
+
+
+          html +=
+            "<td>" +
+            formatRupiah(
+              revenue
+            ) +
+            "</td>";
+
+
+          html +=
+            "<td>" +
+            '<span class="status ' +
+            statusClass +
+            '">' +
+            escapeHtml(
+              status
+            ) +
+            "</span>" +
+            "</td>";
+
+
+          html +=
+            "</tr>";
+
+        }
+      );
+
+
+      html +=
+        "</tbody>";
+
+
+      html +=
+        "</table>";
+
+
+      html +=
+        "</div>";
 
 
       container.innerHTML =
@@ -3512,80 +3246,9 @@
     }
 
 
-    /* =====================================================
-       ESCAPE HTML
-    ===================================================== */
-
-    function escapeHtml(
-      value
-    ) {
-
-      return String(value)
-
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-
-        .replace(
-          /</g,
-          "&lt;"
-        )
-
-        .replace(
-          />/g,
-          "&gt;"
-        )
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /'/g,
-          "&#039;"
-        );
-
-    }
-
-
-    /* =====================================================
-       ESCAPE ATTRIBUTE
-    ===================================================== */
-
-    function escapeAttribute(
-      value
-    ) {
-
-      return String(value)
-
-        .replace(
-          /&/g,
-          "&amp;"
-        )
-
-        .replace(
-          /"/g,
-          "&quot;"
-        )
-
-        .replace(
-          /</g,
-          "&lt;"
-        )
-
-        .replace(
-          />/g,
-          "&gt;"
-        );
-
-    }
-
-
-    /* =====================================================
+    /* =========================================
        REFRESH
-    ===================================================== */
+       ========================================= */
 
     document
       .getElementById(
@@ -3596,7 +3259,9 @@
         async function() {
 
           const button =
-            this;
+            document.getElementById(
+              "refreshButton"
+            );
 
 
           button.disabled =
@@ -3609,7 +3274,7 @@
 
           try {
 
-            await loadDashboard();
+            await loadCards();
 
           }
 
@@ -3627,9 +3292,9 @@
       );
 
 
-    /* =====================================================
+    /* =========================================
        LOGOUT
-    ===================================================== */
+       ========================================= */
 
     document
       .getElementById(
@@ -3659,69 +3324,79 @@
       );
 
 
-    /* =====================================================
-       RESIZE CHART
-    ===================================================== */
+    /* =========================================
+       RESPONSIVE CHART
+       ========================================= */
+
+    let resizeTimer;
+
 
     window.addEventListener(
       "resize",
-      async function() {
+      function() {
 
-        try {
-
-          const subscriptions =
-            await supabaseFetch(
-              "/rest/v1/subscriptions?select=*"
-            );
+        clearTimeout(
+          resizeTimer
+        );
 
 
-          renderRevenueChart(
-            subscriptions
+        resizeTimer =
+          setTimeout(
+            function() {
+
+              /*
+               * Ambil angka saat ini
+               * dari dashboard.
+               */
+
+              const active =
+                Number(
+                  document.getElementById(
+                    "activeCards"
+                  ).textContent
+                ) || 0;
+
+
+              const pending =
+                Number(
+                  document.getElementById(
+                    "statusPending"
+                  ).textContent
+                ) || 0;
+
+
+              const other =
+                Number(
+                  document.getElementById(
+                    "statusOther"
+                  ).textContent
+                ) || 0;
+
+
+              drawRevenueChart(
+                active
+              );
+
+
+              drawStatusChart(
+                active,
+                pending,
+                other
+              );
+
+            },
+            200
           );
-
-
-          renderStatusChart(
-            subscriptions
-          );
-
-        }
-
-        catch (error) {
-
-          console.error(
-            "CHART RESIZE ERROR:",
-            error
-          );
-
-        }
 
       }
     );
 
 
-    /* =====================================================
-       START
-    ===================================================== */
+    /* =========================================
+       LOAD DASHBOARD
+       ========================================= */
 
-    (async function() {
-
-      /*
-       * Pastikan session tersedia
-       * sebelum dashboard dimuat.
-       */
-
-      const token =
-        await refreshSession();
-
-
-      if (!token) {
-        return;
-      }
-
-
-      await loadDashboard();
-
-    })();
+    loadCards();
 
   </script>
 
