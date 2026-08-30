@@ -6,6 +6,7 @@
   const money = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(value) || 0);
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char]);
   let installed = false;
+  let refreshTimer = null;
 
   async function loadData() {
     const config = window.ALJAVA_CONFIG;
@@ -33,7 +34,10 @@
   }
 
   function render(data) {
-    if (!$('salesView') || installed) return;
+    if (!$('salesView')) return;
+    const old = $('salesOperationsReport');
+    if (old) old.remove();
+
     const { start, end } = getPeriod();
     const tx = data.transactions.filter((row) => {
       const date = new Date(row.transaction_date);
@@ -79,7 +83,6 @@
         </div>
       </div>`;
     anchor.parentElement.insertBefore(section, anchor);
-    installed = true;
 
     const totalRevenue = tx.reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
     const paidStatuses = new Set(['paid', 'lunas']);
@@ -93,15 +96,35 @@
     $('reportUnpaidTx').textContent = String(unpaidTx.length);
     $('salesCustomerRows').innerHTML = customerRows.length ? customerRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${row.transactions}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('') : '<tr><td colspan="7" class="muted">Belum ada data customer.</td></tr>';
     $('salesPaymentRows').innerHTML = statusRows.length ? statusRows.map((row) => `<tr><td>${esc(row.status)}</td><td>${row.transactions}</td><td>${money(row.revenue)}</td></tr>`).join('') : '<tr><td colspan="3" class="muted">Belum ada status pembayaran.</td></tr>';
-    $('salesRefreshReport')?.addEventListener('click', async () => { section.remove(); installed = false; try { render(await loadData()); } catch (error) { console.error('[ALJAVA] sales report:', error); } });
+
+    $('salesRefreshReport')?.addEventListener('click', () => void refresh());
+    installed = true;
   }
 
-  async function install() {
-    if (installed || !$('salesView')) return;
-    try { render(await loadData()); } catch (error) { console.error('[ALJAVA] sales report:', error); }
+  async function refresh() {
+    try {
+      const data = await loadData();
+      render(data);
+    } catch (error) {
+      console.error('[ALJAVA] sales report:', error);
+      const host = $('salesView')?.querySelector('.sales-report-error');
+      if (host) host.innerHTML = `<div class="notice err">❌ ${esc(error?.message || error)}</div>`;
+    }
   }
 
-  window.salesOperationsReport = { install };
-  document.addEventListener('aljava:sales-ui-ready', install);
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(() => void refresh(), 60);
+  }
+
+  function install() {
+    if (!$('salesView')) return;
+    if (!installed) void refresh();
+    $('salesStart')?.addEventListener('change', scheduleRefresh, { passive: true });
+    $('salesEnd')?.addEventListener('change', scheduleRefresh, { passive: true });
+  }
+
+  window.salesOperationsReport = { install, refresh };
+  document.addEventListener('aljava:sales-ui-ready', install, { once: true });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true }); else install();
 })();
