@@ -1,4 +1,4 @@
-/* ALJAVA TERIONITY — Sales dashboard (stage 2) */
+/* ALJAVA TERIONITY — Sales dashboard */
 (() => {
   'use strict';
 
@@ -29,6 +29,38 @@
       document.body.appendChild(script);
     });
     return exportLoader;
+  }
+
+  function normalizeWhatsapp(value) {
+    const digits = String(value || '').replace(/\D/g, '');
+    if (!digits) return '';
+    if (digits.startsWith('62')) return digits;
+    if (digits.startsWith('0')) return `62${digits.slice(1)}`;
+    return digits;
+  }
+
+  function whatsappUrl(number, message) {
+    const normalized = normalizeWhatsapp(number);
+    if (!normalized) return '';
+    return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+  }
+
+  function salesWhatsappMessage(row, customer, product) {
+    const qty = Number(row.quantity || 1);
+    const revenue = Number(row.selling_price || 0) * qty;
+    const status = row.payment_status || '-';
+    return [
+      'Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.',
+      '',
+      `Produk: ${product?.name || '-'}`,
+      `Qty: ${qty}`,
+      `Total: ${money(revenue)}`,
+      `Status pembayaran: ${status}`,
+      `Tanggal: ${new Date(row.transaction_date).toLocaleString('id-ID')}`,
+      '',
+      `Customer: ${customer?.business_name || customer?.owner_name || '-'}`,
+      'Terima kasih.'
+    ].join('\n');
   }
 
   function showView() {
@@ -99,7 +131,7 @@
       const [txResult, productsResult, customersResult] = await Promise.all([
         client.from('Transactions').select('id,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date').order('transaction_date', { ascending: false }),
         client.from('Product').select('id,name,product_code,commission'),
-        client.from('Customers').select('id,business_name,owner_name')
+        client.from('Customers').select('id,business_name,owner_name,whatsapp')
       ]);
       if (txResult.error) throw txResult.error;
       if (productsResult.error) throw productsResult.error;
@@ -130,7 +162,7 @@
       });
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
-      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customers[row.customer_id]?.business_name || customers[row.customer_id]?.owner_name || '-')}</td><td>${esc(products[row.product_id]?.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
+      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
     } catch (error) {
       const message = esc(error?.message || error);
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
