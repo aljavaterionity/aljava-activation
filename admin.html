@@ -1,378 +1,68 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#effcff"><title>ALJAVA TERIONITY - Admin</title><style>*{box-sizing:border-box}body{margin:0;min-height:100vh;color:#17324d;font:14px Inter,Poppins,Arial,sans-serif;background:radial-gradient(ellipse at 50% 0%,rgba(115,220,255,.48),transparent 40%),radial-gradient(ellipse at 100% 30%,rgba(180,240,255,.55),transparent 30%),linear-gradient(180deg,#effcff,#dff6ff 50%,#c8efff)}.stars{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.95) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(60,190,235,.4) 0 1px,transparent 1.5px);background-size:97px 83px,151px 137px;opacity:.35}.page{position:relative;z-index:1;max-width:1200px;margin:auto;padding:20px}.top,.row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{font-size:22px;font-weight:900;letter-spacing:2px;background:linear-gradient(90deg,#0879b8,#35c9f2,#0879b8);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}.muted{color:#58788f;font-size:12px}.glass{border:1px solid rgba(55,180,225,.3);border-radius:18px;background:linear-gradient(145deg,rgba(255,255,255,.75),rgba(220,247,255,.5));box-shadow:0 20px 60px rgba(38,139,177,.16);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden}.head{padding:16px 18px;border-bottom:1px solid rgba(55,180,225,.15)}.body{padding:18px}.actions{display:flex;gap:8px;flex-wrap:wrap}.btn,.field{border:1px solid rgba(39,163,211,.28);border-radius:10px;padding:10px 12px;background:rgba(255,255,255,.65);color:#17324d}.btn{cursor:pointer;font-weight:800}.danger{border-color:rgba(190,65,90,.32);background:rgba(255,225,232,.72);color:#9b3047}.stats{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;margin-top:18px}.stat{padding:15px}.num{margin-top:6px;color:#0794d1;font-size:22px;font-weight:900}.grid{display:grid;grid-template-columns:2fr 1fr;gap:14px}.panel{margin-top:14px}.filter{display:flex;gap:8px;flex-wrap:wrap}.chart{height:290px;display:flex;align-items:end;gap:7px;padding:12px;background:rgba(255,255,255,.35);border-radius:14px}.bar{flex:1;display:flex;flex-direction:column;justify-content:end;align-items:center;height:100%;gap:5px}.bar i{display:block;width:65%;max-width:52px;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,#35c9f2,#0879b8);min-height:4px}.bar span{font-size:10px;color:#58788f}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:760px}th,td{padding:10px;border-bottom:1px solid rgba(30,120,160,.1);text-align:left;font-size:12px}th{color:#247fa6;white-space:nowrap}.active{color:#159b73;font-weight:800}.pending{color:#b57916;font-weight:800}.expired{color:#c9435b;font-weight:800}.form{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.full{grid-column:1/-1;width:100%}.notice{padding:10px;border-radius:9px;margin-top:9px}.ok{background:rgba(50,190,150,.16)}.err{background:rgba(220,80,100,.13);color:#9b3047}.info{background:rgba(45,180,230,.12);color:#17658a}.login{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 10%,rgba(0,132,255,.38),transparent 42%),radial-gradient(ellipse at 85% 35%,rgba(0,225,255,.18),transparent 30%),linear-gradient(180deg,#010817 0%,#031b46 48%,#010713 100%);backdrop-filter:blur(4px)}.loginbox{width:min(420px,100%);padding:30px;border-radius:24px;border:1px solid rgba(55,210,255,.55);background:linear-gradient(145deg,rgba(4,25,72,.84),rgba(1,8,35,.95));box-shadow:0 0 35px rgba(0,160,255,.22),0 25px 75px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.06);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);position:relative}.loginbox:before{content:'';display:block;width:55px;height:2px;margin:0 auto 18px;border-radius:999px;background:linear-gradient(90deg,transparent,#25e4ff,transparent);box-shadow:0 0 12px rgba(37,228,255,.7)}.loginbox .brand{display:block;text-align:center;font-size:20px;letter-spacing:3px;background:linear-gradient(90deg,#fff,#35e7ff,#168cff,#fff);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent}.loginbox .muted{color:#9db7cc;text-align:center;font-size:13px;line-height:1.6;margin:10px 0 25px}.loginbox .field{width:100%;height:50px;margin-top:0;margin-bottom:14px;border:1px solid rgba(100,145,190,.45);border-radius:12px;outline:none;color:#fff;background:rgba(5,20,54,.9);font-size:14px}.loginbox .field::placeholder{color:#637f96}.loginbox .field:focus{border-color:#25ddff;box-shadow:0 0 0 3px rgba(0,190,255,.1),0 0 20px rgba(0,170,255,.18)}.loginbox button{width:100%;height:50px;margin-top:2px;border:0;border-radius:12px;color:#fff;background:linear-gradient(90deg,#0757c9,#168cff,#25dfff);font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 8px 25px rgba(0,140,255,.25)}.loginbox button:hover{transform:translateY(-1px);box-shadow:0 12px 30px rgba(0,180,255,.35)}.loginbox button:disabled{opacity:.6;cursor:not-allowed}.loginbox #loginMsg{margin-top:12px}.loginbox #loginMsg .notice.err{border:1px solid rgba(255,90,120,.4);background:rgba(220,40,75,.1);color:#ffdce4}.loginbox #loginMsg .notice.ok{border:1px solid rgba(50,230,255,.4);background:rgba(0,210,255,.1);color:#bffcff}@keyframes shine{to{background-position:250% center}}@media(max-width:1000px){.stats{grid-template-columns:repeat(3,1fr)}}@media(max-width:650px){.page{padding:13px}.stats,.form,.grid{grid-template-columns:1fr}.chart{height:250px}.brand{font-size:18px}.head,.body{padding:14px}}
-/* Admin login: match Aktivasi Kartu ALJAVA blue-light design */
-.login{position:fixed;inset:0;z-index:10;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 50% 0%,rgba(115,220,255,.48),transparent 40%),radial-gradient(ellipse at 100% 30%,rgba(180,240,255,.55),transparent 30%),linear-gradient(180deg,#effcff,#dff6ff 50%,#c8efff);backdrop-filter:none;-webkit-backdrop-filter:none}
-.login:after{content:'';position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(circle,rgba(255,255,255,.95) 0 1px,transparent 1.5px),radial-gradient(circle,rgba(60,190,235,.4) 0 1px,transparent 1.5px);background-size:97px 83px,151px 137px;opacity:.35}
-.loginbox{width:min(625px,100%);padding:27px 28px 23px;border:1px solid rgba(55,180,225,.3);border-radius:21px;background:linear-gradient(145deg,rgba(255,255,255,.76),rgba(220,247,255,.5));box-shadow:0 20px 60px rgba(38,139,177,.16),inset 0 1px 0 rgba(255,255,255,.8);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);overflow:hidden;position:relative;animation:cardIn .7s ease both}
-.loginbox:before{content:'';display:block;width:55px;height:2px;margin:0 auto 18px;border-radius:999px;background:linear-gradient(90deg,transparent,#35c9f2,transparent);box-shadow:0 0 12px rgba(53,201,242,.7)}
-.loginbox .brand{display:block;text-align:center;font-size:21px;font-weight:900;letter-spacing:2.5px;background:linear-gradient(90deg,#0879b8,#35c9f2,#0879b8);background-size:250% auto;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite}
-.loginbox .muted{color:#58788f;text-align:center;font-size:13px;line-height:1.6;margin:10px 0 25px}
-.loginbox .field{width:100%;height:55px;margin:0 0 15px;padding:0 14px;border:1px solid rgba(39,163,211,.28);border-radius:12px;outline:none;color:#17324d;background:rgba(255,255,255,.58);font:15px Inter,Poppins,Arial,sans-serif;box-shadow:inset 0 1px 0 rgba(255,255,255,.7);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);transition:.2s ease}
-.loginbox .field::placeholder{color:#7893a6}.loginbox .field:hover{border-color:rgba(39,163,211,.55)}.loginbox .field:focus{border-color:#35c9f2;background:rgba(255,255,255,.82);box-shadow:0 0 0 3px rgba(53,201,242,.12),0 0 22px rgba(53,201,242,.18)}
-.loginbox button{width:100%;height:57px;margin-top:7px;border:1px solid rgba(53,201,242,.75);border-radius:13px;color:#fff;background:linear-gradient(100deg,#0879b8,#159bd0 50%,#35c9f2);font:800 16px Inter,Poppins,Arial,sans-serif;cursor:pointer;box-shadow:0 0 25px rgba(53,201,242,.22),0 10px 25px rgba(38,139,177,.16);transition:.2s ease}
-.loginbox button:hover{transform:translateY(-2px);filter:brightness(1.06);box-shadow:0 0 34px rgba(53,201,242,.34),0 12px 30px rgba(38,139,177,.22)}.loginbox button:active{transform:scale(.985)}.loginbox button:disabled{opacity:.6;cursor:not-allowed}
-.loginbox #loginMsg{margin-top:14px}.loginbox #loginMsg .notice.err{border:1px solid rgba(190,65,90,.32);background:rgba(255,225,232,.72);color:#9b3047;text-align:center}.loginbox #loginMsg .notice.ok{border:1px solid rgba(50,190,150,.3);background:rgba(50,190,150,.16);color:#176c5a;text-align:center}
-@media(max-width:700px){.login{padding:20px 12px}.loginbox{padding:21px 16px 19px;border-radius:18px}.loginbox .brand{font-size:17px;letter-spacing:2.4px}.loginbox .muted{font-size:11px}.loginbox .field{height:54px;font-size:15px;border-radius:11px}.loginbox button{height:56px;font-size:16px}}\n\n\n/* ALJAVA ADMIN MENU LAYOUT V3 */
-.admin-top{position:relative;display:flex!important;align-items:center!important;gap:12px!important}
-.admin-menu-toggle{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:46px;height:46px;padding:0;border:1px solid rgba(39,163,211,.32);border-radius:12px;background:rgba(255,255,255,.78);color:#0879b8;box-shadow:0 10px 28px rgba(38,139,177,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;font-size:24px;font-weight:900;line-height:1;transition:.2s ease}
-.admin-menu-toggle:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(38,139,177,.22);background:rgba(255,255,255,.92)}
-.admin-menu-toggle:focus-visible{outline:3px solid rgba(53,201,242,.24);outline-offset:2px}
-.admin-menu-toggle span{display:block;line-height:1}
-.admin-menu{position:fixed!important;left:18px!important;top:78px!important;z-index:44!important;width:min(280px,calc(100vw - 36px))!important;margin:0!important;padding:16px!important;transform:translateX(calc(-100% - 26px));opacity:0;pointer-events:none;visibility:hidden;transition:transform .24s ease,opacity .2s ease,visibility .24s ease;box-shadow:0 24px 70px rgba(38,139,177,.22)!important}
-.admin-menu.menu-open{transform:translateX(0);opacity:1;pointer-events:auto;visibility:visible}
-.admin-menu h2{margin:0 0 4px}.admin-menu .muted{line-height:1.5}.admin-menu-grid{display:grid!important;grid-template-columns:1fr!important;gap:9px!important;margin-top:12px}
-.admin-menu-grid .btn{width:100%;min-height:48px;text-align:left;padding:11px 13px}
-.admin-menu-backdrop{position:fixed;inset:0;z-index:43;background:rgba(11,48,75,.14);display:none;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-.admin-menu-backdrop.show{display:block}
-.admin-menu-mobile-spacer{display:none}
-@media(max-width:700px){.admin-top{gap:9px}.admin-menu-toggle{width:44px;height:44px;font-size:22px}.admin-menu{left:12px!important;top:70px!important;width:calc(100vw - 24px)!important}.admin-menu-grid .btn{min-height:46px}}
-
-
-/* ALJAVA ADMIN MENU FINAL FIX */
-#adminMenuToggle{position:fixed!important;z-index:2147483647!important;pointer-events:auto!important;touch-action:manipulation!important}
-#adminMenuBackdrop{display:none!important;pointer-events:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.admin-menu{position:fixed!important;z-index:2147483646!important;display:none!important;visibility:visible!important;opacity:1!important;transform:none!important;pointer-events:auto!important;filter:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
-.admin-menu.is-open{display:block!important}
-
-</style></head><body><div id="adminMenuBackdrop" class="admin-menu-backdrop"></div><div class="stars"></div><div id="login" class="login"><div class="loginbox glass"><div class="brand">ALJAVA TERIONITY</div><p class="muted">Admin Dashboard</p><input id="email" class="field" type="email" placeholder="Email admin"><input id="password" class="field" type="password" placeholder="Password"><button id="loginBtn" class="btn">Masuk</button><div id="loginMsg"></div></div></div><main class="page" id="app" style="display:none"><header class="top admin-top"><div><div class="brand">ALJAVA TERIONITY</div><div class="muted">Admin Dashboard • Supabase Live</div></div><div class="actions"><button id="refresh" class="btn">Refresh</button><button id="logout" class="btn danger">Keluar</button></div></header><div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Utama</h1><p id="userEmail" class="muted"></p></div></div><section class="stats"><div class="glass stat"><div class="muted">Total Revenue</div><div id="totalRev" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Revenue Bulan Ini</div><div id="monthRev" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="totalScan" class="num">0</div></div><div class="glass stat"><div class="muted">Scan Bulan Ini</div><div id="monthScan" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Aktif</div><div id="activeCards" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Belum Aktif</div><div id="pendingCards" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Grafik Revenue Bulanan</h2><p class="muted">Pilih tahun dan bulan untuk memfilter grafik.</p></div><div class="filter"><select id="year" class="field"></select><select id="month" class="field"><option value="">Semua bulan</option><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">Mei</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Agu</option><option value="8">Sep</option><option value="9">Okt</option><option value="10">Nov</option><option value="11">Des</option></select></div></div></div><div class="body"><div id="chart" class="chart"></div><div id="chartTotal" class="muted" style="margin-top:9px"></div></div></section><div class="grid"><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Terbaru</h2></div><div id="txTable" class="body"></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Scan</h2></div><div id="scanSummary" class="body"></div></section></div><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Kartu Aktif / Belum Aktif</h2><p class="muted">Daftar kartu utama dari tabel Cards.</p></div><div class="filter"><input id="cardSearch" class="field" placeholder="Cari kode / customer"><select id="cardStatus" class="field"><option value="">Semua status</option><option value="active">Aktif</option><option value="pending">Belum Aktif</option><option value="expired">Expired</option></select></div></div></div><div class="body"><div id="cardSummary"></div><div id="cardTable" class="table-wrap" style="margin-top:12px"></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Kelola Kartu</h2><p class="muted">Kode kartu tetap manual. Buat satu kartu atau banyak kartu menggunakan kode yang Anda tentukan.</p></div><div class="body"><h3>Buat Satu Kartu</h3><form id="singleForm" class="form"><input id="singleCode" class="field" required placeholder="Kode kartu manual"><select id="singleProduct" class="field"><option value="">Produk (opsional)</option></select><select id="singleCustomer" class="field"><option value="">Customer (opsional)</option></select><input id="singleReview" class="field" type="url" placeholder="Google Review URL"><button class="btn" type="submit">Tambah Satu Kartu</button></form><div id="singleMsg"></div><hr style="margin:22px 0;border:0;border-top:1px solid rgba(55,180,225,.2)"><h3>Buat Banyak Kartu Sekaligus</h3><p class="muted">Masukkan kode manual satu per baris. Semua kode akan dibuat sebagai kartu baru dengan jenis/produk/customer yang sama.</p><form id="bulkForm"><textarea id="bulkCodes" class="field full" rows="8" required placeholder="ALJ-001\nALJ-002\nALJ-003"></textarea><div class="form" style="margin-top:9px"><select id="bulkProduct" class="field"><option value="">Produk (opsional)</option></select><select id="bulkCustomer" class="field"><option value="">Customer (opsional)</option></select></div><button id="bulkBtn" class="btn" type="submit" style="margin-top:9px">Buat Semua Kartu</button></form><div id="bulkMsg"></div></div></section><style id="aljava-admin-menu-style">
-.admin-menu{margin-top:18px;padding:14px 16px}.admin-menu h2{margin:0 0 10px}.admin-menu-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}.admin-menu button{min-height:48px}.admin-menu .menu-settings{background:rgba(255,255,255,.72)}
-.customer-panel{margin-top:14px}.customer-toolbar{display:flex;gap:8px;align-items:center;justify-content:space-between;flex-wrap:wrap}.customer-search{min-width:240px;flex:1}.customer-table{min-width:900px}.link-btn{display:inline-flex;align-items:center;gap:5px;padding:6px 9px;border-radius:8px;text-decoration:none;font-weight:800;color:#0879b8;background:rgba(53,201,242,.12);border:1px solid rgba(39,163,211,.22)}
-.admin-modal{position:fixed;inset:0;z-index:30;display:none;place-items:center;padding:18px;background:rgba(4,22,45,.38);backdrop-filter:blur(5px)}.admin-modal.show{display:grid}.admin-modal-card{width:min(520px,100%);padding:20px}.admin-modal-card h3{margin:0 0 8px}.admin-modal-card .actions{margin-top:14px;justify-content:flex-end}
-@media(max-width:800px){.admin-menu-grid{grid-template-columns:repeat(2,1fr)}}@media(max-width:520px){.admin-menu-grid{grid-template-columns:1fr}.customer-search{min-width:100%}}
-</style><!-- ALJAVA ADMIN MENU V1 -->
-<section class="glass admin-menu panel">
-  <div class="row"><div><h2>Main Menu</h2><p class="muted">Pengaturan dan akses cepat admin.</p></div></div>
-  <div class="admin-menu-grid">
-    <button id="adminReset" class="btn">↻ Reset Dashboard</button>
-    <button id="adminAddAccount" class="btn">＋ Tambah Akun</button>
-    <button id="adminCustomerTop" class="btn">👥 Database Customer</button>
-    <button id="adminLogout" class="btn danger">Keluar / Logout</button>
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#effcff">
+<title>ALJAVA TERIONITY - Admin</title>
+<link rel="stylesheet" href="/assets/admin.css">
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<section id="login" class="login">
+  <div class="login-box">
+    <div class="brand">ALJAVA TERIONITY</div><p class="muted">Admin Dashboard</p>
+    <input id="email" class="field" type="email" placeholder="Email admin" autocomplete="email">
+    <input id="password" class="field" type="password" placeholder="Password" autocomplete="current-password">
+    <button id="loginBtn" class="btn" type="button">Masuk</button><div id="loginMsg"></div>
   </div>
 </section>
-<section id="customerDatabase" class="glass customer-panel panel">
-  <div class="head"><div class="customer-toolbar"><div><h2 style="margin:0">Database Customer</h2><p class="muted">ID, usaha, jenis kartu, status, total scan/tap, dan link Google Review.</p></div><input id="customerSearch" class="field customer-search" placeholder="Cari nama usaha / ID..."></div></div>
-  <div class="body"><div class="table-wrap"><table class="customer-table"><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Status</th><th>Total Scan/Tap</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat data customer...</td></tr></tbody></table></div><div id="customerMsg"></div></div>
-</section>
-<div id="adminModal" class="admin-modal"><div class="glass admin-modal-card"><h3 id="adminModalTitle">Pengaturan</h3><div id="adminModalBody"></div><div class="actions"><button id="adminModalClose" class="btn">Tutup</button></div></div></div>
-<script id="aljava-admin-menu-script">
-(()=>{
-  const marker='/* ALJAVA ADMIN MENU V1 */';
-  const $=id=>document.getElementById(id);
-  const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let customerData=[];
-  async function loadCustomers(){
-    const rows=$('customerRows'), msg=$('customerMsg'); if(!rows) return;
-    rows.innerHTML='<tr><td colspan="6" class="muted">Memuat data customer...</td></tr>';
-    try{
-      const {data,error}=await sb.from('Customers').select('id,business_name,product_type,google_review_url,total_reviews').order('created_at',{ascending:false});
-      if(error) throw error;
-      const customers=data||[];
-      const ids=customers.map(x=>x.id).filter(Boolean);
-      let counts={};
-      if(ids.length){
-        const {data:cards,error:ce}=await sb.from('Cards').select('customer_id,product_type').in('customer_id',ids);
-        if(ce) throw ce;
-        (cards||[]).forEach(c=>{counts[c.customer_id]??={qty:0,types:{}};counts[c.customer_id].qty++;if(c.product_type) counts[c.customer_id].types[c.product_type]=(counts[c.customer_id].types[c.product_type]||0)+1;});
-      }
-      customerData=customers.map(c=>({id:c.id,business_name:c.business_name||'-',product_type:c.product_type||Object.keys(counts[c.id]?.types||{}).join(', ')||'-',qty:counts[c.id]?.qty||0,reviews:0,url:c.google_review_url||'',reviews:Number.isFinite(Number(c.total_reviews))?Number(c.total_reviews):0}));
-      renderCustomers();
-    }catch(e){rows.innerHTML='<tr><td colspan="6"><div class="notice err">Gagal memuat database customer: '+esc(e.message)+'</div></td></tr>';if(msg)msg.innerHTML='';}
-  }
-  function renderCustomers(){
-    const rows=$('customerRows'), q=($('customerSearch')?.value||'').toLowerCase().trim(); if(!rows)return;
-    const list=customerData.filter(c=>!q||c.business_name.toLowerCase().includes(q)||c.id.toLowerCase().includes(q));
-    rows.innerHTML=list.length?list.map(c=>`<tr><td>${esc(c.id)}</td><td><b>${esc(c.business_name)}</b></td><td>${esc(c.product_type)}</td><td><span class="${String(c.status).toLowerCase()==='active'?'active':String(c.status).toLowerCase()==='expired'?'expired':'pending'}">${esc(c.status)}</span></td><td>${c.scans}</td><td>${c.url?`<a class="link-btn" href="${esc(c.url)}" target="_blank" rel="noopener">🔗 Buka Review</a>`:'<span class="muted">Belum ada link</span>'}</td></tr>`).join(''):'<tr><td colspan="6" class="muted">Tidak ada customer.</td></tr>';
-  }
-  function modal(title,body){$('adminModalTitle').textContent=title;$('adminModalBody').innerHTML=body;$('adminModal').classList.add('show');}
-  function wire(){
-    if(!$('adminReset')) return;
-    $('adminReset').onclick=()=>{ if($('year'))$('year').value='';if($('month'))$('month').value='';$('adminModal').classList.remove('show');$('refresh')?.click();window.scrollTo({top:0,behavior:'smooth'}); };
-    $('adminLogout').onclick=()=>$('logout')?.click();
-    $('adminCustomerTop').onclick=()=>$('customerDatabase')?.scrollIntoView({behavior:'smooth'});
-    $('customerSearch').oninput=renderCustomers;
-    $('adminAddAccount').onclick=()=>modal('Tambah Akun','<div class="notice info">Fitur tambah akun admin membutuhkan proses server-side/privileged auth. Tidak ada akun atau password yang dibuat otomatis dari browser. Gunakan menu pengelolaan akun yang sudah disiapkan di server.</div>');
-    $('adminModalClose').onclick=()=>$('adminModal').classList.remove('show');
-    $('adminModal').onclick=e=>{if(e.target.id==='adminModal')$('adminModal').classList.remove('show')};
-    loadCustomers();
-  }
-  const boot=setInterval(()=>{if($('app')&&$('app').style.display!=='none'){clearInterval(boot);wire();}},300);
-})();
-</script><script id="aljava-admin-menu-v3-script">
-(()=>{
-  const boot=()=>{
-    const toggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    if(!toggle||!menu||!backdrop){return false;}
-    const close=()=>{menu.classList.remove('is-open');backdrop.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('is-open');backdrop.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
-    close();
-    toggle.onclick=(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();};
-    backdrop.onclick=close;
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
-    menu.addEventListener('click',(e)=>e.stopPropagation());
-    return true;
-  };
-  if(!boot()) document.addEventListener('DOMContentLoaded',()=>boot());
-})();
-</script><script id="aljava-admin-menu-blur-fix">
-(()=>{
-  const toggle=document.getElementById('adminMenuToggle');
-  const menu=document.querySelector('.admin-menu');
-  const backdrop=document.getElementById('adminMenuBackdrop');
-  if(!toggle||!menu||!backdrop)return;
-  const sync=()=>{
-    const open=menu.classList.contains('menu-open');
-    backdrop.classList.toggle('show',open);
-    document.documentElement.style.overflow=open?'hidden':'';
-    document.body.style.overflow=open?'hidden':'';
-  };
-  const close=()=>{menu.classList.remove('menu-open');toggle.setAttribute('aria-expanded','false');sync();};
-  const open=()=>{menu.classList.add('menu-open');toggle.setAttribute('aria-expanded','true');sync();};
-  toggle.onclick=()=>menu.classList.contains('menu-open')?close():open();
-  backdrop.onclick=close;
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-  close();
-})();
-</script>\n<script id="aljava-admin-menu-layout-script-v3">
-(()=>{
-  const setup=()=>{
-    const toggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    if(!toggle||!menu||!backdrop)return false;
-    const close=()=>{menu.classList.remove('menu-open');backdrop.classList.remove('show');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('menu-open');backdrop.classList.add('show');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',()=>menu.classList.contains('menu-open')?close():open());
-    backdrop.addEventListener('click',close);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-    menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>close()));
-    return true;
-  };
-  if(!setup()) document.addEventListener('DOMContentLoaded',setup,{once:true});
-})();
-</script>
-<script id="aljava-admin-menu-blur-fix">
-(()=>{
-  const toggle=document.getElementById('adminMenuToggle');
-  const menu=document.querySelector('.admin-menu');
-  const backdrop=document.getElementById('adminMenuBackdrop');
-  if(!toggle||!menu||!backdrop)return;
-  const sync=()=>{
-    const open=menu.classList.contains('menu-open');
-    backdrop.classList.toggle('show',open);
-    document.documentElement.style.overflow=open?'hidden':'';
-    document.body.style.overflow=open?'hidden':'';
-  };
-  const close=()=>{menu.classList.remove('menu-open');toggle.setAttribute('aria-expanded','false');sync();};
-  const open=()=>{menu.classList.add('menu-open');toggle.setAttribute('aria-expanded','true');sync();};
-  toggle.onclick=()=>menu.classList.contains('menu-open')?close():open();
-  backdrop.onclick=close;
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-  close();
-})();
-</script>\n<script id="aljava-admin-menu-layout-script-v3">
-(()=>{
-  const setup=()=>{
-    const toggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    if(!toggle||!menu||!backdrop)return false;
-    const close=()=>{menu.classList.remove('menu-open');backdrop.classList.remove('show');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('menu-open');backdrop.classList.add('show');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',()=>menu.classList.contains('menu-open')?close():open());
-    backdrop.addEventListener('click',close);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-    menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>close()));
-    return true;
-  };
-  if(!setup()) document.addEventListener('DOMContentLoaded',setup,{once:true});
-})();
-</script>
-\n<script id="aljava-admin-menu-layout-script-v3">
-(()=>{
-  const setup=()=>{
-    const toggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    if(!toggle||!menu||!backdrop)return false;
-    const close=()=>{menu.classList.remove('menu-open');backdrop.classList.remove('show');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('menu-open');backdrop.classList.add('show');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',()=>menu.classList.contains('menu-open')?close():open());
-    backdrop.addEventListener('click',close);
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});
-    menu.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>close()));
-    return true;
-  };
-  if(!setup()) document.addEventListener('DOMContentLoaded',setup,{once:true});
-})();
-</script>
-</main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>const SUPABASE_URL='https://lbzwmcxwxummitldxucj.supabase.co',KEY='sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw';const sb=window.supabase.createClient(SUPABASE_URL,KEY);let tx=[],scans=[],cards=[],products=[],customers=[],txCount=0;const $=id=>document.getElementById(id),money=v=>new Intl.NumberFormat('id-ID',{style:'currency',currency:'IDR',maximumFractionDigits:0}).format(Number(v)||0),esc=v=>String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));async function admin(){try{const{data:{session}}=await sb.auth.getSession();if(!session){await sb.auth.signOut({scope:'local'});$('login').style.display='grid';$('app').style.display='none';return false}const{data:{user},error:userError}=await sb.auth.getUser();if(userError||!user){await sb.auth.signOut({scope:'local'});$('login').style.display='grid';$('app').style.display='none';return false}const{data:isAdmin,error:adminError}=await sb.rpc('is_admin_user');if(adminError||isAdmin!==true){await sb.auth.signOut({scope:'local'});$('login').style.display='grid';$('app').style.display='none';$('loginMsg').innerHTML='<div class="notice err">❌ Akun bukan admin.</div>';return false}$('login').style.display='none';$('app').style.display='block';$('userEmail').textContent=user.email||'';return true}catch(e){await sb.auth.signOut({scope:'local'});$('login').style.display='grid';$('app').style.display='none';$('loginMsg').innerHTML='<div class="notice err">❌ Sesi login kedaluwarsa. Silakan masuk lagi.</div>';return false}}async function load(){try{const q=async(table,select,order='')=>{let x=sb.from(table).select(select);if(order)x=x.order(order,{ascending:false});const{data,error}=await x;if(error)throw error;return data||[]};[cards,products,customers,tx,scans]=await Promise.all([q('Cards','id,card_code,product_type,status,customer_id,product_id,google_review_url,created_at,activated_at,expires_at','created_at'),q('Product','id,name,category','name'),q('Customers','id,business_name,owner_name','created_at'),q('Transactions','id,customer_id,card_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date','transaction_date'),q('CardScans','id,card_id,card_code,event_type,scanned_at','scanned_at')]);txCount=tx.length;renderStats();renderChart();renderTx();renderScans();renderCards();fillProducts();fillCustomers()}catch(e){$('txTable').innerHTML='<div class="notice err">❌ '+esc(e.message)+'</div>'}}function revenueRows(){const y=Number($('year').value),m=$('month').value,a=Array(12).fill(0);tx.forEach(t=>{const d=new Date(t.transaction_date);if(d.getFullYear()===y)a[d.getMonth()]+=Number(t.selling_price||0)*Number(t.quantity||1)});return m===''?a.map((v,i)=>({v,i})): [{v:a[Number(m)],i:Number(m)}]}function renderStats(){const now=new Date(),ym=now.getFullYear(),mm=now.getMonth();const rev=tx.reduce((s,t)=>s+Number(t.selling_price||0)*Number(t.quantity||1),0),mr=tx.filter(t=>{const d=new Date(t.transaction_date);return d.getFullYear()===ym&&d.getMonth()===mm}).reduce((s,t)=>s+Number(t.selling_price||0)*Number(t.quantity||1),0),ms=scans.filter(s=>{const d=new Date(s.scanned_at);return d.getFullYear()===ym&&d.getMonth()===mm}).length;const active=cards.filter(c=>(c.status||'').toLowerCase()==='active'||c.activated_at).length;$('totalRev').textContent=money(rev);$('monthRev').textContent=money(mr);$('totalScan').textContent=scans.length;$('monthScan').textContent=ms;$('activeCards').textContent=active;$('pendingCards').textContent=cards.length-active}function renderChart(){const names=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'],rows=revenueRows(),max=Math.max(1,...rows.map(x=>x.v));$('chart').innerHTML=rows.map(x=>`<div class="bar" title="${names[x.i]}: ${money(x.v)}"><i style="height:${Math.max(5,x.v/max*220)}px"></i><span>${names[x.i]}</span></div>`).join('');$('chartTotal').textContent='Total periode: '+money(rows.reduce((s,x)=>s+x.v,0))+' • '+txCount+' transaksi terbaca'}function renderTx(){const cm=Object.fromEntries(customers.map(c=>[c.id,c])),pm=Object.fromEntries(products.map(p=>[p.id,p])),rows=tx.slice(0,12);if(!rows.length){$('txTable').innerHTML='<div class="muted">Belum ada transaksi.</div>';return}$('txTable').innerHTML='<div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Revenue</th><th>Status</th></tr></thead><tbody>'+rows.map(t=>`<tr><td>${new Date(t.transaction_date).toLocaleString('id-ID')}</td><td>${esc(cm[t.customer_id]?.business_name||cm[t.customer_id]?.owner_name||'-')}</td><td>${esc(pm[t.product_id]?.name||'-')}</td><td>${t.quantity||1}</td><td>${money(Number(t.selling_price||0)*Number(t.quantity||1))}</td><td>${esc(t.payment_status||'-')}</td></tr>`).join('')+'</tbody></table></div>'}function renderScans(){const map={};scans.forEach(s=>map[s.card_code]=(map[s.card_code]||0)+1);const rows=Object.entries(map).sort((a,b)=>b[1]-a[1]).slice(0,10);$('scanSummary').innerHTML=rows.length?rows.map(([c,n])=>`<div class="row" style="padding:9px 0;border-bottom:1px solid rgba(30,120,160,.1)"><strong>${esc(c)}</strong><span class="muted">${n} scan/tap</span></div>`).join(''):'<div class="muted">Belum ada scan/tap.</div>'}function renderCards(){const q=($('cardSearch').value||'').toLowerCase(),st=$('cardStatus').value;const cm=Object.fromEntries(customers.map(c=>[c.id,c]));const list=cards.filter(c=>(!st||(c.activated_at?'active':c.status||'pending')===st)&&(!q||`${c.card_code} ${cm[c.customer_id]?.business_name||''} ${c.product_type||''}`.toLowerCase().includes(q)));const active=list.filter(c=>c.activated_at||(c.status||'').toLowerCase()==='active').length;$('cardSummary').innerHTML=`<div class="notice info">Total ${list.length} kartu • <strong>${active}</strong> aktif • <strong>${list.length-active}</strong> belum aktif</div>`;$('cardTable').innerHTML=list.length?'<table><thead><tr><th>Kode</th><th>Jenis</th><th>Customer</th><th>Status</th><th>Dibuat</th></tr></thead><tbody>'+list.map(c=>{const a=!!c.activated_at||(c.status||'').toLowerCase()==='active';return `<tr><td><strong>${esc(c.card_code)}</strong></td><td>${esc(c.product_type||'-')}</td><td>${esc(cm[c.customer_id]?.business_name||cm[c.customer_id]?.owner_name||'-')}</td><td class="${a?'active':'pending'}">${a?'Aktif':'Belum Aktif'}</td><td>${new Date(c.created_at).toLocaleDateString('id-ID')}</td></tr>`}).join('')+'</tbody></table>':'<div class="muted">Tidak ada kartu.</div>'}function fillProducts(){const html='<option value="">Produk (opsional)</option>'+products.map(p=>`<option value="${esc(p.id)}">${esc(p.name||p.category||p.id)}</option>`).join('');$('singleProduct').innerHTML=html;$('bulkProduct').innerHTML=html}function fillCustomers(){const html='<option value="">Customer (opsional)</option>'+customers.map(c=>`<option value="${esc(c.id)}">${esc(c.business_name||c.owner_name||c.id)}</option>`).join('');$('singleCustomer').innerHTML=html;$('bulkCustomer').innerHTML=html}async function createCards(rows,msg){const{data,error}=await sb.from('Cards').insert(rows).select('id,card_code');if(error)throw error;msg.className='notice ok';msg.textContent=`✓ ${data?.length||rows.length} kartu berhasil dibuat.`;await load()}$('loginBtn').onclick=async()=>{const r=await sb.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});if(r.error){$('loginMsg').innerHTML='<div class="notice err">❌ '+esc(r.error.message)+'</div>';return}await admin();await load()};$('logout').onclick=async()=>{await sb.auth.signOut();location.reload()};$('refresh').onclick=load;$('cardSearch').oninput=renderCards;$('cardStatus').onchange=renderCards;$('year').onchange=renderChart;$('month').onchange=renderChart;$('singleForm').onsubmit=async e=>{e.preventDefault();try{const pid=$('singleProduct').value||null,cid=$('singleCustomer').value||null,p=products.find(x=>x.id===pid);await createCards([{card_code:$('singleCode').value.trim(),product_type:p?.category||p?.name||'Tanpa Jenis',status:'pending',product_id:pid,customer_id:cid,google_review_url:$('singleReview').value.trim()||null}],$('singleMsg'));e.target.reset()}catch(x){$('singleMsg').className='notice err';$('singleMsg').textContent='❌ '+esc(x.message)}};$('bulkForm').onsubmit=async e=>{e.preventDefault();const codes=[...new Set($('bulkCodes').value.split(/\r?\n/).map(x=>x.trim()).filter(Boolean))];if(!codes.length)return;try{const pid=$('bulkProduct').value||null,cid=$('bulkCustomer').value||null,p=products.find(x=>x.id===pid);await createCards(codes.map(card_code=>({card_code,product_type:p?.category||p?.name||'Tanpa Jenis',status:'pending',product_id:pid,customer_id:cid})),$('bulkMsg'));e.target.reset()}catch(x){$('bulkMsg').className='notice err';$('bulkMsg').textContent='❌ '+esc(x.message)}};for(let i=new Date().getFullYear()-3;i<=new Date().getFullYear()+1;i++)$('year').insertAdjacentHTML('beforeend',`<option value="${i}">${i}</option>`);$('year').value=new Date().getFullYear();(async()=>{if(await admin())await load()})()</script>
-<script id="aljava-admin-menu-final-fix-script">
-(()=>{
-  const ready=()=>{
-    const oldToggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    if(!oldToggle||!menu||oldToggle.dataset.finalBound==='1') return;
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    const toggle=oldToggle.cloneNode(true);
-    oldToggle.replaceWith(toggle);
-    if(backdrop) backdrop.remove();
-    document.body.appendChild(menu);
-    menu.classList.remove('menu-open','show');
-    menu.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded','false');
-    toggle.dataset.finalBound='1';
-    const close=()=>{menu.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
-    const add=(id,fn)=>document.getElementById(id)?.addEventListener('click',fn);
-    add('adminCustomerTop',()=>{close();document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});});
-    add('adminLogout',()=>document.getElementById('logout')?.click());
-    add('adminReset',()=>document.getElementById('refresh')?.click());
-    add('adminAddAccount',()=>{});
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true}); else ready();
-  setTimeout(ready,500);
-})();
-</script>
 
+<button id="menuButton" class="menu-button" type="button" aria-label="Buka Main Menu" aria-expanded="false">☰</button>
+<nav id="menuPanel" class="menu-panel" aria-label="Main Menu">
+  <div class="row"><div><h2 style="margin:0">Main Menu</h2><p class="muted">Akses dan pengaturan admin.</p></div><button id="closeMenu" class="btn" type="button">Tutup</button></div>
+  <div class="menu-items">
+    <button id="dashboardMenu" class="btn" type="button">▦ Dashboard Utama</button>
+    <button id="cardsMenu" class="btn" type="button">💳 Kelola Kartu</button>
+    <button id="customerMenu" class="btn" type="button">👥 Database Customer</button>
+    <button id="resetMenu" class="btn" type="button">↻ Reset Dashboard</button>
+    <button id="addAccountMenu" class="btn" type="button">＋ Tambah Akun</button>
+    <button id="logoutMenu" class="btn danger" type="button">Keluar / Logout</button>
+  </div>
+</nav>
 
-<script id="aljava-admin-menu-final-fix-script">
-(()=>{
-  const ready=()=>{
-    const oldToggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    if(!oldToggle||!menu||oldToggle.dataset.finalBound==='1') return;
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    const toggle=oldToggle.cloneNode(true);
-    oldToggle.replaceWith(toggle);
-    if(backdrop) backdrop.remove();
-    document.body.appendChild(menu);
-    menu.classList.remove('menu-open','show');
-    menu.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded','false');
-    toggle.dataset.finalBound='1';
-    const close=()=>{menu.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
-    const add=(id,fn)=>document.getElementById(id)?.addEventListener('click',fn);
-    add('adminCustomerTop',()=>{close();document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});});
-    add('adminLogout',()=>document.getElementById('logout')?.click());
-    add('adminReset',()=>document.getElementById('refresh')?.click());
-    add('adminAddAccount',()=>{});
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true}); else ready();
-  setTimeout(ready,500);
-})();
-</script>
+<main id="app" class="page" style="display:none">
+  <header class="top">
+    <div><div class="brand">ALJAVA TERIONITY</div><div class="muted">Admin Dashboard • Supabase Live</div></div>
+    <div class="actions"><button id="refresh" class="btn" type="button">Refresh</button><button id="logoutTop" class="btn danger" type="button">Keluar</button></div>
+  </header>
 
+  <section id="dashboardView" class="view active-view">
+    <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Utama</h1><p id="userEmail" class="muted"></p></div></div>
+    <section class="stats">
+      <div class="glass stat"><div class="muted">Total Revenue</div><div id="totalRev" class="num">Rp 0</div></div>
+      <div class="glass stat"><div class="muted">Revenue Bulan Ini</div><div id="monthRev" class="num">Rp 0</div></div>
+      <div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="totalScan" class="num">0</div></div>
+      <div class="glass stat"><div class="muted">Scan Bulan Ini</div><div id="monthScan" class="num">0</div></div>
+      <div class="glass stat"><div class="muted">Kartu Aktif</div><div id="activeCards" class="num">0</div></div>
+      <div class="glass stat"><div class="muted">Kartu Belum Aktif</div><div id="pendingCards" class="num">0</div></div>
+    </section>
+    <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Grafik Revenue Bulanan</h2><p class="muted">Filter tahun dan bulan.</p></div><div class="filter"><select id="year" class="field"></select><select id="month" class="field"><option value="">Semua bulan</option><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">Mei</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Agu</option><option value="8">Sep</option><option value="9">Okt</option><option value="10">Nov</option><option value="11">Des</option></select></div></div></div><div class="body"><div id="chart" class="chart"></div><div id="chartTotal" class="muted" style="margin-top:9px"></div></div></section>
+    <div class="grid"><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Terbaru</h2></div><div id="txTable" class="body"></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Scan</h2></div><div id="scanSummary" class="body"></div></section></div>
+    <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Kartu Aktif / Belum Aktif</h2><p class="muted">Ringkasan kartu utama.</p></div><div class="filter"><input id="cardSearch" class="field" placeholder="Cari kode / customer"><select id="cardStatus" class="field"><option value="">Semua status</option><option value="active">Aktif</option><option value="pending">Belum Aktif</option><option value="expired">Expired</option></select></div></div></div><div class="body"><div id="cardSummary"></div><div id="cardTable" class="table-wrap" style="margin-top:12px"></div></div></section>
+  </section>
 
-<script id="aljava-admin-menu-final-fix-script">
-(()=>{
-  const ready=()=>{
-    const oldToggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    if(!oldToggle||!menu||oldToggle.dataset.finalBound==='1') return;
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    const toggle=oldToggle.cloneNode(true);
-    oldToggle.replaceWith(toggle);
-    if(backdrop) backdrop.remove();
-    document.body.appendChild(menu);
-    menu.classList.remove('menu-open','show');
-    menu.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded','false');
-    toggle.dataset.finalBound='1';
-    const close=()=>{menu.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
-    const add=(id,fn)=>document.getElementById(id)?.addEventListener('click',fn);
-    add('adminCustomerTop',()=>{close();document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});});
-    add('adminLogout',()=>document.getElementById('logout')?.click());
-    add('adminReset',()=>document.getElementById('refresh')?.click());
-    add('adminAddAccount',()=>{});
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true}); else ready();
-  setTimeout(ready,500);
-})();
-</script>
+  <section id="cardsView" class="view">
+    <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Kelola Kartu</h1><p class="muted">Pembuatan kartu terpisah dari Dashboard Utama.</p></div></div>
+    <section class="glass panel"><div class="head"><h2 style="margin:0">Buat Satu Kartu</h2></div><div class="body"><form id="singleForm" class="form"><input id="singleCode" class="field" required placeholder="Kode kartu manual"><select id="singleProduct" class="field"><option value="">Produk (opsional)</option></select><select id="singleCustomer" class="field"><option value="">Customer (opsional)</option></select><input id="singleReview" class="field" type="url" placeholder="Google Review URL"><button class="btn" type="submit">Tambah Satu Kartu</button></form><div id="singleMsg"></div></div></section>
+    <section class="glass panel"><div class="head"><h2 style="margin:0">Buat Banyak Kartu Sekaligus</h2></div><div class="body"><p class="muted">Masukkan satu kode kartu per baris.</p><form id="bulkForm"><textarea id="bulkCodes" class="field full" rows="8" required placeholder="ALJ-001&#10;ALJ-002&#10;ALJ-003"></textarea><div class="form" style="margin-top:9px"><select id="bulkProduct" class="field"><option value="">Produk (opsional)</option></select><select id="bulkCustomer" class="field"><option value="">Customer (opsional)</option></select></div><button class="btn" type="submit" style="margin-top:9px">Buat Semua Kartu</button></form><div id="bulkMsg"></div></div></section>
+  </section>
 
-
-<script id="aljava-admin-menu-final-fix-script">
-(()=>{
-  const ready=()=>{
-    const oldToggle=document.getElementById('adminMenuToggle');
-    const menu=document.querySelector('.admin-menu');
-    if(!oldToggle||!menu||oldToggle.dataset.finalBound==='1') return;
-    const backdrop=document.getElementById('adminMenuBackdrop');
-    const toggle=oldToggle.cloneNode(true);
-    oldToggle.replaceWith(toggle);
-    if(backdrop) backdrop.remove();
-    document.body.appendChild(menu);
-    menu.classList.remove('menu-open','show');
-    menu.classList.remove('is-open');
-    toggle.setAttribute('aria-expanded','false');
-    toggle.dataset.finalBound='1';
-    const close=()=>{menu.classList.remove('is-open');toggle.setAttribute('aria-expanded','false');};
-    const open=()=>{menu.classList.add('is-open');toggle.setAttribute('aria-expanded','true');};
-    toggle.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();menu.classList.contains('is-open')?close():open();});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')close();});
-    const add=(id,fn)=>document.getElementById(id)?.addEventListener('click',fn);
-    add('adminCustomerTop',()=>{close();document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});});
-    add('adminLogout',()=>document.getElementById('logout')?.click());
-    add('adminReset',()=>document.getElementById('refresh')?.click());
-    add('adminAddAccount',()=>{});
-  };
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',ready,{once:true}); else ready();
-  setTimeout(ready,500);
-})();
-</script>
-
-</body></html><style id="aljava-admin-menu-v4-style">
-/* ALJAVA ADMIN MENU V4 */
-.admin-menu-toggle,.admin-menu{ }
-#aljavaMenuV4Button{position:fixed!important;top:18px!important;left:18px!important;z-index:2147483647!important;width:48px!important;height:48px!important;display:none!important;align-items:center!important;justify-content:center!important;padding:0!important;margin:0!important;border:1px solid rgba(39,163,211,.38)!important;border-radius:12px!important;background:rgba(255,255,255,.94)!important;color:#0879b8!important;box-shadow:0 12px 30px rgba(38,139,177,.20)!important;cursor:pointer!important;font:900 25px/1 Inter,Poppins,Arial,sans-serif!important;pointer-events:auto!important;user-select:none!important}
-#aljavaMenuV4Button:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(38,139,177,.28)!important}
-#aljavaMenuV4Button.v4-visible{display:flex!important}
-#aljavaMenuV4Drawer{position:fixed!important;top:76px!important;left:18px!important;z-index:2147483646!important;width:280px!important;display:none!important;padding:16px!important;margin:0!important;border:1px solid rgba(55,180,225,.30)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(220,247,255,.94))!important;box-shadow:0 24px 70px rgba(38,139,177,.25)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important;pointer-events:auto!important}
-#aljavaMenuV4Drawer.v4-open{display:block!important}
-#aljavaMenuV4Drawer h2{margin:0 0 4px;color:#17324d;font-size:20px}
-#aljavaMenuV4Drawer p{margin:0 0 12px;color:#58788f;font-size:12px}
-#aljavaMenuV4Drawer button{display:block!important;width:100%!important;min-height:48px!important;margin:8px 0!important;padding:11px 13px!important;border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.78)!important;color:#17324d!important;text-align:left!important;font:800 14px/1.2 Inter,Poppins,Arial,sans-serif!important;cursor:pointer!important;pointer-events:auto!important}
-#aljavaMenuV4Drawer button:hover{background:rgba(53,201,242,.14)!important;border-color:rgba(39,163,211,.55)!important}
-#aljavaMenuV4Drawer .danger{color:#9b3047!important;background:rgba(255,225,232,.78)!important;border-color:rgba(190,65,90,.32)!important}
-@media(max-width:520px){#aljavaMenuV4Button{top:12px!important;left:12px!important;width:44px!important;height:44px!important}#aljavaMenuV4Drawer{top:68px!important;left:12px!important;width:calc(100vw - 24px)!important}}
-</style><script id="aljava-admin-menu-v4-script">
-(()=>{
-  const boot=()=>{
-    if(document.getElementById('aljavaMenuV4Button')) return true;
-    const app=document.getElementById('app');
-    const style=document.createElement('div');
-    style.innerHTML='<button id="aljavaMenuV4Button" type="button" aria-label="Buka Main Menu" aria-expanded="false">☰</button><div id="aljavaMenuV4Drawer" role="dialog" aria-label="Main Menu"><h2>Main Menu</h2><p>Pengaturan dan akses admin</p><button type="button" data-target="adminReset">↻ Reset Dashboard</button><button type="button" data-target="adminAddAccount">＋ Tambah Akun</button><button type="button" data-target="adminCustomerTop">👥 Database Customer</button><button type="button" data-target="adminLogout" class="danger">Keluar / Logout</button></div>';
-    document.body.appendChild(style.firstElementChild);
-    document.body.appendChild(style.lastElementChild);
-    const b=document.getElementById('aljavaMenuV4Button');
-    const d=document.getElementById('aljavaMenuV4Drawer');
-    const sync=()=>{ const logged=!!app && getComputedStyle(app).display!=='none'; b.classList.toggle('v4-visible',logged); if(!logged)d.classList.remove('v4-open'); };
-    b.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();d.classList.toggle('v4-open');b.setAttribute('aria-expanded',d.classList.contains('v4-open')?'true':'false');});
-    d.addEventListener('click',(e)=>{
-      e.stopPropagation();
-      const btn=e.target.closest('button[data-target]');
-      if(!btn)return;
-      const target=document.getElementById(btn.dataset.target);
-      if(target){target.click();}
-      d.classList.remove('v4-open');
-      b.setAttribute('aria-expanded','false');
-    });
-    document.addEventListener('click',(e)=>{if(!d.contains(e.target)&&e.target!==b)d.classList.remove('v4-open');});
-    document.addEventListener('keydown',(e)=>{if(e.key==='Escape')d.classList.remove('v4-open');});
-    const obs=new MutationObserver(sync); if(app)obs.observe(app,{attributes:true,attributeFilter:['style']});
-    setInterval(sync,500); sync();
-    document.querySelectorAll('.admin-menu-toggle,.admin-menu-backdrop,.admin-menu').forEach(el=>{if(el.id!=='aljavaMenuV4Drawer')el.style.pointerEvents='none';});
-    return true;
-  };
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
-})();
-</script>
+  <section id="customersView" class="view">
+    <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Database Customer</h1><p class="muted">ID, Nama Usaha, Jenis Kartu, Status, Total Scan/Tap, dan Google Review.</p></div></div>
+    <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Customer</h2><p class="muted">Data dihitung dari customer, kartu, dan aktivitas scan/tap.</p></div><input id="customerSearch" class="field" placeholder="Cari nama usaha / ID"></div></div><div class="body"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Status</th><th>Total Scan/Tap</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat...</td></tr></tbody></table></div></div></section>
+  </section>
+</main>
+<div id="modal" class="modal"><div class="glass modal-card"><h3 id="modalTitle">Pengaturan</h3><div id="modalBody"></div><div class="actions" style="margin-top:14px;justify-content:flex-end"><button id="modalClose" class="btn" type="button">Tutup</button></div></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/admin.js"></script>
+</body>
+</html>
