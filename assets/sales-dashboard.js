@@ -8,7 +8,6 @@
   let sb = null;
   let initialized = false;
   let exportLoader = null;
-  let opsLoader = null;
 
   function getClient() {
     if (sb) return sb;
@@ -30,20 +29,6 @@
       document.body.appendChild(script);
     });
     return exportLoader;
-  }
-
-  function loadOpsModule() {
-    if (window.salesOperations?.install) { window.salesOperations.install(); return Promise.resolve(); }
-    if (opsLoader) return opsLoader;
-    opsLoader = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = '/assets/sales-ops.js';
-      script.async = true;
-      script.onload = () => { try { window.salesOperations?.install?.(); resolve(); } catch (error) { reject(error); } };
-      script.onerror = () => reject(new Error('Modul operasional penjualan gagal dimuat.'));
-      document.body.appendChild(script);
-    });
-    return opsLoader;
   }
 
   function normalizeWhatsapp(value) {
@@ -135,7 +120,6 @@
     $('salesEnd')?.addEventListener('change', () => void loadSales());
     initialized = true;
     document.dispatchEvent(new CustomEvent('aljava:sales-ui-ready'));
-    void loadOpsModule();
   }
 
   function getPeriod() {
@@ -186,8 +170,6 @@
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
       $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
-      void loadOpsModule();
-      window.salesOperations?.load?.();
     } catch (error) {
       const message = esc(error?.message || error);
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
