@@ -1,30 +1,34 @@
-/* ALJAVA TERIONITY — Reset dashboard
-   Intentionally self-contained: one click = one deterministic reset.
+/* ALJAVA TERIONITY — Full Dashboard Reset
+   Reset button restores the admin UI to its clean initial dashboard state.
+   It never deletes database records or logs the admin out.
 */
 (() => {
   'use strict';
 
   const RESET_URL = '/admin.html#dashboard';
 
-  function hardReset(event) {
+  function fullDashboardReset(event) {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
     }
 
-    // Use a normal navigation so every in-memory filter/view/selection state
-    // is discarded. Login/session remains stored by Supabase.
+    // Full navigation intentionally clears all in-memory dashboard state:
+    // filters, search, selections, chart state, and active view.
+    // Supabase authentication is preserved by the existing session.
     window.location.assign(RESET_URL);
   }
 
+  window.__resetDashboard = fullDashboardReset;
+
   function bind() {
     const button = document.getElementById('resetMenu');
-    if (!button || button.dataset.hardResetBound === '1') return;
+    if (!button || button.dataset.fullResetBound === '1') return;
 
-    button.dataset.hardResetBound = '1';
-    button.onclick = hardReset;
-    button.addEventListener('click', hardReset, true);
+    button.dataset.fullResetBound = '1';
+    button.onclick = fullDashboardReset;
+    button.addEventListener('click', fullDashboardReset, true);
   }
 
   if (document.readyState === 'loading') {
