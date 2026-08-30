@@ -1,1 +1,0 @@
-Admin hamburger menu repair trigger.
