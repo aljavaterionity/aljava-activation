@@ -1,0 +1,38 @@
+name: Force Kelola Kartu Menu
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[kelola-kartu-force]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Force inject Kelola Kartu into the active hamburger drawer
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = 'ALJAVA KELola Kartu FORCE V1'
+          if marker in s:
+              print('Force patch already installed')
+              raise SystemExit(0)
+          css = r'''\n/* ALJAVA KELola Kartu FORCE V1 */\n#aljavaForcedCardPanel{position:fixed!important;inset:0!important;z-index:2147483640!important;display:none!important;padding:24px!important;background:#effcff!important;overflow:auto!important}\n#aljavaForcedCardPanel.open{display:block!important}\n#aljavaForcedCardInner{width:min(1000px,100%)!important;margin:56px auto 30px!important}\n#aljavaForcedCardClose{float:right!important;margin-bottom:12px!important}\n#aljavaForcedCardPanel .card-source{clear:both!important}\n#aljavaForceKelolaKartu{display:block!important;width:100%!important;min-height:48px!important;margin:8px 0!important;padding:11px 13px!important;border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.94)!important;color:#17324d!important;text-align:left!important;font:800 14px/1.2 Inter,Poppins,Arial,sans-serif!important;cursor:pointer!important;pointer-events:auto!important}\n'''
+          js = r'''\n<script id="aljava-kelola-kartu-force-script">\n(()=>{\n  const boot=()=>{\n    let drawer=document.getElementById('aljavaMenuV4Drawer');\n    const app=document.getElementById('app');\n    if(!drawer){\n      drawer=document.createElement('div');\n      drawer.id='aljavaMenuV4Drawer';\n      drawer.setAttribute('role','dialog');\n      drawer.style.cssText='position:fixed;top:76px;left:18px;z-index:2147483646;width:280px;padding:16px;background:rgba(255,255,255,.98);border:1px solid rgba(55,180,225,.3);border-radius:18px;box-shadow:0 24px 70px rgba(38,139,177,.25);display:none;pointer-events:auto';\n      drawer.innerHTML='<h2 style="margin:0 0 10px;color:#17324d">Main Menu</h2>';\n      document.body.appendChild(drawer);\n    }\n    if(!document.getElementById('aljavaMenuV4Button')){\n      const b=document.createElement('button');\n      b.id='aljavaMenuV4Button'; b.type='button'; b.textContent='☰'; b.setAttribute('aria-label','Buka Main Menu');\n      b.style.cssText='position:fixed;left:18px;top:18px;z-index:2147483647;width:48px;height:48px;border:1px solid rgba(39,163,211,.38);border-radius:12px;background:#fff;color:#0879b8;font-size:25px;font-weight:900;cursor:pointer';\n      document.body.appendChild(b);\n      b.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();drawer.style.display=drawer.style.display==='block'?'none':'block';});\n    }\n    if(!document.getElementById('aljavaForceKelolaKartu')){\n      const btn=document.createElement('button');\n      btn.id='aljavaForceKelolaKartu'; btn.type='button'; btn.textContent='💳 Kelola Kartu';\n      drawer.appendChild(btn);\n      const source=[...document.querySelectorAll('section.glass.panel')].find(el=>/Buat Satu Kartu|Buat Banyak Kartu Sekaligus/i.test(el.textContent||''));\n      if(source){\n        source.classList.add('card-source');\n        const panel=document.createElement('div'); panel.id='aljavaForcedCardPanel';\n        panel.innerHTML='<div id="aljavaForcedCardInner"><button id="aljavaForcedCardClose" class="btn" type="button">← Kembali</button></div>';\n        document.body.appendChild(panel);\n        const inner=panel.querySelector('#aljavaForcedCardInner');\n        inner.appendChild(source);\n        source.style.display='block'; source.style.marginTop='0';\n        btn.addEventListener('click',()=>{panel.classList.add('open');drawer.style.display='none';});\n        panel.querySelector('#aljavaForcedCardClose').addEventListener('click',()=>panel.classList.remove('open'));\n        panel.addEventListener('click',(e)=>{if(e.target===panel)panel.classList.remove('open')});\n      } else {\n        btn.addEventListener('click',()=>{\n          const target=[...document.querySelectorAll('section,div')].find(el=>/Kelola Kartu/i.test(el.textContent||''));\n          target?.scrollIntoView({behavior:'smooth'}); drawer.style.display='none';\n        });\n      }\n    }\n    return true;\n  };\n  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();\n  setInterval(boot,500);\n})();\n</script>\n'''
+          s=s.replace('</style>', css+'</style>',1)
+          s=s.replace('</body>', js+'</body>',1)
+          p.write_text(s, encoding='utf-8')
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: force Kelola Kartu into active main menu [kelola-kartu-force]"
+          git push
