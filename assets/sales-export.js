@@ -93,11 +93,11 @@
       };
     });
 
-    const grouped = {};
+    const groupedProduct = {};
     data.transactions.forEach((row) => {
       const key = row.product_id || 'unknown';
       const product = data.products[key] || {};
-      const item = grouped[key] ||= { Produk: product.name || '-', 'Kode Produk': product.product_code || '-', Qty: 0, Omzet: 0, HPP: 0, Komisi: 0, 'Laba Kotor': 0 };
+      const item = groupedProduct[key] ||= { Produk: product.name || '-', 'Kode Produk': product.product_code || '-', Qty: 0, Omzet: 0, HPP: 0, Komisi: 0, 'Laba Kotor': 0 };
       const qty = Number(row.quantity || 1);
       const sell = money(row.selling_price) * qty;
       const hpp = money(row.hpp) * qty;
@@ -108,10 +108,51 @@
       item.Komisi += commission;
       item['Laba Kotor'] += sell - hpp - commission;
     });
+    const productSummary = Object.values(groupedProduct).sort((a, b) => b.Omzet - a.Omzet);
 
-    const summary = Object.values(grouped).sort((a, b) => b.Omzet - a.Omzet);
-    const totals = summary.reduce((acc, row) => {
-      acc.Qty += row.Qty; acc.Omzet += row.Omzet; acc.HPP += row.HPP; acc.Komisi += row.Komisi; acc['Laba Kotor'] += row['Laba Kotor'];
+    const groupedCustomer = {};
+    data.transactions.forEach((row) => {
+      const key = row.customer_id || 'unknown';
+      const customer = data.customers[key] || {};
+      const item = groupedCustomer[key] ||= {
+        'Customer': customer.business_name || customer.owner_name || '-',
+        'WhatsApp': customer.whatsapp || '-',
+        'Transaksi': 0,
+        'Qty': 0,
+        'Omzet': 0,
+        'HPP': 0,
+        'Komisi': 0,
+        'Laba Kotor': 0
+      };
+      const qty = Number(row.quantity || 1);
+      const sell = money(row.selling_price) * qty;
+      const hpp = money(row.hpp) * qty;
+      const commission = money(row.commission);
+      item.Transaksi += 1;
+      item.Qty += qty;
+      item.Omzet += sell;
+      item.HPP += hpp;
+      item.Komisi += commission;
+      item['Laba Kotor'] += sell - hpp - commission;
+    });
+    const customerSummary = Object.values(groupedCustomer).sort((a, b) => b.Omzet - a.Omzet);
+
+    const groupedStatus = {};
+    data.transactions.forEach((row) => {
+      const status = String(row.payment_status || 'Tidak diketahui').trim() || 'Tidak diketahui';
+      const item = groupedStatus[status] ||= { 'Status Pembayaran': status, 'Transaksi': 0, 'Omzet': 0 };
+      const qty = Number(row.quantity || 1);
+      item.Transaksi += 1;
+      item.Omzet += money(row.selling_price) * qty;
+    });
+    const paymentSummary = Object.values(groupedStatus).sort((a, b) => b.Omzet - a.Omzet);
+
+    const totals = productSummary.reduce((acc, row) => {
+      acc.Qty += row.Qty;
+      acc.Omzet += row.Omzet;
+      acc.HPP += row.HPP;
+      acc.Komisi += row.Komisi;
+      acc['Laba Kotor'] += row['Laba Kotor'];
       return acc;
     }, { Qty: 0, Omzet: 0, HPP: 0, Komisi: 0, 'Laba Kotor': 0 });
 
@@ -128,7 +169,9 @@
 
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(report), 'Ringkasan');
-    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(summary), 'Per Produk');
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(productSummary), 'Per Produk');
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(customerSummary), 'Per Customer');
+    XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(paymentSummary), 'Status Pembayaran');
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.json_to_sheet(rows), 'Transaksi');
     return workbook;
   }
