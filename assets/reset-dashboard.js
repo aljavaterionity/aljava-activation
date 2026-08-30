@@ -3,7 +3,7 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const PROJECT_URL = 'https://lbzwmcxwxummitldxucj.supabase.co';
+  const PROJECT_URL = 'https://lbzwmcxwxummitldxuc.supabase.co';
   const PROJECT_KEY = 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw';
 
   function createClient() {
@@ -29,7 +29,9 @@
 
   async function resetAllData(event) {
     if (event) {
-      event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation();
+      event.preventDefault();
+      event.stopPropagation();
+      event.stopImmediatePropagation();
     }
     const confirmation = window.prompt(
       'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nProduk tidak dihapus.'
@@ -38,15 +40,23 @@
     const button = $('resetMenu');
     const originalText = button?.textContent || '↻ Reset Dashboard';
     const message = $('cardActionMsg');
-    if (button) { button.disabled = true; button.textContent = 'Mereset...'; }
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'Mereset...';
+    }
     try {
       const client = createClient();
-      if (message) { message.className = 'notice info'; message.textContent = 'Mereset dashboard... Produk tetap aman.'; }
+      if (message) {
+        message.className = 'notice info';
+        message.textContent = 'Mereset dashboard... Produk tetap aman.';
+      }
       const { data, error } = await client.rpc('admin_reset_dashboard');
       if (error) throw new Error(error.message || 'RPC reset gagal.');
       const counts = await verifyReset(client);
       const failed = Object.entries(counts).filter(([, count]) => count !== 0);
-      if (failed.length) throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
+      if (failed.length) {
+        throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
+      }
       console.info('[ALJAVA] reset result:', data, counts);
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
@@ -54,11 +64,18 @@
       return true;
     } catch (error) {
       console.error('[ALJAVA] reset failed:', error);
-      if (message) { message.className = 'notice err'; message.textContent = `❌ Reset gagal: ${error?.message || error}`; }
-      else window.alert(`Reset gagal: ${error?.message || error}`);
+      if (message) {
+        message.className = 'notice err';
+        message.textContent = `❌ Reset gagal: ${error?.message || error}`;
+      } else {
+        window.alert(`Reset gagal: ${error?.message || error}`);
+      }
       return false;
     } finally {
-      if (button) { button.disabled = false; button.textContent = originalText; }
+      if (button) {
+        button.disabled = false;
+        button.textContent = originalText;
+      }
     }
   }
 
@@ -70,7 +87,6 @@
     const logout = $('logoutMenu');
     if (!panel || !reset || !addAccount || !logout) return;
 
-    // Ensure these three buttons are physically removed from the main menu list.
     let settings = panel.querySelector('[data-menu-section="settings"]');
     if (!settings) {
       settings = document.createElement('section');
@@ -98,22 +114,30 @@
 
       const items = document.createElement('div');
       items.className = 'menu-settings-items';
-      Object.assign(items.style, { display: 'grid', gap: '9px' });
+      Object.assign(items.style, {
+        display: 'grid',
+        gap: '9px'
+      });
 
       settings.append(title, items);
       panel.appendChild(settings);
     }
 
     const items = settings.querySelector('.menu-settings-items');
+    if (!items) return;
+
     [reset, addAccount, logout].forEach((button) => {
-      items.appendChild(button);
+      if (button.parentElement !== items) items.appendChild(button);
       button.style.width = '100%';
       button.style.minHeight = '48px';
       button.style.textAlign = 'left';
     });
 
-    // Defensive cleanup in case another script re-adds them to the main list.
-    if (mainItems) mainItems.querySelectorAll('#resetMenu,#addAccountMenu,#logoutMenu').forEach((button) => items.appendChild(button));
+    if (mainItems) {
+      mainItems.querySelectorAll('#resetMenu,#addAccountMenu,#logoutMenu').forEach((button) => {
+        if (button.parentElement !== items) items.appendChild(button);
+      });
+    }
   }
 
   function bind() {
@@ -126,7 +150,16 @@
   }
 
   window.__resetDashboard = resetAllData;
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
-  else bind();
-  new MutationObserver(bind).observe(document.body, { childList: true, subtree: true });
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind, { once: true });
+  } else {
+    bind();
+  }
+
+  const observer = new MutationObserver(() => {
+    // Only touch the DOM when required; prevents recursive mutation loops.
+    organizeSettings();
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
 })();
