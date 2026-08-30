@@ -48,7 +48,7 @@
 
       const payments = {};
       tx.forEach((row) => {
-        const status = String(row.payment_status || 'unpaid').toLowerCase();
+        const status = String(row.payment_status || 'unpaid').trim().toLowerCase() || 'unpaid';
         const qty = Number(row.quantity || 1);
         const total = Number(row.selling_price || 0) * qty;
         payments[status] = (payments[status] || 0) + total;
@@ -66,19 +66,20 @@
 
       const totalRevenue = tx.reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
       const paid = Object.entries(payments).filter(([status]) => ['paid', 'lunas'].includes(status)).reduce((sum, [, amount]) => sum + amount, 0);
-      const unpaid = Object.entries(payments).filter(([status]) => !['paid', 'lunas'].includes(status)).reduce((sum, [, amount]) => sum + amount, 0);
+      const receivable = Object.entries(payments).filter(([status]) => !['paid', 'lunas'].includes(status)).reduce((sum, [, amount]) => sum + amount, 0);
       const topCustomers = Object.values(customerGroups).sort((a, b) => b.revenue - a.revenue).slice(0, 10);
+      const paidPct = totalRevenue ? Math.round((paid / totalRevenue) * 100) : 0;
 
       host.innerHTML = `
         <div class="stats" style="margin-bottom:14px">
           <div class="glass stat"><div class="muted">Sudah Dibayar</div><div class="num">${money(paid)}</div></div>
-          <div class="glass stat"><div class="muted">Belum Dibayar</div><div class="num">${money(unpaid)}</div></div>
-          <div class="glass stat"><div class="muted">Coverage Pembayaran</div><div class="num">${totalRevenue ? Math.round((paid / totalRevenue) * 100) : 0}%</div></div>
+          <div class="glass stat"><div class="muted">Piutang / Belum Dibayar</div><div class="num">${money(receivable)}</div></div>
+          <div class="glass stat"><div class="muted">Coverage Pembayaran</div><div class="num">${paidPct}%</div></div>
           <div class="glass stat"><div class="muted">Customer Bertransaksi</div><div class="num">${Object.keys(customerGroups).length}</div></div>
         </div>
         <div class="grid">
-          <section class="glass panel"><div class="head"><h2 style="margin:0">Status Pembayaran</h2></div><div class="body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Nominal</th></tr></thead><tbody>${Object.entries(payments).sort((a,b)=>b[1]-a[1]).map(([status, amount]) => `<tr><td>${esc(status)}</td><td>${money(amount)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">Belum ada transaksi.</td></tr>'}</tbody></table></div></div></section>
-          <section class="glass panel"><div class="head"><h2 style="margin:0">Top Customer</h2></div><div class="body"><div class="table-wrap"><table><thead><tr><th>Customer</th><th>Qty</th><th>Omzet</th><th>Komisi</th></tr></thead><tbody>${topCustomers.map((row) => `<tr><td>${esc(row.name)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.commission)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">Belum ada transaksi.</td></tr>'}</tbody></table></div></div></section>
+          <section class="glass panel"><div class="head"><h2 style="margin:0">Status Pembayaran</h2><p class="muted" style="margin:5px 0 0">Nominal berdasarkan status pada transaksi.</p></div><div class="body"><div class="table-wrap"><table><thead><tr><th>Status</th><th>Nominal</th></tr></thead><tbody>${Object.entries(payments).sort((a,b)=>b[1]-a[1]).map(([status, amount]) => `<tr><td>${esc(status)}</td><td>${money(amount)}</td></tr>`).join('') || '<tr><td colspan="2" class="muted">Belum ada transaksi.</td></tr>'}</tbody></table></div></div></section>
+          <section class="glass panel"><div class="head"><h2 style="margin:0">Top Customer</h2><p class="muted" style="margin:5px 0 0">10 customer dengan omzet terbesar pada periode.</p></div><div class="body"><div class="table-wrap"><table><thead><tr><th>Customer</th><th>Qty</th><th>Omzet</th><th>Komisi</th></tr></thead><tbody>${topCustomers.map((row) => `<tr><td>${esc(row.name)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.commission)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">Belum ada transaksi.</td></tr>'}</tbody></table></div></div></section>
         </div>`;
     } catch (error) {
       host.innerHTML = `<div class="notice err">❌ Gagal memuat ringkasan operasional: ${esc(error?.message || error)}</div>`;
@@ -91,7 +92,7 @@
     if (!anchor) return;
     const section = document.createElement('section');
     section.className = 'glass panel';
-    section.innerHTML = '<div class="head"><div class="row"><div><h2 style="margin:0">Kontrol Operasional</h2><p class="muted">Ringkasan pembayaran dan customer mengikuti periode laporan.</p></div></div></div><div class="body" id="salesOpsSummary"></div>';
+    section.innerHTML = '<div class="head"><div class="row"><div><h2 style="margin:0">Kontrol Operasional</h2><p class="muted">Pembayaran, piutang, dan customer mengikuti periode laporan.</p></div></div></div><div class="body" id="salesOpsSummary"></div>';
     anchor.parentElement?.insertBefore(section, anchor);
     $('salesStart')?.addEventListener('change', load);
     $('salesEnd')?.addEventListener('change', load);
