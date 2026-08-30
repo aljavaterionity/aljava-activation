@@ -43,11 +43,12 @@
     section.id = 'salesView';
     section.className = 'view';
     section.innerHTML = `
-      <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, laba kotor, transaksi, dan performa produk.</p></div><button id="salesRefresh" class="btn" type="button">Refresh</button></div>
+      <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, laba kotor, komisi, transaksi, dan performa produk.</p></div><button id="salesRefresh" class="btn" type="button">Refresh</button></div>
       <section class="stats sales-stats">
         <div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div>
         <div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div>
         <div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div>
+        <div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div>
         <div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div>
       </section>
       <section class="glass panel">
@@ -76,12 +77,12 @@
     installUi();
     const client = getClient();
     if (!client || !initialized) return;
-    const hosts = ['salesRevenue', 'salesHpp', 'salesGrossProfit', 'salesTransactions'];
+    const hosts = ['salesRevenue', 'salesHpp', 'salesGrossProfit', 'salesCommission', 'salesTransactions'];
     hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '…' : 'Memuat…'; });
     try {
       const [txResult, productsResult, customersResult] = await Promise.all([
         client.from('Transactions').select('id,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date').order('transaction_date', { ascending: false }),
-        client.from('Product').select('id,name,product_code'),
+        client.from('Product').select('id,name,product_code,commission'),
         client.from('Customers').select('id,business_name,owner_name')
       ]);
       if (txResult.error) throw txResult.error;
@@ -94,23 +95,26 @@
 
       const revenue = tx.reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
       const hpp = tx.reduce((sum, row) => sum + Number(row.hpp || 0) * Number(row.quantity || 1), 0);
+      const commission = tx.reduce((sum, row) => sum + Number(row.commission || 0), 0);
       $('salesRevenue').textContent = money(revenue);
       $('salesHpp').textContent = money(hpp);
       $('salesGrossProfit').textContent = money(revenue - hpp);
+      $('salesCommission').textContent = money(commission);
       $('salesTransactions').textContent = String(tx.length);
 
       const grouped = {};
       tx.forEach((row) => {
         const key = row.product_id || 'unknown';
-        const item = grouped[key] ||= { qty: 0, revenue: 0, hpp: 0, name: products[key]?.name || '-', code: products[key]?.product_code || '-' };
+        const item = grouped[key] ||= { qty: 0, revenue: 0, hpp: 0, commission: 0, name: products[key]?.name || '-', code: products[key]?.product_code || '-' };
         const qty = Number(row.quantity || 1);
         item.qty += qty;
         item.revenue += Number(row.selling_price || 0) * qty;
         item.hpp += Number(row.hpp || 0) * qty;
+        item.commission += Number(row.commission || 0);
       });
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
-      $('salesProductSummary').innerHTML = productRows.length ? `<table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.revenue - row.hpp)}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
-      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Laba Kotor</th><th>Status</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customers[row.customer_id]?.business_name || customers[row.customer_id]?.owner_name || '-')}</td><td>${esc(products[row.product_id]?.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(rev - cost)}</td><td>${esc(row.payment_status || '-')}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
+      $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
+      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customers[row.customer_id]?.business_name || customers[row.customer_id]?.owner_name || '-')}</td><td>${esc(products[row.product_id]?.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost)}</td><td>${esc(row.payment_status || '-')}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
     } catch (error) {
       const message = esc(error?.message || error);
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
