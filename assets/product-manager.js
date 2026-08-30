@@ -9,7 +9,7 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#039;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
   })[char]);
   const money = (value) => new Intl.NumberFormat('id-ID', {
     style: 'currency', currency: 'IDR', maximumFractionDigits: 0
@@ -118,7 +118,7 @@
       if (error) throw error;
 
       form.reset();
-      if ($('productPreview')) $('productPreview').textContent = `Kode produk: ${code}`;
+      updatePreview();
       showMessage(`✓ Produk ${name} (${code}) berhasil dibuat.`, 'ok');
       await loadProducts();
       document.dispatchEvent(new CustomEvent('aljava:products-changed'));
@@ -146,19 +146,47 @@
     const productView = $('productView');
     const cardsView = $('cardsView');
 
-    if (productView && !productView.querySelector('[data-product-action="primary"]')) {
+    // Restore the old HPP entry in Main Menu without removing Kelola Produk.
+    const menuItems = document.querySelector('.menu-items');
+    const productMenu = $('productMenu');
+    if (menuItems && productMenu && !$('hppMenu')) {
+      const hppButton = document.createElement('button');
+      hppButton.id = 'hppMenu';
+      hppButton.type = 'button';
+      hppButton.className = 'btn';
+      hppButton.textContent = '💰 HPP';
+      hppButton.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
+        $('menuPanel')?.classList.remove('open');
+        $('menuButton')?.setAttribute('aria-expanded', 'false');
+        history.replaceState?.(null, '', '#product');
+        setTimeout(() => $('productName')?.focus(), 50);
+        void loadProducts();
+      });
+      productMenu.insertAdjacentElement('afterend', hppButton);
+    }
+
+    // Make a second unmistakable Add Product action at the top of Kelola Produk.
+    if (productView && !productView.querySelector('[data-product-action="top"]')) {
       const headingRow = productView.querySelector('.row');
       if (headingRow) {
         const action = document.createElement('button');
         action.type = 'button';
-        action.className = 'btn product-nav-add';
-        action.dataset.productAction = 'primary';
+        action.className = 'btn product-submit';
+        action.dataset.productAction = 'top';
         action.textContent = '＋ Tambah Produk';
-        action.addEventListener('click', () => $('productName')?.focus());
+        action.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          $('productName')?.focus();
+        });
         headingRow.appendChild(action);
       }
     }
 
+    // Also expose the action directly from Kelola Kartu.
     if (cardsView && !cardsView.querySelector('[data-product-action="cards"]')) {
       const form = $('singleForm');
       const productSelect = $('singleProduct');
@@ -182,8 +210,7 @@
           document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
           $('menuPanel')?.classList.remove('open');
           $('menuButton')?.setAttribute('aria-expanded', 'false');
-          if (history.replaceState) history.replaceState(null, '', '#product');
-          window.scrollTo(0, 0);
+          history.replaceState?.(null, '', '#product');
           setTimeout(() => $('productName')?.focus(), 50);
           void loadProducts();
         });
