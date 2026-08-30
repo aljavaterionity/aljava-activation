@@ -14,7 +14,7 @@
   };
 
   const $ = (id) => document.getElementById(id);
-  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
   })[char]);
 
@@ -160,7 +160,6 @@
     const bodyRows = [...table.querySelectorAll('tbody tr')];
     if (!headerRow || !bodyRows.length) return;
 
-    // Do not duplicate columns when the admin table is re-rendered.
     headerRow.querySelectorAll('.main-card-extra').forEach((node) => node.remove());
     bodyRows.forEach((row) => row.querySelectorAll('.main-card-extra').forEach((node) => node.remove()));
 
@@ -180,17 +179,10 @@
       const cardMap = Object.fromEntries((cards || []).map((card) => [String(card.id), card]));
       const productMap = Object.fromEntries((products || []).map((product) => [String(product.id), product]));
 
-      // Insert after the existing Kode / Jenis columns, immediately before Aksi.
       const actionHeader = [...headerRow.children].find((cell) => cell.textContent.trim() === 'Aksi');
-      const extraHeaders = [
-        ['main-card-extra', 'Kode Produk'],
-        ['main-card-extra', 'Aktivasi'],
-        ['main-card-extra', 'QR'],
-        ['main-card-extra', 'NFC']
-      ];
-      extraHeaders.forEach(([className, label]) => {
+      ['Kode Produk', 'Aktivasi', 'QR', 'NFC'].forEach((label) => {
         const th = document.createElement('th');
-        th.className = className;
+        th.className = 'main-card-extra';
         th.textContent = label;
         actionHeader ? headerRow.insertBefore(th, actionHeader) : headerRow.appendChild(th);
       });
@@ -210,13 +202,12 @@
           td.innerHTML = html;
           return td;
         };
-        const cells = [
+        [
           makeCell(`<strong>${esc(code)}</strong>`),
           makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(activation)}">Link</a>`),
           makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(qr)}">QR</a>`),
           makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(nfc)}">NFC</a>`)
-        ];
-        cells.forEach((cell) => actionCell ? row.insertBefore(cell, actionCell) : row.appendChild(cell));
+        ].forEach((cell) => actionCell ? row.insertBefore(cell, actionCell) : row.appendChild(cell));
       });
     } catch (error) {
       console.warn('[ALJAVA] Gagal melengkapi ringkasan kartu utama:', error?.message || error);
@@ -265,14 +256,7 @@
       if (typeof window.load === 'function') window.load();
       scheduleMainSummaryEnrichment();
     });
-
-    // The existing admin.js owns rendering, selection, and deletion. We only
-    // enrich the rendered table so those handlers remain attached.
-    const cardTable = $('cardTable');
-    if (cardTable) {
-      const observer = new MutationObserver(scheduleMainSummaryEnrichment);
-      observer.observe(cardTable, { childList: true, subtree: true });
-    }
+    document.addEventListener('aljava:data-loaded', scheduleMainSummaryEnrichment);
     scheduleMainSummaryEnrichment();
   }
 
