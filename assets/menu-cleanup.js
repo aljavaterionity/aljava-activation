@@ -5,6 +5,15 @@
   const panel = () => document.getElementById('menuPanel');
   const normalize = (value) => String(value || '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim().toLowerCase();
 
+  function loadSalesEntry() {
+    if (window.salesEntry || document.querySelector('script[data-aljava-sales-entry]')) return;
+    const script = document.createElement('script');
+    script.src = '/assets/sales-entry.js';
+    script.async = true;
+    script.dataset.aljavaSalesEntry = '1';
+    document.body.appendChild(script);
+  }
+
   function clean() {
     const root = panel();
     if (!root) return;
@@ -47,6 +56,8 @@
     // Older builds can initialize the sales view more than once. Keep the first.
     const salesViews = Array.from(document.querySelectorAll('#salesView'));
     salesViews.slice(1).forEach((view) => view.remove());
+
+    loadSalesEntry();
   }
 
   function scheduleClean() {
