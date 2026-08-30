@@ -6,7 +6,7 @@ const CONFIG = {
 };
 
 const $ = (id) => document.getElementById(id);
-const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
   '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
 }[char]));
 const money = (value) => new Intl.NumberFormat('id-ID', {
@@ -47,8 +47,13 @@ function bindNavigation() {
   $('closeMenu')?.addEventListener('click', (event) => { event.preventDefault(); closeMenu(); });
   $('dashboardMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); goDashboard(); });
   $('cardsMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView('cardsView'); });
+  $('productMenu')?.addEventListener('click', (event) => {
+    event.preventDefault(); event.stopPropagation();
+    showView('productView');
+    window.productManager?.loadProducts?.().catch?.(() => {});
+  });
   $('customerMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView('customersView'); });
-  $('resetMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); resetDashboard(); });
+  $('resetMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); window.__resetDashboard?.(event); });
   $('addAccountMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); openAddAccount(); });
   $('logoutMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); logout(); });
   document.addEventListener('click', (event) => {
@@ -66,6 +71,7 @@ function bindNavigation() {
 function initRoute() {
   const hash = location.hash.replace('#', '');
   if (hash === 'cards' || hash === 'cardsView') showView('cardsView');
+  else if (hash === 'product' || hash === 'productView') showView('productView');
   else if (hash === 'customers' || hash === 'customersView') showView('customersView');
   else goDashboard();
 }
@@ -115,30 +121,44 @@ async function login() {
 }
 async function logout() { await sb.auth.signOut({ scope: 'local' }); location.reload(); }
 
-async function queryTable(table, select, orderBy) {
-  let query = sb.from(table).select(select);
-  if (orderBy) query = query.order(orderBy, { ascending: false });
-  const { data, error } = await query;
-  if (error) throw error;
-  return data || [];
+async function queryTable(table, select, orderBy, timeoutMs = 10000) {
+  const request = (async () => {
+    let query = sb.from(table).select(select);
+    if (orderBy) query = query.order(orderBy, { ascending: false });
+    const { data, error } = await query;
+    if (error) throw error;
+    return data || [];
+  })();
+  const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error(`${table}: permintaan data timeout`)), timeoutMs));
+  return Promise.race([request, timeout]);
 }
+
 async function load() {
-  try {
-    const [cards, products, customers, transactions, scans] = await Promise.all([
-      queryTable('Cards', 'id,card_code,product_type,status,customer_id,product_id,google_review_url,created_at,activated_at,expires_at', 'created_at'),
-      queryTable('Product', 'id,name,category', 'name'),
-      queryTable('Customers', 'id,business_name,owner_name,google_review_url,created_at', 'created_at'),
-      queryTable('Transactions', 'id,customer_id,card_id,product_id,quantity,selling_price,payment_status,transaction_date', 'transaction_date'),
-      queryTable('CardScans', 'id,card_id,card_code,event_type,scanned_at', 'scanned_at')
-    ]);
-    Object.assign(state, { cards, products, customers, transactions, scans });
-    renderAll();
-  } catch (error) {
-    const message = esc(error.message || 'Gagal memuat data.');
-    if ($('txTable')) $('txTable').innerHTML = `<div class="notice err">❌ ${message}</div>`;
-    if ($('cardTable')) $('cardTable').innerHTML = `<div class="notice err">❌ ${message}</div>`;
-    if ($('customerRows')) $('customerRows').innerHTML = `<tr><td colspan="6"><div class="notice err">❌ ${message}</div></td></tr>`;
-  }
+  const jobs = {
+    cards: queryTable('Cards', 'id,card_code,product_type,status,customer_id,product_id,google_review_url,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url', 'created_at'),
+    products: queryTable('Product', 'id,name,category,product_code', 'name'),
+    customers: queryTable('Customers', 'id,business_name,owner_name,google_review_url,created_at', 'created_at'),
+    transactions: queryTable('Transactions', 'id,customer_id,card_id,product_id,quantity,selling_price,payment_status,transaction_date', 'transaction_date'),
+    scans: queryTable('CardScans', 'id,card_id,card_code,event_type,scanned_at', 'scanned_at')
+  };
+
+  const entries = Object.entries(jobs);
+  const results = await Promise.all(entries.map(async ([key, promise]) => {
+    try { return [key, await promise, null]; }
+    catch (error) { return [key, [], error]; }
+  }));
+
+  results.forEach(([key, data, error]) => {
+    state[key] = data;
+    const hostMap = { cards: 'cardTable', customers: 'customerRows', transactions: 'txTable', scans: 'scanSummary' };
+    if (error && $(hostMap[key])) {
+      if (key === 'customers') $(hostMap[key]).innerHTML = `<tr><td colspan="6"><div class="notice err">❌ ${esc(error.message)}</div></td></tr>`;
+      else $(hostMap[key]).innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`;
+    }
+  });
+
+  renderAll();
+  document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
 }
 function renderAll() {
   renderStats(); renderChart(); renderTransactions(); renderScans(); renderCards(); fillProductOptions(); fillCustomerOptions(); renderCustomers();
@@ -219,10 +239,14 @@ async function deleteCards(ids, successMessage) {
   }
 }
 function fillProductOptions() {
-  const html = '<option value="">Produk (opsional)</option>' + state.products.map((product) => `<option value="${esc(product.id)}">${esc(product.name || product.category || product.id)}</option>`).join(''); $('singleProduct').innerHTML = html; $('bulkProduct').innerHTML = html;
+  const html = '<option value="">Produk (opsional)</option>' + state.products.map((product) => `<option value="${esc(product.id)}">${esc(product.name || product.category || product.id)}</option>`).join('');
+  if ($('singleProduct')) $('singleProduct').innerHTML = html;
+  if ($('bulkProduct')) $('bulkProduct').innerHTML = html;
 }
 function fillCustomerOptions() {
-  const html = '<option value="">Customer (opsional)</option>' + state.customers.map((customer) => `<option value="${esc(customer.id)}">${esc(customer.business_name || customer.owner_name || customer.id)}</option>`).join(''); $('singleCustomer').innerHTML = html; $('bulkCustomer').innerHTML = html;
+  const html = '<option value="">Customer (opsional)</option>' + state.customers.map((customer) => `<option value="${esc(customer.id)}">${esc(customer.business_name || customer.owner_name || customer.id)}</option>`).join('');
+  if ($('singleCustomer')) $('singleCustomer').innerHTML = html;
+  if ($('bulkCustomer')) $('bulkCustomer').innerHTML = html;
 }
 function prepareCustomerRows() {
   const scansByCard = {}; const cardsByCustomer = {};
@@ -235,25 +259,8 @@ function renderCustomers() {
   prepareCustomerRows(); const search = ($('customerSearch').value || '').toLowerCase().trim(); const rows = state.customerRows.filter((customer) => !search || customer.business_name.toLowerCase().includes(search) || String(customer.id).toLowerCase().includes(search));
   $('customerRows').innerHTML = rows.length ? rows.map((customer) => `<tr><td>${esc(customer.id)}</td><td><b>${esc(customer.business_name)}</b></td><td>${esc(customer.product_type)}</td><td>${esc(customer.status)}</td><td>${customer.scans}</td><td>${customer.url ? `<a class="btn" style="text-decoration:none;display:inline-block" href="${esc(customer.url)}" target="_blank" rel="noopener">🔗 Buka Review</a>` : '<span class="muted">Belum ada link</span>'}</td></tr>`).join('') : '<tr><td colspan="6" class="muted">Tidak ada customer.</td></tr>';
 }
-async function createCards(rows, messageElement) {
-  messageElement.className = 'notice info'; messageElement.textContent = 'Memproses...';
-  const { data, error } = await sb.from('Cards').insert(rows).select('id,card_code'); if (error) throw error;
-  messageElement.className = 'notice ok'; messageElement.textContent = `✓ ${data?.length || rows.length} kartu berhasil dibuat.`; await load();
-}
 
-$('singleForm')?.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  try {
-    const productId = $('singleProduct').value || null; const customerId = $('singleCustomer').value || null; const product = state.products.find((row) => row.id === productId);
-    await createCards([{ card_code: $('singleCode').value.trim(), product_type: product?.category || product?.name || 'Tanpa Jenis', status: 'pending', product_id: productId, customer_id: customerId, google_review_url: $('singleReview').value.trim() || null }], $('singleMsg'));
-    event.target.reset();
-  } catch (error) { $('singleMsg').className = 'notice err'; $('singleMsg').textContent = `❌ ${esc(error.message)}`; }
-});
-$('bulkForm')?.addEventListener('submit', async (event) => {
-  event.preventDefault(); const codes = [...new Set($('bulkCodes').value.split(/\r?\n/).map((value) => value.trim()).filter(Boolean))]; if (!codes.length) return;
-  try { const productId = $('bulkProduct').value || null; const customerId = $('bulkCustomer').value || null; const product = state.products.find((row) => row.id === productId); await createCards(codes.map((cardCode) => ({ card_code: cardCode, product_type: product?.category || product?.name || 'Tanpa Jenis', status: 'pending', product_id: productId, customer_id: customerId })), $('bulkMsg')); event.target.reset(); }
-  catch (error) { $('bulkMsg').className = 'notice err'; $('bulkMsg').textContent = `❌ ${esc(error.message)}`; }
-});
+// Legacy handlers are intentionally no-ops when the old bulk form is absent.
 $('loginBtn')?.addEventListener('click', login);
 $('password')?.addEventListener('keydown', (event) => { if (event.key === 'Enter') login(); });
 $('refresh')?.addEventListener('click', load);
@@ -268,7 +275,17 @@ $('deleteSelectedCards')?.addEventListener('click', deleteSelectedCards);
 $('modalClose')?.addEventListener('click', () => $('modal').classList.remove('open'));
 $('modal')?.addEventListener('click', (event) => { if (event.target === $('modal')) $('modal').classList.remove('open'); });
 function openAddAccount() { $('modalTitle').textContent = 'Tambah Akun'; $('modalBody').innerHTML = '<div class="notice info">Pembuatan akun admin harus melalui proses server-side/privileged auth.</div>'; $('modal').classList.add('open'); }
-async function resetDashboard() { if ($('year')) $('year').value = new Date().getFullYear(); if ($('month')) $('month').value = ''; await load(); goDashboard(); }
-const currentYear = new Date().getFullYear(); for (let year = currentYear - 3; year <= currentYear + 1; year += 1) $('year')?.insertAdjacentHTML('beforeend', `<option value="${year}">${year}</option>`); if ($('year')) $('year').value = currentYear;
+
+window.adminApi = { load, goDashboard, showView };
+const currentYear = new Date().getFullYear();
+for (let year = currentYear - 3; year <= currentYear + 1; year += 1) $('year')?.insertAdjacentHTML('beforeend', `<option value="${year}">${year}</option>`);
+if ($('year')) $('year').value = currentYear;
+
 bindNavigation();
-(async () => { if (await ensureAdmin()) { await load(); initRoute(); } })();
+(async () => {
+  if (await ensureAdmin()) {
+    await load();
+    initRoute();
+    if (location.hash === '#product' || location.hash === '#productView') window.productManager?.loadProducts?.().catch?.(() => {});
+  }
+})();
