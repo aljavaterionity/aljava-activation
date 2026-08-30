@@ -1,13 +1,41 @@
 /* ALJAVA TERIONITY — Full Reset Controller
    Main Menu > Reset Dashboard
 
-   Deletes application/business records while preserving the Product master
+   Resets application/business data while preserving Product master
    catalog and authentication/admin access.
 */
 (() => {
   'use strict';
 
   const $ = (id) => document.getElementById(id);
+  const PROJECT_URL = 'https://lbzwmcxwxummitldxucj.supabase.co';
+  const PROJECT_KEY = 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw';
+
+  function createClient() {
+    const factory = window.supabase?.createClient;
+    if (!factory) throw new Error('Library Supabase tidak tersedia.');
+    return factory(PROJECT_URL, PROJECT_KEY);
+  }
+
+  async function verifyReset(client) {
+    const checks = [
+      ['Transactions', 'id'],
+      ['CardScans', 'id'],
+      ['Subscriptions', 'id'],
+      ['Cards', 'id'],
+      ['cards', 'id'],
+      ['Customers', 'id'],
+      ['Sales', 'id'],
+      ['admin_card_actions', 'id']
+    ];
+    const counts = {};
+    for (const [table, column] of checks) {
+      const { count, error } = await client.from(table).select(column, { count: 'exact', head: true });
+      if (error) throw new Error(`Verifikasi ${table} gagal: ${error.message}`);
+      counts[table] = Number(count || 0);
+    }
+    return counts;
+  }
 
   async function resetAllData(event) {
     if (event) {
@@ -17,9 +45,9 @@
     }
 
     const confirmation = window.prompt(
-      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus seluruh data kartu, customer, transaksi, penjualan, subscription, scan/tap, kartu legacy, dan log operasional.\n\nData PRODUK tidak akan dihapus.\nAkun login/admin juga tidak dihapus.'
+      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus seluruh transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nData PRODUK tidak akan dihapus.\nAkun login/admin juga tidak dihapus.'
     );
-    if (confirmation !== 'RESET') return;
+    if (confirmation !== 'RESET') return false;
 
     const button = $('resetMenu');
     const originalText = button?.textContent || '↻ Reset Dashboard';
@@ -31,24 +59,32 @@
     }
 
     try {
-      const client = window.supabase?.createClient;
-      if (!client) throw new Error('Library Supabase tidak tersedia.');
-
+      const client = createClient();
       if (message) {
         message.className = 'notice info';
-        message.textContent = 'Mereset data dashboard... Produk tetap aman.';
+        message.textContent = 'Menghapus data dashboard dan memverifikasi hasil... Produk tetap aman.';
       }
 
-      const { data, error } = await client.rpc('reset_admin_data');
-      if (error) throw new Error(error.message || 'RPC reset_admin_data gagal.');
+      const { data, error } = await client.rpc('admin_reset_dashboard');
+      if (error) throw new Error(error.message || 'RPC admin_reset_dashboard gagal.');
 
-      console.info('[ALJAVA] reset_admin_data result:', data);
+      const counts = await verifyReset(client);
+      const failed = Object.entries(counts).filter(([, count]) => count !== 0);
+      if (failed.length) {
+        throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
+      }
 
-      sessionStorage.clear();
-      localStorage.removeItem('admin_dashboard_state');
+      console.info('[ALJAVA] admin_reset_dashboard result:', data);
+      console.info('[ALJAVA] reset verification:', counts);
 
-      // Full reload clears in-memory dashboard state while preserving Auth.
-      window.location.assign('/admin.html#dashboard');
+      // Clear only app UI state; Supabase Auth session stays intact.
+      try { sessionStorage.clear(); } catch (_) {}
+      try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
+
+      // Force a fresh document so computed revenue, scan totals and chart are rebuilt from zero.
+      const target = `/admin.html#dashboard-reset-${Date.now()}`;
+      window.location.replace(target);
+      return true;
     } catch (error) {
       console.error('[ALJAVA] full reset failed:', error);
       if (message) {
@@ -57,6 +93,7 @@
       } else {
         window.alert(`Reset gagal: ${error?.message || error}`);
       }
+      return false;
     } finally {
       if (button) {
         button.disabled = false;
@@ -73,7 +110,6 @@
 
     button.dataset.fullResetBound = '1';
     button.onclick = resetAllData;
-    button.addEventListener('click', resetAllData, true);
   }
 
   if (document.readyState === 'loading') {
