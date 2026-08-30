@@ -31,7 +31,7 @@
 
     if (keep) {
       const dashboard = root.querySelector('#dashboardMenu');
-      if (dashboard && keep.parentElement !== mainItems) mainItems.appendChild(keep);
+      if (keep.parentElement !== mainItems) mainItems.appendChild(keep);
       if (dashboard && dashboard.nextElementSibling !== keep) dashboard.insertAdjacentElement('afterend', keep);
     }
 
@@ -44,7 +44,7 @@
     const topLogout = document.getElementById('logoutTop');
     if (topLogout) topLogout.remove();
 
-    // Guard against duplicate sales dashboard sections created by repeated script loads.
+    // Older builds can initialize the sales view more than once. Keep the first.
     const salesViews = Array.from(document.querySelectorAll('#salesView'));
     salesViews.slice(1).forEach((view) => view.remove());
   }
