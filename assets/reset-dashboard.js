@@ -77,11 +77,9 @@
       console.info('[ALJAVA] admin_reset_dashboard result:', data);
       console.info('[ALJAVA] reset verification:', counts);
 
-      // Clear only app UI state; Supabase Auth session stays intact.
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
 
-      // Force a fresh document so computed revenue, scan totals and chart are rebuilt from zero.
       const target = `/admin.html#dashboard-reset-${Date.now()}`;
       window.location.replace(target);
       return true;
@@ -104,7 +102,38 @@
 
   window.__resetDashboard = resetAllData;
 
+  function organizeSettings() {
+    const panel = $('menuPanel');
+    const reset = $('resetMenu');
+    const addAccount = $('addAccountMenu');
+    const logout = $('logoutMenu');
+    if (!panel || !reset || !addAccount || !logout) return;
+
+    let settings = panel.querySelector('[data-menu-section="settings"]');
+    if (!settings) {
+      settings = document.createElement('section');
+      settings.dataset.menuSection = 'settings';
+      settings.setAttribute('aria-label', 'Pengaturan');
+      settings.className = 'menu-settings';
+
+      const title = document.createElement('div');
+      title.className = 'menu-settings-title';
+      title.textContent = '⚙ Pengaturan';
+
+      const items = document.createElement('div');
+      items.className = 'menu-items';
+      settings.appendChild(title);
+      settings.appendChild(items);
+      panel.appendChild(settings);
+    }
+
+    const items = settings.querySelector('.menu-items') || settings;
+    [reset, addAccount, logout].forEach((button) => items.appendChild(button));
+  }
+
   function bind() {
+    organizeSettings();
+
     const button = $('resetMenu');
     if (!button || button.dataset.fullResetBound === '1') return;
 
