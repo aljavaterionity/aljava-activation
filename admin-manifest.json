@@ -1,0 +1,12 @@
+{
+  "name": "ALJAVA TERIONITY Admin",
+  "short_name": "ALJAVA Admin",
+  "description": "Admin Dashboard ALJAVA TERIONITY",
+  "start_url": "/admin#dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#effcff",
+  "theme_color": "#effcff",
+  "lang": "id"
+}
