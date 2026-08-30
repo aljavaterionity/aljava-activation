@@ -3,7 +3,7 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' })[char]);
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
   const money = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(value) || 0);
 
   let installed = false;
@@ -27,6 +27,7 @@
     if (customers.error) throw customers.error;
     if (cards.error) throw cards.error;
     data = { products: products.data || [], customers: customers.data || [], cards: cards.data || [] };
+    syncCardSelection();
   }
 
   function renderOptions() {
@@ -35,13 +36,50 @@
     const cardSelect = $('saleCard');
     if (!productSelect || !customerSelect || !cardSelect) return;
 
+    const previous = {
+      product: productSelect.value,
+      customer: customerSelect.value,
+      card: cardSelect.value
+    };
+
     productSelect.innerHTML = '<option value="">Pilih produk</option>' + data.products.map((p) => `<option value="${esc(p.id)}">${esc(p.name)}${p.product_code ? ` — ${esc(p.product_code)}` : ''}</option>`).join('');
     customerSelect.innerHTML = '<option value="">Pilih customer</option>' + data.customers.map((c) => `<option value="${esc(c.id)}">${esc(c.business_name || c.owner_name || '-')}</option>`).join('');
-    cardSelect.innerHTML = '<option value="">Pilih kartu</option>' + data.cards.map((c) => `<option value="${esc(c.id)}">${esc(c.card_code)} — ${esc(c.product_type || '-')} — ${esc(c.status || '-')}</option>`).join('');
+    cardSelect.innerHTML = '<option value="">Pilih customer & produk terlebih dahulu</option>';
+
+    if (data.products.some((p) => String(p.id) === String(previous.product))) productSelect.value = previous.product;
+    if (data.customers.some((c) => String(c.id) === String(previous.customer))) customerSelect.value = previous.customer;
+    renderCardOptions(previous.card);
+  }
+
+  function renderCardOptions(previousCardId = '') {
+    const cardSelect = $('saleCard');
+    if (!cardSelect) return;
+    const customerId = $('saleCustomer')?.value || '';
+    const productId = $('saleProduct')?.value || '';
+    const filtered = data.cards.filter((card) => {
+      const matchesCustomer = !customerId || String(card.customer_id) === String(customerId);
+      const matchesProduct = !productId || String(card.product_id) === String(productId);
+      const usableStatus = String(card.status || '').toLowerCase() !== 'expired';
+      return matchesCustomer && matchesProduct && usableStatus;
+    });
+
+    if (!customerId || !productId) {
+      cardSelect.innerHTML = '<option value="">Pilih customer & produk terlebih dahulu</option>';
+      cardSelect.disabled = true;
+      return;
+    }
+    cardSelect.disabled = false;
+    cardSelect.innerHTML = '<option value="">Pilih kartu</option>' + filtered.map((c) => `<option value="${esc(c.id)}">${esc(c.card_code)} — ${esc(c.product_type || '-')} — ${esc(c.status || '-')}</option>`).join('');
+    if (filtered.some((c) => String(c.id) === String(previousCardId))) cardSelect.value = previousCardId;
+    if (!filtered.length) cardSelect.innerHTML = '<option value="">Tidak ada kartu customer/produk yang cocok</option>';
   }
 
   function selectedProduct() {
     return data.products.find((p) => String(p.id) === String($('saleProduct')?.value)) || null;
+  }
+
+  function selectedCard() {
+    return data.cards.find((c) => String(c.id) === String($('saleCard')?.value)) || null;
   }
 
   function updatePreview() {
@@ -92,7 +130,7 @@
           <form id="salesEntryForm" class="form" novalidate>
             <select id="saleCustomer" class="field" required><option value="">Pilih customer</option></select>
             <select id="saleProduct" class="field" required><option value="">Pilih produk</option></select>
-            <select id="saleCard" class="field" required><option value="">Pilih kartu</option></select>
+            <select id="saleCard" class="field" required disabled><option value="">Pilih customer & produk terlebih dahulu</option></select>
             <input id="saleQuantity" class="field" type="number" min="1" step="1" value="1" required placeholder="Qty">
             <select id="salePaymentStatus" class="field" required><option value="unpaid">Belum Dibayar</option><option value="paid">Lunas</option></select>
             <input id="saleDate" class="field" type="datetime-local">
@@ -104,7 +142,8 @@
       </section>`;
     app.appendChild(section);
 
-    $('saleProduct')?.addEventListener('change', updatePreview);
+    $('saleCustomer')?.addEventListener('change', () => { renderCardOptions(); updatePreview(); });
+    $('saleProduct')?.addEventListener('change', () => { renderCardOptions(); updatePreview(); });
     $('saleQuantity')?.addEventListener('input', updatePreview);
     $('salesEntryForm')?.addEventListener('submit', submit);
     installed = true;
@@ -128,18 +167,36 @@
     }
   }
 
+  function syncCardSelection() {
+    const card = selectedCard();
+    const customerId = $('saleCustomer')?.value || '';
+    const productId = $('saleProduct')?.value || '';
+    if (!card) return;
+    if (customerId && String(card.customer_id) !== String(customerId)) $('saleCard').value = '';
+    if (productId && card.product_id && String(card.product_id) !== String(productId)) $('saleCard').value = '';
+  }
+
   async function submit(event) {
     event.preventDefault();
     const sb = client();
     const product = selectedProduct();
     const customerId = $('saleCustomer')?.value || '';
     const cardId = $('saleCard')?.value || '';
-    const quantity = Math.max(1, Number($('saleQuantity')?.value || 1));
+    const card = selectedCard();
+    const quantity = Math.max(1, Math.floor(Number($('saleQuantity')?.value || 1)));
     const paymentStatus = $('salePaymentStatus')?.value || 'unpaid';
     const transactionDate = $('saleDate')?.value ? new Date($('saleDate').value).toISOString() : new Date().toISOString();
 
-    if (!sb || !product || !customerId || !cardId) {
-      $('saleMsg').innerHTML = '<div class="notice err">Customer, produk, dan kartu wajib dipilih.</div>';
+    if (!sb || !product || !customerId || !cardId || !card) {
+      $('saleMsg').innerHTML = '<div class="notice err">Customer, produk, dan kartu yang sesuai wajib dipilih.</div>';
+      return;
+    }
+    if (card.customer_id && String(card.customer_id) !== String(customerId)) {
+      $('saleMsg').innerHTML = '<div class="notice err">Kartu tidak terhubung ke customer yang dipilih.</div>';
+      return;
+    }
+    if (card.product_id && String(card.product_id) !== String(product.id)) {
+      $('saleMsg').innerHTML = '<div class="notice err">Kartu tidak terhubung ke produk yang dipilih.</div>';
       return;
     }
 
@@ -162,18 +219,14 @@
       });
       if (error) throw error;
 
-      $('saleMsg').innerHTML = '<div class="notice info">✅ Penjualan berhasil disimpan.</div>';
+      $('saleMsg').innerHTML = '<div class="notice ok">✅ Penjualan berhasil disimpan.</div>';
       $('salesEntryForm').reset();
       $('saleQuantity').value = '1';
       $('salePaymentStatus').value = 'unpaid';
       $('saleDate').value = '';
       renderOptions();
       updatePreview();
-      await loadOptions();
-      renderOptions();
-      updatePreview();
       window.salesDashboard?.load?.();
-      window.salesOperationsReport?.install?.();
       document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
     } catch (error) {
       $('saleMsg').innerHTML = `<div class="notice err">❌ Gagal menyimpan penjualan: ${esc(error?.message || error)}</div>`;
