@@ -9,7 +9,7 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#039;'
   })[char]);
   const money = (value) => new Intl.NumberFormat('id-ID', {
     style: 'currency', currency: 'IDR', maximumFractionDigits: 0
@@ -142,26 +142,75 @@
     if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
   }
 
+  function ensureActionButtons() {
+    const productView = $('productView');
+    const cardsView = $('cardsView');
+
+    if (productView && !productView.querySelector('[data-product-action="primary"]')) {
+      const headingRow = productView.querySelector('.row');
+      if (headingRow) {
+        const action = document.createElement('button');
+        action.type = 'button';
+        action.className = 'btn product-nav-add';
+        action.dataset.productAction = 'primary';
+        action.textContent = '＋ Tambah Produk';
+        action.addEventListener('click', () => $('productName')?.focus());
+        headingRow.appendChild(action);
+      }
+    }
+
+    if (cardsView && !cardsView.querySelector('[data-product-action="cards"]')) {
+      const form = $('singleForm');
+      const productSelect = $('singleProduct');
+      if (form && productSelect) {
+        const holder = document.createElement('div');
+        holder.className = 'product-inline-action';
+        holder.style.gridColumn = '1 / -1';
+        holder.style.display = 'flex';
+        holder.style.gap = '8px';
+        holder.style.alignItems = 'center';
+        holder.style.flexWrap = 'wrap';
+
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'btn';
+        button.dataset.productAction = 'cards';
+        button.textContent = '＋ Tambah Produk';
+        button.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
+          $('menuPanel')?.classList.remove('open');
+          $('menuButton')?.setAttribute('aria-expanded', 'false');
+          if (history.replaceState) history.replaceState(null, '', '#product');
+          window.scrollTo(0, 0);
+          setTimeout(() => $('productName')?.focus(), 50);
+          void loadProducts();
+        });
+
+        holder.appendChild(button);
+        productSelect.insertAdjacentElement('afterend', holder);
+      }
+    }
+  }
+
   function bind() {
     const form = $('productForm');
     const submit = $('productSubmitBtn') || form?.querySelector('button');
-    if (!form || !submit) return;
-    if (form.dataset.productManagerBound === '1') return;
-    form.dataset.productManagerBound = '1';
-
-    // Direct DOM property + capture listener: either route can trigger creation.
-    submit.type = 'button';
-    submit.onclick = () => { void createProduct(null, form); };
-    submit.addEventListener('click', (event) => { void createProduct(event, form); }, true);
-    form.addEventListener('submit', (event) => { void createProduct(event, form); }, true);
-
-    $('productCode')?.addEventListener('input', updatePreview);
-    $('productName')?.addEventListener('input', updatePreview);
-    updatePreview();
-    void loadProducts();
+    if (form && submit && form.dataset.productManagerBound !== '1') {
+      form.dataset.productManagerBound = '1';
+      submit.type = 'button';
+      submit.onclick = () => { void createProduct(null, form); };
+      submit.addEventListener('click', (event) => { void createProduct(event, form); }, true);
+      form.addEventListener('submit', (event) => { void createProduct(event, form); }, true);
+      $('productCode')?.addEventListener('input', updatePreview);
+      $('productName')?.addEventListener('input', updatePreview);
+      updatePreview();
+      void loadProducts();
+    }
+    ensureActionButtons();
   }
 
-  // Stable direct entry point for inline HTML handlers or diagnostics.
   window.__createProduct = () => createProduct(null, $('productForm'));
   window.productManager = { loadProducts, createProduct };
 
@@ -171,7 +220,6 @@
     bind();
   }
 
-  // Protect against the product view being rendered/changed after initial load.
   const observer = new MutationObserver(() => bind());
   observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
