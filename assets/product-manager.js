@@ -34,23 +34,26 @@
     const table = $('productRows');
     if (!table) return [];
     table.innerHTML = '<tr><td colspan="7" class="muted">Memuat produk...</td></tr>';
-    const { data, error } = await sb.from('Product')
-      .select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at')
-      .order('created_at', { ascending: false });
-    if (error) {
-      table.innerHTML = `<tr><td colspan="7"><div class="notice err">❌ ${esc(error.message)}</div></td></tr>`;
+    try {
+      const { data, error } = await sb.from('Product')
+        .select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+
+      table.innerHTML = data?.length ? data.map((p) => `<tr>
+        <td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td>
+        <td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td>
+        <td><button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td>
+      </tr>`).join('') : '<tr><td colspan="7" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
+
+      table.querySelectorAll('.product-delete').forEach((button) => {
+        button.addEventListener('click', () => deleteProduct(button.dataset.id, button.dataset.name));
+      });
+      return data || [];
+    } catch (error) {
+      table.innerHTML = `<tr><td colspan="7"><div class="notice err">❌ Gagal memuat produk: ${esc(error?.message || error)}</div></td></tr>`;
       return [];
     }
-    table.innerHTML = data?.length ? data.map((p) => `<tr>
-      <td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td>
-      <td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td>
-      <td><button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td>
-    </tr>`).join('') : '<tr><td colspan="7" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
-
-    table.querySelectorAll('.product-delete').forEach((button) => {
-      button.addEventListener('click', () => deleteProduct(button.dataset.id, button.dataset.name));
-    });
-    return data || [];
   }
 
   async function deleteProduct(id, name) {
@@ -132,34 +135,33 @@
     }
   }
 
-  function bind() {
-    const form = $('productForm');
-    const submit = $('productSubmitBtn') || form?.querySelector('button');
-    if (!form || !submit || form.dataset.productManagerBound === '1') return;
-    form.dataset.productManagerBound = '1';
-
-    submit.type = 'button';
-    submit.addEventListener('click', (event) => createProduct(event, form), true);
-    form.addEventListener('submit', (event) => createProduct(event, form), true);
-
-    $('productCode')?.addEventListener('input', updatePreview);
-    $('productName')?.addEventListener('input', updatePreview);
-
-    loadProducts();
-  }
-
   function updatePreview() {
     const explicit = $('productCode')?.value || '';
     const source = explicit.trim() || $('productName')?.value || '';
     const code = normalizeCode(source);
-    if ($('productPreview')) {
-      $('productPreview').textContent = code
-        ? `Kode produk: ${code}`
-        : 'Kode produk dibuat otomatis dari nama produk.';
-    }
+    if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
   }
 
-  // Stable direct entry point for inline HTML handlers.
+  function bind() {
+    const form = $('productForm');
+    const submit = $('productSubmitBtn') || form?.querySelector('button');
+    if (!form || !submit) return;
+    if (form.dataset.productManagerBound === '1') return;
+    form.dataset.productManagerBound = '1';
+
+    // Direct DOM property + capture listener: either route can trigger creation.
+    submit.type = 'button';
+    submit.onclick = () => { void createProduct(null, form); };
+    submit.addEventListener('click', (event) => { void createProduct(event, form); }, true);
+    form.addEventListener('submit', (event) => { void createProduct(event, form); }, true);
+
+    $('productCode')?.addEventListener('input', updatePreview);
+    $('productName')?.addEventListener('input', updatePreview);
+    updatePreview();
+    void loadProducts();
+  }
+
+  // Stable direct entry point for inline HTML handlers or diagnostics.
   window.__createProduct = () => createProduct(null, $('productForm'));
   window.productManager = { loadProducts, createProduct };
 
@@ -168,4 +170,8 @@
   } else {
     bind();
   }
+
+  // Protect against the product view being rendered/changed after initial load.
+  const observer = new MutationObserver(() => bind());
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
