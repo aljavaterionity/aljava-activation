@@ -172,29 +172,6 @@
     }
   }
 
-  function ensureHppMenu() {
-    const menuItems = document.querySelector('.menu-items');
-    const productMenu = $('productMenu');
-    if (!menuItems || !productMenu || $('hppMenu')) return;
-
-    const hppButton = document.createElement('button');
-    hppButton.id = 'hppMenu';
-    hppButton.type = 'button';
-    hppButton.className = 'btn';
-    hppButton.textContent = '💰 HPP';
-    hppButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
-      $('menuPanel')?.classList.remove('open');
-      $('menuButton')?.setAttribute('aria-expanded', 'false');
-      history.replaceState?.(null, '', '#product');
-      setTimeout(() => $('productName')?.focus(), 50);
-      void loadProducts();
-    });
-    productMenu.insertAdjacentElement('afterend', hppButton);
-  }
-
   function bind() {
     const form = $('productForm');
     const submit = $('productSubmitBtn') || form?.querySelector('button');
@@ -210,7 +187,6 @@
       updatePreview();
       void loadProducts();
     }
-    ensureHppMenu();
   }
 
   window.__createProduct = () => createProduct(null, $('productForm'));
