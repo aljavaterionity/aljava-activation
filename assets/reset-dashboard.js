@@ -1,9 +1,4 @@
-/* ALJAVA TERIONITY — Full Reset Controller
-   Main Menu > Reset Dashboard
-
-   Resets application/business data while preserving Product master
-   catalog and authentication/admin access.
-*/
+/* ALJAVA TERIONITY — Full Reset Controller */
 (() => {
   'use strict';
 
@@ -19,14 +14,9 @@
 
   async function verifyReset(client) {
     const checks = [
-      ['Transactions', 'id'],
-      ['CardScans', 'id'],
-      ['Subscriptions', 'id'],
-      ['Cards', 'id'],
-      ['cards', 'id'],
-      ['Customers', 'id'],
-      ['Sales', 'id'],
-      ['admin_card_actions', 'id']
+      ['Transactions', 'id'], ['CardScans', 'id'], ['Subscriptions', 'id'],
+      ['Cards', 'id'], ['cards', 'id'], ['Customers', 'id'],
+      ['Sales', 'id'], ['admin_card_actions', 'id']
     ];
     const counts = {};
     for (const [table, column] of checks) {
@@ -39,111 +29,104 @@
 
   async function resetAllData(event) {
     if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
+      event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation();
     }
-
     const confirmation = window.prompt(
-      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus seluruh transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nData PRODUK tidak akan dihapus.\nAkun login/admin juga tidak dihapus.'
+      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nProduk tidak dihapus.'
     );
     if (confirmation !== 'RESET') return false;
-
     const button = $('resetMenu');
     const originalText = button?.textContent || '↻ Reset Dashboard';
     const message = $('cardActionMsg');
-
-    if (button) {
-      button.disabled = true;
-      button.textContent = 'Mereset...';
-    }
-
+    if (button) { button.disabled = true; button.textContent = 'Mereset...'; }
     try {
       const client = createClient();
-      if (message) {
-        message.className = 'notice info';
-        message.textContent = 'Menghapus data dashboard dan memverifikasi hasil... Produk tetap aman.';
-      }
-
+      if (message) { message.className = 'notice info'; message.textContent = 'Mereset dashboard... Produk tetap aman.'; }
       const { data, error } = await client.rpc('admin_reset_dashboard');
-      if (error) throw new Error(error.message || 'RPC admin_reset_dashboard gagal.');
-
+      if (error) throw new Error(error.message || 'RPC reset gagal.');
       const counts = await verifyReset(client);
       const failed = Object.entries(counts).filter(([, count]) => count !== 0);
-      if (failed.length) {
-        throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
-      }
-
-      console.info('[ALJAVA] admin_reset_dashboard result:', data);
-      console.info('[ALJAVA] reset verification:', counts);
-
+      if (failed.length) throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
+      console.info('[ALJAVA] reset result:', data, counts);
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
-
-      const target = `/admin.html#dashboard-reset-${Date.now()}`;
-      window.location.replace(target);
+      window.location.replace(`/admin.html#dashboard-reset-${Date.now()}`);
       return true;
     } catch (error) {
-      console.error('[ALJAVA] full reset failed:', error);
-      if (message) {
-        message.className = 'notice err';
-        message.textContent = `❌ Reset gagal: ${error?.message || error}`;
-      } else {
-        window.alert(`Reset gagal: ${error?.message || error}`);
-      }
+      console.error('[ALJAVA] reset failed:', error);
+      if (message) { message.className = 'notice err'; message.textContent = `❌ Reset gagal: ${error?.message || error}`; }
+      else window.alert(`Reset gagal: ${error?.message || error}`);
       return false;
     } finally {
-      if (button) {
-        button.disabled = false;
-        button.textContent = originalText;
-      }
+      if (button) { button.disabled = false; button.textContent = originalText; }
     }
   }
 
-  window.__resetDashboard = resetAllData;
-
   function organizeSettings() {
     const panel = $('menuPanel');
+    const mainItems = panel?.querySelector(':scope > .menu-items');
     const reset = $('resetMenu');
     const addAccount = $('addAccountMenu');
     const logout = $('logoutMenu');
     if (!panel || !reset || !addAccount || !logout) return;
 
+    // Ensure these three buttons are physically removed from the main menu list.
     let settings = panel.querySelector('[data-menu-section="settings"]');
     if (!settings) {
       settings = document.createElement('section');
       settings.dataset.menuSection = 'settings';
       settings.setAttribute('aria-label', 'Pengaturan');
       settings.className = 'menu-settings';
+      Object.assign(settings.style, {
+        marginTop: '16px',
+        paddingTop: '14px',
+        borderTop: '1px solid rgba(39,163,211,.28)',
+        display: 'block'
+      });
 
       const title = document.createElement('div');
       title.className = 'menu-settings-title';
       title.textContent = '⚙ Pengaturan';
+      Object.assign(title.style, {
+        display: 'block',
+        margin: '0 0 10px',
+        color: '#247fa6',
+        fontWeight: '900',
+        fontSize: '13px',
+        letterSpacing: '.3px'
+      });
 
       const items = document.createElement('div');
-      items.className = 'menu-items';
-      settings.appendChild(title);
-      settings.appendChild(items);
+      items.className = 'menu-settings-items';
+      Object.assign(items.style, { display: 'grid', gap: '9px' });
+
+      settings.append(title, items);
       panel.appendChild(settings);
     }
 
-    const items = settings.querySelector('.menu-items') || settings;
-    [reset, addAccount, logout].forEach((button) => items.appendChild(button));
+    const items = settings.querySelector('.menu-settings-items');
+    [reset, addAccount, logout].forEach((button) => {
+      items.appendChild(button);
+      button.style.width = '100%';
+      button.style.minHeight = '48px';
+      button.style.textAlign = 'left';
+    });
+
+    // Defensive cleanup in case another script re-adds them to the main list.
+    if (mainItems) mainItems.querySelectorAll('#resetMenu,#addAccountMenu,#logoutMenu').forEach((button) => items.appendChild(button));
   }
 
   function bind() {
     organizeSettings();
-
     const button = $('resetMenu');
-    if (!button || button.dataset.fullResetBound === '1') return;
-
-    button.dataset.fullResetBound = '1';
-    button.onclick = resetAllData;
+    if (button && button.dataset.fullResetBound !== '1') {
+      button.dataset.fullResetBound = '1';
+      button.onclick = resetAllData;
+    }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bind, { once: true });
-  } else {
-    bind();
-  }
+  window.__resetDashboard = resetAllData;
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
+  else bind();
+  new MutationObserver(bind).observe(document.body, { childList: true, subtree: true });
 })();
