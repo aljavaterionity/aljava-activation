@@ -4,7 +4,6 @@
 
   const $ = (id) => document.getElementById(id);
   const money = (value) => Number(value || 0);
-  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
   let sb = null;
 
   function getClient() {
@@ -29,8 +28,8 @@
     const existing = document.querySelector('script[data-aljava-xlsx="1"]');
     if (existing) {
       return new Promise((resolve, reject) => {
-        existing.addEventListener('load', () => resolve(window.XLSX));
-        existing.addEventListener('error', () => reject(new Error('Library Excel gagal dimuat.')));
+        existing.addEventListener('load', () => resolve(window.XLSX), { once: true });
+        existing.addEventListener('error', () => reject(new Error('Library Excel gagal dimuat.')), { once: true });
       });
     }
     return new Promise((resolve, reject) => {
@@ -47,7 +46,6 @@
   async function getData() {
     const client = getClient();
     if (!client) throw new Error('Konfigurasi aplikasi tidak tersedia.');
-
     const [txResult, productsResult, customersResult] = await Promise.all([
       client.from('Transactions').select('id,customer_id,card_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date').order('transaction_date', { ascending: false }),
       client.from('Product').select('id,name,product_code,category,hpp,selling_price,commission'),
@@ -64,7 +62,6 @@
       const date = new Date(row.transaction_date);
       return (!start || date >= start) && (!end || date <= end);
     });
-
     return { transactions, products, customers, start, end };
   }
 
@@ -73,7 +70,8 @@
       const qty = Number(row.quantity || 1);
       const unitSell = money(row.selling_price);
       const unitHpp = money(row.hpp);
-      const unitCommission = money(row.commission);
+      const commissionTotal = money(row.commission);
+      const unitCommission = qty ? commissionTotal / qty : commissionTotal;
       const customer = data.customers[row.customer_id] || {};
       const product = data.products[row.product_id] || {};
       return {
@@ -89,8 +87,8 @@
         'HPP / Unit': unitHpp,
         'HPP Total': unitHpp * qty,
         'Komisi / Unit': unitCommission,
-        'Komisi Total': unitCommission * qty,
-        'Laba Kotor': (unitSell - unitHpp - unitCommission) * qty,
+        'Komisi Total': commissionTotal,
+        'Laba Kotor': (unitSell * qty) - (unitHpp * qty) - commissionTotal,
         'Status Pembayaran': row.payment_status || '-'
       };
     });
@@ -103,7 +101,7 @@
       const qty = Number(row.quantity || 1);
       const sell = money(row.selling_price) * qty;
       const hpp = money(row.hpp) * qty;
-      const commission = money(row.commission) * qty;
+      const commission = money(row.commission);
       item.Qty += qty;
       item.Omzet += sell;
       item.HPP += hpp;
@@ -158,19 +156,18 @@
 
   function install() {
     if ($('salesExportExcel')) return;
-    const refresh = $('salesRefresh');
-    if (!refresh) return;
+    const host = $('salesRefresh')?.parentElement;
+    if (!host) return;
     const button = document.createElement('button');
     button.id = 'salesExportExcel';
     button.type = 'button';
     button.className = 'btn';
     button.textContent = 'Export Excel';
     button.addEventListener('click', () => void exportExcel());
-    refresh.insertAdjacentElement('afterend', button);
+    host.appendChild(button);
   }
 
   window.salesExport = { install, exportExcel };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true });
   else install();
-  document.addEventListener('aljava:sales-ui-ready', install);
 })();
