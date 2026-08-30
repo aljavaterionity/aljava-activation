@@ -1,24 +1,13 @@
 /* ALJAVA TERIONITY — Full Reset Controller
    Main Menu > Reset Dashboard
 
-   WARNING: This removes application/business data from the public tables below.
-   Authentication/admin access is intentionally preserved.
+   Deletes application/business data through a server-side admin RPC.
+   Supabase Auth and admin_profiles are intentionally preserved.
 */
 (() => {
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const TABLES = [
-    'CardScans',
-    'Transactions',
-    'Subscriptions',
-    'Cards',
-    'Sales',
-    'Customers',
-    'Product',
-    'cards',
-    'admin_card_actions'
-  ];
 
   async function resetAllData(event) {
     if (event) {
@@ -28,44 +17,46 @@
     }
 
     const confirmation = window.prompt(
-      'RESET TOTAL DATA\n\nKetik RESET untuk menghapus semua data kartu, customer, transaksi, produk, penjualan, subscription, scan/tap, dan data operasional terkait.\n\nAkun login/admin tidak dihapus.'
+      'RESET TOTAL DATA\n\nKetik RESET untuk menghapus semua data kartu, customer, transaksi, produk, penjualan, subscription, scan/tap, kartu legacy, dan log operasional.\n\nAkun login/admin TIDAK dihapus.'
     );
     if (confirmation !== 'RESET') return;
 
     const button = $('resetMenu');
-    const originalText = button?.textContent;
+    const originalText = button?.textContent || '↻ Reset Dashboard';
     if (button) {
       button.disabled = true;
       button.textContent = 'Mereset...';
     }
 
+    const message = $('cardActionMsg');
     try {
       const client = window.supabase?.createClient;
-      if (!client) throw new Error('Supabase client tidak tersedia.');
+      if (!client) throw new Error('Library Supabase tidak tersedia.');
 
-      // Deletes are ordered to respect the known foreign-key relationships.
-      for (const table of TABLES) {
-        const { error } = await client.from(table).delete().not('id', 'is', null);
-        // A legacy/optional table may be absent or inaccessible; do not hide
-        // errors for the core application tables.
-        if (error && !['cards', 'admin_card_actions'].includes(table)) {
-          throw new Error(`${table}: ${error.message}`);
-        }
+      if (message) {
+        message.className = 'notice info';
+        message.textContent = 'Mereset semua data aplikasi...';
       }
 
-      // Clear local dashboard state and return to a clean dashboard.
+      // One server-side transaction: avoids browser RLS/FK ordering issues.
+      const { data, error } = await client.rpc('reset_admin_data');
+      if (error) throw new Error(error.message || 'RPC reset_admin_data gagal.');
+
+      console.info('[ALJAVA] reset_admin_data result:', data);
+
+      // Clear only dashboard UI state. Supabase auth/session remains intact.
       sessionStorage.clear();
       localStorage.removeItem('admin_dashboard_state');
 
-      const message = $('cardActionMsg');
       if (message) {
         message.className = 'notice ok';
         message.textContent = '✓ Semua data aplikasi berhasil direset. Akun admin tetap aktif.';
       }
 
+      // Reload so every view, cache, table and in-memory state starts clean.
       window.location.assign('/admin.html#dashboard');
     } catch (error) {
-      const message = $('cardActionMsg');
+      console.error('[ALJAVA] full reset failed:', error);
       if (message) {
         message.className = 'notice err';
         message.textContent = `❌ Reset gagal: ${error?.message || error}`;
@@ -75,7 +66,7 @@
     } finally {
       if (button) {
         button.disabled = false;
-        button.textContent = originalText || '↻ Reset Dashboard';
+        button.textContent = originalText;
       }
     }
   }
