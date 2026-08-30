@@ -44,8 +44,7 @@
     const topLogout = document.getElementById('logoutTop');
     if (topLogout) topLogout.remove();
 
-    // Some older builds can initialize the sales view more than once.
-    // Keep the first rendered view and remove duplicate copies.
+    // Guard against duplicate sales dashboard sections created by repeated script loads.
     const salesViews = Array.from(document.querySelectorAll('#salesView'));
     salesViews.slice(1).forEach((view) => view.remove());
   }
