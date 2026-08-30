@@ -1,12 +1,3 @@
 {
-  "rewrites": [
-    {
-      "source": "/admin.html",
-      "destination": "/admin-shell.html"
-    },
-    {
-      "source": "/admin-source.html",
-      "destination": "https://aljava-activation-5a6xso5bw-aljava.vercel.app/admin.html"
-    }
-  ]
+  "cleanUrls": true
 }
