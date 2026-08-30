@@ -28,15 +28,15 @@
   }
 
   async function resetAllData(event) {
-    if (event) {
-      event.preventDefault();
-      event.stopPropagation();
-      event.stopImmediatePropagation();
-    }
+    event?.preventDefault();
+    event?.stopPropagation();
+    event?.stopImmediatePropagation();
+
     const confirmation = window.prompt(
       'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nProduk tidak dihapus.'
     );
     if (confirmation !== 'RESET') return false;
+
     const button = $('resetMenu');
     const originalText = button?.textContent || '↻ Reset Dashboard';
     const message = $('cardActionMsg');
@@ -44,6 +44,7 @@
       button.disabled = true;
       button.textContent = 'Mereset...';
     }
+
     try {
       const client = createClient();
       if (message) {
@@ -52,11 +53,13 @@
       }
       const { data, error } = await client.rpc('admin_reset_dashboard');
       if (error) throw new Error(error.message || 'RPC reset gagal.');
+
       const counts = await verifyReset(client);
       const failed = Object.entries(counts).filter(([, count]) => count !== 0);
       if (failed.length) {
         throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
       }
+
       console.info('[ALJAVA] reset result:', data, counts);
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
@@ -79,73 +82,14 @@
     }
   }
 
-  function organizeSettings() {
-    const panel = $('menuPanel');
-    const mainItems = panel?.querySelector(':scope > .menu-items');
-    const reset = $('resetMenu');
-    const addAccount = $('addAccountMenu');
-    const logout = $('logoutMenu');
-    if (!panel || !reset || !addAccount || !logout) return;
-
-    let settings = panel.querySelector('[data-menu-section="settings"]');
-    if (!settings) {
-      settings = document.createElement('section');
-      settings.dataset.menuSection = 'settings';
-      settings.setAttribute('aria-label', 'Pengaturan');
-      settings.className = 'menu-settings';
-      Object.assign(settings.style, {
-        marginTop: '16px',
-        paddingTop: '14px',
-        borderTop: '1px solid rgba(39,163,211,.28)',
-        display: 'block'
-      });
-
-      const title = document.createElement('div');
-      title.className = 'menu-settings-title';
-      title.textContent = '⚙ Pengaturan';
-      Object.assign(title.style, {
-        display: 'block',
-        margin: '0 0 10px',
-        color: '#247fa6',
-        fontWeight: '900',
-        fontSize: '13px',
-        letterSpacing: '.3px'
-      });
-
-      const items = document.createElement('div');
-      items.className = 'menu-settings-items';
-      Object.assign(items.style, {
-        display: 'grid',
-        gap: '9px'
-      });
-
-      settings.append(title, items);
-      panel.appendChild(settings);
-    }
-
-    const items = settings.querySelector('.menu-settings-items');
-    if (!items) return;
-
-    [reset, addAccount, logout].forEach((button) => {
-      if (button.parentElement !== items) items.appendChild(button);
-      button.style.width = '100%';
-      button.style.minHeight = '48px';
-      button.style.textAlign = 'left';
-    });
-
-    if (mainItems) {
-      mainItems.querySelectorAll('#resetMenu,#addAccountMenu,#logoutMenu').forEach((button) => {
-        if (button.parentElement !== items) items.appendChild(button);
-      });
-    }
-  }
-
   function bind() {
-    organizeSettings();
+    // admin.html already contains the Pengaturan section statically.
+    // Do not move DOM nodes and do not use a MutationObserver here.
+    // This controller only owns the Reset Dashboard action.
     const button = $('resetMenu');
     if (button && button.dataset.fullResetBound !== '1') {
       button.dataset.fullResetBound = '1';
-      button.onclick = resetAllData;
+      button.addEventListener('click', resetAllData);
     }
   }
 
@@ -156,10 +100,4 @@
   } else {
     bind();
   }
-
-  const observer = new MutationObserver(() => {
-    // Only touch the DOM when required; prevents recursive mutation loops.
-    organizeSettings();
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
 })();
