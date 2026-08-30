@@ -30,27 +30,42 @@
     el.textContent = text;
   }
 
+  function ensureCommissionField() {
+    const form = $('productForm');
+    if (!form || $('productCommission')) return;
+    const subscription = $('productSubscription');
+    const field = document.createElement('input');
+    field.id = 'productCommission';
+    field.className = 'field';
+    field.type = 'number';
+    field.min = '0';
+    field.step = '1';
+    field.placeholder = 'Komisi per unit';
+    if (subscription) subscription.insertAdjacentElement('afterend', field);
+    else form.appendChild(field);
+  }
+
   async function loadProducts() {
     const table = $('productRows');
     if (!table) return [];
-    table.innerHTML = '<tr><td colspan="7" class="muted">Memuat produk...</td></tr>';
+    table.innerHTML = '<tr><td colspan="8" class="muted">Memuat produk...</td></tr>';
     try {
       const { data, error } = await sb.from('Product')
-        .select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at')
+        .select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at')
         .order('created_at', { ascending: false });
       if (error) throw error;
       table.innerHTML = data?.length ? data.map((p) => `<tr>
         <td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td>
-        <td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td>
+        <td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td><td>${money(p.commission)}</td>
         <td><button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td>
-      </tr>`).join('') : '<tr><td colspan="7" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
+      </tr>`).join('') : '<tr><td colspan="8" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
 
       table.querySelectorAll('.product-delete').forEach((button) => {
         button.addEventListener('click', () => deleteProduct(button.dataset.id, button.dataset.name));
       });
       return data || [];
     } catch (error) {
-      table.innerHTML = `<tr><td colspan="7"><div class="notice err">❌ Gagal memuat produk: ${esc(error?.message || error)}</div></td></tr>`;
+      table.innerHTML = `<tr><td colspan="8"><div class="notice err">❌ Gagal memuat produk: ${esc(error?.message || error)}</div></td></tr>`;
       return [];
     }
   }
@@ -80,6 +95,8 @@
       return false;
     }
 
+    ensureCommissionField();
+
     const name = $('productName')?.value.trim();
     const rawCode = $('productCode')?.value.trim();
     const code = normalizeCode(rawCode || name);
@@ -87,6 +104,7 @@
     const hpp = Number($('productHpp')?.value || 0);
     const selling = Number($('productSelling')?.value || 0);
     const subscription = Number($('productSubscription')?.value || 0);
+    const commission = Number($('productCommission')?.value || 0);
 
     if (!name) {
       showMessage('Nama produk wajib diisi.', 'err');
@@ -96,6 +114,11 @@
     if (!code) {
       showMessage('Kode produk tidak valid.', 'err');
       $('productCode')?.focus();
+      return false;
+    }
+    if (commission < 0) {
+      showMessage('Komisi tidak boleh negatif.', 'err');
+      $('productCommission')?.focus();
       return false;
     }
 
@@ -112,13 +135,15 @@
         category,
         hpp,
         selling_price: selling,
-        subscription_price: subscription
+        subscription_price: subscription,
+        commission
       });
       if (error) throw error;
 
       form.reset();
+      if ($('productCommission')) $('productCommission').value = '0';
       updatePreview();
-      showMessage(`✓ Produk ${name} (${code}) berhasil dibuat.`, 'ok');
+      showMessage(`✓ Produk ${name} (${code}) berhasil dibuat. Komisi: ${money(commission)} / unit.`, 'ok');
       await loadProducts();
       document.dispatchEvent(new CustomEvent('aljava:products-changed'));
       if (typeof window.adminApi?.load === 'function') await window.adminApi.load().catch(() => {});
@@ -138,7 +163,13 @@
     const explicit = $('productCode')?.value || '';
     const source = explicit.trim() || $('productName')?.value || '';
     const code = normalizeCode(source);
-    if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
+    ensureCommissionField();
+    if ($('productPreview')) {
+      const commission = Number($('productCommission')?.value || 0);
+      $('productPreview').textContent = code
+        ? `Kode produk: ${code} • Komisi: ${money(commission)} / unit`
+        : 'Kode produk dibuat otomatis dari nama produk.';
+    }
   }
 
   function ensureHppMenu() {
@@ -174,6 +205,8 @@
       form.addEventListener('submit', (event) => { void createProduct(event, form); }, true);
       $('productCode')?.addEventListener('input', updatePreview);
       $('productName')?.addEventListener('input', updatePreview);
+      ensureCommissionField();
+      $('productCommission')?.addEventListener('input', updatePreview);
       updatePreview();
       void loadProducts();
     }
