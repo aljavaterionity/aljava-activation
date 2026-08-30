@@ -1,5 +1,5 @@
 /* ALJAVA TERIONITY — Main card summary enhancer
-   Keeps the dashboard summary independent from admin.js data internals.
+   Single owner for the Dashboard Main Card Summary table.
 */
 (() => {
   'use strict';
@@ -22,9 +22,7 @@
     if (String(card.status || '').toLowerCase() === 'active' || card.activated_at) return 'Aktif';
     return 'Belum Aktif';
   };
-
   const statusClass = (label) => label === 'Aktif' ? 'active' : label === 'Expired' ? 'expired' : 'pending';
-
   const formatDate = (value) => {
     if (!value) return '-';
     const date = new Date(value);
@@ -41,12 +39,14 @@
       client.from('Customers').select('id,business_name,owner_name')
     ]);
 
-    if (cardsError || productsError || customersError) return;
+    if (cardsError || productsError || customersError) {
+      host.innerHTML = '<div class="notice err">❌ Gagal memuat ringkasan kartu.</div>';
+      return;
+    }
 
     const productMap = Object.fromEntries((products || []).map((product) => [String(product.id), product]));
     const customerMap = Object.fromEntries((customers || []).map((customer) => [String(customer.id), customer]));
     const rows = cards || [];
-
     const currentChecked = new Set([...host.querySelectorAll('.card-select:checked')].map((input) => String(input.value)));
     const currentSearch = ($('cardSearch')?.value || '').toLowerCase().trim();
     const currentStatus = $('cardStatus')?.value || '';
@@ -88,9 +88,9 @@
         <td>${esc(customer?.business_name || customer?.owner_name || '-')}</td>
         <td class="${statusClass(label)}">${esc(label)}</td>
         <td>${formatDate(card.created_at)}</td>
-        <td>${activation ? `<a class="btn summary-link" target="_blank" rel="noopener" href="${esc(activation)}">Link</a>` : '-'}</td>
-        <td>${qr ? `<a class="btn summary-link" target="_blank" rel="noopener" href="${esc(qr)}">QR</a>` : '-'}</td>
-        <td>${nfc ? `<a class="btn summary-link" href="${esc(nfc)}">NFC</a>` : '-'}</td>
+        <td><a class="btn summary-link" target="_blank" rel="noopener" href="${esc(activation)}">Link</a></td>
+        <td><a class="btn summary-link" target="_blank" rel="noopener" href="${esc(qr)}">QR</a></td>
+        <td><a class="btn summary-link" href="${esc(nfc)}">NFC</a></td>
         <td><button class="btn danger summary-delete-card" type="button" data-card-id="${esc(card.id)}" data-card-code="${esc(card.card_code)}">Hapus</button></td>
       </tr>`;
     }).join('')}</tbody></table>`;
@@ -139,11 +139,21 @@
   }
 
   function scheduleInitial() {
-    setTimeout(fetchSummary, 1000);
+    setTimeout(fetchSummary, 500);
     document.addEventListener('aljava:cards-created', () => setTimeout(fetchSummary, 300));
-    $('cardSearch')?.addEventListener('input', () => setTimeout(fetchSummary, 50));
-    $('cardStatus')?.addEventListener('change', () => setTimeout(fetchSummary, 50));
+    document.addEventListener('aljava:cards-deleted', () => setTimeout(fetchSummary, 200));
+    document.addEventListener('aljava:data-loaded', () => setTimeout(fetchSummary, 100));
+    window.addEventListener('hashchange', () => setTimeout(fetchSummary, 100));
+    document.addEventListener('click', (event) => {
+      if (event.target?.closest?.('#dashboardMenu')) setTimeout(fetchSummary, 150);
+    });
+    $('cardSearch')?.addEventListener('input', () => fetchSummary());
+    $('cardStatus')?.addEventListener('change', () => fetchSummary());
     $('refresh')?.addEventListener('click', () => setTimeout(fetchSummary, 300));
+    $('selectAllCards')?.addEventListener('change', (event) => {
+      $('cardTable')?.querySelectorAll('.card-select').forEach((input) => { input.checked = event.target.checked; });
+      syncSelection();
+    });
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', scheduleInitial, { once: true });
