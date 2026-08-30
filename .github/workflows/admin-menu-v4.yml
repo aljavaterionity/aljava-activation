@@ -1,0 +1,80 @@
+name: Rebuild Admin Menu V4
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-menu-v4]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install independent clickable menu
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = 'ALJAVA ADMIN MENU V4'
+          if marker in s:
+              print('V4 already installed')
+              raise SystemExit(0)
+          css = r'''<style id="aljava-admin-menu-v4-style">
+          /* ALJAVA ADMIN MENU V4 */
+          .admin-menu-toggle,.admin-menu{ }
+          #aljavaMenuV4Button{position:fixed!important;top:18px!important;left:18px!important;z-index:2147483647!important;width:48px!important;height:48px!important;display:none!important;align-items:center!important;justify-content:center!important;padding:0!important;margin:0!important;border:1px solid rgba(39,163,211,.38)!important;border-radius:12px!important;background:rgba(255,255,255,.94)!important;color:#0879b8!important;box-shadow:0 12px 30px rgba(38,139,177,.20)!important;cursor:pointer!important;font:900 25px/1 Inter,Poppins,Arial,sans-serif!important;pointer-events:auto!important;user-select:none!important}
+          #aljavaMenuV4Button:hover{transform:translateY(-1px);box-shadow:0 16px 36px rgba(38,139,177,.28)!important}
+          #aljavaMenuV4Button.v4-visible{display:flex!important}
+          #aljavaMenuV4Drawer{position:fixed!important;top:76px!important;left:18px!important;z-index:2147483646!important;width:280px!important;display:none!important;padding:16px!important;margin:0!important;border:1px solid rgba(55,180,225,.30)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(220,247,255,.94))!important;box-shadow:0 24px 70px rgba(38,139,177,.25)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important;pointer-events:auto!important}
+          #aljavaMenuV4Drawer.v4-open{display:block!important}
+          #aljavaMenuV4Drawer h2{margin:0 0 4px;color:#17324d;font-size:20px}
+          #aljavaMenuV4Drawer p{margin:0 0 12px;color:#58788f;font-size:12px}
+          #aljavaMenuV4Drawer button{display:block!important;width:100%!important;min-height:48px!important;margin:8px 0!important;padding:11px 13px!important;border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.78)!important;color:#17324d!important;text-align:left!important;font:800 14px/1.2 Inter,Poppins,Arial,sans-serif!important;cursor:pointer!important;pointer-events:auto!important}
+          #aljavaMenuV4Drawer button:hover{background:rgba(53,201,242,.14)!important;border-color:rgba(39,163,211,.55)!important}
+          #aljavaMenuV4Drawer .danger{color:#9b3047!important;background:rgba(255,225,232,.78)!important;border-color:rgba(190,65,90,.32)!important}
+          @media(max-width:520px){#aljavaMenuV4Button{top:12px!important;left:12px!important;width:44px!important;height:44px!important}#aljavaMenuV4Drawer{top:68px!important;left:12px!important;width:calc(100vw - 24px)!important}}
+          </style>'''
+          js = r'''<script id="aljava-admin-menu-v4-script">
+          (()=>{
+            const boot=()=>{
+              if(document.getElementById('aljavaMenuV4Button')) return true;
+              const app=document.getElementById('app');
+              const style=document.createElement('div');
+              style.innerHTML='<button id="aljavaMenuV4Button" type="button" aria-label="Buka Main Menu" aria-expanded="false">☰</button><div id="aljavaMenuV4Drawer" role="dialog" aria-label="Main Menu"><h2>Main Menu</h2><p>Pengaturan dan akses admin</p><button type="button" data-target="adminReset">↻ Reset Dashboard</button><button type="button" data-target="adminAddAccount">＋ Tambah Akun</button><button type="button" data-target="adminCustomerTop">👥 Database Customer</button><button type="button" data-target="adminLogout" class="danger">Keluar / Logout</button></div>';
+              document.body.appendChild(style.firstElementChild);
+              document.body.appendChild(style.lastElementChild);
+              const b=document.getElementById('aljavaMenuV4Button');
+              const d=document.getElementById('aljavaMenuV4Drawer');
+              const sync=()=>{ const logged=!!app && getComputedStyle(app).display!=='none'; b.classList.toggle('v4-visible',logged); if(!logged)d.classList.remove('v4-open'); };
+              b.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();d.classList.toggle('v4-open');b.setAttribute('aria-expanded',d.classList.contains('v4-open')?'true':'false');});
+              d.addEventListener('click',(e)=>{
+                e.stopPropagation();
+                const btn=e.target.closest('button[data-target]');
+                if(!btn)return;
+                const target=document.getElementById(btn.dataset.target);
+                if(target){target.click();}
+                d.classList.remove('v4-open');
+                b.setAttribute('aria-expanded','false');
+              });
+              document.addEventListener('click',(e)=>{if(!d.contains(e.target)&&e.target!==b)d.classList.remove('v4-open');});
+              document.addEventListener('keydown',(e)=>{if(e.key==='Escape')d.classList.remove('v4-open');});
+              const obs=new MutationObserver(sync); if(app)obs.observe(app,{attributes:true,attributeFilter:['style']});
+              setInterval(sync,500); sync();
+              document.querySelectorAll('.admin-menu-toggle,.admin-menu-backdrop,.admin-menu').forEach(el=>{if(el.id!=='aljavaMenuV4Drawer')el.style.pointerEvents='none';});
+              return true;
+            };
+            if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
+          })();
+          </script>'''
+          # Remove interaction from all old menu layers; V4 is the only interactive menu.
+          s += css + js
+          p.write_text(s, encoding='utf-8')
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: independent admin menu drawer [admin-menu-v4]"
+          git push
