@@ -1,0 +1,39 @@
+name: Native Admin Menu
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[admin-menu-native]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install native clickable admin menu
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('admin.html')
+          s=p.read_text(encoding='utf-8')
+          marker='ALJAVA ADMIN MENU NATIVE V6'
+          if marker in s:
+              raise SystemExit(0)
+          css=r'''\n<style id="aljava-admin-menu-native-style">\n/* ALJAVA ADMIN MENU NATIVE V6 */\n#adminMenuToggle{display:none!important;pointer-events:none!important}\n#adminMenuBackdrop,.admin-menu-backdrop{display:none!important;pointer-events:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}\n.admin-menu{display:none!important;pointer-events:none!important}\n#aljavaNativeMenu{position:fixed!important;left:18px!important;top:18px!important;z-index:2147483647!important;display:none!important;font-family:Inter,Poppins,Arial,sans-serif}\n#aljavaNativeMenu.visible{display:block!important}\n#aljavaNativeMenu summary{list-style:none!important;display:flex!important;align-items:center!important;justify-content:center!important;width:48px!important;height:48px!important;border:1px solid rgba(39,163,211,.38)!important;border-radius:12px!important;background:rgba(255,255,255,.96)!important;color:#0879b8!important;box-shadow:0 12px 30px rgba(38,139,177,.2)!important;cursor:pointer!important;font:900 25px/1 Inter,Poppins,Arial,sans-serif!important;user-select:none!important;outline:none!important}\n#aljavaNativeMenu summary::-webkit-details-marker{display:none!important}\n#aljavaNativeMenu[open] summary{box-shadow:0 14px 35px rgba(38,139,177,.28)!important}\n#aljavaNativeMenuPanel{width:280px!important;margin-top:10px!important;padding:16px!important;border:1px solid rgba(55,180,225,.30)!important;border-radius:18px!important;background:linear-gradient(145deg,rgba(255,255,255,.98),rgba(220,247,255,.96))!important;box-shadow:0 24px 70px rgba(38,139,177,.25)!important}\n#aljavaNativeMenuPanel h2{margin:0 0 5px!important;color:#17324d!important;font-size:20px!important}\n#aljavaNativeMenuPanel p{margin:0 0 12px!important;color:#58788f!important;font-size:12px!important}\n#aljavaNativeMenuPanel button{display:block!important;width:100%!important;min-height:48px!important;margin:8px 0!important;padding:11px 13px!important;border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.82)!important;color:#17324d!important;text-align:left!important;cursor:pointer!important;pointer-events:auto!important;font:800 14px/1.2 Inter,Poppins,Arial,sans-serif!important}\n#aljavaNativeMenuPanel button:hover{background:rgba(53,201,242,.14)!important;border-color:rgba(39,163,211,.55)!important}\n#aljavaNativeMenuPanel .danger{color:#9b3047!important;background:rgba(255,225,232,.82)!important;border-color:rgba(190,65,90,.32)!important}\n@media(max-width:520px){#aljavaNativeMenu{left:12px!important;top:12px!important}#aljavaNativeMenu summary{width:44px!important;height:44px!important;font-size:22px!important}#aljavaNativeMenuPanel{width:calc(100vw - 24px)!important}}\n</style>\n'''
+          html=r'''<details id="aljavaNativeMenu" aria-label="Main Menu"><summary aria-label="Buka Main Menu">☰</summary><div id="aljavaNativeMenuPanel"><h2>Main Menu</h2><p>Pengaturan dan akses admin.</p><button type="button" onclick="document.getElementById('refresh')?.click();document.getElementById('aljavaNativeMenu').open=false">↻ Reset Dashboard</button><button type="button" onclick="document.getElementById('adminAddAccount')?.click()">＋ Tambah Akun</button><button type="button" onclick="document.getElementById('customerDatabase')?.scrollIntoView({behavior:'smooth'});document.getElementById('aljavaNativeMenu').open=false">👥 Database Customer</button><button type="button" class="danger" onclick="document.getElementById('logout')?.click()">Keluar / Logout</button></div></details>'''
+          js=r'''<script id="aljava-admin-menu-native-script">\n(()=>{const setup=()=>{const app=document.getElementById('app'),m=document.getElementById('aljavaNativeMenu');if(!app||!m)return false;const sync=()=>{const ok=getComputedStyle(app).display!=='none';m.classList.toggle('visible',ok);if(!ok)m.open=false};const ob=new MutationObserver(sync);ob.observe(app,{attributes:true,attributeFilter:['style']});sync();setInterval(sync,500);return true};if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',setup,{once:true});else setup()})();\n</script>'''
+          s=s.replace('<body>', '<body>'+html, 1) if '<body>' in s else s
+          s=s.replace('</style>', css+'</style>', 1)
+          s=s.replace('</body>', js+'</body>', 1)
+          p.write_text(s,encoding='utf-8')
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "fix: make main menu native and clickable [admin-menu-native]"
+          git push
