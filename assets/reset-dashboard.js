@@ -1,8 +1,8 @@
 /* ALJAVA TERIONITY — Full Reset Controller
    Main Menu > Reset Dashboard
 
-   Deletes application/business data through a server-side admin RPC.
-   Supabase Auth and admin_profiles are intentionally preserved.
+   Deletes application/business records while preserving the Product master
+   catalog and authentication/admin access.
 */
 (() => {
   'use strict';
@@ -17,43 +17,37 @@
     }
 
     const confirmation = window.prompt(
-      'RESET TOTAL DATA\n\nKetik RESET untuk menghapus semua data kartu, customer, transaksi, produk, penjualan, subscription, scan/tap, kartu legacy, dan log operasional.\n\nAkun login/admin TIDAK dihapus.'
+      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus seluruh data kartu, customer, transaksi, penjualan, subscription, scan/tap, kartu legacy, dan log operasional.\n\nData PRODUK tidak akan dihapus.\nAkun login/admin juga tidak dihapus.'
     );
     if (confirmation !== 'RESET') return;
 
     const button = $('resetMenu');
     const originalText = button?.textContent || '↻ Reset Dashboard';
+    const message = $('cardActionMsg');
+
     if (button) {
       button.disabled = true;
       button.textContent = 'Mereset...';
     }
 
-    const message = $('cardActionMsg');
     try {
       const client = window.supabase?.createClient;
       if (!client) throw new Error('Library Supabase tidak tersedia.');
 
       if (message) {
         message.className = 'notice info';
-        message.textContent = 'Mereset semua data aplikasi...';
+        message.textContent = 'Mereset data dashboard... Produk tetap aman.';
       }
 
-      // One server-side transaction: avoids browser RLS/FK ordering issues.
       const { data, error } = await client.rpc('reset_admin_data');
       if (error) throw new Error(error.message || 'RPC reset_admin_data gagal.');
 
       console.info('[ALJAVA] reset_admin_data result:', data);
 
-      // Clear only dashboard UI state. Supabase auth/session remains intact.
       sessionStorage.clear();
       localStorage.removeItem('admin_dashboard_state');
 
-      if (message) {
-        message.className = 'notice ok';
-        message.textContent = '✓ Semua data aplikasi berhasil direset. Akun admin tetap aktif.';
-      }
-
-      // Reload so every view, cache, table and in-memory state starts clean.
+      // Full reload clears in-memory dashboard state while preserving Auth.
       window.location.assign('/admin.html#dashboard');
     } catch (error) {
       console.error('[ALJAVA] full reset failed:', error);
