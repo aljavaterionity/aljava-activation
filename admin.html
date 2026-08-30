@@ -15,7 +15,6 @@
     <button id="loginBtn" class="btn" type="button">Masuk</button><div id="loginMsg"></div>
   </div>
 </section>
-
 <button id="menuButton" class="menu-button" type="button" aria-label="Buka Main Menu" aria-expanded="false">☰</button>
 <nav id="menuPanel" class="menu-panel" aria-label="Main Menu">
   <div class="row"><div><h2 style="margin:0">Main Menu</h2><p class="muted">Akses dan pengaturan admin.</p></div><button id="closeMenu" class="btn" type="button">Tutup</button></div>
@@ -28,50 +27,17 @@
     <button id="logoutMenu" class="btn danger" type="button">Keluar / Logout</button>
   </div>
 </nav>
-
 <main id="app" class="page" style="display:none">
-  <header class="top">
-    <div><div class="brand">ALJAVA TERIONITY</div><div class="muted">Admin Dashboard • Supabase Live</div></div>
-    <div class="actions"><button id="refresh" class="btn" type="button">Refresh</button><button id="logoutTop" class="btn danger" type="button">Keluar</button></div>
-  </header>
-
+  <header class="top"><div><div class="brand">ALJAVA TERIONITY</div><div class="muted">Admin Dashboard • Supabase Live</div></div><div class="actions"><button id="refresh" class="btn" type="button">Refresh</button><button id="logoutTop" class="btn danger" type="button">Keluar</button></div></header>
   <section id="dashboardView" class="view active-view">
     <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Utama</h1><p id="userEmail" class="muted"></p></div></div>
-    <section class="stats">
-      <div class="glass stat"><div class="muted">Total Revenue</div><div id="totalRev" class="num">Rp 0</div></div>
-      <div class="glass stat"><div class="muted">Revenue Bulan Ini</div><div id="monthRev" class="num">Rp 0</div></div>
-      <div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="totalScan" class="num">0</div></div>
-      <div class="glass stat"><div class="muted">Scan Bulan Ini</div><div id="monthScan" class="num">0</div></div>
-      <div class="glass stat"><div class="muted">Kartu Aktif</div><div id="activeCards" class="num">0</div></div>
-      <div class="glass stat"><div class="muted">Kartu Belum Aktif</div><div id="pendingCards" class="num">0</div></div>
-    </section>
+    <section class="stats"><div class="glass stat"><div class="muted">Total Revenue</div><div id="totalRev" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Revenue Bulan Ini</div><div id="monthRev" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="totalScan" class="num">0</div></div><div class="glass stat"><div class="muted">Scan Bulan Ini</div><div id="monthScan" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Aktif</div><div id="activeCards" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Belum Aktif</div><div id="pendingCards" class="num">0</div></div></section>
     <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Grafik Revenue Bulanan</h2><p class="muted">Filter tahun dan bulan.</p></div><div class="filter"><select id="year" class="field"></select><select id="month" class="field"><option value="">Semua bulan</option><option value="0">Jan</option><option value="1">Feb</option><option value="2">Mar</option><option value="3">Apr</option><option value="4">Mei</option><option value="5">Jun</option><option value="6">Jul</option><option value="7">Agu</option><option value="8">Sep</option><option value="9">Okt</option><option value="10">Nov</option><option value="11">Des</option></select></div></div></div><div class="body"><div id="chart" class="chart"></div><div id="chartTotal" class="muted" style="margin-top:9px"></div></div></section>
     <div class="grid"><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Terbaru</h2></div><div id="txTable" class="body"></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Scan</h2></div><div id="scanSummary" class="body"></div></section></div>
     <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Kartu Aktif / Belum Aktif</h2><p class="muted">Ringkasan kartu utama.</p></div><div class="filter"><input id="cardSearch" class="field" placeholder="Cari kode / customer"><select id="cardStatus" class="field"><option value="">Semua status</option><option value="active">Aktif</option><option value="pending">Belum Aktif</option><option value="expired">Expired</option></select></div></div></div><div class="body"><div id="cardSummary"></div><div class="card-bulk-actions"><label class="check-all"><input id="selectAllCards" type="checkbox"> Pilih semua</label><button id="deleteSelectedCards" class="btn danger" type="button" disabled>Hapus Pilihan</button><span id="cardActionMsg" class="muted" aria-live="polite"></span></div><div id="cardTable" class="table-wrap" style="margin-top:12px"></div></div></section>
   </section>
-
-  <section id="cardsView" class="view">
-    <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Kelola Kartu</h1><p class="muted">Satu form untuk membuat satu atau banyak kartu sekaligus.</p></div></div>
-    <section class="glass panel"><div class="head"><h2 style="margin:0">Buat Kartu</h2></div><div class="body">
-      <form id="singleForm" class="form">
-        <input id="singleCode" class="field full" required placeholder="Kode awal kartu, contoh: ALJ-001" autocomplete="off">
-        <input id="singleQty" class="field" type="number" min="1" max="500" value="1" required placeholder="Jumlah kartu">
-        <select id="singleProduct" class="field"><option value="">Produk (opsional)</option></select>
-        <select id="singleCustomer" class="field"><option value="">Customer (opsional)</option></select>
-        <input id="singleReview" class="field full" type="url" placeholder="Google Review URL">
-        <div id="singlePreview" class="notice info full">1 kartu akan dibuat dengan kode sesuai input.</div>
-        <button class="btn full" type="submit">Buat Kartu</button>
-      </form>
-      <div id="singleMsg"></div>
-      <select id="bulkProduct" hidden aria-hidden="true"></select>
-      <select id="bulkCustomer" hidden aria-hidden="true"></select>
-    </div></section>
-  </section>
-
-  <section id="customersView" class="view">
-    <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Database Customer</h1><p class="muted">ID, Nama Usaha, Jenis Kartu, Status, Total Scan/Tap, dan Google Review.</p></div></div>
-    <section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Customer</h2><p class="muted">Data dihitung dari customer, kartu, dan aktivitas scan/tap.</p></div><input id="customerSearch" class="field" placeholder="Cari nama usaha / ID"></div></div><div class="body"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Status</th><th>Total Scan/Tap</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat...</td></tr></tbody></table></div></div></section>
-  </section>
+  <section id="cardsView" class="view"><div class="row" style="margin-top:18px"><div><h1 style="margin:0">Kelola Kartu</h1><p class="muted">Satu form untuk membuat satu atau banyak kartu sekaligus.</p></div></div><section class="glass panel"><div class="head"><h2 style="margin:0">Buat Kartu</h2></div><div class="body"><form id="singleForm" class="form"><input id="singleCode" class="field full" required placeholder="Kode awal kartu, contoh: ALJ-001" autocomplete="off"><input id="singleQty" class="field" type="number" min="1" max="500" value="1" required placeholder="Jumlah kartu"><select id="singleProduct" class="field"><option value="">Produk (opsional)</option></select><select id="singleCustomer" class="field"><option value="">Customer (opsional)</option></select><input id="singleReview" class="field full" type="url" placeholder="Google Review URL"><div id="singlePreview" class="notice info full">1 kartu akan dibuat dengan kode sesuai input.</div><button class="btn full" type="submit">Buat Kartu</button></form><div id="singleMsg"></div><select id="bulkProduct" hidden aria-hidden="true"></select><select id="bulkCustomer" hidden aria-hidden="true"></select></div></section></section>
+  <section id="customersView" class="view"><div class="row" style="margin-top:18px"><div><h1 style="margin:0">Database Customer</h1><p class="muted">ID, Nama Usaha, Jenis Kartu, Status, Total Scan/Tap, dan Google Review.</p></div></div><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Customer</h2><p class="muted">Data dihitung dari customer, kartu, dan aktivitas scan/tap.</p></div><input id="customerSearch" class="field" placeholder="Cari nama usaha / ID"></div></div><div class="body"><div class="table-wrap"><table><thead><tr><th>ID</th><th>Nama Usaha</th><th>Jenis Kartu</th><th>Status</th><th>Total Scan/Tap</th><th>Link Google Review</th></tr></thead><tbody id="customerRows"><tr><td colspan="6" class="muted">Memuat...</td></tr></tbody></table></div></div></section></section>
 </main>
 <div id="modal" class="modal"><div class="glass modal-card"><h3 id="modalTitle">Pengaturan</h3><div id="modalBody"></div><div class="actions" style="margin-top:14px;justify-content:flex-end"><button id="modalClose" class="btn" type="button">Tutup</button></div></div></div>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -81,70 +47,27 @@
   const $ = (id) => document.getElementById(id);
   const escLocal = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[char]));
   const codeSequence = (base, qty) => {
-    const clean = String(base || '').trim();
-    const count = Math.max(1, Math.min(500, Number(qty) || 1));
+    const clean = String(base || '').trim(); const count = Math.max(1, Math.min(500, Number(qty) || 1));
     const match = clean.match(/^(.*?)(\d+)$/);
-    if (match) {
-      const prefix = match[1];
-      const width = match[2].length;
-      const start = Number(match[2]);
-      return Array.from({length: count}, (_, i) => prefix + String(start + i).padStart(width, '0'));
-    }
+    if (match) { const prefix = match[1]; const width = match[2].length; const start = Number(match[2]); return Array.from({length: count}, (_, i) => prefix + String(start + i).padStart(width, '0')); }
     return Array.from({length: count}, (_, i) => `${clean}-${String(i + 1).padStart(3, '0')}`);
   };
-  const updatePreview = () => {
-    const codes = codeSequence($('singleCode')?.value, $('singleQty')?.value);
-    const first = codes[0] || '-';
-    const last = codes[codes.length - 1] || first;
-    if ($('singlePreview')) $('singlePreview').innerHTML = `${codes.length} kartu akan dibuat • <strong>${escLocal(first)}</strong>${codes.length > 1 ? ` sampai <strong>${escLocal(last)}</strong>` : ''}`;
-  };
-  $('singleCode')?.addEventListener('input', updatePreview);
-  $('singleQty')?.addEventListener('input', updatePreview);
-  updatePreview();
-
+  const updatePreview = () => { const codes = codeSequence($('singleCode')?.value, $('singleQty')?.value); const first = codes[0] || '-'; const last = codes[codes.length - 1] || first; if ($('singlePreview')) $('singlePreview').innerHTML = `${codes.length} kartu akan dibuat • <strong>${escLocal(first)}</strong>${codes.length > 1 ? ` sampai <strong>${escLocal(last)}</strong>` : ''}`; };
+  $('singleCode')?.addEventListener('input', updatePreview); $('singleQty')?.addEventListener('input', updatePreview); updatePreview();
   $('singleForm')?.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    const msg = $('singleMsg');
-    const code = $('singleCode')?.value.trim();
-    const qty = Math.max(1, Math.min(500, Number($('singleQty')?.value) || 1));
+    event.preventDefault(); event.stopImmediatePropagation();
+    const msg = $('singleMsg'); const code = $('singleCode')?.value.trim(); const qty = Math.max(1, Math.min(500, Number($('singleQty')?.value) || 1));
     if (!code) { msg.className = 'notice err'; msg.textContent = '❌ Kode kartu wajib diisi.'; return; }
-
-    const codes = codeSequence(code, qty);
-    const productId = $('singleProduct')?.value || null;
-    const customerId = $('singleCustomer')?.value || null;
+    const codes = codeSequence(code, qty); const productId = $('singleProduct')?.value || null; const customerId = $('singleCustomer')?.value || null;
     const product = window.__adminState?.products?.find?.((row) => row.id === productId);
-    const supabaseClient = window.supabase?.createClient?.(
-      'https://lbzwmcxwxummitldxucj.supabase.co',
-      'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw'
-    );
-    if (!supabaseClient) { msg.className = 'notice err'; msg.textContent = '❌ Koneksi database belum siap. Muat ulang halaman.'; return; }
-
-    msg.className = 'notice info';
-    msg.textContent = `Memproses ${codes.length} kartu...`;
+    const client = window.supabase?.createClient?.('https://lbzwmcxwxummitldxucj.supabase.co','sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw');
+    if (!client) { msg.className = 'notice err'; msg.textContent = '❌ Koneksi database belum siap. Muat ulang halaman.'; return; }
+    msg.className = 'notice info'; msg.textContent = `Memproses ${codes.length} kartu...`;
     try {
-      const rows = codes.map((cardCode) => ({
-        card_code: cardCode,
-        product_type: product?.category || product?.name || 'Tanpa Jenis',
-        status: 'pending',
-        product_id: productId,
-        customer_id: customerId,
-        google_review_url: $('singleReview')?.value.trim() || null
-      }));
-      const { data, error } = await supabaseClient.from('Cards').insert(rows).select('id,card_code');
-      if (error) throw error;
-      msg.className = 'notice ok';
-      msg.textContent = `✓ ${data?.length || rows.length} kartu berhasil dibuat.`;
-      $('singleForm').reset();
-      $('singleQty').value = '1';
-      updatePreview();
-      // Refresh the main admin state after insertion.
-      if (typeof window.adminReload === 'function') await window.adminReload();
-      else window.location.hash = '#cards';
-    } catch (error) {
-      msg.className = 'notice err';
-      msg.textContent = `❌ ${escLocal(error.message)}`;
-    }
+      const rows = codes.map((cardCode) => ({card_code:cardCode,product_type:product?.category||product?.name||'Tanpa Jenis',status:'pending',product_id:productId,customer_id:customerId,google_review_url:$('singleReview')?.value.trim()||null}));
+      const {data,error}=await client.from('Cards').insert(rows).select('id,card_code'); if(error) throw error;
+      msg.className='notice ok'; msg.textContent=`✓ ${data?.length||rows.length} kartu berhasil dibuat.`; $('singleForm').reset(); $('singleQty').value='1'; updatePreview(); location.reload();
+    } catch(error) { msg.className='notice err'; msg.textContent=`❌ ${escLocal(error.message)}`; }
   }, true);
 })();
 </script>
