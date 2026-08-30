@@ -113,6 +113,7 @@
     $('salesStart')?.addEventListener('change', () => void loadSales());
     $('salesEnd')?.addEventListener('change', () => void loadSales());
     initialized = true;
+    document.dispatchEvent(new CustomEvent('aljava:sales-ui-ready'));
   }
 
   function getPeriod() {
