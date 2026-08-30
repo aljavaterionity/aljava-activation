@@ -8,6 +8,7 @@
   let sb = null;
   let initialized = false;
   let exportLoader = null;
+  let opsLoader = null;
 
   function getClient() {
     if (sb) return sb;
@@ -29,6 +30,20 @@
       document.body.appendChild(script);
     });
     return exportLoader;
+  }
+
+  function loadOpsModule() {
+    if (window.salesOperations?.install) { window.salesOperations.install(); return Promise.resolve(); }
+    if (opsLoader) return opsLoader;
+    opsLoader = new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = '/assets/sales-ops.js';
+      script.async = true;
+      script.onload = () => { try { window.salesOperations?.install?.(); resolve(); } catch (error) { reject(error); } };
+      script.onerror = () => reject(new Error('Modul operasional penjualan gagal dimuat.'));
+      document.body.appendChild(script);
+    });
+    return opsLoader;
   }
 
   function normalizeWhatsapp(value) {
@@ -78,35 +93,41 @@
     const app = $('app');
     if (!menuItems || !app) return;
 
-    const button = document.createElement('button');
-    button.id = 'salesMenu';
-    button.type = 'button';
-    button.className = 'btn';
-    button.textContent = 'Dashboard Penjualan';
-    button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView(); });
-    menuItems.insertBefore(button, menuItems.children[2] || null);
+    const existingButton = $('salesMenu');
+    const button = existingButton || document.createElement('button');
+    if (!existingButton) {
+      button.id = 'salesMenu';
+      button.type = 'button';
+      button.className = 'btn';
+      button.textContent = 'Dashboard Penjualan';
+      button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView(); });
+      menuItems.insertBefore(button, menuItems.children[2] || null);
+    }
 
-    const section = document.createElement('section');
-    section.id = 'salesView';
-    section.className = 'view';
-    section.innerHTML = `
-      <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button><button id="salesExportExcel" class="btn" type="button">Export Excel</button></div></div>
-      <section class="stats sales-stats">
-        <div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div>
-        <div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div>
-        <div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div>
-        <div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div>
-        <div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div>
-      </section>
-      <section class="glass panel">
-        <div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div>
-        <div class="body"><div id="salesProductSummary"></div></div>
-      </section>
-      <section class="glass panel">
-        <div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div>
-        <div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div>
-      </section>`;
-    app.appendChild(section);
+    const existingSection = $('salesView');
+    const section = existingSection || document.createElement('section');
+    if (!existingSection) {
+      section.id = 'salesView';
+      section.className = 'view';
+      section.innerHTML = `
+        <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button><button id="salesExportExcel" class="btn" type="button">Export Excel</button></div></div>
+        <section class="stats sales-stats">
+          <div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div>
+          <div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div>
+          <div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div>
+          <div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div>
+          <div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div>
+        </section>
+        <section class="glass panel">
+          <div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div>
+          <div class="body"><div id="salesProductSummary"></div></div>
+        </section>
+        <section class="glass panel">
+          <div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div>
+          <div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div>
+        </section>`;
+      app.appendChild(section);
+    }
 
     $('salesRefresh')?.addEventListener('click', () => void loadSales());
     $('salesExportExcel')?.addEventListener('click', () => void loadExportModule().then(() => window.salesExport?.exportExcel?.()).catch((error) => alert(`Gagal menyiapkan Excel: ${error?.message || error}`)));
@@ -114,6 +135,7 @@
     $('salesEnd')?.addEventListener('change', () => void loadSales());
     initialized = true;
     document.dispatchEvent(new CustomEvent('aljava:sales-ui-ready'));
+    void loadOpsModule();
   }
 
   function getPeriod() {
@@ -164,6 +186,8 @@
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
       $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
+      void loadOpsModule();
+      window.salesOperations?.load?.();
     } catch (error) {
       const message = esc(error?.message || error);
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
