@@ -8,9 +8,9 @@
   };
 
   const $ = (id) => document.getElementById(id);
-  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-  }[char]));
+  })[char]);
   const money = (value) => new Intl.NumberFormat('id-ID', {
     style: 'currency', currency: 'IDR', maximumFractionDigits: 0
   }).format(Number(value) || 0);
@@ -19,7 +19,8 @@
   if (!sb) return;
 
   function normalizeCode(value) {
-    return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+    return String(value || '').trim().toUpperCase()
+      .replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
   }
 
   function showMessage(text, type = 'info') {
@@ -33,7 +34,9 @@
     const table = $('productRows');
     if (!table) return [];
     table.innerHTML = '<tr><td colspan="7" class="muted">Memuat produk...</td></tr>';
-    const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at').order('created_at', { ascending: false });
+    const { data, error } = await sb.from('Product')
+      .select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at')
+      .order('created_at', { ascending: false });
     if (error) {
       table.innerHTML = `<tr><td colspan="7"><div class="notice err">❌ ${esc(error.message)}</div></td></tr>`;
       return [];
@@ -69,8 +72,8 @@
       event.stopImmediatePropagation();
     }
 
-    const form = explicitForm || event?.currentTarget;
-    if (!form || form.id !== 'productForm') {
+    const form = explicitForm || $('productForm');
+    if (!form) {
       showMessage('Form produk tidak ditemukan.', 'err');
       return false;
     }
@@ -135,29 +138,34 @@
     if (!form || !submit || form.dataset.productManagerBound === '1') return;
     form.dataset.productManagerBound = '1';
 
-    // Direct click path is the primary handler. Capture phase prevents
-    // unrelated navigation/form handlers from swallowing the action.
     submit.type = 'button';
     submit.addEventListener('click', (event) => createProduct(event, form), true);
-
-    // Keyboard submit remains supported.
     form.addEventListener('submit', (event) => createProduct(event, form), true);
 
-    $('productCode')?.addEventListener('input', () => {
-      const code = normalizeCode($('productCode').value || $('productName')?.value);
-      if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
-    });
-    $('productName')?.addEventListener('input', () => {
-      if (!$('productCode').value.trim()) {
-        const code = normalizeCode($('productName').value);
-        if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
-      }
-    });
+    $('productCode')?.addEventListener('input', updatePreview);
+    $('productName')?.addEventListener('input', updatePreview);
 
     loadProducts();
   }
 
+  function updatePreview() {
+    const explicit = $('productCode')?.value || '';
+    const source = explicit.trim() || $('productName')?.value || '';
+    const code = normalizeCode(source);
+    if ($('productPreview')) {
+      $('productPreview').textContent = code
+        ? `Kode produk: ${code}`
+        : 'Kode produk dibuat otomatis dari nama produk.';
+    }
+  }
+
+  // Stable direct entry point for inline HTML handlers.
+  window.__createProduct = () => createProduct(null, $('productForm'));
   window.productManager = { loadProducts, createProduct };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
-  else bind();
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bind, { once: true });
+  } else {
+    bind();
+  }
 })();
