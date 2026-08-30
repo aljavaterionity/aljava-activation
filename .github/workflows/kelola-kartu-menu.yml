@@ -1,0 +1,40 @@
+name: Move Card Management Into Menu
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: ${{ !contains(github.event.head_commit.message, '[kelola-kartu-menu]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move card creation UI into Kelola Kartu drawer
+        shell: python
+        run: |
+          from pathlib import Path
+          p = Path('admin.html')
+          s = p.read_text(encoding='utf-8')
+          marker = 'ALJAVA KELola Kartu MENU FINAL'
+          if marker in s:
+              print('Patch already present')
+              raise SystemExit(0)
+          css = r'''\n/* ALJAVA KELola Kartu MENU FINAL */\n#aljavaKelolaKartuPanel{position:fixed!important;inset:0!important;z-index:2147483644!important;display:none!important;padding:28px 18px!important;background:rgba(11,48,75,.08)!important;overflow:auto!important}\n#aljavaKelolaKartuPanel.open{display:block!important}\n#aljavaKelolaKartuCard{width:min(900px,100%)!important;margin:54px auto 30px!important;background:rgba(255,255,255,.97)!important;border:1px solid rgba(55,180,225,.32)!important;border-radius:20px!important;box-shadow:0 24px 70px rgba(38,139,177,.26)!important;overflow:hidden!important}\n#aljavaKelolaKartuHead{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:16px 18px!important;border-bottom:1px solid rgba(55,180,225,.18)!important}\n#aljavaKelolaKartuHead h2{margin:0!important;color:#17324d!important}\n#aljavaKelolaKartuClose{border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.86)!important;color:#0879b8!important;cursor:pointer!important;font-weight:800!important;padding:9px 12px!important}\n#aljavaKelolaKartuBody{padding:18px!important}\n#aljavaKelolaKartuBody .panel{margin-top:0!important}\n#aljavaKelolaKartuBody .glass{box-shadow:none!important;border:0!important;background:transparent!important}\n#aljavaKelolaKartuMenuButton{display:block!important;width:100%!important;min-height:48px!important;margin:8px 0!important;padding:11px 13px!important;border:1px solid rgba(39,163,211,.28)!important;border-radius:10px!important;background:rgba(255,255,255,.78)!important;color:#17324d!important;text-align:left!important;font:800 14px/1.2 Inter,Poppins,Arial,sans-serif!important;cursor:pointer!important;pointer-events:auto!important}\n#aljavaKelolaKartuMenuButton:hover{background:rgba(53,201,242,.14)!important;border-color:rgba(39,163,211,.55)!important}\n@media(max-width:650px){#aljavaKelolaKartuPanel{padding:14px 10px!important}#aljavaKelolaKartuCard{margin-top:48px!important;border-radius:16px!important}}\n'''
+          js = r'''\n<script id="aljava-kelola-kartu-final-script">\n(()=>{\n  const boot=()=>{\n    const drawer=document.getElementById('aljavaMenuV4Drawer');\n    const source=[...document.querySelectorAll('section.glass.panel')].find(el=>/Kelola Kartu/i.test(el.textContent||''));\n    if(!drawer||!source||document.getElementById('aljavaKelolaKartuPanel')) return false;\n    const panel=document.createElement('div');\n    panel.id='aljavaKelolaKartuPanel';\n    panel.innerHTML='<div id="aljavaKelolaKartuCard"><div id="aljavaKelolaKartuHead"><h2>Kelola Kartu</h2><button id="aljavaKelolaKartuClose" type="button">Tutup</button></div><div id="aljavaKelolaKartuBody"></div></div>';
+    document.body.appendChild(panel);\n    const body=panel.querySelector('#aljavaKelolaKartuBody');\n    body.appendChild(source);\n    source.style.display='block';\n    source.style.margin='0';\n    const btn=document.createElement('button');\n    btn.id='aljavaKelolaKartuMenuButton';\n    btn.type='button';\n    btn.textContent='💳 Kelola Kartu';\n    drawer.appendChild(btn);\n    const close=()=>{panel.classList.remove('open');};\n    btn.addEventListener('click',(e)=>{e.preventDefault();e.stopPropagation();panel.classList.add('open');drawer.classList.remove('v4-open');});\n    panel.querySelector('#aljavaKelolaKartuClose').addEventListener('click',close);\n    panel.addEventListener('click',e=>{if(e.target===panel)close();});\n    document.addEventListener('keydown',e=>{if(e.key==='Escape')close();});\n    return true;\n  };\n  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();\n  const iv=setInterval(()=>{if(boot())clearInterval(iv);},300);\n  setTimeout(()=>clearInterval(iv),15000);\n})();\n</script>\n'''
+          s=s.replace('</style>', css+'</style>', 1)
+          s=s.replace('</body>', js+'</body>', 1)
+          p.write_text(s, encoding='utf-8')
+          print('installed Kelola Kartu menu patch')
+      - name: Commit patch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add admin.html
+          git diff --cached --quiet && exit 0
+          git commit -m "feat: move card creation into Kelola Kartu menu [kelola-kartu-menu]"
+          git push
