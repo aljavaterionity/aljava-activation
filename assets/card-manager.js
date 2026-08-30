@@ -1,6 +1,7 @@
 /* ALJAVA TERIONITY — Card manager module
    Responsibilities: product-aware card creation, quantity/code sequencing,
-   activation URL generation, QR/NFC links, and result rendering.
+   activation URL generation, QR/NFC links, result rendering, and enriching
+   the main dashboard card summary without breaking existing handlers.
 */
 
 (() => {
@@ -145,8 +146,87 @@
     $('singleQty').value = '1';
     renderPreview(products);
 
-    // Refresh the main card list without forcing a full page reload.
     document.dispatchEvent(new CustomEvent('aljava:cards-created', { detail: { count: data?.length || activationRows.length } }));
+  }
+
+  async function enrichMainCardSummary() {
+    const host = $('cardTable');
+    if (!host) return;
+
+    const table = host.querySelector('table');
+    if (!table) return;
+
+    const headerRow = table.querySelector('thead tr');
+    const bodyRows = [...table.querySelectorAll('tbody tr')];
+    if (!headerRow || !bodyRows.length) return;
+
+    // Do not duplicate columns when the admin table is re-rendered.
+    headerRow.querySelectorAll('.main-card-extra').forEach((node) => node.remove());
+    bodyRows.forEach((row) => row.querySelectorAll('.main-card-extra').forEach((node) => node.remove()));
+
+    try {
+      const visibleIds = bodyRows
+        .map((row) => row.querySelector('.delete-card')?.dataset.cardId)
+        .filter(Boolean);
+      if (!visibleIds.length) return;
+
+      const [{ data: cards, error: cardsError }, { data: products, error: productsError }] = await Promise.all([
+        client.from('Cards').select('id,card_code,product_type,activation_url,qr_code_url,nfc_url,product_id').in('id', visibleIds),
+        client.from('Product').select('id,product_code,name').order('name', { ascending: true })
+      ]);
+      if (cardsError) throw cardsError;
+      if (productsError) throw productsError;
+
+      const cardMap = Object.fromEntries((cards || []).map((card) => [String(card.id), card]));
+      const productMap = Object.fromEntries((products || []).map((product) => [String(product.id), product]));
+
+      // Insert after the existing Kode / Jenis columns, immediately before Aksi.
+      const actionHeader = [...headerRow.children].find((cell) => cell.textContent.trim() === 'Aksi');
+      const extraHeaders = [
+        ['main-card-extra', 'Kode Produk'],
+        ['main-card-extra', 'Aktivasi'],
+        ['main-card-extra', 'QR'],
+        ['main-card-extra', 'NFC']
+      ];
+      extraHeaders.forEach(([className, label]) => {
+        const th = document.createElement('th');
+        th.className = className;
+        th.textContent = label;
+        actionHeader ? headerRow.insertBefore(th, actionHeader) : headerRow.appendChild(th);
+      });
+
+      bodyRows.forEach((row) => {
+        const cardId = row.querySelector('.delete-card')?.dataset.cardId;
+        const card = cardMap[String(cardId)];
+        const product = card ? productMap[String(card.product_id)] : null;
+        const activation = card?.activation_url || activationUrl(card?.card_code || '');
+        const qr = card?.qr_code_url || qrUrl(activation);
+        const nfc = card?.nfc_url || activation;
+        const code = product?.product_code || card?.product_type || '-';
+        const actionCell = [...row.children].find((cell) => cell.querySelector('.delete-card'));
+        const makeCell = (html) => {
+          const td = document.createElement('td');
+          td.className = 'main-card-extra';
+          td.innerHTML = html;
+          return td;
+        };
+        const cells = [
+          makeCell(`<strong>${esc(code)}</strong>`),
+          makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(activation)}">Link</a>`),
+          makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(qr)}">QR</a>`),
+          makeCell(`<a class="btn" target="_blank" rel="noopener" href="${esc(nfc)}">NFC</a>`)
+        ];
+        cells.forEach((cell) => actionCell ? row.insertBefore(cell, actionCell) : row.appendChild(cell));
+      });
+    } catch (error) {
+      console.warn('[ALJAVA] Gagal melengkapi ringkasan kartu utama:', error?.message || error);
+    }
+  }
+
+  let enrichTimer = null;
+  function scheduleMainSummaryEnrichment() {
+    clearTimeout(enrichTimer);
+    enrichTimer = setTimeout(enrichMainCardSummary, 60);
   }
 
   async function init() {
@@ -166,7 +246,6 @@
     $('singleProduct')?.addEventListener('change', update);
     update();
 
-    // Capture phase guarantees this single form has exactly one submit owner.
     form.addEventListener('submit', async (event) => {
       event.preventDefault();
       event.stopImmediatePropagation();
@@ -183,9 +262,18 @@
     }, true);
 
     document.addEventListener('aljava:cards-created', () => {
-      // Give the existing admin module a chance to refresh its dashboard data.
       if (typeof window.load === 'function') window.load();
+      scheduleMainSummaryEnrichment();
     });
+
+    // The existing admin.js owns rendering, selection, and deletion. We only
+    // enrich the rendered table so those handlers remain attached.
+    const cardTable = $('cardTable');
+    if (cardTable) {
+      const observer = new MutationObserver(scheduleMainSummaryEnrichment);
+      observer.observe(cardTable, { childList: true, subtree: true });
+    }
+    scheduleMainSummaryEnrichment();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
