@@ -39,7 +39,6 @@
         .select('id,name,product_code,category,hpp,selling_price,subscription_price,created_at')
         .order('created_at', { ascending: false });
       if (error) throw error;
-
       table.innerHTML = data?.length ? data.map((p) => `<tr>
         <td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td>
         <td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td>
@@ -142,83 +141,27 @@
     if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code}` : 'Kode produk dibuat otomatis dari nama produk.';
   }
 
-  function ensureActionButtons() {
-    const productView = $('productView');
-    const cardsView = $('cardsView');
-
-    // Restore the old HPP entry in Main Menu without removing Kelola Produk.
+  function ensureHppMenu() {
     const menuItems = document.querySelector('.menu-items');
     const productMenu = $('productMenu');
-    if (menuItems && productMenu && !$('hppMenu')) {
-      const hppButton = document.createElement('button');
-      hppButton.id = 'hppMenu';
-      hppButton.type = 'button';
-      hppButton.className = 'btn';
-      hppButton.textContent = '💰 HPP';
-      hppButton.addEventListener('click', (event) => {
-        event.preventDefault();
-        event.stopPropagation();
-        document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
-        $('menuPanel')?.classList.remove('open');
-        $('menuButton')?.setAttribute('aria-expanded', 'false');
-        history.replaceState?.(null, '', '#product');
-        setTimeout(() => $('productName')?.focus(), 50);
-        void loadProducts();
-      });
-      productMenu.insertAdjacentElement('afterend', hppButton);
-    }
+    if (!menuItems || !productMenu || $('hppMenu')) return;
 
-    // Make a second unmistakable Add Product action at the top of Kelola Produk.
-    if (productView && !productView.querySelector('[data-product-action="top"]')) {
-      const headingRow = productView.querySelector('.row');
-      if (headingRow) {
-        const action = document.createElement('button');
-        action.type = 'button';
-        action.className = 'btn product-submit';
-        action.dataset.productAction = 'top';
-        action.textContent = '＋ Tambah Produk';
-        action.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          $('productName')?.focus();
-        });
-        headingRow.appendChild(action);
-      }
-    }
-
-    // Also expose the action directly from Kelola Kartu.
-    if (cardsView && !cardsView.querySelector('[data-product-action="cards"]')) {
-      const form = $('singleForm');
-      const productSelect = $('singleProduct');
-      if (form && productSelect) {
-        const holder = document.createElement('div');
-        holder.className = 'product-inline-action';
-        holder.style.gridColumn = '1 / -1';
-        holder.style.display = 'flex';
-        holder.style.gap = '8px';
-        holder.style.alignItems = 'center';
-        holder.style.flexWrap = 'wrap';
-
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'btn';
-        button.dataset.productAction = 'cards';
-        button.textContent = '＋ Tambah Produk';
-        button.addEventListener('click', (event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
-          $('menuPanel')?.classList.remove('open');
-          $('menuButton')?.setAttribute('aria-expanded', 'false');
-          history.replaceState?.(null, '', '#product');
-          setTimeout(() => $('productName')?.focus(), 50);
-          void loadProducts();
-        });
-
-        holder.appendChild(button);
-        productSelect.insertAdjacentElement('afterend', holder);
-      }
-    }
+    const hppButton = document.createElement('button');
+    hppButton.id = 'hppMenu';
+    hppButton.type = 'button';
+    hppButton.className = 'btn';
+    hppButton.textContent = '💰 HPP';
+    hppButton.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'productView'));
+      $('menuPanel')?.classList.remove('open');
+      $('menuButton')?.setAttribute('aria-expanded', 'false');
+      history.replaceState?.(null, '', '#product');
+      setTimeout(() => $('productName')?.focus(), 50);
+      void loadProducts();
+    });
+    productMenu.insertAdjacentElement('afterend', hppButton);
   }
 
   function bind() {
@@ -228,25 +171,18 @@
       form.dataset.productManagerBound = '1';
       submit.type = 'button';
       submit.onclick = () => { void createProduct(null, form); };
-      submit.addEventListener('click', (event) => { void createProduct(event, form); }, true);
       form.addEventListener('submit', (event) => { void createProduct(event, form); }, true);
       $('productCode')?.addEventListener('input', updatePreview);
       $('productName')?.addEventListener('input', updatePreview);
       updatePreview();
       void loadProducts();
     }
-    ensureActionButtons();
+    ensureHppMenu();
   }
 
   window.__createProduct = () => createProduct(null, $('productForm'));
   window.productManager = { loadProducts, createProduct };
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bind, { once: true });
-  } else {
-    bind();
-  }
-
-  const observer = new MutationObserver(() => bind());
-  observer.observe(document.documentElement, { childList: true, subtree: true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
+  else bind();
 })();
