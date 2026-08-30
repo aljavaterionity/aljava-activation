@@ -1,70 +1,30 @@
-/* ALJAVA TERIONITY — Reset dashboard controller
-   Single owner for Main Menu > Reset Dashboard.
+/* ALJAVA TERIONITY — Reset dashboard
+   Intentionally self-contained: one click = one deterministic reset.
 */
 (() => {
   'use strict';
 
-  const $ = (id) => document.getElementById(id);
+  const RESET_URL = '/admin.html#dashboard';
 
-  function resetDashboardView(event) {
+  function hardReset(event) {
     if (event) {
       event.preventDefault();
       event.stopPropagation();
       event.stopImmediatePropagation();
     }
 
-    const currentYear = String(new Date().getFullYear());
-    const fields = {
-      year: currentYear,
-      month: '',
-      cardSearch: '',
-      cardStatus: '',
-      customerSearch: ''
-    };
-
-    Object.entries(fields).forEach(([id, value]) => {
-      const element = $(id);
-      if (element) element.value = value;
-    });
-
-    document.querySelectorAll('.card-select').forEach((input) => {
-      input.checked = false;
-    });
-
-    const selectAll = $('selectAllCards');
-    if (selectAll) {
-      selectAll.checked = false;
-      selectAll.indeterminate = false;
-    }
-
-    document.querySelectorAll('.view').forEach((view) => {
-      view.classList.toggle('active-view', view.id === 'dashboardView');
-    });
-
-    $('menuPanel')?.classList.remove('open');
-    $('menuButton')?.setAttribute('aria-expanded', 'false');
-
-    if (history.replaceState) history.replaceState(null, '', '#dashboard');
-    window.scrollTo(0, 0);
-
-    // Re-render immediately so reset is visible even when a data refresh fails.
-    if (typeof window.adminApi?.load === 'function') {
-      Promise.resolve(window.adminApi.load()).catch(() => {});
-    }
-    if (typeof window.syncCardSummarySelection === 'function') {
-      window.syncCardSummarySelection();
-    }
+    // Use a normal navigation so every in-memory filter/view/selection state
+    // is discarded. Login/session remains stored by Supabase.
+    window.location.assign(RESET_URL);
   }
 
-  // Expose one stable entry point for the button.
-  window.__resetDashboard = resetDashboardView;
-
   function bind() {
-    const button = $('resetMenu');
-    if (!button || button.dataset.resetDirectBound === '1') return;
-    button.dataset.resetDirectBound = '1';
-    button.setAttribute('onclick', 'window.__resetDashboard(event)');
-    button.addEventListener('click', resetDashboardView, true);
+    const button = document.getElementById('resetMenu');
+    if (!button || button.dataset.hardResetBound === '1') return;
+
+    button.dataset.hardResetBound = '1';
+    button.onclick = hardReset;
+    button.addEventListener('click', hardReset, true);
   }
 
   if (document.readyState === 'loading') {
