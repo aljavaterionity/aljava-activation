@@ -1,9 +1,6 @@
 /* ALJAVA TERIONITY — Admin application logic */
 
-const CONFIG = {
-  supabaseUrl: 'https://lbzwmcxwxummitldxucj.supabase.co',
-  supabaseKey: 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw'
-};
+const CONFIG = window.ALJAVA_CONFIG;
 
 const $ = (id) => document.getElementById(id);
 const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
@@ -13,7 +10,7 @@ const money = (value) => new Intl.NumberFormat('id-ID', {
   style: 'currency', currency: 'IDR', maximumFractionDigits: 0
 }).format(Number(value) || 0);
 
-if (!window.supabase?.createClient) {
+if (!CONFIG || !window.supabase?.createClient) {
   if ($('loginMsg')) $('loginMsg').innerHTML = '<div class="notice err">Library Supabase gagal dimuat. Muat ulang halaman.</div>';
   throw new Error('Supabase client tidak tersedia.');
 }

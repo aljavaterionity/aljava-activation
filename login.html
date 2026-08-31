@@ -50,13 +50,31 @@ input::placeholder{color:#7893a5}input:hover{border-color:rgba(39,163,211,.5)}in
 </section>
 <div class="footer">© 2026 ALJAVA TERIONITY • Digital Solution</div>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/app-config.js"></script>
 <script>
-const SUPABASE_URL="https://lbzwmcxwxummitldxucj.supabase.co";
-const SUPABASE_KEY="sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw";
+const config=window.ALJAVA_CONFIG;
+const supabaseClient=config&&window.supabase?.createClient?window.supabase.createClient(config.supabaseUrl,config.supabaseKey):null;
 const loginForm=document.getElementById("loginForm");
 const loginButton=document.getElementById("loginButton");
 const errorBox=document.getElementById("errorBox");
 const successBox=document.getElementById("successBox");
+function setError(message){errorBox.textContent="❌ "+message;errorBox.style.display="block"}
+async function confirmAdminSession(){
+ if(!supabaseClient)throw new Error("Library Supabase gagal dimuat. Muat ulang halaman.");
+ const {data:{user}={},error:userError}=await supabaseClient.auth.getUser();
+ if(userError||!user)throw new Error("Sesi login tidak valid.");
+ const {data:isAdmin,error:adminError}=await supabaseClient.rpc("is_admin_user");
+ if(adminError)throw new Error("Gagal memeriksa hak admin.");
+ if(isAdmin!==true){await supabaseClient.auth.signOut({scope:"local"});throw new Error("Akun ini tidak memiliki akses admin.")}
+ return user;
+}
+async function redirectIfAdminSession(){
+ if(!supabaseClient)return;
+ const {data:{session}={}}=await supabaseClient.auth.getSession();
+ if(!session)return;
+ try{await confirmAdminSession();window.location.replace("/admin.html")}catch(error){console.warn("Session admin tidak dapat digunakan:",error);}
+}
 loginForm.addEventListener("submit",async function(event){
  event.preventDefault();
  errorBox.style.display="none";successBox.style.display="none";
@@ -64,20 +82,19 @@ loginForm.addEventListener("submit",async function(event){
  const password=document.getElementById("password").value;
  loginButton.disabled=true;loginButton.textContent="Memproses...";
  try{
-  const response=await fetch(SUPABASE_URL+"/auth/v1/token?grant_type=password",{method:"POST",headers:{"Content-Type":"application/json",apikey:SUPABASE_KEY},body:JSON.stringify({email,password})});
-  const data=await response.json();
-  if(!response.ok)throw new Error(data.error_description||data.msg||data.message||"Email atau password salah.");
-  localStorage.setItem("supabase_access_token",data.access_token);
-  localStorage.setItem("supabase_refresh_token",data.refresh_token);
-  localStorage.setItem("supabase_user",JSON.stringify(data.user));
+  if(!supabaseClient)throw new Error("Library Supabase gagal dimuat. Muat ulang halaman.");
+  const {error}=await supabaseClient.auth.signInWithPassword({email,password});
+  if(error)throw error;
+  await confirmAdminSession();
   successBox.textContent="Login berhasil. Mengalihkan...";successBox.style.display="block";
-  setTimeout(function(){window.location.href="admin.html"},500);
+  setTimeout(function(){window.location.replace("/admin.html")},500);
  }catch(error){
   console.error("LOGIN ERROR:",error);
-  errorBox.textContent="❌ "+error.message;errorBox.style.display="block";
+  setError(error.message||"Login gagal.");
   loginButton.disabled=false;loginButton.textContent="Masuk";
  }
 });
+void redirectIfAdminSession();
 </script>
 </body>
 </html>

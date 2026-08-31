@@ -3,7 +3,6 @@
   'use strict';
 
   let sb = null;
-  let observer = null;
   let busy = false;
 
   const $ = (id) => document.getElementById(id);
@@ -130,14 +129,11 @@
     ensureModal();
     const target = $('salesTransactionTable');
     if (!target) return;
-    if (!observer) {
-      observer = new MutationObserver(decorate);
-      observer.observe(target, { childList: true, subtree: true });
-    }
     decorate();
   }
 
   window.paymentCollection = { install, open: openModal };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', install, { once: true }); else install();
   document.addEventListener('aljava:sales-ui-ready', install);
+  document.addEventListener('aljava:sales-data-rendered', decorate);
 })();

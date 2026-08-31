@@ -107,8 +107,8 @@
       $('payReceivable').textContent = money(allRows.reduce((sum, row) => sum + row.receivable, 0));
       $('payOverdue').textContent = String(allRows.filter((row) => row.overdue).length);
 
-      host.innerHTML = rows.length ? `<table><thead><tr><th>Customer</th><th>Produk</th><th>Total</th><th>Dibayar</th><th>Piutang</th><th>Jatuh Tempo</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${rows.map((row) => `<tr><td>${esc(row.customer.business_name || row.customer.owner_name || '-')}<br><span class="muted" style="font-size:.8em">${esc(row.id)}</span></td><td>${esc(row.product.name || '-')}</td><td>${money(row.total)}</td><td>${money(row.paid)}</td><td><strong>${money(row.receivable)}</strong></td><td>${row.due_date ? esc(new Date(`${row.due_date}T00:00:00`).toLocaleDateString('id-ID')) : '-'}</td><td>${esc(row.status)}${row.overdue ? ' • overdue' : ''}</td><td>${row.receivable > 0 ? `<button class="btn" type="button" data-pay-id="${esc(row.id)}" data-pay-total="${row.total}" data-pay-paid="${row.paid}">Catat Bayar</button>` : '<span class="muted">Selesai</span>'}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">Tidak ada transaksi sesuai filter.</div>';
-      host.querySelectorAll('[data-pay-id]').forEach((button) => button.addEventListener('click', () => void recordPayment(button.dataset.payId, Number(button.dataset.payTotal || 0), Number(button.dataset.payPaid || 0))));
+      host.innerHTML = rows.length ? `<table><thead><tr><th>Customer</th><th>Produk</th><th>Total</th><th>Dibayar</th><th>Piutang</th><th>Jatuh Tempo</th><th>Status</th><th>Aksi</th></tr></thead><tbody>${rows.map((row) => `<tr><td>${esc(row.customer.business_name || row.customer.owner_name || '-')}<br><span class="muted" style="font-size:.8em">${esc(row.id)}</span></td><td>${esc(row.product.name || '-')}</td><td>${money(row.total)}</td><td>${money(row.paid)}</td><td><strong>${money(row.receivable)}</strong></td><td>${row.due_date ? esc(new Date(`${row.due_date}T00:00:00`).toLocaleDateString('id-ID')) : '-'}</td><td>${esc(row.status)}${row.overdue ? ' • overdue' : ''}</td><td>${row.receivable > 0 ? `<button class="btn" type="button" data-pay-id="${esc(row.id)}" data-pay-total="${row.total}" data-pay-paid="${row.paid}" data-pay-due-date="${esc(row.due_date || '')}">Catat Bayar</button>` : '<span class="muted">Selesai</span>'}</td></tr>`).join('')}</tbody></table>` : '<div class="muted">Tidak ada transaksi sesuai filter.</div>';
+      host.querySelectorAll('[data-pay-id]').forEach((button) => button.addEventListener('click', () => void recordPayment(button.dataset.payId, Number(button.dataset.payTotal || 0), Number(button.dataset.payPaid || 0), button.dataset.payDueDate || null)));
     } catch (error) {
       host.innerHTML = `<div class="notice err">❌ Gagal memuat pembayaran: ${esc(error?.message || error)}</div>`;
     } finally {
@@ -116,7 +116,7 @@
     }
   }
 
-  async function recordPayment(id, total, paidBefore) {
+  async function recordPayment(id, total, paidBefore, dueDate) {
     const input = window.prompt(`Nominal pembayaran untuk transaksi ${id}\nSisa saat ini: ${money(Math.max(0, total-paidBefore))}`);
     if (input === null) return;
     const amount = Number(String(input).replace(/[^0-9.-]/g, ''));
@@ -128,10 +128,14 @@
     const sb = client();
     if (!sb) return;
     try {
-      const nextPaid = Math.min(total, paidBefore + amount);
-      const nextStatus = nextPaid >= total ? 'paid' : 'partial';
-      const { error } = await sb.from('Transactions').update({ amount_paid: nextPaid, payment_status: nextStatus }).eq('id', id);
+      const { data, error } = await sb.rpc('record_transaction_payment', {
+        p_transaction_id: id,
+        p_payment_amount: amount,
+        p_due_date: dueDate
+      });
       if (error) throw error;
+      const result = Array.isArray(data) ? data[0] : data;
+      if (!result?.success) throw new Error(result?.message || 'Pembayaran gagal disimpan.');
       await loadPayments();
       document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
     } catch (error) {
