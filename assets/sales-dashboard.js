@@ -52,6 +52,7 @@
     return [
       'Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.',
       '',
+      `No. Transaksi: ${row.transaction_code || '-'}`,
       `Produk: ${product?.name || '-'}`,
       `Qty: ${qty}`,
       `Total: ${money(revenue)}`,
@@ -136,7 +137,7 @@
     hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '…' : 'Memuat…'; });
     try {
       const [txResult, productsResult, customersResult] = await Promise.all([
-        client.from('Transactions').select('id,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date').order('transaction_date', { ascending: false }),
+        client.from('Transactions').select('id,transaction_code,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date,amount_paid,due_date').order('transaction_date', { ascending: false }),
         client.from('Product').select('id,name,product_code,commission'),
         client.from('Customers').select('id,business_name,owner_name,whatsapp')
       ]);
@@ -169,7 +170,7 @@
       });
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
-      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(cost)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
+      $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>No. Transaksi</th><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>Dibayar</th><th>Piutang</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const paid = Math.min(Math.max(Number(row.amount_paid || 0), 0), rev); const receivable = Math.max(0, rev - paid); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td><strong>${esc(row.transaction_code || '-')}</strong></td><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(paid)}</td><td>${money(receivable)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
     } catch (error) {
       const message = esc(error?.message || error);
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
