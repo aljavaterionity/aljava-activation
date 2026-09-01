@@ -99,3 +99,55 @@
   window.addEventListener('hashchange',()=>setActive(panel()));
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',scheduleClean,{once:true}); else scheduleClean();
 })();
+
+/* Mobile dashboard table scrolling fallback */
+(() => {
+  'use strict';
+  const install = () => {
+    const wraps = document.querySelectorAll('.table-wrap');
+    wraps.forEach((wrap) => {
+      if (wrap.dataset.horizontalScrollFix === '1') return;
+      wrap.dataset.horizontalScrollFix = '1';
+      wrap.style.overflowX = 'auto';
+      wrap.style.overflowY = 'hidden';
+      wrap.style.width = '100%';
+      wrap.style.maxWidth = '100%';
+      wrap.style.touchAction = 'pan-y';
+      wrap.style.webkitOverflowScrolling = 'touch';
+      const table = wrap.querySelector('table');
+      if (table) {
+        table.style.width = 'max-content';
+        table.style.minWidth = '760px';
+      }
+      let startX = 0;
+      let startScroll = 0;
+      let dragging = false;
+      let moved = false;
+      wrap.addEventListener('pointerdown', (event) => {
+        if (wrap.scrollWidth <= wrap.clientWidth) return;
+        startX = event.clientX;
+        startScroll = wrap.scrollLeft;
+        dragging = true;
+        moved = false;
+        if (event.pointerType === 'mouse') wrap.setPointerCapture?.(event.pointerId);
+      }, {passive:true});
+      wrap.addEventListener('pointermove', (event) => {
+        if (!dragging) return;
+        const dx = event.clientX - startX;
+        if (Math.abs(dx) > 4) moved = true;
+        if (moved) wrap.scrollLeft = startScroll - dx;
+      }, {passive:true});
+      const stop = () => { dragging = false; };
+      wrap.addEventListener('pointerup', stop, {passive:true});
+      wrap.addEventListener('pointercancel', stop, {passive:true});
+      wrap.addEventListener('lostpointercapture', stop, {passive:true});
+    });
+  };
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', install, {once:true});
+  } else {
+    install();
+  }
+  window.setTimeout(install, 250);
+  window.setTimeout(install, 1000);
+})();
