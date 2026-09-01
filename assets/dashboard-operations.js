@@ -51,4 +51,35 @@
     #dashboardView .stats .stat:nth-child(6):hover{border-color:#fdba74;box-shadow:0 16px 38px rgba(234,88,12,.12)}
   `;
   document.head.appendChild(statsStyle);
+
+  /* Mobile horizontal scrolling for wide dashboard tables. */
+  const tableStyle = document.createElement('style');
+  tableStyle.id = 'aljava-mobile-table-scroll-fix';
+  tableStyle.textContent = `
+    .table-wrap{
+      width:100%;
+      max-width:100%;
+      min-width:0;
+      overflow-x:auto;
+      overflow-y:hidden;
+      -webkit-overflow-scrolling:touch;
+      overscroll-behavior-x:contain;
+      touch-action:pan-x pan-y;
+      scrollbar-width:auto;
+    }
+    .table-wrap > table{
+      width:max-content;
+      min-width:760px;
+    }
+    .table-wrap::-webkit-scrollbar{height:12px}
+    .table-wrap::-webkit-scrollbar-thumb{background:rgba(23,50,77,.38);border-radius:999px}
+    .table-wrap::-webkit-scrollbar-track{background:rgba(23,50,77,.06);border-radius:999px}
+    @media(max-width:650px){
+      #dashboardView .grid .panel .body{min-width:0;overflow:hidden}
+      #dashboardView .grid .panel .body .table-wrap{display:block;overflow-x:auto;overflow-y:hidden;width:100%;max-width:100%;padding-bottom:2px}
+      #dashboardView .grid .panel .body .table-wrap > table{min-width:760px;width:max-content}
+      #dashboardView .grid .panel .body .table-wrap + *{max-width:100%}
+    }
+  `;
+  document.head.appendChild(tableStyle);
 })();
