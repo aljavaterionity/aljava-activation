@@ -7,6 +7,10 @@
   const PROJECT_KEY = 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw';
 
   function createClient() {
+    // Reuse the shared client created by app-config/admin auth so the RPC
+    // receives the current authenticated admin session.
+    const shared = window.__ALJAVA_SUPABASE_CLIENT;
+    if (shared) return shared;
     const factory = window.supabase?.createClient;
     if (!factory) throw new Error('Library Supabase tidak tersedia.');
     return factory(PROJECT_URL, PROJECT_KEY);
@@ -47,6 +51,10 @@
 
     try {
       const client = createClient();
+      const { data: sessionData, error: sessionError } = await client.auth.getSession();
+      if (sessionError) throw new Error(`Session admin gagal: ${sessionError.message}`);
+      if (!sessionData?.session?.user) throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
+
       if (message) {
         message.className = 'notice info';
         message.textContent = 'Mereset dashboard... Produk tetap aman.';
@@ -83,9 +91,6 @@
   }
 
   function bind() {
-    // admin.html already contains the Pengaturan section statically.
-    // Do not move DOM nodes and do not use a MutationObserver here.
-    // This controller only owns the Reset Dashboard action.
     const button = $('resetMenu');
     if (button && button.dataset.fullResetBound !== '1') {
       button.dataset.fullResetBound = '1';
