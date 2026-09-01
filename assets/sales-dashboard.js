@@ -2,6 +2,16 @@
 (() => {
   'use strict';
 
+  function installSalesStyles() {
+    if (document.getElementById('aljava-sales-dashboard-ui')) return;
+    const link = document.createElement('link');
+    link.id = 'aljava-sales-dashboard-ui';
+    link.rel = 'stylesheet';
+    link.href = '/assets/sales-dashboard-ui.css';
+    document.head.appendChild(link);
+  }
+  installSalesStyles();
+
   const $ = (id) => document.getElementById(id);
   const money = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(value) || 0);
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
@@ -65,6 +75,7 @@
   }
 
   function showView() {
+    installSalesStyles();
     document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'salesView'));
     $('menuPanel')?.classList.remove('open');
     $('menuButton')?.setAttribute('aria-expanded', 'false');
@@ -74,6 +85,7 @@
   }
 
   function installUi() {
+    installSalesStyles();
     if (initialized) return;
     const menuItems = document.querySelector('.menu-items');
     const app = $('app');
