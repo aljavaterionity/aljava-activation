@@ -72,6 +72,29 @@
     root.querySelectorAll('.menu-item').forEach((item)=>item.classList.remove('active'));
     root.querySelector(`#${activeId}`)?.classList.add('active');
   }
+  function applyBrandLockup(){
+    if(document.getElementById('aljava-brand-lockup-style')) return;
+    const style=document.createElement('style'); style.id='aljava-brand-lockup-style'; style.textContent=`
+      :root{--aljava-navy:#071c5f;--aljava-royal:#1e40c0;--aljava-blue:#2563eb;--aljava-cyan:#06b6d4;--aljava-brand-gradient:linear-gradient(110deg,var(--aljava-navy) 0%,var(--aljava-royal) 38%,var(--aljava-blue) 72%,var(--aljava-cyan) 100%)}
+      .aljava-brand-lockup{display:inline-flex;align-items:center;gap:10px;text-decoration:none;white-space:nowrap}
+      .aljava-brand-lockup .aljava-a{width:38px;height:38px;flex:0 0 38px;display:block;overflow:visible;filter:drop-shadow(0 5px 10px rgba(30,64,192,.14))}
+      .aljava-brand-lockup .aljava-name{font:700 21px/1 Inter,Poppins,Arial,sans-serif;letter-spacing:1.5px;background:var(--aljava-brand-gradient);-webkit-background-clip:text;background-clip:text;color:transparent}
+      .aljava-brand-lockup .aljava-name span{font-weight:500}
+      .top .aljava-brand-lockup{min-height:40px}
+      #menuPanel .aljava-brand-lockup{gap:8px}
+      #menuPanel .aljava-brand-lockup .aljava-a{width:30px;height:30px;flex-basis:30px}
+      #menuPanel .aljava-brand-lockup .aljava-name{font-size:14px;letter-spacing:1px}
+      .login-box .aljava-brand-lockup{justify-content:center}
+      .login-box .aljava-brand-lockup .aljava-a{width:34px;height:34px;flex-basis:34px}
+      .login-box .aljava-brand-lockup .aljava-name{font-size:18px}
+      @media(max-width:650px){.top .aljava-brand-lockup .aljava-a{width:30px;height:30px;flex-basis:30px}.top .aljava-brand-lockup .aljava-name{font-size:17px;letter-spacing:1px}}
+    `; document.head.appendChild(style);
+    const logoSvg=`<svg class="aljava-a" viewBox="0 0 100 100" role="img" aria-label="ALJAVA"><defs><linearGradient id="aljavaBrandGradient" x1="8%" y1="92%" x2="92%" y2="8%"><stop offset="0%" stop-color="#071c5f"/><stop offset="38%" stop-color="#1e40c0"/><stop offset="72%" stop-color="#2563eb"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs><path d="M16 83 38 24c2.5-6.8 7-10 14-10h10c6.5 0 11.5 3.5 14.5 10L92 83H73L57 43c-1.5-4-4-6-7-6s-5.5 2-7 6L29 83H16Z" fill="url(#aljavaBrandGradient)"/><path d="M42 83 54 55c2.5-6 6.5-9 12.5-9H83c5 0 8.5 2.2 10.5 6.5L98 62 78 69 68 83H42Z" fill="url(#aljavaBrandGradient)"/></svg>`;
+    const lockup=()=>`<span class="aljava-brand-lockup">${logoSvg}<span class="aljava-name">ALJAVA <span>TERIONITY</span></span></span>`;
+    document.querySelectorAll('.top .brand').forEach(el=>{if(!el.closest('.aljava-brand-lockup')) el.outerHTML=lockup()});
+    document.querySelectorAll('#menuPanel .menu-kicker').forEach(el=>{if(!el.closest('.aljava-brand-lockup')) el.outerHTML=lockup()});
+    document.querySelectorAll('.login-box .brand').forEach(el=>{if(!el.closest('.aljava-brand-lockup')) el.outerHTML=lockup()});
+  }
   function clean(){
     const root=panel(); if(!root) return;
     const mainItems=root.querySelector('.menu-section > .menu-items');
@@ -95,7 +118,7 @@
     Array.from(document.querySelectorAll('#salesView')).slice(1).forEach((view)=>view.remove());
     loadSalesEntry();
   }
-  function scheduleClean(){clean();window.setTimeout(clean,100);window.setTimeout(clean,500);window.setTimeout(clean,1200);}
-  window.addEventListener('hashchange',()=>setActive(panel()));
+  function scheduleClean(){applyBrandLockup();clean();window.setTimeout(applyBrandLockup,100);window.setTimeout(clean,100);window.setTimeout(applyBrandLockup,500);window.setTimeout(clean,500);window.setTimeout(applyBrandLockup,1200);window.setTimeout(clean,1200);}
+  window.addEventListener('hashchange',()=>{setActive(panel());applyBrandLockup()});
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',scheduleClean,{once:true}); else scheduleClean();
 })();
