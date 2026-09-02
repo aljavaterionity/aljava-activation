@@ -77,16 +77,17 @@
 
   window.ALJAVA_BUSINESS_CONTEXT = context;
 
-  // Business scope is enforced in the client query path as a convenience layer.
-  // Database RLS remains the actual security boundary.
+  // Business scope is a convenience layer only. Database RLS remains the security boundary.
+  // SELECT/UPDATE/DELETE queries on business-scoped tables are constrained to the active membership.
+  // INSERT/UPSERT requests are intentionally not modified because their payload must carry business_unit_id.
   if (client && !client.__ALJAVA_BUSINESS_SCOPE_PATCHED) {
     const originalFrom = client.from.bind(client);
-    const wrapBuilder = (builder, table) => new Proxy(builder, {
+    const wrapBuilder = (builder, table, mode = 'select') => new Proxy(builder, {
       get(target, prop, receiver) {
         if (prop === 'then') {
           return (resolve, reject) => {
             Promise.resolve(context.getSelectedUnitId()).then((id) => {
-              if (id && SCOPED_TABLES.has(table) && typeof target.eq === 'function') {
+              if (id && SCOPED_TABLES.has(table) && mode !== 'insert' && mode !== 'upsert' && typeof target.eq === 'function') {
                 return target.eq('business_unit_id', id);
               }
               return target;
@@ -96,8 +97,9 @@
         const value = Reflect.get(target, prop, receiver);
         if (typeof value !== 'function') return value;
         return (...args) => {
+          const nextMode = prop === 'insert' ? 'insert' : prop === 'upsert' ? 'upsert' : prop === 'update' ? 'update' : prop === 'delete' ? 'delete' : mode;
           const result = value.apply(target, args);
-          if (result && typeof result === 'object' && SCOPED_TABLES.has(table)) return wrapBuilder(result, table);
+          if (result && typeof result === 'object' && SCOPED_TABLES.has(table)) return wrapBuilder(result, table, nextMode);
           return result;
         };
       }
@@ -131,7 +133,7 @@
       catch (error) { window.alert(error.message); }
     });
     context.load().catch((error) => {
-      select.innerHTML = `<option value="">Gagal memuat unit</option>`;
+      select.innerHTML = '<option value="">Gagal memuat unit</option>';
       select.disabled = true;
       console.error('Business context:', error);
     });
