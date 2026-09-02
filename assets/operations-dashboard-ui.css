@@ -1,330 +1,39 @@
 /* ALJAVA TERIONITY — Premium Operations Dashboard UI
    Visual layer only. Existing IDs, classes, data flow and JS behavior remain unchanged. */
-#operationsView {
-  --ops-navy: #102a43;
-  --ops-blue: #2563eb;
-  --ops-cyan: #0891b2;
-  --ops-border: #dbeafe;
-  --ops-muted: #64748b;
-  --ops-soft: #f8fbff;
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  color: var(--ops-navy);
-}
-
-#operationsView > div:first-child {
-  margin-top: 22px !important;
-  margin-bottom: 22px;
-  padding: 0 2px;
-}
-
-#operationsView > div:first-child h1 {
-  color: var(--ops-navy);
-  font-size: clamp(28px, 3vw, 38px);
-  line-height: 1.12;
-  letter-spacing: -0.035em;
-  font-weight: 800;
-}
-
-#operationsView > div:first-child p {
-  margin: 9px 0 0;
-  color: #64748b;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-#operationsView .stats {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px;
-  margin-bottom: 18px;
-}
-
-#operationsView .stat.glass {
-  position: relative;
-  min-width: 0;
-  min-height: 126px;
-  box-sizing: border-box;
-  padding: 20px 18px;
-  border: 1px solid var(--ops-border);
-  border-radius: 20px;
-  background: #fff;
-  box-shadow: 0 8px 24px rgba(15, 61, 96, .055);
-  overflow: hidden;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-}
-
-#operationsView .stat.glass::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 18px;
-  width: 42px;
-  height: 3px;
-  border-radius: 0 0 5px 5px;
-  background: linear-gradient(90deg, #2563eb, #06b6d4);
-  opacity: .9;
-}
-
-#operationsView .stat.glass:hover {
-  transform: translateY(-2px);
-  border-color: #bfdbfe;
-  box-shadow: 0 12px 30px rgba(15, 61, 96, .08);
-}
-
-#operationsView .stat .muted {
-  color: #64748b;
-  font-size: 11px;
-  line-height: 1.3;
-  text-transform: uppercase;
-  letter-spacing: .075em;
-  font-weight: 800;
-}
-
-#operationsView .stat .num {
-  margin-top: 12px;
-  color: var(--ops-navy);
-  font-size: clamp(22px, 2vw, 30px);
-  line-height: 1.15;
-  font-weight: 800;
-  letter-spacing: -.025em;
-  overflow-wrap: anywhere;
-}
-
-#operationsView > .panel {
-  width: 100%;
-  min-width: 0;
-  box-sizing: border-box;
-  margin-bottom: 18px;
-  border: 1px solid var(--ops-border);
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 8px 26px rgba(15, 61, 96, .055);
-  overflow: hidden;
-}
-
-#operationsView > .panel .head {
-  min-width: 0;
-  padding: 19px 22px;
-  border-bottom: 1px solid #e8f0f7;
-  background: #fff;
-}
-
-#operationsView > .panel .head h2 {
-  color: var(--ops-navy);
-  font-size: 18px;
-  line-height: 1.3;
-  font-weight: 800;
-  letter-spacing: -.018em;
-}
-
-#operationsView > .panel .head p {
-  color: var(--ops-muted);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-#operationsView > .panel .body {
-  min-width: 0;
-  padding: 18px 22px 22px;
-  background: #fff;
-}
-
-#operationsView .table-wrap {
-  width: 100%;
-  max-width: 100%;
-  min-width: 0;
-  overflow-x: auto !important;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
-  overscroll-behavior-x: auto;
-  scrollbar-width: thin;
-  scrollbar-gutter: stable;
-}
-
-#operationsView .table-wrap > table {
-  width: 100%;
-  min-width: 620px;
-  border-collapse: separate;
-  border-spacing: 0;
-  table-layout: auto;
-  background: #fff;
-  border: 1px solid #e2edf7;
-  border-radius: 14px;
-  overflow: hidden;
-}
-
-#operationsView table thead th {
-  padding: 13px 14px;
-  background: #eff6ff;
-  color: #1d4ed8;
-  border-bottom: 1px solid #dbeafe;
-  font-size: 11px;
-  line-height: 1.3;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .065em;
-  text-align: left;
-  white-space: nowrap;
-}
-
-#operationsView table tbody td {
-  padding: 14px;
-  color: #334e68;
-  border-bottom: 1px solid #edf2f7;
-  font-size: 13px;
-  line-height: 1.45;
-  vertical-align: middle;
-  background: #fff;
-}
-
-#operationsView table tbody tr:last-child td { border-bottom: 0; }
-#operationsView table tbody tr:hover td { background: #f8fbff; }
-
-/* Modern status indicators without changing rendered status text/data. */
-#operationsView #opsActions table tbody td:nth-child(2),
-#operationsView #opsHealth table tbody td:nth-child(2) {
-  white-space: nowrap;
-  font-weight: 750;
-}
-
-#operationsView #opsActions table tbody td:nth-child(2) {
-  color: #15803d;
-}
-
-#operationsView #opsActions table tbody tr:first-child td:nth-child(2) {
-  color: #a16207;
-}
-
-#operationsView #opsHealth table tbody td:nth-child(2) { color: #15803d; }
-
-/* Hide legacy emoji glyphs in status cells and replace them with clean indicators. */
-#operationsView #opsActions table tbody td:nth-child(2),
-#operationsView #opsHealth table tbody td:nth-child(2) {
-  font-size: 0;
-}
-#operationsView #opsActions table tbody td:nth-child(2)::before,
-#operationsView #opsHealth table tbody td:nth-child(2)::before {
-  content: "";
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  margin-right: 8px;
-  border-radius: 50%;
-  vertical-align: 1px;
-  background: #22c55e;
-  box-shadow: 0 0 0 3px #dcfce7;
-}
-#operationsView #opsActions table tbody tr:first-child td:nth-child(2)::before {
-  background: #f59e0b;
-  box-shadow: 0 0 0 3px #fef3c7;
-}
-#operationsView #opsActions table tbody tr:first-child td:nth-child(2)::after { content: "Perlu aktivasi"; font-size: 12px; }
-#operationsView #opsActions table tbody tr:nth-child(2) td:nth-child(2)::after { content: "Otomatis"; font-size: 12px; }
-#operationsView #opsActions table tbody tr:nth-child(3) td:nth-child(2)::after { content: "Otomatis"; font-size: 12px; }
-#operationsView #opsActions table tbody tr:nth-child(4) td:nth-child(2)::after { content: "Otomatis"; font-size: 12px; }
-#operationsView #opsHealth table tbody tr:nth-child(1) td:nth-child(2)::after { content: "Healthy"; font-size: 12px; }
-#operationsView #opsHealth table tbody tr:nth-child(2) td:nth-child(2)::after { content: "Connected"; font-size: 12px; }
-#operationsView #opsHealth table tbody tr:nth-child(3) td:nth-child(2)::after { content: "Connected"; font-size: 12px; }
-#operationsView #opsHealth table tbody tr:nth-child(4) td:nth-child(2)::after { content: "Online"; font-size: 12px; }
-
-#operationsView #opsRecent {
-  overflow-x: auto !important;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-x pan-y;
-}
-
-#operationsView #opsRecent > div {
-  position: relative;
-  min-width: 0;
-  padding: 15px 2px 15px 42px !important;
-  border-bottom: 1px solid #edf2f7 !important;
-}
-
-#operationsView #opsRecent > div::before {
-  content: "";
-  position: absolute;
-  left: 3px;
-  top: 18px;
-  width: 27px;
-  height: 27px;
-  border: 1px solid #bfdbfe;
-  border-radius: 9px;
-  background: #eff6ff;
-}
-
-#operationsView #opsRecent strong {
-  color: #173f66;
-  font-size: 14px;
-  font-weight: 800;
-}
-
-#operationsView #opsRecent .muted { color: #64748b; font-size: 12px; }
-
-/* Transaction status text is kept intact while presenting PAID as a premium badge. */
-#operationsView #opsRecent > div span {
-  display: inline-block;
-  margin-top: 6px;
-}
-
-#operationsView #opsRecent > div span::after {
-  content: "";
-}
-
-#operationsView #opsTopProducts table tbody td:first-child {
-  color: #173f66;
-  font-weight: 700;
-}
-
-#operationsView #opsTopProducts table tbody td:last-child {
-  color: #2563eb;
-  font-weight: 800;
-  text-align: right;
-}
-
-#operationsView .notice.err {
-  margin: 0;
-  border: 1px solid #fecaca;
-  border-radius: 12px;
-  background: #fff7f7;
-  color: #b91c1c;
-}
-
-html:has(#operationsView.active-view),
-body:has(#operationsView.active-view) {
-  overflow-x: hidden;
-}
-
-@media (max-width: 1100px) {
-  #operationsView .stats { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-}
-
-@media (max-width: 768px) {
-  #operationsView > div:first-child { margin-top: 16px !important; margin-bottom: 16px; }
-  #operationsView > div:first-child h1 { font-size: 28px; }
-  #operationsView .stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 11px;
-    margin-bottom: 14px;
-  }
-  #operationsView .stat.glass {
-    min-height: 112px;
-    padding: 17px 15px;
-    border-radius: 18px;
-  }
-  #operationsView .stat .num { margin-top: 9px; font-size: 22px; }
-  #operationsView > .panel { border-radius: 19px; margin-bottom: 14px; }
-  #operationsView > .panel .head { padding: 16px; }
-  #operationsView > .panel .body { padding: 14px 16px 17px; }
-  #operationsView .table-wrap > table { min-width: 600px; }
-  #operationsView #opsRecent > div { padding-left: 38px !important; }
-}
-
-@media (max-width: 430px) {
-  #operationsView .stats { grid-template-columns: 1fr; }
-  #operationsView .stat.glass { min-height: 104px; }
-  #operationsView .table-wrap > table { min-width: 560px; }
-}
+#operationsView{--ops-navy:#102a43;--ops-blue:#2563eb;--ops-cyan:#0891b2;--ops-border:#dbeafe;--ops-muted:#64748b;width:100%;max-width:100%;min-width:0;box-sizing:border-box;color:var(--ops-navy)}
+#operationsView>div:first-child{margin-top:22px!important;margin-bottom:22px;padding:0 2px}
+#operationsView>div:first-child h1{color:var(--ops-navy);font-size:clamp(28px,3vw,38px);line-height:1.12;letter-spacing:-.035em;font-weight:800}
+#operationsView>div:first-child p{margin:9px 0 0;color:#64748b;font-size:14px;line-height:1.6}
+#operationsView .stats{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:14px;margin-bottom:18px}
+#operationsView .stat.glass{position:relative;min-width:0;min-height:126px;box-sizing:border-box;padding:20px 18px;border:1px solid var(--ops-border);border-radius:20px;background:#fff;box-shadow:0 8px 24px rgba(15,61,96,.055);overflow:hidden;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+#operationsView .stat.glass::after{content:"";position:absolute;top:0;left:18px;width:42px;height:3px;border-radius:0 0 5px 5px;background:linear-gradient(90deg,#2563eb,#06b6d4);opacity:.9}
+#operationsView .stat.glass:hover{transform:translateY(-2px);border-color:#bfdbfe;box-shadow:0 12px 30px rgba(15,61,96,.08)}
+#operationsView .stat .muted{color:#64748b;font-size:11px;line-height:1.3;text-transform:uppercase;letter-spacing:.075em;font-weight:800}
+#operationsView .stat .num{margin-top:12px;color:var(--ops-navy);font-size:clamp(22px,2vw,30px);line-height:1.15;font-weight:800;letter-spacing:-.025em;overflow-wrap:anywhere}
+#operationsView>.panel{width:100%;min-width:0;box-sizing:border-box;margin-bottom:18px;border:1px solid var(--ops-border);border-radius:22px;background:#fff;box-shadow:0 8px 26px rgba(15,61,96,.055);overflow:hidden}
+#operationsView>.panel .head{min-width:0;padding:19px 22px;border-bottom:1px solid #e8f0f7;background:#fff}
+#operationsView>.panel .head h2{color:var(--ops-navy);font-size:18px;line-height:1.3;font-weight:800;letter-spacing:-.018em}
+#operationsView>.panel .head p{color:var(--ops-muted);font-size:13px;line-height:1.5}
+#operationsView>.panel .body{min-width:0;padding:18px 22px 22px;background:#fff}
+#operationsView .table-wrap{width:100%;max-width:100%;min-width:0;overflow-x:auto!important;overflow-y:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:auto;scrollbar-width:thin;scrollbar-gutter:stable}
+#operationsView .table-wrap>table{width:100%;min-width:620px;border-collapse:separate;border-spacing:0;table-layout:auto;background:#fff;border:1px solid #e2edf7;border-radius:14px;overflow:hidden}
+#operationsView table thead th{padding:13px 14px;background:#eff6ff;color:#1d4ed8;border-bottom:1px solid #dbeafe;font-size:11px;line-height:1.3;font-weight:800;text-transform:uppercase;letter-spacing:.065em;text-align:left;white-space:nowrap}
+#operationsView table tbody td{padding:14px;color:#334e68;border-bottom:1px solid #edf2f7;font-size:13px;line-height:1.45;vertical-align:middle;background:#fff}
+#operationsView table tbody tr:last-child td{border-bottom:0}#operationsView table tbody tr:hover td{background:#f8fbff}
+#operationsView #opsActions table tbody td:nth-child(2),#operationsView #opsHealth table tbody td:nth-child(2){white-space:nowrap;font-weight:750;font-size:0}
+#operationsView #opsActions table tbody td:nth-child(2){color:#15803d}#operationsView #opsActions table tbody tr:first-child td:nth-child(2){color:#a16207}#operationsView #opsHealth table tbody td:nth-child(2){color:#15803d}
+#operationsView #opsActions table tbody td:nth-child(2)::before,#operationsView #opsHealth table tbody td:nth-child(2)::before{content:"";display:inline-block;width:8px;height:8px;margin-right:8px;border-radius:50%;vertical-align:1px;background:#22c55e;box-shadow:0 0 0 3px #dcfce7}
+#operationsView #opsActions table tbody tr:first-child td:nth-child(2)::before{background:#f59e0b;box-shadow:0 0 0 3px #fef3c7}
+#operationsView #opsActions table tbody tr:first-child td:nth-child(2)::after{content:"Perlu aktivasi";font-size:12px}#operationsView #opsActions table tbody tr:nth-child(2) td:nth-child(2)::after,#operationsView #opsActions table tbody tr:nth-child(3) td:nth-child(2)::after,#operationsView #opsActions table tbody tr:nth-child(4) td:nth-child(2)::after{content:"Otomatis";font-size:12px}
+#operationsView #opsHealth table tbody tr:nth-child(1) td:nth-child(2)::after{content:"Healthy";font-size:12px}#operationsView #opsHealth table tbody tr:nth-child(2) td:nth-child(2)::after,#operationsView #opsHealth table tbody tr:nth-child(3) td:nth-child(2)::after{content:"Connected";font-size:12px}#operationsView #opsHealth table tbody tr:nth-child(4) td:nth-child(2)::after{content:"Online";font-size:12px}
+#operationsView #opsRecent{overflow-x:auto!important;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y}
+#operationsView #opsRecent>div{position:relative;min-width:0;padding:15px 2px 15px 42px!important;border-bottom:1px solid #edf2f7!important}
+#operationsView #opsRecent>div::before{content:"";position:absolute;left:3px;top:18px;width:27px;height:27px;border:1px solid #bfdbfe;border-radius:9px;background:#eff6ff}
+#operationsView #opsRecent strong{color:#173f66;font-size:14px;font-weight:800}#operationsView #opsRecent .muted{color:#64748b;font-size:12px}
+#operationsView #opsRecent .ops-paid-badge{display:inline-flex;align-items:center;margin-left:7px;padding:4px 8px;border:1px solid #bbf7d0;border-radius:999px;background:#ecfdf5;color:#15803d;font-size:10px;line-height:1;font-weight:800;letter-spacing:.06em;vertical-align:1px}
+#operationsView #opsTopProducts table tbody td:first-child{color:#173f66;font-weight:700}#operationsView #opsTopProducts table tbody td:last-child{color:#2563eb;font-weight:800;text-align:right}
+#operationsView .notice.err{margin:0;border:1px solid #fecaca;border-radius:12px;background:#fff7f7;color:#b91c1c}
+html:has(#operationsView.active-view),body:has(#operationsView.active-view){overflow-x:hidden}
+@media (max-width:1100px){#operationsView .stats{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:768px){#operationsView>div:first-child{margin-top:16px!important;margin-bottom:16px}#operationsView>div:first-child h1{font-size:28px}#operationsView .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin-bottom:14px}#operationsView .stat.glass{min-height:112px;padding:17px 15px;border-radius:18px}#operationsView .stat .num{margin-top:9px;font-size:22px}#operationsView>.panel{border-radius:19px;margin-bottom:14px}#operationsView>.panel .head{padding:16px}#operationsView>.panel .body{padding:14px 16px 17px}#operationsView .table-wrap>table{min-width:600px}#operationsView #opsRecent>div{padding-left:38px!important}}
+@media (max-width:430px){#operationsView .stats{grid-template-columns:1fr}#operationsView .stat.glass{min-height:104px}#operationsView .table-wrap>table{min-width:560px}}
