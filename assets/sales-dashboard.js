@@ -19,6 +19,7 @@
   let initialized = false;
   let loading = false;
   let exportLoader = null;
+  let reloadAfterBusinessChange = false;
 
   function getClient() {
     if (sb) return sb;
@@ -26,6 +27,14 @@
     if (!config || !window.supabase?.createClient) return null;
     sb = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
     return sb;
+  }
+
+  async function ensureBusinessContext() {
+    const ctx = window.ALJAVA_BUSINESS_CONTEXT;
+    if (!ctx) throw new Error('Konteks unit bisnis belum tersedia.');
+    if (!ctx.active) await ctx.load();
+    if (!ctx.active?.id) throw new Error('Unit bisnis aktif belum tersedia.');
+    return ctx.active.id;
   }
 
   function loadExportModule() {
@@ -113,16 +122,18 @@
   async function loadSales() {
     installUi();
     const client = getClient();
-    if (!client || !initialized || loading) return;
+    if (!client || !initialized) return;
+    if (loading) { reloadAfterBusinessChange = true; return; }
     loading = true;
     const refreshButton = $('salesRefresh');
     if (refreshButton) { refreshButton.disabled = true; refreshButton.textContent = 'Memuat…'; }
     const hosts = ['salesRevenue', 'salesHpp', 'salesCommission', 'salesGrossProfit', 'salesTransactions'];
     hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '…' : 'Memuat…'; });
     try {
+      const businessUnitId = await ensureBusinessContext();
       const [txResult, productsResult, customersResult] = await Promise.all([
-        client.from('Transactions').select('id,transaction_code,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date,amount_paid,due_date').order('transaction_date', { ascending: false }),
-        client.from('Product').select('id,name,product_code,commission'),
+        client.from('Transactions').select('id,transaction_code,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date,amount_paid,due_date').eq('business_unit_id', businessUnitId).order('transaction_date', { ascending: false }),
+        client.from('Product').select('id,name,product_code,commission').eq('business_unit_id', businessUnitId),
         client.from('Customers').select('id,business_name,owner_name,whatsapp')
       ]);
       if (txResult.error) throw txResult.error;
@@ -161,10 +172,12 @@
     } finally {
       loading = false;
       if (refreshButton) { refreshButton.disabled = false; refreshButton.textContent = 'Refresh'; }
+      if (reloadAfterBusinessChange) { reloadAfterBusinessChange = false; void loadSales(); }
     }
   }
 
   window.salesDashboard = { show: showView, load: loadSales };
+  document.addEventListener('aljava:business-changed', () => void loadSales());
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installUi, { once: true }); else installUi();
   document.addEventListener('aljava:data-loaded', installUi);
 })();
