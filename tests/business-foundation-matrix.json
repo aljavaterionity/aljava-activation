@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "purpose": "ALJAVA business foundation regression baseline",
+  "hierarchy": {
+    "parent": "aljava",
+    "business_units": [
+      "konsultan-resto-cafe",
+      "kartu-google-review",
+      "website-landing-page"
+    ]
+  },
+  "roles": ["owner", "admin", "manager", "staff", "sales", "accounting", "viewer"],
+  "required_tables": [
+    "business_units",
+    "business_memberships",
+    "app_roles",
+    "app_permissions",
+    "app_role_permissions"
+  ],
+  "scoped_operational_tables": [
+    "Product",
+    "Cards",
+    "Transactions",
+    "Subscriptions",
+    "Sales",
+    "admin_card_actions"
+  ],
+  "customer_model": "global_customer_can_work_with_multiple_business_units",
+  "security_baseline": "new foundation tables are admin-only until business-scoped authorization is implemented",
+  "production_data_policy": "no destructive reset/delete during foundation testing"
+}
