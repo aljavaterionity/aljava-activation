@@ -12,6 +12,8 @@
 
   let products = [];
   let editingId = null;
+  let reloadAfterBusinessChange = false;
+  let loading = false;
 
   function normalizeCode(value) {
     return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
@@ -58,12 +60,17 @@
   }
 
   async function loadProducts() {
+    if (loading) { reloadAfterBusinessChange = true; return products; }
     const table = $('productRows'); if (!table) return [];
+    loading = true;
     table.innerHTML = '<tr><td colspan="8" class="muted">Memuat produk...</td></tr>';
     try {
-      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').order('created_at', { ascending:false });
+      const activeId = await businessContext?.getDefaultUnitId?.();
+      if (!activeId) throw new Error('Unit bisnis aktif belum tersedia.');
+      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').eq('business_unit_id', activeId).order('created_at', { ascending:false });
       if (error) throw error;
       products = data || [];
+      if (editingId && !products.some((item) => String(item.id) === String(editingId))) resetForm();
       table.innerHTML = products.length ? products.map((p) => `<tr><td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td><td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td><td>${money(p.commission)}</td><td><button class="btn product-edit" type="button" data-id="${esc(p.id)}">Edit</button> <button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td></tr>`).join('') : '<tr><td colspan="8" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
       table.querySelectorAll('.product-edit').forEach((button) => button.addEventListener('click', () => { const product = products.find((item) => String(item.id) === String(button.dataset.id)); if (product) fillForm(product); }));
       table.querySelectorAll('.product-delete').forEach((button) => button.addEventListener('click', () => deleteProduct(button.dataset.id, button.dataset.name)));
@@ -71,6 +78,9 @@
     } catch (error) {
       table.innerHTML = `<tr><td colspan="8"><div class="notice err">❌ Gagal memuat produk: ${esc(error?.message || error)}</div></td></tr>`;
       return [];
+    } finally {
+      loading = false;
+      if (reloadAfterBusinessChange) { reloadAfterBusinessChange = false; void loadProducts(); }
     }
   }
 
@@ -142,5 +152,6 @@
 
   window.__createProduct = () => saveProduct(null, $('productForm'));
   window.productManager = { loadProducts, createProduct: saveProduct, editProduct: (id) => { const product = products.find((item) => String(item.id) === String(id)); if (product) fillForm(product); } };
+  document.addEventListener('aljava:business-changed', () => void loadProducts());
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once:true }); else bind();
 })();
