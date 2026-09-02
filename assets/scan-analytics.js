@@ -4,13 +4,14 @@
   const $ = id => document.getElementById(id);
   const esc = v => String(v ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const cfg = window.ALJAVA_CONFIG || {};
-  let sb, installed=false, loading=false;
-  function client(){ if(!sb && window.supabase?.createClient && cfg.supabaseUrl && cfg.supabaseKey) sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey); return sb; }
+  let sb, installed=false, loading=false, reloadAfterBusinessChange=false;
+  function client(){ if(!sb && window.__ALJAVA_SUPABASE_CLIENT) sb=window.__ALJAVA_SUPABASE_CLIENT; if(!sb && window.supabase?.createClient && cfg.supabaseUrl && cfg.supabaseKey) sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey); return sb; }
+  async function getBusinessUnitId(){ const ctx=window.ALJAVA_BUSINESS_CONTEXT; if(!ctx) throw new Error('Konteks unit bisnis belum tersedia.'); if(!ctx.active) await ctx.load(); if(!ctx.active?.id) throw new Error('Unit bisnis aktif belum tersedia.'); return ctx.active.id; }
   function install(){
     if(installed)return; const app=$('app'); if(!app)return;
     if(!$('scanAnalyticsUI')){const link=document.createElement('link');link.id='scanAnalyticsUI';link.rel='stylesheet';link.href='/assets/scan-analytics-ui.css';document.head.appendChild(link);}
     const s=document.createElement('section'); s.id='analyticsView'; s.className='view';
-    s.innerHTML=`<div style="margin-top:18px"><h1 style="margin:0">Scan Analytics & Reporting</h1><p class="muted">Pantau penggunaan kartu dan aktivitas pelanggan.</p></div><section class="stats"><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="anTotal" class="num">0</div></div><div class="glass stat"><div class="muted">30 Hari</div><div id="an30" class="num">0</div></div><div class="glass stat"><div class="muted">Hari Aktif</div><div id="anDays" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Terscan</div><div id="anCards" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Aktivitas Scan Terbaru</h2><p class="muted">Data aktual dari CardScans.</p></div><button id="anRefresh" class="btn" type="button">⟳ Refresh</button></div></div><div class="body"><div id="anTable" class="table-wrap"><div class="muted">Memuat...</div></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Harian</h2></div><div class="body"><div id="anDaily" class="table-wrap"><div class="muted">Memuat...</div></div></div></section>`;
+    s.innerHTML=`<div style="margin-top:18px"><h1 style="margin:0">Scan Analytics & Reporting</h1><p class="muted">Pantau penggunaan kartu dan aktivitas pelanggan pada unit bisnis aktif.</p></div><section class="stats"><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="anTotal" class="num">0</div></div><div class="glass stat"><div class="muted">30 Hari</div><div id="an30" class="num">0</div></div><div class="glass stat"><div class="muted">Hari Aktif</div><div id="anDays" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Terscan</div><div id="anCards" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Aktivitas Scan Terbaru</h2><p class="muted">Data aktual dari CardScans unit bisnis aktif.</p></div><button id="anRefresh" class="btn" type="button">⟳ Refresh</button></div></div><div class="body"><div id="anTable" class="table-wrap"><div class="muted">Memuat...</div></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Harian</h2></div><div class="body"><div id="anDaily" class="table-wrap"><div class="muted">Memuat...</div></div></div></section>`;
     app.appendChild(s); installed=true;
     const menu=$('menuPanel')?.querySelector(':scope > .menu-settings .menu-items');
     if(menu&&!$('analyticsMenu')){const b=document.createElement('button');b.id='analyticsMenu';b.type='button';b.className='btn';b.textContent='Scan Analytics';b.onclick=show;menu.insertBefore(b,$('refreshMenu')||null)}
@@ -18,11 +19,12 @@
   }
   function show(){install();document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active-view',v.id==='analyticsView'));$('menuPanel')?.classList.remove('open');$('menuButton')?.setAttribute('aria-expanded','false');history.replaceState?.(null,'','#analytics');window.scrollTo({top:0,behavior:'smooth'});void load();}
   async function load(){
-    if(loading)return;
+    if(loading){reloadAfterBusinessChange=true;return;}
     const db=client();if(!db)return;
     loading=true;
     try{
-      const {data,error}=await db.from('CardScans').select('card_id,card_code,event_type,scanned_at').order('scanned_at',{ascending:false});
+      const businessUnitId=await getBusinessUnitId();
+      const {data,error}=await db.from('CardScans').select('card_id,card_code,event_type,scanned_at').eq('business_unit_id',businessUnitId).order('scanned_at',{ascending:false});
       if(error)throw error;
       const rows=data||[], cutoff=Date.now()-30*86400000;
       $('anTotal').textContent=rows.length;
@@ -37,8 +39,9 @@
       const message=esc(e?.message||e);
       $('anTable').innerHTML=`<div class="notice err">❌ Gagal memuat analytics: ${message}</div>`;
       $('anDaily').innerHTML='';
-    }finally{loading=false;}
+    }finally{loading=false;if(reloadAfterBusinessChange){reloadAfterBusinessChange=false;void load();}}
   }
   window.scanAnalytics={show,load};
+  document.addEventListener('aljava:business-changed',()=>{if($('analyticsView')?.classList.contains('active-view'))void load();});
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
