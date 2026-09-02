@@ -6,7 +6,8 @@
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;' }[char]));
   const money = (value) => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(Number(value) || 0);
   const CONFIG = window.ALJAVA_CONFIG;
-  const sb = CONFIG && window.supabase?.createClient ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey) : null;
+  const businessContext = window.ALJAVA_BUSINESS_CONTEXT;
+  const sb = CONFIG && window.supabase?.createClient ? (window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)) : null;
   if (!sb) return;
 
   let products = [];
@@ -103,6 +104,14 @@
     if (submit) { submit.disabled = true; submit.textContent = editingId ? 'Menyimpan...' : 'Menambah...'; }
     try {
       const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission };
+      if (!editingId) {
+        try {
+          payload.business_unit_id = await businessContext?.getDefaultUnitId?.();
+        } catch (error) {
+          throw new Error(`Unit bisnis default tidak tersedia: ${error.message}`);
+        }
+        if (!payload.business_unit_id) throw new Error('Konteks unit bisnis belum tersedia.');
+      }
       const result = editingId ? await sb.from('Product').update(payload).eq('id', editingId) : await sb.from('Product').insert(payload);
       if (result.error) throw result.error;
       const message = editingId ? `✓ Produk ${name} berhasil diperbarui.` : `✓ Produk ${name} (${code}) berhasil dibuat.`;
