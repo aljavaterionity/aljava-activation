@@ -31,6 +31,9 @@ A live database audit returned zero cross-business references for:
 
 A live audit also returned zero missing `business_unit_id` values for the tenant-scoped operational tables checked.
 
+## Deployment verification
+The latest dashboard code is committed to GitHub `main`. A fresh production deployment is required so the public Vercel alias serves that latest `main` revision. This commit intentionally changes only this audit documentation to trigger the existing Git-to-Vercel deployment pipeline; no application logic or database behavior is changed.
+
 ## REVIEW REQUIRED
 Interactive browser/device testing is still required for desktop/tablet/mobile, navigation, chart rendering, and real user-role scenarios. Vercel runtime logs may remain unavailable if the platform returns 403 for the project log endpoint.
 
