@@ -4,8 +4,9 @@
   const C = window.ALJAVA_CONFIG || {};
   const $ = id => document.getElementById(id);
   const esc = v => String(v ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
-  if (!window.supabase?.createClient || !C.supabaseUrl || !C.supabaseKey) return;
-  const sb = window.supabase.createClient(C.supabaseUrl, C.supabaseKey);
+  if (!C.supabaseUrl || !C.supabaseKey) return;
+  const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase?.createClient?.(C.supabaseUrl, C.supabaseKey);
+  if (!sb) return;
   let cards = [], customers = [], businessUnitId = null;
   const msg = (type, text) => { const el = $('assignMsg'); if (el) { el.className = `notice ${type}`; el.textContent = text; } };
 
