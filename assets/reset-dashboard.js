@@ -3,17 +3,14 @@
   'use strict';
 
   const $ = (id) => document.getElementById(id);
-  const PROJECT_URL = 'https://lbzwmcxwxummitldxuc.supabase.co';
-  const PROJECT_KEY = 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw';
+  const CONFIG = window.ALJAVA_CONFIG || {};
 
   function createClient() {
-    // Reuse the shared client created by app-config/admin auth so the RPC
-    // receives the current authenticated admin session.
     const shared = window.__ALJAVA_SUPABASE_CLIENT;
     if (shared) return shared;
     const factory = window.supabase?.createClient;
-    if (!factory) throw new Error('Library Supabase tidak tersedia.');
-    return factory(PROJECT_URL, PROJECT_KEY);
+    if (!factory || !CONFIG.supabaseUrl || !CONFIG.supabaseKey) throw new Error('Konfigurasi Supabase tidak tersedia.');
+    return factory(CONFIG.supabaseUrl, CONFIG.supabaseKey);
   }
 
   async function verifyReset(client) {
@@ -36,18 +33,13 @@
     event?.stopPropagation();
     event?.stopImmediatePropagation();
 
-    const confirmation = window.prompt(
-      'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nProduk tidak dihapus.'
-    );
+    const confirmation = window.prompt('RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus transaksi, scan/tap, kartu, customer, subscription, sales, dan log operasional.\n\nProduk tidak dihapus.');
     if (confirmation !== 'RESET') return false;
 
     const button = $('resetMenu');
-    const originalText = button?.textContent || '↻ Reset Dashboard';
+    const originalText = button?.textContent || 'Reset Dashboard';
     const message = $('cardActionMsg');
-    if (button) {
-      button.disabled = true;
-      button.textContent = 'Mereset...';
-    }
+    if (button) { button.disabled = true; button.textContent = 'Mereset...'; }
 
     try {
       const client = createClient();
@@ -55,18 +47,13 @@
       if (sessionError) throw new Error(`Session admin gagal: ${sessionError.message}`);
       if (!sessionData?.session?.user) throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
 
-      if (message) {
-        message.className = 'notice info';
-        message.textContent = 'Mereset dashboard... Produk tetap aman.';
-      }
+      if (message) { message.className = 'notice info'; message.textContent = 'Mereset dashboard... Produk tetap aman.'; }
       const { data, error } = await client.rpc('admin_reset_dashboard');
       if (error) throw new Error(error.message || 'RPC reset gagal.');
 
       const counts = await verifyReset(client);
       const failed = Object.entries(counts).filter(([, count]) => count !== 0);
-      if (failed.length) {
-        throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
-      }
+      if (failed.length) throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
 
       console.info('[ALJAVA] reset result:', data, counts);
       try { sessionStorage.clear(); } catch (_) {}
@@ -75,18 +62,11 @@
       return true;
     } catch (error) {
       console.error('[ALJAVA] reset failed:', error);
-      if (message) {
-        message.className = 'notice err';
-        message.textContent = `❌ Reset gagal: ${error?.message || error}`;
-      } else {
-        window.alert(`Reset gagal: ${error?.message || error}`);
-      }
+      if (message) { message.className = 'notice err'; message.textContent = `❌ Reset gagal: ${error?.message || error}`; }
+      else window.alert(`Reset gagal: ${error?.message || error}`);
       return false;
     } finally {
-      if (button) {
-        button.disabled = false;
-        button.textContent = originalText;
-      }
+      if (button) { button.disabled = false; button.textContent = originalText; }
     }
   }
 
@@ -99,10 +79,6 @@
   }
 
   window.__resetDashboard = resetAllData;
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bind, { once: true });
-  } else {
-    bind();
-  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
+  else bind();
 })();
