@@ -6,12 +6,14 @@
 
   const $ = (id) => document.getElementById(id);
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
-    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#039;'
   }[char]));
   const CONFIG = window.ALJAVA_CONFIG || {};
-  const client = window.supabase?.createClient && CONFIG.supabaseUrl && CONFIG.supabaseKey
-    ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)
-    : null;
+  const client = window.__ALJAVA_SUPABASE_CLIENT
+    || (window.supabase?.createClient && CONFIG.supabaseUrl && CONFIG.supabaseKey
+      ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)
+      : null);
+  const businessContext = window.ALJAVA_BUSINESS_CONTEXT || null;
   if (!client) return;
 
   const statusLabel = (card) => {
@@ -29,6 +31,11 @@
   let refreshTimer = null;
   let loading = false;
 
+  async function getActiveBusinessUnitId() {
+    if (!businessContext) return null;
+    return businessContext.getSelectedUnitId();
+  }
+
   function scheduleRefresh(delay = 0) {
     window.clearTimeout(refreshTimer);
     refreshTimer = window.setTimeout(() => { void fetchSummary(); }, delay);
@@ -39,9 +46,15 @@
     if (!host || !document.querySelector('#dashboardView.active-view') || loading) return;
     loading = true;
     try {
+      const businessUnitId = await getActiveBusinessUnitId();
+      if (!businessUnitId) {
+        host.innerHTML = '<div class="notice info">Unit bisnis aktif belum tersedia.</div>';
+        return;
+      }
+
       const [{ data: cards, error: cardsError }, { data: products, error: productsError }, { data: customers, error: customersError }] = await Promise.all([
-        client.from('Cards').select('id,card_code,product_type,status,customer_id,product_id,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url').order('created_at', { ascending: false }),
-        client.from('Product').select('id,name,category,product_code'),
+        client.from('Cards').select('id,card_code,product_type,status,customer_id,product_id,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url').eq('business_unit_id', businessUnitId).order('created_at', { ascending: false }),
+        client.from('Product').select('id,name,category,product_code').eq('business_unit_id', businessUnitId),
         client.from('Customers').select('id,business_name,owner_name')
       ]);
 
@@ -135,11 +148,13 @@
   }
 
   async function deleteCard(id, code) {
-    if (!id || !window.confirm(`Hapus kartu "${code || id}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    if (!id || !window.confirm(`Hapus kartu \"${code || id}\"? Tindakan ini tidak dapat dibatalkan.`)) return;
     const msg = $('cardActionMsg');
     if (msg) { msg.className = 'notice info'; msg.textContent = `Menghapus kartu ${code || id}...`; }
     try {
-      const { error } = await client.from('Cards').delete().eq('id', id);
+      const businessUnitId = await getActiveBusinessUnitId();
+      if (!businessUnitId) throw new Error('Unit bisnis aktif tidak ditemukan.');
+      const { error } = await client.from('Cards').delete().eq('id', id).eq('business_unit_id', businessUnitId);
       if (error) throw error;
       if (msg) { msg.className = 'notice ok'; msg.textContent = `✓ Kartu ${code || id} berhasil dihapus.`; }
       document.dispatchEvent(new CustomEvent('aljava:cards-deleted'));
@@ -156,6 +171,7 @@
     document.addEventListener('aljava:data-loaded', () => scheduleRefresh(50));
     document.addEventListener('aljava:data-refresh-requested', () => scheduleRefresh(50));
     window.addEventListener('hashchange', () => scheduleRefresh(50));
+    window.addEventListener('aljava:business-changed', () => scheduleRefresh(50));
     document.addEventListener('click', (event) => {
       if (event.target?.closest?.('#dashboardMenu')) scheduleRefresh(100);
     });
