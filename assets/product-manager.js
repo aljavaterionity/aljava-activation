@@ -42,8 +42,21 @@
     if (subscription) subscription.insertAdjacentElement('afterend', field); else form.appendChild(field);
   }
 
+  function ensureMarketplaceField() {
+    const form = $('productForm');
+    if (!form || $('productMarketplaceEnabled')) return;
+    const wrapper = document.createElement('label');
+    wrapper.id = 'productMarketplaceField';
+    wrapper.className = 'notice info full';
+    wrapper.style.display = 'flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.style.gap = '8px';
+    wrapper.innerHTML = '<input id="productMarketplaceEnabled" type="checkbox" checked> Tampilkan produk ini di Marketplace';
+    form.appendChild(wrapper);
+  }
+
   function fillForm(product) {
-    ensureCommissionField();
+    ensureCommissionField(); ensureMarketplaceField();
     $('productName').value = product?.name || '';
     $('productCode').value = product?.product_code || '';
     $('productCategory').value = product?.category || '';
@@ -51,6 +64,7 @@
     $('productSelling').value = product?.selling_price ?? '';
     $('productSubscription').value = product?.subscription_price ?? '';
     $('productCommission').value = product?.commission ?? '0';
+    $('productMarketplaceEnabled').checked = product?.marketplace_enabled !== false;
     editingId = product?.id || null;
     const button = $('productSubmitBtn');
     if (button) button.textContent = editingId ? 'Simpan Perubahan' : 'Tambah Produk';
@@ -61,6 +75,7 @@
   function resetForm() {
     $('productForm')?.reset();
     if ($('productCommission')) $('productCommission').value = '0';
+    if ($('productMarketplaceEnabled')) $('productMarketplaceEnabled').checked = true;
     editingId = null;
     const button = $('productSubmitBtn'); if (button) button.textContent = 'Tambah Produk';
     updatePreview();
@@ -74,11 +89,11 @@
     try {
       const activeId = await getActiveBusinessId();
       if (!activeId) throw new Error('Unit bisnis aktif belum tersedia.');
-      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').eq('business_unit_id', activeId).order('created_at', { ascending:false });
+      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,marketplace_enabled,created_at').eq('business_unit_id', activeId).order('created_at', { ascending:false });
       if (error) throw error;
       products = data || [];
       if (editingId && !products.some((item) => String(item.id) === String(editingId))) resetForm();
-      table.innerHTML = products.length ? products.map((p) => `<tr><td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td><td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td><td>${money(p.commission)}</td><td><button class="btn product-edit" type="button" data-id="${esc(p.id)}">Edit</button> <button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td></tr>`).join('') : '<tr><td colspan="8" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
+      table.innerHTML = products.length ? products.map((p) => `<tr><td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td><td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td><td>${money(p.commission)}</td><td><span class="notice ${p.marketplace_enabled !== false ? 'ok' : 'info'}" style="display:inline-block;padding:4px 7px">${p.marketplace_enabled !== false ? 'Marketplace' : 'Draft'}</span> <button class="btn product-edit" type="button" data-id="${esc(p.id)}">Edit</button> <button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td></tr>`).join('') : '<tr><td colspan="8" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
       table.querySelectorAll('.product-edit').forEach((button) => button.addEventListener('click', () => { const product = products.find((item) => String(item.id) === String(button.dataset.id)); if (product) fillForm(product); }));
       table.querySelectorAll('.product-delete').forEach((button) => button.addEventListener('click', () => deleteProduct(button.dataset.id, button.dataset.name)));
       return products;
@@ -109,7 +124,7 @@
     if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
     const form = explicitForm || $('productForm');
     if (!form) { showMessage('Form produk tidak ditemukan.', 'err'); return false; }
-    ensureCommissionField();
+    ensureCommissionField(); ensureMarketplaceField();
     const name = $('productName')?.value.trim();
     const code = normalizeCode($('productCode')?.value.trim() || name);
     const category = $('productCategory')?.value.trim() || null;
@@ -118,13 +133,14 @@
     const subscriptionRaw = $('productSubscription')?.value;
     const subscription = subscriptionRaw === '' ? null : Number(subscriptionRaw);
     const commission = Number($('productCommission')?.value || 0);
+    const marketplaceEnabled = $('productMarketplaceEnabled')?.checked !== false;
     if (!name) { showMessage('Nama produk wajib diisi.', 'err'); $('productName')?.focus(); return false; }
     if (!code) { showMessage('Kode produk tidak valid.', 'err'); $('productCode')?.focus(); return false; }
     if ([hpp, selling, commission].some((v) => !Number.isFinite(v) || v < 0) || (subscription !== null && (!Number.isFinite(subscription) || subscription < 0))) { showMessage('HPP, harga, subscription, dan komisi tidak boleh negatif atau tidak valid.', 'err'); return false; }
     const submit = $('productSubmitBtn') || form.querySelector('button');
     if (submit) { submit.disabled = true; submit.textContent = editingId ? 'Menyimpan...' : 'Menambah...'; }
     try {
-      const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission };
+      const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission, marketplace_enabled: marketplaceEnabled };
       if (!editingId) {
         payload.business_unit_id = await getActiveBusinessId();
         if (!payload.business_unit_id) throw new Error('Konteks unit bisnis belum tersedia.');
@@ -143,7 +159,7 @@
 
   function updatePreview() {
     const source = $('productCode')?.value.trim() || $('productName')?.value || '';
-    const code = normalizeCode(source); ensureCommissionField();
+    const code = normalizeCode(source); ensureCommissionField(); ensureMarketplaceField();
     if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code} • Komisi: ${money(Number($('productCommission')?.value || 0))} / unit` : 'Kode produk dibuat otomatis dari nama produk.';
   }
 
@@ -153,7 +169,7 @@
       form.dataset.productManagerBound = '1'; submit.type = 'button'; submit.onclick = () => { void saveProduct(null, form); };
       form.addEventListener('submit', (event) => { void saveProduct(event, form); }, true);
       ['productCode','productName','productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview));
-      ensureCommissionField(); updatePreview(); void loadProducts();
+      ensureCommissionField(); ensureMarketplaceField(); updatePreview(); void loadProducts();
     }
   }
 
