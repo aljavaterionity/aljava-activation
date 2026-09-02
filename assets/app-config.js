@@ -5,7 +5,8 @@
   const CONFIG = Object.freeze({
     supabaseUrl: 'https://lbzwmcxwxummitldxucj.supabase.co',
     supabaseKey: 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw',
-    activationBaseUrl: 'https://aljava-activation.vercel.app/'
+    activationBaseUrl: 'https://aljava-activation.vercel.app/',
+    defaultBusinessUnitSlug: 'kartu-google-review'
   });
 
   window.ALJAVA_CONFIG = CONFIG;
@@ -23,4 +24,25 @@
       return originalCreateClient(url, key, options);
     };
   }
+
+  // Phase 1 keeps the existing Google Review Card operation as the default
+  // operational context. Business switching will be added only after the
+  // scoped authorization layer is ready; modules must not invent a client
+  // supplied business id.
+  window.ALJAVA_BUSINESS_CONTEXT = Object.freeze({
+    defaultSlug: CONFIG.defaultBusinessUnitSlug,
+    async getDefaultUnitId() {
+      const client = window.__ALJAVA_SUPABASE_CLIENT;
+      if (!client) throw new Error('Supabase client belum siap.');
+      const { data, error } = await client
+        .from('business_units')
+        .select('id,slug,status,unit_type')
+        .eq('slug', CONFIG.defaultBusinessUnitSlug)
+        .eq('status', 'active')
+        .eq('unit_type', 'business')
+        .single();
+      if (error) throw error;
+      return data.id;
+    }
+  });
 })();
