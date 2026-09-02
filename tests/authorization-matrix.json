@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "purpose": "ALJAVA authorization regression baseline",
+  "actors": ["anonymous", "authenticated_non_admin", "authenticated_admin"],
+  "resources": [
+    "public_activation",
+    "admin_dashboard",
+    "Cards",
+    "Customers",
+    "Product",
+    "Transactions",
+    "Subscriptions",
+    "Sales",
+    "CardScans",
+    "admin_card_actions",
+    "admin_reset_dashboard",
+    "privileged_rpc"
+  ],
+  "rules": [
+    {"actor":"anonymous","resource":"public_activation","actions":["read","activate"]},
+    {"actor":"anonymous","resource":"admin_dashboard","actions":[],"expected":"deny"},
+    {"actor":"anonymous","resource":"Cards","actions":[],"expected":"deny"},
+    {"actor":"anonymous","resource":"Customers","actions":[],"expected":"deny"},
+    {"actor":"anonymous","resource":"Product","actions":[],"expected":"deny"},
+    {"actor":"anonymous","resource":"Transactions","actions":[],"expected":"deny"},
+    {"actor":"anonymous","resource":"admin_reset_dashboard","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"admin_dashboard","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"Cards","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"Customers","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"Product","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"Transactions","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"admin_card_actions","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"admin_reset_dashboard","actions":[],"expected":"deny"},
+    {"actor":"authenticated_non_admin","resource":"privileged_rpc","actions":[],"expected":"deny"},
+    {"actor":"authenticated_admin","resource":"admin_dashboard","actions":["read"]},
+    {"actor":"authenticated_admin","resource":"Cards","actions":["read","create","update","delete"]},
+    {"actor":"authenticated_admin","resource":"Customers","actions":["read","create","update","delete"]},
+    {"actor":"authenticated_admin","resource":"Product","actions":["read","create","update","delete"]},
+    {"actor":"authenticated_admin","resource":"Transactions","actions":["read","create","update","delete"]},
+    {"actor":"authenticated_admin","resource":"Subscriptions","actions":["read","delete"]},
+    {"actor":"authenticated_admin","resource":"Sales","actions":["read","delete"]},
+    {"actor":"authenticated_admin","resource":"CardScans","actions":["read","delete"]},
+    {"actor":"authenticated_admin","resource":"admin_card_actions","actions":["read","create"]},
+    {"actor":"authenticated_admin","resource":"admin_reset_dashboard","actions":["execute"]}
+  ],
+  "manual_e2e_required": [
+    "admin login with real browser session",
+    "create card without committing production test data",
+    "activation flow against controlled test card",
+    "non-admin session cannot read or mutate admin tables",
+    "logout invalidates dashboard access"
+  ]
+}
