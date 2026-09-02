@@ -48,12 +48,8 @@
     if (!chart) return;
     injectStyle();
     const bars = [...chart.querySelectorAll('.bar')];
-    const allZero = bars.length > 0 && bars.every((bar) => {
-      const height = parseFloat(bar.querySelector('i')?.style.height || '0');
-      return height <= 5;
-    });
+    const allZero = bars.length > 0 && bars.every((bar) => parseFloat(bar.querySelector('i')?.style.height || '0') <= 5);
     chart.dataset.empty = allZero ? 'true' : 'false';
-
     bars.forEach((bar) => {
       if (bar.dataset.revenueTooltipBound === '1') return;
       const barEl = bar.querySelector('i');
@@ -71,10 +67,8 @@
       });
       bar.addEventListener('mousemove', (event) => {
         const tip = getTooltip();
-        const left = Math.min(event.clientX + 14, window.innerWidth - tip.offsetWidth - 10);
-        const top = Math.max(event.clientY - tip.offsetHeight - 12, 10);
-        tip.style.left = `${left}px`;
-        tip.style.top = `${top}px`;
+        tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - tip.offsetWidth - 10)}px`;
+        tip.style.top = `${Math.max(event.clientY - tip.offsetHeight - 12, 10)}px`;
       });
       bar.addEventListener('mouseleave', () => { getTooltip().style.display = 'none'; });
     });
@@ -83,15 +77,9 @@
   const start = () => {
     injectStyle();
     refreshChartUi();
-    const chart = document.getElementById('chart');
-    if (!chart || chart.dataset.revenueObserverBound === '1') return;
-    chart.dataset.revenueObserverBound = '1';
-    new MutationObserver(refreshChartUi).observe(chart, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['style']
-    });
+    document.addEventListener('aljava:data-loaded', refreshChartUi);
+    $('year')?.addEventListener('change', refreshChartUi);
+    $('month')?.addEventListener('change', refreshChartUi);
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
