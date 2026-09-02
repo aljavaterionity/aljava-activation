@@ -17,6 +17,7 @@
   const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
   let sb = null;
   let initialized = false;
+  let loading = false;
   let exportLoader = null;
 
   function getClient() {
@@ -59,19 +60,7 @@
     const qty = Number(row.quantity || 1);
     const revenue = Number(row.selling_price || 0) * qty;
     const status = row.payment_status || '-';
-    return [
-      'Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.',
-      '',
-      `No. Transaksi: ${row.transaction_code || '-'}`,
-      `Produk: ${product?.name || '-'}`,
-      `Qty: ${qty}`,
-      `Total: ${money(revenue)}`,
-      `Status pembayaran: ${status}`,
-      `Tanggal: ${new Date(row.transaction_date).toLocaleString('id-ID')}`,
-      '',
-      `Customer: ${customer?.business_name || customer?.owner_name || '-'}`,
-      'Terima kasih.'
-    ].join('\n');
+    return ['Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.','',`No. Transaksi: ${row.transaction_code || '-'}`,`Produk: ${product?.name || '-'}`,`Qty: ${qty}`,`Total: ${money(revenue)}`,`Status pembayaran: ${status}`,`Tanggal: ${new Date(row.transaction_date).toLocaleString('id-ID')}`,'',`Customer: ${customer?.business_name || customer?.owner_name || '-'}`,'Terima kasih.'].join('\n');
   }
 
   function showView() {
@@ -94,10 +83,7 @@
     const existingButton = $('salesMenu');
     const button = existingButton || document.createElement('button');
     if (!existingButton) {
-      button.id = 'salesMenu';
-      button.type = 'button';
-      button.className = 'btn';
-      button.textContent = 'Dashboard Penjualan';
+      button.id = 'salesMenu'; button.type = 'button'; button.className = 'btn'; button.textContent = 'Dashboard Penjualan';
       button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView(); });
       menuItems.insertBefore(button, menuItems.children[2] || null);
     }
@@ -105,25 +91,8 @@
     const existingSection = $('salesView');
     const section = existingSection || document.createElement('section');
     if (!existingSection) {
-      section.id = 'salesView';
-      section.className = 'view';
-      section.innerHTML = `
-        <div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button><button id="salesExportExcel" class="btn" type="button">Export Excel</button></div></div>
-        <section class="stats sales-stats">
-          <div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div>
-          <div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div>
-          <div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div>
-          <div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div>
-          <div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div>
-        </section>
-        <section class="glass panel">
-          <div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div>
-          <div class="body"><div id="salesProductSummary"></div></div>
-        </section>
-        <section class="glass panel">
-          <div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div>
-          <div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div>
-        </section>`;
+      section.id = 'salesView'; section.className = 'view';
+      section.innerHTML = `<div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button><button id="salesExportExcel" class="btn" type="button">Export Excel</button></div></div><section class="stats sales-stats"><div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div><div class="body"><div id="salesProductSummary"></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div><div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div></section>`;
       app.appendChild(section);
     }
 
@@ -144,7 +113,10 @@
   async function loadSales() {
     installUi();
     const client = getClient();
-    if (!client || !initialized) return;
+    if (!client || !initialized || loading) return;
+    loading = true;
+    const refreshButton = $('salesRefresh');
+    if (refreshButton) { refreshButton.disabled = true; refreshButton.textContent = 'Memuat…'; }
     const hosts = ['salesRevenue', 'salesHpp', 'salesCommission', 'salesGrossProfit', 'salesTransactions'];
     hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '…' : 'Memuat…'; });
     try {
@@ -175,10 +147,7 @@
         const key = row.product_id || 'unknown';
         const item = grouped[key] ||= { qty: 0, revenue: 0, hpp: 0, commission: 0, name: products[key]?.name || '-', code: products[key]?.product_code || '-' };
         const qty = Number(row.quantity || 1);
-        item.qty += qty;
-        item.revenue += Number(row.selling_price || 0) * qty;
-        item.hpp += Number(row.hpp || 0) * qty;
-        item.commission += Number(row.commission || 0);
+        item.qty += qty; item.revenue += Number(row.selling_price || 0) * qty; item.hpp += Number(row.hpp || 0) * qty; item.commission += Number(row.commission || 0);
       });
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
@@ -189,6 +158,9 @@
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
       if ($('salesTransactionTable')) $('salesTransactionTable').innerHTML = '';
       hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '0' : money(0); });
+    } finally {
+      loading = false;
+      if (refreshButton) { refreshButton.disabled = false; refreshButton.textContent = 'Refresh'; }
     }
   }
 
