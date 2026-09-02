@@ -17,45 +17,47 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate authorization matrix
-        run: python - <<'PY'
-import json
-from pathlib import Path
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
 
-path = Path("tests/authorization-matrix.json")
-data = json.loads(path.read_text(encoding="utf-8"))
+          path = Path("tests/authorization-matrix.json")
+          data = json.loads(path.read_text(encoding="utf-8"))
 
-required_actors = {"anonymous", "authenticated_non_admin", "authenticated_admin"}
-required_resources = {
-    "public_activation", "admin_dashboard", "Cards", "Customers", "Product",
-    "Transactions", "Subscriptions", "Sales", "CardScans",
-    "admin_card_actions", "admin_reset_dashboard", "privileged_rpc",
-}
+          required_actors = {"anonymous", "authenticated_non_admin", "authenticated_admin"}
+          required_resources = {
+              "public_activation", "admin_dashboard", "Cards", "Customers", "Product",
+              "Transactions", "Subscriptions", "Sales", "CardScans",
+              "admin_card_actions", "admin_reset_dashboard", "privileged_rpc",
+          }
 
-actors = set(data.get("actors", []))
-resources = set(data.get("resources", []))
-assert required_actors <= actors, f"Missing actors: {sorted(required_actors - actors)}"
-assert required_resources <= resources, f"Missing resources: {sorted(required_resources - resources)}"
-assert data.get("version") == 1
-assert data.get("purpose") == "ALJAVA authorization regression baseline"
+          actors = set(data.get("actors", []))
+          resources = set(data.get("resources", []))
+          assert required_actors <= actors, f"Missing actors: {sorted(required_actors - actors)}"
+          assert required_resources <= resources, f"Missing resources: {sorted(required_resources - resources)}"
+          assert data.get("version") == 1
+          assert data.get("purpose") == "ALJAVA authorization regression baseline"
 
-rules = data.get("rules", [])
-assert rules, "Authorization matrix has no rules"
+          rules = data.get("rules", [])
+          assert rules, "Authorization matrix has no rules"
 
-for rule in rules:
-    assert rule["actor"] in actors, rule
-    assert rule["resource"] in resources, rule
-    assert isinstance(rule.get("actions", []), list), rule
-    if rule.get("expected") == "deny":
-        assert rule["actions"] == [], rule
+          for rule in rules:
+              assert rule["actor"] in actors, rule
+              assert rule["resource"] in resources, rule
+              assert isinstance(rule.get("actions", []), list), rule
+              if rule.get("expected") == "deny":
+                  assert rule["actions"] == [], rule
 
-required_manual = {
-    "admin login with real browser session",
-    "create card without committing production test data",
-    "activation flow against controlled test card",
-    "non-admin session cannot read or mutate admin tables",
-    "logout invalidates dashboard access",
-}
-assert required_manual <= set(data.get("manual_e2e_required", [])), "Manual E2E checklist is incomplete"
+          required_manual = {
+              "admin login with real browser session",
+              "create card without committing production test data",
+              "activation flow against controlled test card",
+              "non-admin session cannot read or mutate admin tables",
+              "logout invalidates dashboard access",
+          }
+          assert required_manual <= set(data.get("manual_e2e_required", [])), "Manual E2E checklist is incomplete"
 
-print(f"Authorization matrix OK: {len(rules)} rules, {len(required_actors)} actors, {len(required_resources)} resources")
-PY
+          print(f"Authorization matrix OK: {len(rules)} rules, {len(required_actors)} actors, {len(required_resources)} resources")
+          PY
