@@ -5,31 +5,28 @@
 <meta name="robots" content="noindex,nofollow,noarchive">
 <title>ALJAVA — Global Platform Dashboard</title>
 <link rel="stylesheet" href="/assets/business-hub.css">
-<style>
-.kpi-green strong{color:#15803d}.kpi-amber strong{color:#b45309}.kpi-blue strong{color:#2563eb}.kpi-purple strong{color:#7c3aed}.kpi-teal strong{color:#0f766e}.kpi-cyan strong{color:#0891b2}.kpi-gray strong{color:#64748b}.kpi-red strong{color:#dc2626}
-.filter{display:flex;gap:8px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:5px;min-width:150px}.field label{font-size:12px;color:var(--muted);font-weight:700}.field input{min-height:42px;border:1px solid rgba(23,50,77,.14);border-radius:10px;padding:0 10px;background:#fff}.business-list{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.business-row{display:flex;justify-content:space-between;gap:12px;padding:14px;border:1px solid rgba(23,50,77,.09);border-radius:14px}.business-row strong{display:block}.business-row small{color:var(--muted)}@media(max-width:650px){.business-list{grid-template-columns:1fr}.field{min-width:100%}.filter .btn{width:100%}}
-</style>
+<link rel="stylesheet" href="/assets/platform-ui.css">
 </head>
 <body><main class="page">
 <header class="topbar"><div><div class="eyebrow">ALJAVA TERIONITY</div><h1>Global Platform Dashboard</h1><p>Ringkasan keseluruhan platform ALJAVA untuk Super Admin.</p></div><div class="top-actions"><a class="btn secondary" href="/dashboard-hub.html">Dashboard Hub</a><a class="btn secondary" href="/business-hub.html">Business Hub</a><a class="btn secondary" href="/admin.html">Admin</a></div></header>
 <section id="notice" class="notice" hidden></section>
-<section class="card section-card"><div class="section-head"><div><h2>Periode</h2><p>Semua angka berasal dari data aktual platform.</p></div></div><div class="filter"><div class="field"><label for="start">Mulai</label><input id="start" type="date"></div><div class="field"><label for="end">Sampai</label><input id="end" type="date"></div><button id="apply" class="btn primary">Terapkan</button></div></section>
+<section class="card section-card"><div class="section-head"><div><h2>Periode</h2><p>Semua angka berasal dari data aktual platform.</p></div></div><div class="filter-panel"><div class="filter-field"><label for="start">Mulai</label><input id="start" type="date"></div><div class="filter-field"><label for="end">Sampai</label><input id="end" type="date"></div><button id="apply" class="btn primary">Terapkan</button></div></section>
 <section class="summary-grid">
-<article class="card kpi-blue"><span>Total Businesses</span><strong id="businesses">0</strong><small>business aktif</small></article>
-<article class="card kpi-cyan"><span>Total Users</span><strong id="users">0</strong><small>akun platform</small></article>
-<article class="card kpi-cyan"><span>Total Customers</span><strong id="customers">0</strong><small>database customer</small></article>
-<article class="card kpi-blue"><span>Total Products</span><strong id="products">0</strong><small>dalam periode</small></article>
-<article class="card kpi-purple"><span>Total Cards</span><strong id="cards">0</strong><small>dalam periode</small></article>
-<article class="card kpi-green"><span>Active Cards</span><strong id="active_cards">0</strong><small>status aktif</small></article>
-<article class="card kpi-gray"><span>Inactive Cards</span><strong id="inactive_cards">0</strong><small>status nonaktif</small></article>
-<article class="card kpi-teal"><span>Transactions</span><strong id="transactions">0</strong><small>periode terpilih</small></article>
-<article class="card kpi-green"><span>Total Revenue</span><strong id="revenue">Rp 0</strong><small>transaksi paid</small></article>
-<article class="card kpi-green"><span>Total Payments</span><strong id="payments">Rp 0</strong><small>amount paid</small></article>
-<article class="card kpi-amber"><span>Outstanding</span><strong id="outstanding">Rp 0</strong><small>sisa pembayaran</small></article>
-<article class="card kpi-purple"><span>Total Scans</span><strong id="scans">0</strong><small>scan/tap</small></article>
+<article class="card kpi-accent kpi-blue"><span>Total Businesses</span><strong id="businesses">0</strong><small>business aktif</small></article>
+<article class="card kpi-accent kpi-cyan"><span>Total Users</span><strong id="users">0</strong><small>akun platform</small></article>
+<article class="card kpi-accent kpi-cyan"><span>Total Customers</span><strong id="customers">0</strong><small>database customer</small></article>
+<article class="card kpi-accent kpi-blue"><span>Total Products</span><strong id="products">0</strong><small>dalam periode</small></article>
+<article class="card kpi-accent kpi-purple"><span>Total Cards</span><strong id="cards">0</strong><small>dalam periode</small></article>
+<article class="card kpi-accent kpi-green"><span>Active Cards</span><strong id="active_cards">0</strong><small>status aktif</small></article>
+<article class="card kpi-accent kpi-gray"><span>Inactive Cards</span><strong id="inactive_cards">0</strong><small>status nonaktif</small></article>
+<article class="card kpi-accent kpi-teal"><span>Transactions</span><strong id="transactions">0</strong><small>periode terpilih</small></article>
+<article class="card kpi-accent kpi-green"><span>Total Revenue</span><strong id="revenue">Rp 0</strong><small>transaksi paid</small></article>
+<article class="card kpi-accent kpi-green"><span>Total Payments</span><strong id="payments">Rp 0</strong><small>amount paid</small></article>
+<article class="card kpi-accent kpi-amber"><span>Outstanding</span><strong id="outstanding">Rp 0</strong><small>sisa pembayaran</small></article>
+<article class="card kpi-accent kpi-purple"><span>Total Scans</span><strong id="scans">0</strong><small>scan/tap</small></article>
 </section>
 <section class="card section-card"><div class="section-head"><div><h2>Business Performance</h2><p>Top business berdasarkan revenue paid pada periode terpilih.</p></div></div><div id="business-list" class="business-list"></div></section>
-<section class="summary-grid"><article class="card kpi-green"><span>Finance Income</span><strong id="finance_income">Rp 0</strong></article><article class="card kpi-amber"><span>Finance Expense</span><strong id="finance_expense">Rp 0</strong></article><article class="card kpi-blue"><span>Finance Net</span><strong id="finance_net">Rp 0</strong></article><article class="card kpi-purple"><span>Projects</span><strong id="projects">0</strong></article><article class="card kpi-teal"><span>Open Tasks</span><strong id="open_tasks">0</strong></article></section>
+<section class="summary-grid"><article class="card kpi-accent kpi-green"><span>Finance Income</span><strong id="finance_income">Rp 0</strong></article><article class="card kpi-accent kpi-amber"><span>Finance Expense</span><strong id="finance_expense">Rp 0</strong></article><article class="card kpi-accent kpi-blue"><span>Finance Net</span><strong id="finance_net">Rp 0</strong></article><article class="card kpi-accent kpi-purple"><span>Projects</span><strong id="projects">0</strong></article><article class="card kpi-accent kpi-teal"><span>Open Tasks</span><strong id="open_tasks">0</strong></article></section>
 <footer>ALJAVA TERIONITY • Global Platform Dashboard</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/assets/app-config.js"></script><script>
