@@ -1,0 +1,51 @@
+name: Business Foundation Regression
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  business-foundation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate business foundation matrix
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path('tests/business-foundation-matrix.json')
+          data = json.loads(path.read_text(encoding='utf-8'))
+
+          assert data['version'] == 1
+          assert data['hierarchy']['parent'] == 'aljava'
+          assert set(data['hierarchy']['business_units']) == {
+              'konsultan-resto-cafe',
+              'kartu-google-review',
+              'website-landing-page',
+          }
+          assert set(data['roles']) == {
+              'owner', 'admin', 'manager', 'staff', 'sales', 'accounting', 'viewer'
+          }
+          assert set(data['required_tables']) == {
+              'business_units',
+              'business_memberships',
+              'app_roles',
+              'app_permissions',
+              'app_role_permissions',
+          }
+          assert data['customer_model'] == 'global_customer_can_work_with_multiple_business_units'
+          assert 'admin-only' in data['security_baseline']
+          assert 'no destructive reset/delete' in data['production_data_policy']
+
+          print('Business foundation matrix OK')
+          PY
