@@ -295,7 +295,9 @@ async function deleteCards(ids, successMessage) {
   if (msg) { msg.className = 'notice info'; msg.textContent = `Menghapus ${ids.length} kartu...`; }
   if (button) button.disabled = true;
   try {
-    const { error } = await sb.from('Cards').delete().in('id', ids);
+    await ensureBusinessContext();
+    if (!activeBusinessUnitId) throw new Error('Unit bisnis aktif tidak ditemukan.');
+    const { error } = await sb.from('Cards').delete().in('id', ids).eq('business_unit_id', activeBusinessUnitId);
     if (error) throw error;
     if (msg) { msg.className = 'notice ok'; msg.textContent = `✓ ${successMessage}`; }
     await load();
