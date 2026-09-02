@@ -55,7 +55,8 @@ Business-scoped authorization is now enforced at the database layer without remo
 - `is_business_member(business_unit_id)` checks active membership.
 - Product, Card, Transaction, Subscription, Sales, and admin-card-action tables now have additive business-scoped RLS policies.
 - Existing admin policies remain intact, so the current admin account continues to operate normally.
-- New `card.view` and `card.manage` permissions were added.
+- `card.view` and `card.manage` permissions are available for card operations.
+- `staff.view` and `staff.manage` permissions are assigned to owner/admin/manager and protect business membership access.
 - Existing system roles now have explicit permission mappings instead of empty role definitions.
 
 Role intent:
@@ -64,13 +65,24 @@ Role intent:
 |---|---|
 | Owner | Full business operations |
 | Admin | Full business operations |
-| Manager | Day-to-day operations and reporting |
+| Manager | Day-to-day operations and reporting, including staff access management |
 | Staff | Customer/product/transaction viewing and customer management |
 | Sales | Customer, cards, transactions, payments |
 | Accounting | Transactions, payments, reports |
 | Viewer | Read-only operational/reporting access |
 
 The client may use these permissions to shape UI visibility, but UI visibility is not security. Database RLS remains the enforcement boundary.
+
+## Staff authorization
+
+`business_memberships` remains protected by the existing admin policy and now also has business-scoped policies:
+
+- members with `staff.view` can view memberships for their business unit;
+- users with `staff.manage` can add, update, or deactivate memberships in their business unit;
+- owner/admin/manager receive these staff permissions;
+- the target `business_unit_id` is still checked by the database permission function.
+
+The Business Hub staff panel is intentionally limited to existing Supabase Auth user IDs; it does not expose `auth.users` publicly or create an insecure user-discovery endpoint.
 
 ## Security
 
@@ -80,6 +92,6 @@ Do not expose or accept `business_unit_id`, role, or user identity as a trusted 
 
 ## Admin UI
 
-`business-hub.html` provides the first management surface for viewing the hierarchy and adding a new business unit. It requires an authenticated admin session and uses the existing shared Supabase client configuration.
+`business-hub.html` provides the management surface for viewing the hierarchy, adding a business unit, and assigning an existing Supabase Auth user to a business membership/role. It requires an authenticated admin session and uses the existing shared Supabase client configuration.
 
 The existing `admin.html` exposes Business Hub through the existing Main Menu without replacing the stable card/customer/product routing. This keeps the current Google Review Card operation intact while giving ALJAVA a central business-management entry point.
