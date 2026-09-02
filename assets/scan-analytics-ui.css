@@ -1,0 +1,35 @@
+/* ALJAVA TERIONITY — Scan Analytics & Reporting UI only */
+#analyticsView{--an-navy:#102a43;--an-blue:#2563eb;--an-blue-soft:#eff6ff;--an-cyan:#0891b2;--an-line:#dbe7f2;--an-muted:#64748b;width:100%;max-width:100%;min-width:0;box-sizing:border-box;color:var(--an-navy);overflow-x:hidden;padding-bottom:28px}
+#analyticsView>div:first-child{margin:18px 0 20px!important;padding:0 2px}
+#analyticsView>div:first-child h1{margin:0;color:var(--an-navy);font-size:clamp(27px,3vw,36px);line-height:1.12;letter-spacing:-.035em;font-weight:850}
+#analyticsView>div:first-child p{margin:8px 0 0;color:var(--an-muted);font-size:13px;line-height:1.6}
+#analyticsView .stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 18px}
+#analyticsView .stat.glass{position:relative;min-width:0;height:118px;box-sizing:border-box;padding:19px 18px;border:1px solid var(--an-line);border-radius:19px;background:#fff;box-shadow:0 7px 22px rgba(16,42,67,.045);overflow:hidden;transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+#analyticsView .stat.glass:after{content:"";position:absolute;left:18px;top:0;width:36px;height:3px;border-radius:0 0 5px 5px;background:var(--an-blue)}
+#analyticsView .stat.glass:hover{transform:translateY(-2px);border-color:#c8dcf2;box-shadow:0 11px 28px rgba(16,42,67,.065)}
+#analyticsView .stat .muted{color:#718096;font-size:10px;line-height:1.35;text-transform:uppercase;letter-spacing:.075em;font-weight:800}
+#analyticsView .stat .num{margin-top:12px;color:var(--an-navy);font-size:clamp(24px,2.4vw,31px);line-height:1.1;font-weight:850;letter-spacing:-.03em;overflow-wrap:anywhere}
+#analyticsView>.panel{width:100%;min-width:0;box-sizing:border-box;margin:0 0 18px;border:1px solid var(--an-line);border-radius:20px;background:#fff;box-shadow:0 8px 26px rgba(16,42,67,.045);overflow:hidden}
+#analyticsView>.panel .head{min-width:0;padding:18px 21px 16px;border-bottom:1px solid #e8eef5;background:#fff}
+#analyticsView>.panel .head .row{gap:16px;min-width:0;align-items:center}
+#analyticsView>.panel .head h2{margin:0;color:var(--an-navy);font-size:17px;line-height:1.3;font-weight:850;letter-spacing:-.018em}
+#analyticsView>.panel .head p{margin:5px 0 0;color:var(--an-muted);font-size:12px;line-height:1.5}
+#analyticsView>.panel .body{min-width:0;padding:18px 21px 21px;background:#fff}
+#analyticsView #anRefresh{flex:0 0 auto;height:40px;min-height:40px;padding:0 14px;border:1px solid #bfdbfe;border-radius:11px;background:#f8fbff;color:#1d4ed8;font-size:12px;font-weight:800;box-shadow:none;transition:background .16s ease,border-color .16s ease,transform .16s ease}
+#analyticsView #anRefresh:hover{background:#eff6ff;border-color:#93c5fd;transform:translateY(-1px)}
+#analyticsView #anRefresh:active{transform:translateY(0)}
+#analyticsView .table-wrap{display:block;width:100%;max-width:100%;min-width:0;overflow-x:auto!important;overflow-y:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-x pan-y;overscroll-behavior-x:auto;scrollbar-width:thin;scrollbar-gutter:stable}
+#analyticsView .table-wrap>table{display:table;width:100%;min-width:560px;max-width:none;border-collapse:separate;border-spacing:0;table-layout:auto;background:#fff;border:1px solid #e1eaf3;border-radius:14px;overflow:hidden}
+#analyticsView table thead th{padding:12px 14px;background:#f4f8fc;color:#315b85;border-bottom:1px solid #dbe7f2;font-size:10px;line-height:1.3;font-weight:850;text-transform:uppercase;letter-spacing:.065em;text-align:left;white-space:nowrap}
+#analyticsView table tbody td{padding:13px 14px;background:#fff;color:#40566b;border-bottom:1px solid #edf2f7;font-size:13px;line-height:1.45;vertical-align:middle}
+#analyticsView table tbody tr:last-child td{border-bottom:0}
+#analyticsView table tbody tr:hover td{background:#fbfdff}
+#analyticsView #anTable table tbody td:first-child,#analyticsView #anDaily table tbody td:first-child{color:#173f66;font-weight:750}
+#analyticsView #anTable table tbody td:nth-child(2){color:#52708a;font-weight:650}
+#analyticsView #anTable table tbody td:nth-child(3){color:#667b8f;white-space:nowrap}
+#analyticsView #anDaily table tbody td:last-child{color:var(--an-blue);font-weight:850;text-align:right;white-space:nowrap}
+#analyticsView .notice.err{margin:0;padding:12px 14px;border:1px solid #fecaca;border-radius:12px;background:#fff7f7;color:#b91c1c;font-size:12px;line-height:1.5}
+@media(max-width:1000px){#analyticsView .stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:768px){#analyticsView{padding-bottom:20px}#analyticsView>div:first-child{margin:14px 0 15px!important;padding:0}#analyticsView>div:first-child h1{font-size:26px;letter-spacing:-.025em}#analyticsView>div:first-child p{font-size:12px;margin-top:7px}#analyticsView .stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}#analyticsView .stat.glass{height:106px;padding:16px 14px;border-radius:17px}#analyticsView .stat.glass:after{left:14px;width:32px}#analyticsView .stat .num{margin-top:10px;font-size:22px}#analyticsView>.panel{border-radius:18px;margin-bottom:14px}#analyticsView>.panel .head{padding:15px 15px 14px}#analyticsView>.panel .head .row{align-items:flex-start;gap:10px}#analyticsView>.panel .head h2{font-size:16px}#analyticsView>.panel .head p{font-size:11px}#analyticsView>.panel .body{padding:14px 15px 16px}#analyticsView #anRefresh{height:38px;min-height:38px;padding:0 12px;font-size:11px}#analyticsView .table-wrap>table{min-width:560px}}
+@media(max-width:430px){#analyticsView .stats{grid-template-columns:1fr}#analyticsView .stat.glass{height:100px}#analyticsView>.panel .head .row{flex-wrap:wrap}#analyticsView #anRefresh{width:100%;margin-top:3px}#analyticsView .table-wrap>table{min-width:520px}}
+html:has(#analyticsView.active-view),body:has(#analyticsView.active-view){overflow-x:hidden}
