@@ -14,8 +14,17 @@ if (!CONFIG || !window.supabase?.createClient) {
   throw new Error('Supabase client tidak tersedia.');
 }
 
-const sb = window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
 const state = { cards: [], products: [], customers: [], transactions: [], scans: [] };
+let activeBusinessUnitId = null;
+
+async function ensureBusinessContext() {
+  const ctx = window.ALJAVA_BUSINESS_CONTEXT;
+  if (!ctx?.load) return null;
+  if (!ctx.active?.id) await ctx.load();
+  activeBusinessUnitId = ctx.active?.id || ctx.getSelectedUnitId?.() || null;
+  return activeBusinessUnitId;
+}
 
 function closeMenu() {
   $('menuPanel')?.classList.remove('open');
@@ -99,6 +108,7 @@ async function ensureAdmin() {
     $('app').style.display = 'block';
     $('menuButton').classList.add('visible');
     $('userEmail').textContent = user.email || '';
+    await ensureBusinessContext();
     return true;
   } catch (error) {
     setLoggedOut(error.message || 'Gagal memeriksa sesi admin.');
@@ -139,6 +149,9 @@ async function logout() {
 async function queryTable(table, select, orderBy, timeoutMs = 10000) {
   const request = (async () => {
     let query = sb.from(table).select(select);
+    if (['Cards', 'Product', 'Transactions', 'CardScans'].includes(table) && activeBusinessUnitId) {
+      query = query.eq('business_unit_id', activeBusinessUnitId);
+    }
     if (orderBy) query = query.order(orderBy, { ascending: false });
     const { data, error } = await query;
     if (error) throw error;
@@ -149,6 +162,7 @@ async function queryTable(table, select, orderBy, timeoutMs = 10000) {
 }
 
 async function load() {
+  await ensureBusinessContext();
   const jobs = {
     cards: queryTable('Cards', 'id,card_code,product_type,status,customer_id,product_id,google_review_url,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url', 'created_at'),
     products: queryTable('Product', 'id,name,category,product_code', 'name'),
@@ -325,6 +339,11 @@ $('modalClose')?.addEventListener('click', () => $('modal').classList.remove('op
 $('modal')?.addEventListener('click', (event) => { if (event.target === $('modal')) $('modal').classList.remove('open'); });
 $('year')?.addEventListener('change', renderChart);
 $('month')?.addEventListener('change', renderChart);
+
+document.addEventListener('aljava:business-changed', async () => {
+  activeBusinessUnitId = window.ALJAVA_BUSINESS_CONTEXT?.active?.id || null;
+  if (activeBusinessUnitId) await load();
+});
 
 window.adminApi = { load, goDashboard, showView };
 const currentYear = new Date().getFullYear();
