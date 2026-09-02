@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ALJAVA TERIONITY — ERP Core</title>
+<link rel="stylesheet" href="/assets/business-hub.css">
+<link rel="stylesheet" href="/assets/erp-core.css">
+</head>
+<body>
+<main class="page">
+<header class="topbar">
+  <div><div class="eyebrow">ALJAVA TERIONITY</div><h1>ERP Core</h1><p id="subtitle">Project, Finance & Profit/Loss berdasarkan unit bisnis aktif.</p></div>
+  <div class="top-actions">
+    <select id="businessSelect" class="btn secondary" aria-label="Pilih unit bisnis"><option>Memuat...</option></select>
+    <a class="btn secondary" href="/business-hub.html">Business Hub</a>
+    <a class="btn secondary" href="/admin.html">Admin</a>
+  </div>
+</header>
+<section id="message" class="notice" hidden></section>
+<section class="summary-grid erp-summary">
+  <article class="card"><span>Revenue Transaksi</span><strong id="txRevenue">Rp 0</strong><small>transaksi unit aktif</small></article>
+  <article class="card"><span>Pendapatan Finance</span><strong id="income">Rp 0</strong><small>finance entries income</small></article>
+  <article class="card"><span>Pengeluaran</span><strong id="expense">Rp 0</strong><small>finance entries expense</small></article>
+  <article class="card"><span>Net Finance</span><strong id="net">Rp 0</strong><small>pendapatan - pengeluaran</small></article>
+</section>
+<section class="card section-card">
+  <div class="section-head"><div><h2>Project Management</h2><p>Kelola project per unit bisnis dan hubungkan ke customer.</p></div><button id="refreshProjects" class="btn secondary" type="button">Refresh</button></div>
+  <div class="erp-form-grid">
+    <input id="projectId" type="hidden">
+    <input id="projectName" class="field" placeholder="Nama project" maxlength="160">
+    <input id="projectCode" class="field" placeholder="Kode project (opsional)" maxlength="50">
+    <select id="projectCustomer" class="field"><option value="">Customer (opsional)</option></select>
+    <select id="projectStatus" class="field"><option value="active">Aktif</option><option value="planning">Planning</option><option value="on_hold">Ditunda</option><option value="completed">Selesai</option><option value="cancelled">Dibatalkan</option></select>
+    <input id="projectStart" class="field" type="date">
+    <input id="projectEnd" class="field" type="date">
+    <textarea id="projectDescription" class="field full" rows="2" placeholder="Deskripsi project"></textarea>
+    <div class="erp-actions full"><button id="saveProject" class="btn" type="button">Simpan Project</button><button id="cancelProject" class="btn secondary" type="button" hidden>Batal Edit</button></div>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>Project</th><th>Customer</th><th>Status</th><th>Periode</th><th>Aksi</th></tr></thead><tbody id="projectRows"><tr><td colspan="5" class="muted">Memuat...</td></tr></tbody></table></div>
+</section>
+<section class="card section-card">
+  <div class="section-head"><div><h2>Finance</h2><p>Catat pendapatan, pengeluaran, transfer, atau adjustment secara terpisah dari transaksi operasional.</p></div><button id="refreshFinance" class="btn secondary" type="button">Refresh</button></div>
+  <div class="erp-form-grid">
+    <select id="financeType" class="field"><option value="income">Pendapatan</option><option value="expense">Pengeluaran</option><option value="transfer">Transfer</option><option value="adjustment">Adjustment</option></select>
+    <input id="financeAmount" class="field" type="number" min="0" step="100" placeholder="Nominal">
+    <input id="financeDate" class="field" type="date">
+    <select id="financeProject" class="field"><option value="">Project (opsional)</option></select>
+    <select id="financeTransaction" class="field"><option value="">Transaksi (opsional)</option></select>
+    <input id="financeDescription" class="field full" placeholder="Keterangan" maxlength="240">
+    <div class="erp-actions full"><button id="saveFinance" class="btn" type="button">Simpan Finance</button></div>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Jenis</th><th>Keterangan</th><th>Project</th><th>Nominal</th><th>Aksi</th></tr></thead><tbody id="financeRows"><tr><td colspan="6" class="muted">Memuat...</td></tr></tbody></table></div>
+</section>
+<section class="card section-card">
+  <div class="section-head"><div><h2>Laporan Profit / Loss Dasar</h2><p>Ringkasan finance per bulan dan hasil bersih unit bisnis aktif.</p></div></div>
+  <div class="table-wrap"><table><thead><tr><th>Bulan</th><th>Pendapatan</th><th>Pengeluaran</th><th>Net</th></tr></thead><tbody id="profitRows"><tr><td colspan="4" class="muted">Memuat...</td></tr></tbody></table></div>
+</section>
+<footer>ALJAVA TERIONITY • ERP Core • Business Context</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/app-config.js"></script>
+<script src="/assets/erp-core.js"></script>
+</body>
+</html>
