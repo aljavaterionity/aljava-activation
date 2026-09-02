@@ -3,16 +3,20 @@
   'use strict';
   const $ = (id) => document.getElementById(id);
   const money = (value) => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(Number(value)||0);
-  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;' }[char]));
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;' }[char]));
   let installed = false;
 
   async function loadData() {
     const config = window.ALJAVA_CONFIG;
     if (!config || !window.supabase?.createClient) throw new Error('Konfigurasi aplikasi tidak tersedia.');
-    const sb = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+    const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
+    const ctx = window.ALJAVA_BUSINESS_CONTEXT;
+    if (ctx && !ctx.active) await ctx.load();
+    const businessUnitId = ctx?.active?.id;
+    if (!businessUnitId) throw new Error('Unit bisnis aktif belum tersedia.');
     const [txResult, productsResult, customersResult] = await Promise.all([
-      sb.from('Transactions').select('id,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,amount_paid,due_date,transaction_date').order('transaction_date', { ascending:false }),
-      sb.from('Product').select('id,name,product_code'),
+      sb.from('Transactions').select('id,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,amount_paid,due_date,transaction_date').eq('business_unit_id', businessUnitId).order('transaction_date', { ascending:false }),
+      sb.from('Product').select('id,name,product_code').eq('business_unit_id', businessUnitId),
       sb.from('Customers').select('id,business_name,owner_name')
     ]);
     if (txResult.error) throw txResult.error;
@@ -25,13 +29,7 @@
     const start=$('salesStart')?.value||'', end=$('salesEnd')?.value||'';
     return { start:start?new Date(`${start}T00:00:00`):null, end:end?new Date(`${end}T23:59:59.999`):null };
   }
-
-  async function refresh() {
-    const section=$('salesOperationsReport');
-    if (section) section.remove();
-    installed=false;
-    try { await render(await loadData()); } catch(error) { console.error('[ALJAVA] sales report:',error); }
-  }
+  async function refresh() { const section=$('salesOperationsReport'); if(section) section.remove(); installed=false; try { await render(await loadData()); } catch(error) { console.error('[ALJAVA] sales report:',error); } }
 
   async function render(data) {
     if (!$('salesView') || installed) return;
@@ -65,5 +63,6 @@
   window.salesOperationsReport={install,load:refresh};
   document.addEventListener('aljava:sales-ui-ready',install);
   document.addEventListener('aljava:data-loaded',()=>void refresh());
+  document.addEventListener('aljava:business-changed',()=>void refresh());
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',install,{once:true});else install();
 })();
