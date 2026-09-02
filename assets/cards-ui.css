@@ -1,3 +1,4 @@
+@import url("/assets/product-ui.css");
 /* ALJAVA TERIONITY — Kelola Kartu UI only. No business logic. */
 #cardsView{--cards-blue:#2563eb;--cards-blue-dark:#1d4ed8;--cards-blue-soft:#eff6ff;--cards-navy:#102a43;--cards-muted:#667b8f;--cards-line:rgba(16,42,67,.10);min-width:0;max-width:100%;overflow-x:hidden;padding-bottom:30px;color:var(--cards-navy)}
 #cardsView>.row:first-child{margin-top:10px!important;margin-bottom:8px;padding:7px 2px;align-items:flex-end}
