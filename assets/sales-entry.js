@@ -1,76 +1,8 @@
-/* ALJAVA TERIONITY — Automatic payment UI cleanup. */
+/* ALJAVA TERIONITY — Dashboard Revenue Chart UI layer */
 (() => {
   'use strict';
+  const $ = (id) => document.getElementById(id);
 
-  if (window.salesEntry) return;
-
-  const normalize = (value) => String(value || '')
-    .replace(/[^\p{L}\p{N}]+/gu, ' ')
-    .trim()
-    .toLowerCase();
-
-  const removePaymentMenuItems = () => {
-    document.querySelectorAll('#menuPanel .menu-item, #menuPanel button').forEach((item) => {
-      const label = normalize(item.textContent);
-      if (label.includes('pembayaran') || label.includes('piutang')) {
-        item.remove();
-      }
-    });
-  };
-
-  const hideTableColumns = (tableHost, hiddenHeaders) => {
-    const host = document.getElementById(tableHost);
-    if (!host) return;
-    const table = host.querySelector('table');
-    if (!table) return;
-
-    const headers = [...table.querySelectorAll('thead th')];
-    const indexes = headers
-      .map((header, index) => ({ index, label: normalize(header.textContent) }))
-      .filter(({ label }) => hiddenHeaders.has(label))
-      .map(({ index }) => index);
-
-    if (!indexes.length) return;
-
-    table.querySelectorAll('tr').forEach((row) => {
-      [...row.children].forEach((cell, index) => {
-        if (indexes.includes(index)) cell.remove();
-      });
-    });
-  };
-
-  const cleanDashboardPaymentUi = () => {
-    removePaymentMenuItems();
-    // Dashboard Utama: the Status column is the payment status and is no longer shown.
-    hideTableColumns('txTable', new Set(['status', 'status pembayaran', 'pembayaran']));
-    // Dashboard Penjualan: payment/receivable details are automatic and not shown in the UI.
-    hideTableColumns('salesTransactionTable', new Set([
-      'dibayar',
-      'piutang',
-      'status',
-      'status pembayaran',
-      'pembayaran'
-    ]));
-  };
-
-  const observer = new MutationObserver(() => cleanDashboardPaymentUi());
-  const start = () => {
-    cleanDashboardPaymentUi();
-    observer.observe(document.body, { childList: true, subtree: true });
-  };
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', start, { once: true });
-  } else {
-    start();
-  }
-
-  window.salesEntry = { cleanPaymentUi: cleanDashboardPaymentUi };
-})();
-
-/* Dashboard Revenue Chart — visual layer only. Uses the existing rendered chart/data. */
-(() => {
-  'use strict';
   const STYLE_ID = 'aljava-revenue-chart-premium-style';
   const TOOLTIP_ID = 'aljava-revenue-chart-tooltip';
 
@@ -104,7 +36,11 @@
 
   const getTooltip = () => {
     let tip = document.getElementById(TOOLTIP_ID);
-    if (!tip) { tip = document.createElement('div'); tip.id = TOOLTIP_ID; document.body.appendChild(tip); }
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = TOOLTIP_ID;
+      document.body.appendChild(tip);
+    }
     return tip;
   };
 
@@ -113,15 +49,12 @@
     if (!chart) return;
     injectStyle();
     const bars = [...chart.querySelectorAll('.bar')];
-    const allZero = bars.length > 0 && bars.every((bar) => {
-      const barEl = bar.querySelector('i');
-      const h = parseFloat(barEl?.style.height || '0');
-      return h <= 5;
-    });
+    const allZero = bars.length > 0 && bars.every((bar) => parseFloat(bar.querySelector('i')?.style.height || '0') <= 5);
     chart.dataset.empty = allZero ? 'true' : 'false';
     bars.forEach((bar) => {
+      if (bar.dataset.revenueTooltipBound === '1') return;
       const barEl = bar.querySelector('i');
-      if (!barEl || bar.dataset.revenueTooltipBound === '1') return;
+      if (!barEl) return;
       bar.dataset.revenueTooltipBound = '1';
       const raw = bar.getAttribute('title') || '';
       const split = raw.indexOf(':');
@@ -135,10 +68,8 @@
       });
       bar.addEventListener('mousemove', (event) => {
         const tip = getTooltip();
-        const left = Math.min(event.clientX + 14, window.innerWidth - tip.offsetWidth - 10);
-        const top = Math.max(event.clientY - tip.offsetHeight - 12, 10);
-        tip.style.left = `${left}px`;
-        tip.style.top = `${top}px`;
+        tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - tip.offsetWidth - 10)}px`;
+        tip.style.top = `${Math.max(event.clientY - tip.offsetHeight - 12, 10)}px`;
       });
       bar.addEventListener('mouseleave', () => { getTooltip().style.display = 'none'; });
     });
@@ -147,10 +78,11 @@
   const start = () => {
     injectStyle();
     refreshChartUi();
-    const chart = document.getElementById('chart');
-    if (!chart) return;
-    new MutationObserver(refreshChartUi).observe(chart, { childList: true, subtree: true, attributes: true, attributeFilter: ['style'] });
+    document.addEventListener('aljava:data-loaded', refreshChartUi);
+    $('year')?.addEventListener('change', refreshChartUi);
+    $('month')?.addEventListener('change', refreshChartUi);
   };
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start, { once: true });
   else start();
 })();
