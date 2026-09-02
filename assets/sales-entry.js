@@ -1,6 +1,7 @@
 /* ALJAVA TERIONITY — Dashboard Revenue Chart UI layer */
 (() => {
   'use strict';
+  const $ = (id) => document.getElementById(id);
 
   const STYLE_ID = 'aljava-revenue-chart-premium-style';
   const TOOLTIP_ID = 'aljava-revenue-chart-tooltip';
