@@ -139,6 +139,19 @@
     });
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', injectSwitcher, { once: true });
-  else injectSwitcher();
+  function loadErpCore() {
+    if (document.querySelector('script[data-aljava-erp-core]')) return;
+    const script = document.createElement('script');
+    script.src = '/assets/erp-core.js';
+    script.async = true;
+    script.dataset.aljavaErpCore = '1';
+    document.body.appendChild(script);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => { injectSwitcher(); loadErpCore(); }, { once: true });
+  } else {
+    injectSwitcher();
+    loadErpCore();
+  }
 })();
