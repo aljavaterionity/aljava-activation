@@ -8,12 +8,24 @@
   let active = null;
   const listeners = new Set();
 
+  function requestedUnitId() {
+    try {
+      return new URLSearchParams(window.location.search).get('business_unit_id') || null;
+    } catch (_) {
+      return null;
+    }
+  }
+
   async function load() {
     const { data, error } = await client.rpc('get_my_business_units');
     if (error) throw error;
     const units = Array.isArray(data) ? data.filter((u) => u.status === 'active' && u.unit_type === 'business') : [];
+    const requested = requestedUnitId();
     const saved = localStorage.getItem(STORAGE_KEY);
-    active = units.find((u) => u.id === saved) || units[0] || null;
+    active = units.find((u) => String(u.id) === String(requested))
+      || units.find((u) => u.id === saved)
+      || units[0]
+      || null;
     if (active) localStorage.setItem(STORAGE_KEY, active.id);
     listeners.forEach((fn) => fn(active, units));
     return { active, units };
