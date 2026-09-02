@@ -23,7 +23,7 @@
 
   const client = window.__ALJAVA_SUPABASE_CLIENT;
   const STORAGE_KEY = 'aljava.active_business_unit';
-  const SCOPED_TABLES = new Set(['Product', 'Cards', 'Transactions', 'Subscriptions', 'Sales', 'admin_card_actions']);
+  const SCOPED_TABLES = new Set(['Product', 'Cards', 'Transactions', 'Subscriptions', 'Sales', 'admin_card_actions', 'CardScans']);
   let units = [];
   let active = null;
   let loading = null;
