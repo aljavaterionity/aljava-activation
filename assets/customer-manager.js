@@ -110,7 +110,6 @@
     $('customerSearch')?.addEventListener('input', () => void loadCustomers());
     document.addEventListener('aljava:data-loaded', () => void loadCustomers());
     document.addEventListener('aljava:data-refresh-requested', () => void loadCustomers());
-    document.addEventListener('aljava:customers-changed', () => void loadCustomers());
     void loadCustomers();
   }
 
