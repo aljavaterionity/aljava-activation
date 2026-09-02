@@ -26,6 +26,13 @@
     el.textContent = text;
   }
 
+  async function getActiveBusinessId() {
+    const ctx = businessContext;
+    if (!ctx) throw new Error('Business context belum tersedia.');
+    if (!ctx.active?.id) await ctx.load?.();
+    return ctx.getSelectedUnitId?.() || ctx.active?.id || null;
+  }
+
   function ensureCommissionField() {
     const form = $('productForm');
     if (!form || $('productCommission')) return;
@@ -65,7 +72,7 @@
     loading = true;
     table.innerHTML = '<tr><td colspan="8" class="muted">Memuat produk...</td></tr>';
     try {
-      const activeId = await businessContext?.getDefaultUnitId?.();
+      const activeId = await getActiveBusinessId();
       if (!activeId) throw new Error('Unit bisnis aktif belum tersedia.');
       const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').eq('business_unit_id', activeId).order('created_at', { ascending:false });
       if (error) throw error;
@@ -86,8 +93,12 @@
 
   async function deleteProduct(id, name) {
     if (!window.confirm(`Hapus produk "${name}"?\n\nJika produk sudah dipakai kartu/transaksi, database dapat menolak penghapusan.`)) return;
-    const { error } = await sb.from('Product').delete().eq('id', id);
-    if (error) { showMessage(`❌ Gagal menghapus produk: ${error.message}`, 'err'); return; }
+    try {
+      const activeId = await getActiveBusinessId();
+      if (!activeId) throw new Error('Unit bisnis aktif belum tersedia.');
+      const { error } = await sb.from('Product').delete().eq('id', id).eq('business_unit_id', activeId);
+      if (error) throw error;
+    } catch (error) { showMessage(`❌ Gagal menghapus produk: ${error.message}`, 'err'); return; }
     if (editingId === id) resetForm();
     showMessage('✓ Produk berhasil dihapus.', 'ok');
     await loadProducts();
@@ -115,11 +126,7 @@
     try {
       const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission };
       if (!editingId) {
-        try {
-          payload.business_unit_id = await businessContext?.getDefaultUnitId?.();
-        } catch (error) {
-          throw new Error(`Unit bisnis default tidak tersedia: ${error.message}`);
-        }
+        payload.business_unit_id = await getActiveBusinessId();
         if (!payload.business_unit_id) throw new Error('Konteks unit bisnis belum tersedia.');
       }
       const result = editingId ? await sb.from('Product').update(payload).eq('id', editingId) : await sb.from('Product').insert(payload);
