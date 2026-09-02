@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <title>ALJAVA — Business Hub</title>
+  <link rel="stylesheet" href="/assets/business-hub.css">
+</head>
+<body>
+  <main class="page">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">ALJAVA TERIONITY</div>
+        <h1>Business Hub</h1>
+        <p>Fondasi induk bisnis dan unit usaha ALJAVA.</p>
+      </div>
+      <div class="top-actions">
+        <a class="btn secondary" href="/admin.html">Admin Dashboard</a>
+        <button id="logoutBtn" class="btn danger" type="button">Logout</button>
+      </div>
+    </header>
+
+    <section id="message" class="notice" hidden></section>
+
+    <section class="summary-grid">
+      <article class="card"><span>Induk</span><strong id="parentCount">0</strong><small>struktur ALJAVA</small></article>
+      <article class="card"><span>Unit Bisnis</span><strong id="businessCount">0</strong><small>unit aktif</small></article>
+      <article class="card"><span>Membership</span><strong id="membershipCount">0</strong><small>akses internal</small></article>
+      <article class="card"><span>Permission</span><strong id="permissionCount">0</strong><small>katalog hak akses</small></article>
+    </section>
+
+    <section class="card section-card">
+      <div class="section-head">
+        <div>
+          <h2>Struktur Bisnis</h2>
+          <p>ALJAVA sebagai induk dengan unit usaha yang dapat dikembangkan tanpa membuat sistem baru dari nol.</p>
+        </div>
+        <button id="refreshBtn" class="btn secondary" type="button">Refresh</button>
+      </div>
+      <div id="tree" class="tree"></div>
+    </section>
+
+    <section class="card section-card">
+      <div class="section-head">
+        <div>
+          <h2>Tambah Unit Bisnis</h2>
+          <p>Gunakan untuk menambahkan lini bisnis baru di bawah ALJAVA.</p>
+        </div>
+      </div>
+      <form id="businessForm" class="form">
+        <input id="name" required maxlength="120" placeholder="Nama unit bisnis, contoh: Digital Marketing">
+        <input id="slug" required maxlength="80" pattern="[a-z0-9-]+" placeholder="slug-unit-bisnis">
+        <textarea id="description" maxlength="500" placeholder="Deskripsi singkat"></textarea>
+        <button id="saveBtn" class="btn primary" type="submit">Tambah Unit</button>
+      </form>
+    </section>
+
+    <footer>ALJAVA TERIONITY • Business Foundation</footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/assets/app-config.js"></script>
+  <script>
+    (() => {
+      'use strict';
+      const cfg = window.ALJAVA_CONFIG;
+      const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseKey);
+      const $ = (id) => document.getElementById(id);
+      const esc = (v) => String(v ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
+
+      function message(text, kind='info') {
+        const el = $('message');
+        el.hidden = !text;
+        el.className = `notice ${kind}`;
+        el.textContent = text;
+      }
+
+      async function requireAdmin() {
+        const { data: { session } = {} } = await sb.auth.getSession();
+        if (!session) { location.href = '/login.html'; return false; }
+        const { data: { user } = {}, error: userError } = await sb.auth.getUser();
+        if (userError || !user) { await sb.auth.signOut({scope:'local'}); location.href='/login.html'; return false; }
+        const { data: admin, error } = await sb.rpc('is_admin_user');
+        if (error || admin !== true) { await sb.auth.signOut({scope:'local'}); location.href='/login.html'; return false; }
+        return true;
+      }
+
+      async function load() {
+        message('Memuat struktur bisnis...');
+        const [{ data: units, error: unitError }, { data: memberships, error: membershipError }, { data: permissions, error: permissionError }] = await Promise.all([
+          sb.from('business_units').select('id,parent_id,name,slug,unit_type,description,status,created_at').order('created_at', {ascending:true}),
+          sb.from('business_memberships').select('id,user_id,business_unit_id,role,status'),
+          sb.from('app_permissions').select('id,code,name,module')
+        ]);
+        if (unitError || membershipError || permissionError) throw unitError || membershipError || permissionError;
+        const parents = (units || []).filter(u => u.unit_type === 'parent');
+        const businesses = (units || []).filter(u => u.unit_type === 'business');
+        $('parentCount').textContent = parents.length;
+        $('businessCount').textContent = businesses.filter(u => u.status === 'active').length;
+        $('membershipCount').textContent = (memberships || []).filter(m => m.status === 'active').length;
+        $('permissionCount').textContent = (permissions || []).length;
+        const tree = $('tree');
+        tree.innerHTML = parents.length ? parents.map(parent => {
+          const children = businesses.filter(u => u.parent_id === parent.id);
+          return `<div class="tree-parent"><div class="tree-title"><span class="node-icon parent">A</span><div><strong>${esc(parent.name)}</strong><small>${esc(parent.description || '')}</small></div><span class="badge">INDUK</span></div><div class="tree-children">${children.map(child => `<article class="unit"><div class="unit-icon">${esc(child.name.slice(0,1).toUpperCase())}</div><div class="unit-body"><strong>${esc(child.name)}</strong><small>${esc(child.description || '')}</small><code>${esc(child.slug)}</code></div><span class="badge ${child.status === 'active' ? 'ok' : 'off'}">${child.status === 'active' ? 'AKTIF' : 'NONAKTIF'}</span></article>`).join('') || '<div class="empty">Belum ada unit bisnis.</div>'}</div></div>`;
+        }).join('') : '<div class="empty">Struktur induk belum tersedia.</div>';
+        message('Struktur bisnis siap.', 'ok');
+      }
+
+      $('name').addEventListener('input', () => {
+        if ($('slug').dataset.manual === '1') return;
+        $('slug').value = $('name').value.toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'').slice(0,80);
+      });
+      $('slug').addEventListener('input', () => $('slug').dataset.manual = '1');
+      $('refreshBtn').addEventListener('click', () => load().catch(e => message(`Gagal memuat: ${e.message}`,'err')));
+      $('logoutBtn').addEventListener('click', async () => { await sb.auth.signOut({scope:'local'}); location.href='/login.html'; });
+      $('businessForm').addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const name = $('name').value.trim();
+        const slug = $('slug').value.trim().toLowerCase();
+        const description = $('description').value.trim();
+        if (!name || !/^[a-z0-9-]+$/.test(slug)) { message('Nama dan slug unit bisnis harus valid.','err'); return; }
+        $('saveBtn').disabled = true;
+        try {
+          const { data: parent, error: parentError } = await sb.from('business_units').select('id').eq('slug','aljava').single();
+          if (parentError) throw parentError;
+          const { error } = await sb.from('business_units').insert({parent_id:parent.id,name,slug,unit_type:'business',description,status:'active'});
+          if (error) throw error;
+          $('businessForm').reset();
+          $('slug').dataset.manual = '0';
+          await load();
+          message(`Unit bisnis “${name}” berhasil ditambahkan.`,'ok');
+        } catch (error) {
+          message(`Gagal menambah unit bisnis: ${error.message}`,'err');
+        } finally { $('saveBtn').disabled = false; }
+      });
+
+      requireAdmin().then(ok => ok && load()).catch(error => message(`Gagal memeriksa akses: ${error.message}`,'err'));
+    })();
+  </script>
+</body>
+</html>
