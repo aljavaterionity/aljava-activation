@@ -12,14 +12,33 @@
   const client=window.__ALJAVA_SUPABASE_CLIENT;
   const STORAGE_KEY='aljava.active_business_unit';
   const SCOPED_TABLES=new Set(['Product','Cards','Transactions','Subscriptions','Sales','admin_card_actions','CardScans']);
-  let units=[],active=null,loading=null; const listeners=new Set();
   const normalizeBusinessUnit=(unit)=>({...unit,id:unit?.id||unit?.business_unit_id||null,name:unit?.name||unit?.business_name||unit?.business_slug||'Unit Bisnis',slug:unit?.slug||unit?.business_slug||null,status:unit?.status||unit?.business_status||null,unit_type:unit?.unit_type||'business',role:unit?.role||unit?.role_code||null,membership_status:unit?.membership_status||null});
   const context={
     defaultSlug:CONFIG.defaultBusinessUnitSlug,
     get active(){return active;}, get units(){return units.slice();},
     async load(){
       if(!client)throw new Error('Supabase client belum siap.'); if(loading)return loading;
-      loading=(async()=>{const {data,error}=await client.rpc('get_my_business_units');if(error)throw error;units=Array.isArray(data)?data.map(normalizeBusinessUnit).filter(u=>u.status==='active'&&u.unit_type==='business'&&u.id):[];const saved=localStorage.getItem(STORAGE_KEY);active=units.find(u=>String(u.id)===String(saved))||units[0]||null;if(active)localStorage.setItem(STORAGE_KEY,active.id);listeners.forEach(fn=>fn(active,units.slice()));return{active,units:units.slice()};})().finally(()=>{loading=null;});return loading;
+      loading=(async()=>{
+        const requested=new URLSearchParams(location.search).get('business_unit_id');
+        let memberData=null,memberError=null;
+        const result=await client.rpc('get_my_business_units');
+        memberData=result.data; memberError=result.error;
+        if(memberError && !requested) throw memberError;
+        units=Array.isArray(memberData)?memberData.map(normalizeBusinessUnit).filter(u=>u.status==='active'&&u.unit_type==='business'&&u.id):[];
+        // Admin global navigation can open any active business directly by ID,
+        // while ordinary users remain restricted to get_my_business_units().
+        if(requested&&!units.some(u=>String(u.id)===String(requested))){
+          const {data:isAdmin,error:adminError}=await client.rpc('is_admin_user');
+          if(adminError)throw memberError||adminError;
+          if(isAdmin===true){
+            const {data:requestedUnit,error:unitError}=await client.from('business_units').select('id,name,slug,status,unit_type').eq('id',requested).eq('status','active').eq('unit_type','business').maybeSingle();
+            if(unitError)throw unitError;
+            if(requestedUnit)units=[normalizeBusinessUnit({...requestedUnit,role:'admin'})];
+          }
+        }
+        if(!units.length && memberError)throw memberError;
+        const saved=localStorage.getItem(STORAGE_KEY);active=units.find(u=>String(u.id)===String(requested))||units.find(u=>String(u.id)===String(saved))||units[0]||null;if(active)localStorage.setItem(STORAGE_KEY,active.id);listeners.forEach(fn=>fn(active,units.slice()));return{active,units:units.slice()};
+      })().finally(()=>{loading=null;});return loading;
     },
     set(unitId){const next=units.find(u=>String(u.id)===String(unitId));if(!next)throw new Error('Unit bisnis tidak tersedia untuk akun ini.');active=next;localStorage.setItem(STORAGE_KEY,next.id);listeners.forEach(fn=>fn(active,units.slice()));window.dispatchEvent(new CustomEvent('aljava:business-changed',{detail:{businessUnit:active}}));return active;},
     subscribe(fn){if(typeof fn!=='function')return()=>{};listeners.add(fn);return()=>listeners.delete(fn);},
