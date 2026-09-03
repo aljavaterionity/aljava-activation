@@ -29,6 +29,17 @@
   let loading = null;
   const listeners = new Set();
 
+  const normalizeBusinessUnit = (unit) => ({
+    ...unit,
+    id: unit?.id || unit?.business_unit_id || null,
+    name: unit?.name || unit?.business_name || unit?.business_slug || 'Unit Bisnis',
+    slug: unit?.slug || unit?.business_slug || null,
+    status: unit?.status || unit?.business_status || null,
+    unit_type: unit?.unit_type || 'business',
+    role: unit?.role || unit?.role_code || null,
+    membership_status: unit?.membership_status || null
+  });
+
   const context = {
     defaultSlug: CONFIG.defaultBusinessUnitSlug,
     get active() { return active; },
@@ -39,9 +50,11 @@
       loading = (async () => {
         const { data, error } = await client.rpc('get_my_business_units');
         if (error) throw error;
-        units = Array.isArray(data) ? data.filter((u) => u.status === 'active' && u.unit_type === 'business') : [];
+        units = Array.isArray(data)
+          ? data.map(normalizeBusinessUnit).filter((u) => u.status === 'active' && u.unit_type === 'business' && u.id)
+          : [];
         const saved = localStorage.getItem(STORAGE_KEY);
-        active = units.find((u) => u.id === saved) || units[0] || null;
+        active = units.find((u) => String(u.id) === String(saved)) || units[0] || null;
         if (active) localStorage.setItem(STORAGE_KEY, active.id);
         listeners.forEach((fn) => fn(active, units.slice()));
         return { active, units: units.slice() };
