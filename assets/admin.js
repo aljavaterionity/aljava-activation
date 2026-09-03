@@ -99,8 +99,6 @@ async function query(table,select,orderBy){
 }
 
 async function queryAdminBusinesses(){
-  // Gunakan query tabel langsung dengan RLS admin sebagai sumber daftar bisnis.
-  // Tidak bergantung pada RPC tambahan agar menu tetap tampil walau RPC gagal/cache schema belum refresh.
   const {data,error}=await sb
     .from('business_units')
     .select('id,name,slug,status,unit_type')
@@ -130,9 +128,25 @@ function renderBusinessCategories(){
   }));
 }
 
+async function loadBusinessMenu(){
+  const host=$('businessCategories');
+  if(!host)return;
+  host.innerHTML='<div class="business-menu-empty">Memuat daftar bisnis...</div>';
+  try{
+    state.businesses=await queryAdminBusinesses();
+    renderBusinessCategories();
+  }catch(error){
+    state.businesses=[];
+    host.innerHTML=`<div class="notice err">Gagal memuat daftar bisnis: ${esc(error?.message||'Permintaan gagal.')}</div>`;
+    console.error('[ALJAVA BUSINESS MENU]',error);
+  }
+}
+
 async function loadGlobalDashboard(){
+  // Menu bisnis dimuat terpisah agar tidak ikut menunggu query transaksi/scan/customer.
+  // Jika salah satu tabel lambat atau gagal, daftar bisnis tetap segera tampil.
+  await loadBusinessMenu();
   const jobs=[
-    ['businesses',queryAdminBusinesses()],
     ['transactions',query('Transactions','id,quantity,selling_price,payment_status,transaction_date,business_unit_id','transaction_date')],
     ['scans',query('CardScans','id,event_type,scanned_at,business_unit_id','scanned_at')],
     ['cards',query('Cards','id,status,activated_at,business_unit_id','created_at')],
