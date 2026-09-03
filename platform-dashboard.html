@@ -1,15 +1,109 @@
 <!doctype html>
-<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow,noarchive"><title>ALJAVA — Global Platform Dashboard</title><link rel="stylesheet" href="/assets/business-hub.css"><link rel="stylesheet" href="/assets/platform-ui.css"><link rel="stylesheet" href="/assets/platform-dashboard.css"></head>
-<body><main class="page">
-<header class="topbar"><div><div class="eyebrow">ALJAVA TERIONITY • PLATFORM</div><h1>Global Platform Dashboard</h1><p>Gambaran keseluruhan performa seluruh bisnis ALJAVA untuk Super Admin.</p></div><div class="top-actions"><a class="btn primary" href="/platform-dashboard.html">Global Dashboard</a><a class="btn secondary" href="/business-hub.html">Business Hub</a><a class="btn secondary" href="/dashboard-hub.html">Hub</a><a class="btn secondary" href="/admin.html">Admin</a></div></header>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+<title>ALJAVA — Global Dashboard</title>
+<link rel="stylesheet" href="/assets/business-hub.css">
+<link rel="stylesheet" href="/assets/platform-ui.css">
+<link rel="stylesheet" href="/assets/platform-dashboard.css">
+</head>
+<body>
+<main class="page global-dashboard">
+<header class="topbar">
+  <div>
+    <div class="eyebrow">ALJAVA TERIONITY • PLATFORM</div>
+    <h1>Dashboard Global</h1>
+    <p>Ringkasan seluruh platform dan bisnis yang dapat Anda akses.</p>
+  </div>
+  <div class="top-actions">
+    <a class="btn primary" href="/platform-dashboard.html">Dashboard</a>
+    <a class="btn secondary" href="/business-hub.html">Business Hub</a>
+    <a class="btn secondary" href="/admin.html">Admin</a>
+  </div>
+</header>
+
 <section id="notice" class="notice" hidden></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">GLOBAL PERIOD</span><h2>Filter Periode</h2><p>Semua KPI periode mengikuti rentang tanggal yang dipilih.</p></div></div><div class="filter-panel preset-row"><button class="btn secondary" data-preset="today" type="button">Hari Ini</button><button class="btn secondary" data-preset="7d" type="button">7 Hari</button><button class="btn secondary" data-preset="30d" type="button">30 Hari</button><button class="btn secondary" data-preset="month" type="button">Bulan Ini</button><div class="filter-field"><label for="start">Mulai</label><input id="start" type="date"></div><div class="filter-field"><label for="end">Sampai</label><input id="end" type="date"></div><button id="apply" class="btn primary" type="button">Terapkan</button></div></section>
-<section class="summary-grid"><article class="card kpi-accent kpi-blue"><span>Total Bisnis</span><strong id="businesses">0</strong><small>seluruh business unit</small></article><article class="card kpi-accent kpi-green"><span>Bisnis Aktif</span><strong id="active_businesses">0</strong><small>status aktif</small></article><article class="card kpi-accent kpi-cyan"><span>Total Customer</span><strong id="customers">0</strong><small>platform</small></article><article class="card kpi-accent kpi-blue"><span>Total Produk</span><strong id="products">0</strong><small>platform</small></article><article class="card kpi-accent kpi-purple"><span>Total Kartu</span><strong id="cards">0</strong><small>platform</small></article><article class="card kpi-accent kpi-green"><span>Kartu Aktif</span><strong id="active_cards">0</strong><small>status active</small></article><article class="card kpi-accent kpi-gray"><span>Kartu Nonaktif</span><strong id="inactive_cards">0</strong><small>status selain active</small></article><article class="card kpi-accent kpi-teal"><span>Total Transaksi</span><strong id="transactions">0</strong><small>periode terpilih</small></article><article class="card kpi-accent kpi-green"><span>Total Revenue</span><strong id="revenue">Rp 0</strong><small>paid revenue</small></article><article class="card kpi-accent kpi-green"><span>Total Pembayaran</span><strong id="payments">Rp 0</strong><small>amount paid</small></article><article class="card kpi-accent kpi-amber"><span>Total Piutang</span><strong id="outstanding">Rp 0</strong><small>sisa pembayaran</small></article><article class="card kpi-accent kpi-purple"><span>Total Scan</span><strong id="scans">0</strong><small>scan/tap</small></article></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">GLOBAL REVENUE</span><h2>Revenue Overview</h2><p>Revenue paid seluruh bisnis dalam periode terpilih.</p></div><div class="metric-inline"><strong id="periodRevenue">Rp 0</strong><small id="revenueDelta">Perbandingan belum tersedia</small></div></div><div class="chart-wrap"><canvas id="revenueChart" aria-label="Global revenue chart"></canvas></div><div class="mini-kpi-row"><span>Payments <strong id="periodPayments">Rp 0</strong></span><span>Outstanding <strong id="periodOutstanding">Rp 0</strong></span></div></section>
-<section class="chart-grid"><article class="card section-card"><div class="section-head"><div><span class="kicker">GLOBAL TRANSACTIONS</span><h2>Transaction Trend</h2><p>Volume transaksi per bulan.</p></div></div><div class="chart-wrap"><canvas id="transactionChart" aria-label="Global transaction chart"></canvas></div></article><article class="card section-card"><div class="section-head"><div><h2>Status Transaksi</h2><p>Successful = paid. Pending = unpaid + partial. Failed tidak tersedia pada schema saat ini.</p></div></div><div class="status-summary"><div><strong id="successfulTransactions">0</strong><span>Successful</span></div><div><strong id="pendingTransactions">0</strong><span>Pending</span></div><div class="status-unavailable"><strong>—</strong><span>Failed: N/A</span></div></div></article></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">BUSINESS PERFORMANCE</span><h2>Business Performance</h2><p>Performa per bisnis. Klik Dashboard untuk masuk ke workspace tenant tersebut.</p></div></div><div class="table-wrap"><table><thead><tr><th>Business</th><th>Revenue</th><th>Transactions</th><th>Customers</th><th>Products</th><th>Active Cards</th><th>Scans</th><th>Status</th><th>Aksi</th></tr></thead><tbody id="businessPerformance"><tr><td colspan="9" class="muted">Memuat...</td></tr></tbody></table></div></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">GLOBAL TRANSACTIONS</span><h2>Transaksi Terbaru</h2><p>Business asal transaksi selalu ditampilkan.</p></div></div><div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Kode</th><th>Business</th><th>Produk</th><th>Nilai</th><th>Status</th></tr></thead><tbody id="recentTransactions"><tr><td colspan="6" class="muted">Memuat...</td></tr></tbody></table></div></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">RECENT PLATFORM ACTIVITY</span><h2>Aktivitas Platform</h2><p>Aktivitas aktual yang tersedia dari log operasional dan data event.</p></div></div><div id="activityRows" class="activity-list"></div></section>
-<section class="card section-card"><div class="section-head"><div><span class="kicker">SYSTEM HEALTH</span><h2>Platform Health</h2><p>Status di bawah didasarkan pada pemeriksaan runtime/query yang benar-benar berhasil.</p></div></div><div id="health" class="health-list"></div></section>
-<section class="summary-grid compact-grid"><article class="card kpi-accent kpi-green"><span>Finance Income</span><strong id="finance_income">Rp 0</strong></article><article class="card kpi-accent kpi-amber"><span>Finance Expense</span><strong id="finance_expense">Rp 0</strong></article><article class="card kpi-accent kpi-blue"><span>Finance Net</span><strong id="finance_net">Rp 0</strong></article><article class="card kpi-accent kpi-purple"><span>Projects</span><strong id="projects">0</strong></article><article class="card kpi-accent kpi-teal"><span>Open Tasks</span><strong id="open_tasks">0</strong></article><article class="card kpi-accent kpi-cyan"><span>Total Users</span><strong id="users">0</strong><small>akun platform</small></article></section>
-<footer>ALJAVA TERIONITY • Global Platform Dashboard • Super Admin</footer></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="/assets/app-config.js"></script><script src="/assets/platform-dashboard.js"></script></body></html>
+
+<section class="global-hero card">
+  <div>
+    <span class="kicker">PLATFORM OVERVIEW</span>
+    <h2>ALJAVA TERIONITY</h2>
+    <p>Satu tampilan ringkas untuk memantau performa seluruh bisnis tanpa mencampurkan detail operasional tenant.</p>
+  </div>
+  <div class="global-hero-actions">
+    <span class="scope-badge">Semua bisnis</span>
+    <button id="refresh" class="btn secondary" type="button">Refresh</button>
+  </div>
+</section>
+
+<section class="card section-card global-filter">
+  <div class="section-head">
+    <div><span class="kicker">PERIODE</span><h2>Ringkasan Periode</h2><p>Revenue dan transaksi mengikuti rentang tanggal yang dipilih.</p></div>
+  </div>
+  <div class="filter-panel preset-row">
+    <button class="btn secondary" data-preset="today" type="button">Hari Ini</button>
+    <button class="btn secondary" data-preset="7d" type="button">7 Hari</button>
+    <button class="btn secondary" data-preset="30d" type="button">30 Hari</button>
+    <button class="btn secondary" data-preset="month" type="button">Bulan Ini</button>
+    <div class="filter-field"><label for="start">Mulai</label><input id="start" type="date"></div>
+    <div class="filter-field"><label for="end">Sampai</label><input id="end" type="date"></div>
+    <button id="apply" class="btn primary" type="button">Terapkan</button>
+  </div>
+</section>
+
+<section class="summary-grid global-kpis">
+  <article class="card kpi-accent kpi-green featured-kpi"><span>Total Revenue</span><strong id="revenue">Rp 0</strong><small>gabungan seluruh bisnis</small></article>
+  <article class="card kpi-accent kpi-blue"><span>Total Bisnis</span><strong id="businesses">0</strong><small>business unit</small></article>
+  <article class="card kpi-accent kpi-green"><span>Bisnis Aktif</span><strong id="active_businesses">0</strong><small>status aktif</small></article>
+  <article class="card kpi-accent kpi-teal"><span>Total Transaksi</span><strong id="transactions">0</strong><small>periode terpilih</small></article>
+  <article class="card kpi-accent kpi-purple"><span>Total Customer</span><strong id="customers">0</strong><small>seluruh platform</small></article>
+  <article class="card kpi-accent kpi-cyan"><span>Kartu Aktif</span><strong id="active_cards">0</strong><small>seluruh bisnis</small></article>
+  <article class="card kpi-accent kpi-purple"><span>Total Scan</span><strong id="scans">0</strong><small>periode terpilih</small></article>
+  <article class="card kpi-accent kpi-green"><span>Revenue Periode</span><strong id="periodRevenue">Rp 0</strong><small id="revenueDelta">periode terpilih</small></article>
+</section>
+
+<section class="card section-card">
+  <div class="section-head">
+    <div><span class="kicker">GLOBAL REVENUE</span><h2>Revenue Overview</h2><p>Pergerakan revenue paid gabungan seluruh bisnis.</p></div>
+    <div class="metric-inline"><strong id="periodPayments">Rp 0</strong><small>pembayaran tercatat</small></div>
+  </div>
+  <div class="chart-wrap"><canvas id="revenueChart" aria-label="Global revenue chart"></canvas></div>
+</section>
+
+<section class="card section-card">
+  <div class="section-head">
+    <div><span class="kicker">BUSINESS OVERVIEW</span><h2>Ringkasan Bisnis</h2><p>Hanya ringkasan tingkat bisnis. Detail operasional tersedia setelah masuk ke bisnis.</p></div>
+    <a class="btn secondary" href="/business-hub.html">Kelola Bisnis</a>
+  </div>
+  <div id="businessPerformance" class="business-overview-list"></div>
+</section>
+
+<section class="chart-grid global-secondary">
+  <article class="card section-card">
+    <div class="section-head"><div><span class="kicker">TRANSACTION SUMMARY</span><h2>Ringkasan Transaksi</h2><p>Agregat transaksi periode terpilih.</p></div></div>
+    <div class="status-summary compact-summary">
+      <div><strong id="successfulTransactions">0</strong><span>Paid</span></div>
+      <div><strong id="pendingTransactions">0</strong><span>Pending</span></div>
+      <div><strong id="periodOutstanding">Rp 0</strong><span>Outstanding</span></div>
+    </div>
+  </article>
+  <article class="card section-card">
+    <div class="section-head"><div><span class="kicker">PLATFORM HEALTH</span><h2>Platform Health</h2><p>Status layanan berdasarkan pemeriksaan yang berhasil.</p></div></div>
+    <div id="health" class="health-list"></div>
+  </article>
+</section>
+
+<section class="card section-card">
+  <div class="section-head"><div><span class="kicker">PLATFORM ACTIVITY</span><h2>Aktivitas Global</h2><p>Ringkasan aktivitas platform tanpa menampilkan detail operasional tenant.</p></div></div>
+  <div id="activityRows" class="activity-summary-grid"></div>
+</section>
+
+<footer>ALJAVA TERIONITY • Global Platform Dashboard</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/app-config.js"></script>
+<script src="/assets/platform-dashboard.js"></script>
+</body>
+</html>
