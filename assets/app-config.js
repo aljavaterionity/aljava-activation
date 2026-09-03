@@ -15,10 +15,13 @@
     const originalCreateClient = window.supabase.createClient.bind(window.supabase);
     const sharedClient = originalCreateClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
     window.__ALJAVA_SUPABASE_CLIENT = sharedClient;
+    window.__ALJAVA_SUPABASE_RAW_CLIENT = sharedClient;
     window.supabase.createClient = (url, key, options) => {
       if (url === CONFIG.supabaseUrl && key === CONFIG.supabaseKey) return sharedClient;
       return originalCreateClient(url, key, options);
     };
+  } else if (window.__ALJAVA_SUPABASE_CLIENT && !window.__ALJAVA_SUPABASE_RAW_CLIENT) {
+    window.__ALJAVA_SUPABASE_RAW_CLIENT = window.__ALJAVA_SUPABASE_CLIENT;
   }
 
   const client = window.__ALJAVA_SUPABASE_CLIENT;
@@ -91,8 +94,7 @@
   window.ALJAVA_BUSINESS_CONTEXT = context;
 
   // Business scope is a convenience layer only. Database RLS remains the security boundary.
-  // SELECT/UPDATE/DELETE queries on business-scoped tables are constrained to the active membership.
-  // INSERT/UPSERT requests are intentionally not modified because their payload must carry business_unit_id.
+  // Global /admin intentionally uses __ALJAVA_SUPABASE_RAW_CLIENT so it can aggregate all businesses.
   if (client && !client.__ALJAVA_BUSINESS_SCOPE_PATCHED) {
     const originalFrom = client.from.bind(client);
     const wrapBuilder = (builder, table, mode = 'select') => new Proxy(builder, {
@@ -125,6 +127,7 @@
   }
 
   function injectSwitcher() {
+    if (document.body?.dataset.aljavaGlobalDashboard === 'true') return;
     if (!client || document.getElementById('aljavaBusinessContext')) return;
     const host = document.querySelector('.top');
     if (!host) return;
