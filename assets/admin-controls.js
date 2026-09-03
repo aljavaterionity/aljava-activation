@@ -1,5 +1,5 @@
 /* ALJAVA TERIONITY — admin controls + login safety fallback */
-(() => {
+(()=>{
   'use strict';
   window.adminControls = Object.freeze({
     showPayments() { console.warn('[ALJAVA] Manual payment UI is disabled.'); },
@@ -33,6 +33,6 @@
     };
     button.addEventListener('click',login); document.getElementById('password')?.addEventListener('keydown',e=>{if(e.key==='Enter')login();});
   }
-  function schedule(){addBusinessHubEntry();setTimeout(addBusinessHubEntry,300);setTimeout(addBusinessHubEntry,1000);setTimeout(bindLoginFallback,1200);}
+  function schedule(){addBusinessHubEntry();setTimeout(addBusinessHubEntry,300);setTimeout(addBusinessHubEntry,1000);bindLoginFallback();}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true});else schedule();
 })();
