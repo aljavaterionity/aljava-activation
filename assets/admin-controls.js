@@ -5,13 +5,14 @@
     showPayments() { console.warn('[ALJAVA] Manual payment UI is disabled.'); },
     loadPayments() { return Promise.resolve([]); }
   });
-  function addBusinessHubEntry() {
-    const panel=document.getElementById('menuPanel'); const mainItems=panel?.querySelector('.menu-section > .menu-items');
-    if(!mainItems||document.getElementById('businessHubMenu')) return;
-    const button=document.createElement('button'); button.id='businessHubMenu'; button.type='button'; button.className='menu-item';
-    button.innerHTML='<span class="menu-icon">⌂</span><span><b>Business Hub</b><small>Induk ALJAVA & unit usaha</small></span>';
-    button.addEventListener('click',()=>{window.location.href='/business-hub.html';}); mainItems.appendChild(button);
+
+  function bindBusinessHub(){
+    const button=document.getElementById('businessHubMenu');
+    if(!button||button.dataset.aljavaBound==='1') return;
+    button.dataset.aljavaBound='1';
+    button.addEventListener('click',()=>{window.location.href='/business-hub.html';});
   }
+
   function bindLoginFallback(){
     const original=document.getElementById('loginButton')||document.getElementById('loginBtn');
     if(!original||original.dataset.aljavaFallback==='1') return;
@@ -40,6 +41,11 @@
     button.addEventListener('click',login);
     document.getElementById('password')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();login();}});
   }
-  function schedule(){addBusinessHubEntry();setTimeout(addBusinessHubEntry,300);setTimeout(addBusinessHubEntry,1000);bindLoginFallback();}
+
+  function schedule(){
+    bindBusinessHub();
+    bindLoginFallback();
+  }
+
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',schedule,{once:true});else schedule();
 })();
