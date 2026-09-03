@@ -98,18 +98,24 @@ async function query(table,select,orderBy){
   return data||[];
 }
 
+async function queryAdminBusinesses(){
+  const {data,error}=await sb.rpc('get_admin_business_units');
+  if(error)throw error;
+  return Array.isArray(data)?data:[];
+}
+
 function renderBusinessCategories(){
   const host=$('businessCategories');
   if(!host)return;
   const businesses=state.businesses.filter(b=>b.unit_type==='business'&&String(b.status||'').toLowerCase()==='active');
   if(!businesses.length){
-    host.innerHTML='<div class="business-category-empty">Belum ada kategori bisnis aktif.</div>';
+    host.innerHTML='<div class="business-menu-empty">Belum ada bisnis aktif.</div>';
     return;
   }
   host.innerHTML=businesses.map(b=>{
     const name=esc(b.name||b.slug||'Bisnis');
     const initial=esc((b.name||b.slug||'B').trim().slice(0,1).toUpperCase());
-    return `<button class="business-category" type="button" data-business-id="${esc(b.id)}"><span class="category-icon">${initial}</span><span class="category-copy"><b>${name}</b><small>Buka dashboard bisnis</small></span><span aria-hidden="true">›</span></button>`;
+    return `<button class="business-menu-item" type="button" data-business-id="${esc(b.id)}"><span class="business-icon">${initial}</span><span class="business-copy"><b>${name}</b><small>Buka dashboard bisnis</small></span><span aria-hidden="true">›</span></button>`;
   }).join('');
   host.querySelectorAll('[data-business-id]').forEach(btn=>btn.addEventListener('click',()=>{
     const id=btn.dataset.businessId;
@@ -119,7 +125,7 @@ function renderBusinessCategories(){
 
 async function loadGlobalDashboard(){
   const jobs=[
-    ['businesses',query('business_units','id,name,slug,status,unit_type','name')],
+    ['businesses',queryAdminBusinesses()],
     ['transactions',query('Transactions','id,quantity,selling_price,payment_status,transaction_date,business_unit_id','transaction_date')],
     ['scans',query('CardScans','id,event_type,scanned_at,business_unit_id','scanned_at')],
     ['cards',query('Cards','id,status,activated_at,business_unit_id','created_at')],
@@ -137,7 +143,7 @@ async function loadGlobalDashboard(){
   renderBusinessCategories();
   renderGlobal();
   if(errors.length){
-    $('platformHealth').innerHTML=`<div class="notice err">Sebagian data belum dapat dimuat: ${esc(errors.join(' • '))}</div>`;
+    $('platformHealth').insertAdjacentHTML('afterbegin',`<div class="notice err" style="margin-bottom:12px">Sebagian data belum dapat dimuat: ${esc(errors.join(' • '))}</div>`);
   }
 }
 
