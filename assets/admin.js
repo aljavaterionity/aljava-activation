@@ -99,7 +99,14 @@ async function query(table,select,orderBy){
 }
 
 async function queryAdminBusinesses(){
-  const {data,error}=await sb.rpc('get_admin_business_units');
+  // Gunakan query tabel langsung dengan RLS admin sebagai sumber daftar bisnis.
+  // Tidak bergantung pada RPC tambahan agar menu tetap tampil walau RPC gagal/cache schema belum refresh.
+  const {data,error}=await sb
+    .from('business_units')
+    .select('id,name,slug,status,unit_type')
+    .eq('unit_type','business')
+    .eq('status','active')
+    .order('name',{ascending:true});
   if(error)throw error;
   return Array.isArray(data)?data:[];
 }
