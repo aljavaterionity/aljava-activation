@@ -1,361 +1,106 @@
-/* ALJAVA TERIONITY — Admin application logic */
+/* ALJAVA TERIONITY — Global Admin Dashboard
+   /admin is the single main dashboard and always aggregates every business.
+   Business-specific operations stay inside each business context. */
+(() => {
+  'use strict';
 
-const CONFIG = window.ALJAVA_CONFIG;
-const $ = (id) => document.getElementById(id);
-const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
-  '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;'
-}[char]));
-const money = (value) => new Intl.NumberFormat('id-ID', {
-  style: 'currency', currency: 'IDR', maximumFractionDigits: 0
-}).format(Number(value) || 0);
+  const CONFIG = window.ALJAVA_CONFIG;
+  const sb = window.__ALJAVA_SUPABASE_RAW_CLIENT || window.__ALJAVA_SUPABASE_CLIENT || window.supabase?.createClient?.(CONFIG?.supabaseUrl, CONFIG?.supabaseKey);
+  const $ = (id) => document.getElementById(id);
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#039;' }[char]));
+  const money = (value) => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(Number(value) || 0);
+  const state = { businesses:[], transactions:[], scans:[], cards:[], customers:[] };
 
-if (!CONFIG || !window.supabase?.createClient) {
-  if ($('loginMsg')) $('loginMsg').innerHTML = '<div class="notice err">Library Supabase gagal dimuat. Muat ulang halaman.</div>';
-  throw new Error('Supabase client tidak tersedia.');
-}
-
-const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-const state = { cards: [], products: [], customers: [], transactions: [], scans: [] };
-let activeBusinessUnitId = null;
-
-async function ensureBusinessContext() {
-  const ctx = window.ALJAVA_BUSINESS_CONTEXT;
-  if (!ctx?.load) return null;
-  if (!ctx.active?.id) await ctx.load();
-  activeBusinessUnitId = ctx.active?.id || ctx.getSelectedUnitId?.() || null;
-  return activeBusinessUnitId;
-}
-
-function closeMenu() {
-  $('menuPanel')?.classList.remove('open');
-  $('menuButton')?.setAttribute('aria-expanded', 'false');
-}
-function openMenu() {
-  const panel = $('menuPanel');
-  const button = $('menuButton');
-  if (!panel || !button) return;
-  panel.classList.add('open');
-  button.setAttribute('aria-expanded', 'true');
-}
-function toggleMenu() {
-  $('menuPanel')?.classList.contains('open') ? closeMenu() : openMenu();
-}
-function showView(viewId) {
-  document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === viewId));
-  closeMenu();
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-  if (history.replaceState) history.replaceState(null, '', `#${viewId.replace(/View$/, '')}`);
-}
-function goDashboard() { showView('dashboardView'); }
-
-function bindNavigation() {
-  $('menuButton')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); toggleMenu(); });
-  $('closeMenu')?.addEventListener('click', (event) => { event.preventDefault(); closeMenu(); });
-  $('dashboardMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); goDashboard(); });
-  $('cardsMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView('cardsView'); });
-  $('productMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView('productView'); window.productManager?.loadProducts?.().catch?.(() => {}); });
-  $('customerMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView('customersView'); window.customerManager?.loadCustomers?.().catch?.(() => {}); });
-  $('resetMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); window.__resetDashboard?.(event); });
-  $('addAccountMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); openAddAccount(); });
-  $('logoutMenu')?.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); logout(); });
-  document.addEventListener('click', (event) => {
-    const panel = $('menuPanel');
-    const button = $('menuButton');
-    if (panel?.classList.contains('open') && !panel.contains(event.target) && event.target !== button) closeMenu();
-  });
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') { closeMenu(); $('modal')?.classList.remove('open'); }
-  });
-}
-
-function initRoute() {
-  const hash = location.hash.replace(/^#/, '').toLowerCase();
-  if (hash === 'cards' || hash === 'cardsview') showView('cardsView');
-  else if (hash === 'product' || hash === 'productview' || hash === 'products') { showView('productView'); window.productManager?.loadProducts?.().catch?.(() => {}); }
-  else if (hash === 'customers' || hash === 'customersview') { showView('customersView'); window.customerManager?.loadCustomers?.().catch?.(() => {}); }
-  else if (hash === 'sales' || hash === 'salesview') window.salesDashboard?.show?.();
-  else if (hash === 'operations' || hash === 'operationsview') window.operationsDashboard?.show?.();
-  else if (hash === 'analytics' || hash === 'analyticsview') window.scanAnalytics?.show?.();
-  else goDashboard();
-}
-window.addEventListener('hashchange', initRoute);
-
-function setLoggedOut(message = '') {
-  $('app').style.display = 'none';
-  $('login').classList.remove('hidden');
-  $('menuButton').classList.remove('visible');
-  closeMenu();
-  $('loginMsg').innerHTML = message ? `<div class="notice err">❌ ${esc(message)}</div>` : '';
-}
-
-async function ensureAdmin() {
-  try {
-    const { data: { session } = {} } = await sb.auth.getSession();
-    if (!session) { setLoggedOut(); return false; }
-    const { data: { user } = {}, error: userError } = await sb.auth.getUser();
-    if (userError || !user) {
-      await sb.auth.signOut({ scope: 'local' });
-      setLoggedOut('Sesi login tidak valid.');
-      return false;
-    }
-    const { data: isAdmin, error: adminError } = await sb.rpc('is_admin_user');
-    if (adminError || isAdmin !== true) {
-      await sb.auth.signOut({ scope: 'local' });
-      setLoggedOut(adminError ? 'Gagal memeriksa hak admin.' : 'Akun bukan admin.');
-      return false;
-    }
-    $('login').classList.add('hidden');
-    $('app').style.display = 'block';
-    $('menuButton').classList.add('visible');
-    $('userEmail').textContent = user.email || '';
-    await ensureBusinessContext();
-    return true;
-  } catch (error) {
-    setLoggedOut(error.message || 'Gagal memeriksa sesi admin.');
-    return false;
-  }
-}
-
-async function login() {
-  const email = $('email').value.trim();
-  const password = $('password').value;
-  if (!email || !password) {
-    $('loginMsg').innerHTML = '<div class="notice err">Email dan password wajib diisi.</div>';
+  if (!CONFIG || !sb) {
+    if ($('loginMsg')) $('loginMsg').innerHTML = '<div class="notice err">Library Supabase gagal dimuat. Muat ulang halaman.</div>';
     return;
   }
-  $('loginBtn').disabled = true;
-  try {
-    const { error } = await sb.auth.signInWithPassword({ email, password });
-    if (error) {
-      $('loginMsg').innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`;
-      return;
-    }
-    if (await ensureAdmin()) {
-      await load();
-      goDashboard();
-    }
-  } catch (error) {
-    $('loginMsg').innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`;
-  } finally {
-    $('loginBtn').disabled = false;
+
+  function closeMenu() { $('menuPanel')?.classList.remove('open'); $('menuButton')?.setAttribute('aria-expanded', 'false'); }
+  function toggleMenu() {
+    const panel = $('menuPanel'); const button = $('menuButton'); if (!panel || !button) return;
+    const open = panel.classList.toggle('open'); button.setAttribute('aria-expanded', String(open));
   }
-}
-
-async function logout() {
-  await sb.auth.signOut({ scope: 'local' });
-  location.reload();
-}
-
-async function queryTable(table, select, orderBy, timeoutMs = 10000) {
-  const request = (async () => {
-    let query = sb.from(table).select(select);
-    if (['Cards', 'Product', 'Transactions', 'CardScans'].includes(table) && activeBusinessUnitId) {
-      query = query.eq('business_unit_id', activeBusinessUnitId);
-    }
-    if (orderBy) query = query.order(orderBy, { ascending: false });
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  })();
-  const timeout = new Promise((_, reject) => setTimeout(() => reject(new Error(`${table}: permintaan data timeout`)), timeoutMs));
-  return Promise.race([request, timeout]);
-}
-
-async function load() {
-  await ensureBusinessContext();
-  const jobs = {
-    cards: queryTable('Cards', 'id,card_code,product_type,status,customer_id,product_id,google_review_url,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url', 'created_at'),
-    products: queryTable('Product', 'id,name,category,product_code', 'name'),
-    customers: queryTable('Customers', 'id,business_name,owner_name,google_review_url,created_at,whatsapp,email,product_type,total_reviews', 'created_at'),
-    transactions: queryTable('Transactions', 'id,customer_id,card_id,product_id,quantity,selling_price,payment_status,transaction_date', 'transaction_date'),
-    scans: queryTable('CardScans', 'id,card_id,card_code,event_type,scanned_at', 'scanned_at')
-  };
-  const entries = Object.entries(jobs);
-  const results = await Promise.all(entries.map(async ([key, promise]) => {
-    try { return [key, await promise, null]; }
-    catch (error) { return [key, [], error]; }
-  }));
-
-  results.forEach(([key, data, error]) => {
-    state[key] = data;
-    if (key === 'cards') window.__ALJAVA_CARDS = data;
-    if (key === 'customers') window.__ALJAVA_CUSTOMERS = data;
-    const hostMap = { customers: 'customerRows', transactions: 'txTable', scans: 'scanSummary' };
-    if (error && $(hostMap[key])) {
-      if (key === 'customers') $(hostMap[key]).innerHTML = `<tr><td colspan="6"><div class="notice err">❌ ${esc(error.message)}</div></td></tr>`;
-      else $(hostMap[key]).innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`;
-    }
-  });
-
-  renderAll();
-  document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
-}
-
-function renderAll() {
-  renderStats();
-  renderChart();
-  renderTransactions();
-  renderScans();
-  fillCustomerOptions();
-}
-
-function cardStatus(card) {
-  const status = String(card.status || '').toLowerCase();
-  if (card.expires_at && new Date(card.expires_at) < new Date()) return 'Expired';
-  if (status === 'active' || card.activated_at) return 'Aktif';
-  return 'Belum Aktif';
-}
-
-function renderStats() {
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth();
-  const revenue = state.transactions.reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
-  const monthRevenue = state.transactions.filter((row) => {
-    const d = new Date(row.transaction_date);
-    return d.getFullYear() === year && d.getMonth() === month;
-  }).reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
-  const monthScan = state.scans.filter((row) => {
-    const d = new Date(row.scanned_at);
-    return d.getFullYear() === year && d.getMonth() === month;
-  }).length;
-  const active = state.cards.filter((card) => cardStatus(card) === 'Aktif').length;
-  $('totalRev').textContent = money(revenue);
-  $('monthRev').textContent = money(monthRevenue);
-  $('totalScan').textContent = String(state.scans.length);
-  $('monthScan').textContent = String(monthScan);
-  $('activeCards').textContent = String(active);
-  $('pendingCards').textContent = String(state.cards.filter((card) => cardStatus(card) === 'Belum Aktif').length);
-}
-
-function renderChart() {
-  const names = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const year = Number($('year').value) || new Date().getFullYear();
-  const selectedMonth = $('month').value;
-  const totals = Array(12).fill(0);
-  state.transactions.forEach((row) => {
-    const date = new Date(row.transaction_date);
-    if (date.getFullYear() === year) totals[date.getMonth()] += Number(row.selling_price || 0) * Number(row.quantity || 1);
-  });
-  const rows = selectedMonth === '' ? totals.map((value, index) => ({ value, index })) : [{ value: totals[Number(selectedMonth)] || 0, index: Number(selectedMonth) }];
-  const max = Math.max(1, ...rows.map((row) => row.value));
-  $('chart').innerHTML = rows.map((row) => `<div class="bar" title="${names[row.index]}: ${money(row.value)}"><i style="height:${Math.max(5, row.value / max * 220)}px"></i><span>${names[row.index]}</span></div>`).join('');
-  $('chartTotal').textContent = `Total periode: ${money(rows.reduce((sum, row) => sum + row.value, 0))} • ${state.transactions.length} transaksi terbaca`;
-}
-
-function renderTransactions() {
-  const customers = Object.fromEntries(state.customers.map((row) => [row.id, row]));
-  const products = Object.fromEntries(state.products.map((row) => [row.id, row]));
-  const rows = state.transactions.slice(0, 12);
-  $('txTable').innerHTML = rows.length ? `<div class="table-wrap"><table><thead><tr><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Revenue</th></tr></thead><tbody>${rows.map((row) => `<tr><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customers[row.customer_id]?.business_name || customers[row.customer_id]?.owner_name || '-')}</td><td>${esc(products[row.product_id]?.name || '-')}</td><td>${Number(row.quantity || 1)}</td><td>${money(Number(row.selling_price || 0) * Number(row.quantity || 1))}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada transaksi.</div>';
-}
-
-function renderScans() {
-  const counts = {};
-  state.scans.forEach((scan) => {
-    const key = scan.card_code || scan.card_id || '-';
-    counts[key] = (counts[key] || 0) + 1;
-  });
-  const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
-  $('scanSummary').innerHTML = rows.length ? rows.map(([code, count]) => `<div class="row" style="padding:9px 0;border-bottom:1px solid rgba(30,120,160,.1)"><strong>${esc(code)}</strong><span class="muted">${count} scan/tap</span></div>`).join('') : '<div class="muted">Belum ada scan/tap.</div>';
-}
-
-function syncCardSelection() {
-  const host = $('cardTable');
-  if (!host) return;
-  const selected = host.querySelectorAll('.card-select:checked');
-  const all = host.querySelectorAll('.card-select');
-  const bulk = $('deleteSelectedCards');
-  if (bulk) {
-    bulk.disabled = selected.length === 0;
-    bulk.textContent = selected.length ? `Hapus Pilihan (${selected.length})` : 'Hapus Pilihan';
+  function setLoggedOut(message = '') {
+    $('app').style.display = 'none'; $('login').classList.remove('hidden'); $('menuButton').classList.remove('visible'); closeMenu();
+    $('loginMsg').innerHTML = message ? `<div class="notice err">❌ ${esc(message)}</div>` : '';
   }
-  const tableAll = $('selectAllCardsTable');
-  const topAll = $('selectAllCards');
-  if (tableAll) {
-    tableAll.checked = all.length > 0 && selected.length === all.length;
-    tableAll.indeterminate = selected.length > 0 && selected.length < all.length;
+  async function ensureAdmin() {
+    try {
+      const { data: { session } = {} } = await sb.auth.getSession(); if (!session) { setLoggedOut(); return false; }
+      const { data: { user } = {}, error: userError } = await sb.auth.getUser();
+      if (userError || !user) { await sb.auth.signOut({ scope:'local' }); setLoggedOut('Sesi login tidak valid.'); return false; }
+      const { data: isAdmin, error: adminError } = await sb.rpc('is_admin_user');
+      if (adminError || isAdmin !== true) { await sb.auth.signOut({ scope:'local' }); setLoggedOut(adminError ? 'Gagal memeriksa hak admin.' : 'Akun bukan admin.'); return false; }
+      $('login').classList.add('hidden'); $('app').style.display = 'block'; $('menuButton').classList.add('visible'); $('userEmail').textContent = user.email || '';
+      return true;
+    } catch (error) { setLoggedOut(error.message || 'Gagal memeriksa sesi admin.'); return false; }
   }
-  if (topAll) {
-    topAll.checked = all.length > 0 && selected.length === all.length;
-    topAll.indeterminate = selected.length > 0 && selected.length < all.length;
+  async function login() {
+    const email = $('email').value.trim(); const password = $('password').value;
+    if (!email || !password) { $('loginMsg').innerHTML = '<div class="notice err">Email dan password wajib diisi.</div>'; return; }
+    $('loginBtn').disabled = true;
+    try {
+      const { error } = await sb.auth.signInWithPassword({ email, password });
+      if (error) { $('loginMsg').innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`; return; }
+      if (await ensureAdmin()) await loadGlobalDashboard();
+    } catch (error) { $('loginMsg').innerHTML = `<div class="notice err">❌ ${esc(error.message)}</div>`; }
+    finally { $('loginBtn').disabled = false; }
   }
-}
-
-async function deleteSelectedCards() {
-  const ids = [...document.querySelectorAll('.card-select:checked')].map((input) => input.value).filter(Boolean);
-  if (!ids.length) return;
-  if (!window.confirm(`Hapus ${ids.length} kartu terpilih? Tindakan ini tidak dapat dibatalkan.`)) return;
-  await deleteCards(ids, `${ids.length} kartu berhasil dihapus.`);
-}
-
-async function deleteCards(ids, successMessage) {
-  const msg = $('cardActionMsg');
-  const button = $('deleteSelectedCards');
-  if (msg) { msg.className = 'notice info'; msg.textContent = `Menghapus ${ids.length} kartu...`; }
-  if (button) button.disabled = true;
-  try {
-    await ensureBusinessContext();
-    if (!activeBusinessUnitId) throw new Error('Unit bisnis aktif tidak ditemukan.');
-    const { error } = await sb.from('Cards').delete().in('id', ids).eq('business_unit_id', activeBusinessUnitId);
-    if (error) throw error;
-    if (msg) { msg.className = 'notice ok'; msg.textContent = `✓ ${successMessage}`; }
-    await load();
-    setTimeout(() => {
-      if ($('cardActionMsg')) { $('cardActionMsg').className = 'muted'; $('cardActionMsg').textContent = ''; }
-    }, 3500);
-  } catch (error) {
-    if (msg) { msg.className = 'notice err'; msg.textContent = `❌ Gagal menghapus kartu: ${esc(error.message)}`; }
-    await load();
+  async function logout() { await sb.auth.signOut({ scope:'local' }); location.reload(); }
+  async function query(table, select, orderBy) {
+    let builder = sb.from(table).select(select); if (orderBy) builder = builder.order(orderBy, { ascending:false });
+    const { data, error } = await builder; if (error) throw error; return data || [];
   }
-}
-
-function fillCustomerOptions() {
-  const html = '<option value="">Customer (opsional)</option>' + state.customers.map((customer) => `<option value="${esc(customer.id)}">${esc(customer.business_name || customer.owner_name || customer.id)}</option>`).join('');
-  if ($('singleCustomer')) $('singleCustomer').innerHTML = html;
-  if ($('bulkCustomer')) $('bulkCustomer').innerHTML = html;
-}
-
-function openAddAccount() {
-  $('modalTitle').textContent = 'Tambah Akun';
-  $('modalBody').innerHTML = '<div class="notice info">Pembuatan akun admin harus melalui proses server-side/privileged auth.</div>';
-  $('modal').classList.add('open');
-}
-
-$('loginBtn')?.addEventListener('click', login);
-$('password')?.addEventListener('keydown', (event) => { if (event.key === 'Enter') login(); });
-$('refreshMenu')?.addEventListener('click', () => {
-  const button = $('refreshMenu');
-  if (!button || button.dataset.refreshBound === '1') return;
-  button.dataset.refreshBound = '1';
-  button.disabled = true;
-  button.textContent = 'Memuat…';
-  window.setTimeout(() => window.location.reload(), 50);
-});
-$('selectAllCards')?.addEventListener('change', (event) => {
-  $('cardTable')?.querySelectorAll('.card-select').forEach((input) => { input.checked = event.target.checked; });
-  syncCardSelection();
-});
-$('deleteSelectedCards')?.addEventListener('click', deleteSelectedCards);
-$('modalClose')?.addEventListener('click', () => $('modal').classList.remove('open'));
-$('modal')?.addEventListener('click', (event) => { if (event.target === $('modal')) $('modal').classList.remove('open'); });
-$('year')?.addEventListener('change', renderChart);
-$('month')?.addEventListener('change', renderChart);
-
-document.addEventListener('aljava:business-changed', async () => {
-  activeBusinessUnitId = window.ALJAVA_BUSINESS_CONTEXT?.active?.id || null;
-  if (activeBusinessUnitId) await load();
-});
-
-window.adminApi = { load, goDashboard, showView };
-const currentYear = new Date().getFullYear();
-for (let year = currentYear - 3; year <= currentYear + 1; year += 1) $('year')?.insertAdjacentHTML('beforeend', `<option value="${year}">${year}</option>`);
-if ($('year')) $('year').value = currentYear;
-
-bindNavigation();
-(async () => {
-  if (await ensureAdmin()) {
-    await load();
-    initRoute();
+  async function loadGlobalDashboard() {
+    const jobs = [
+      ['businesses', query('business_units', 'id,name,slug,status,unit_type', 'name')],
+      ['transactions', query('Transactions', 'id,quantity,selling_price,payment_status,transaction_date,business_unit_id', 'transaction_date')],
+      ['scans', query('CardScans', 'id,event_type,scanned_at,business_unit_id', 'scanned_at')],
+      ['cards', query('Cards', 'id,status,activated_at,business_unit_id', 'created_at')],
+      ['customers', query('Customers', 'id,business_unit_id', 'created_at')]
+    ];
+    const results = await Promise.all(jobs.map(async ([key, promise]) => { try { return [key, await promise, null]; } catch (error) { return [key, [], error]; } }));
+    const errors = []; results.forEach(([key, data, error]) => { state[key] = data; if (error) errors.push(`${key}: ${error.message}`); });
+    renderGlobal(); if (errors.length) $('platformHealth').innerHTML = `<div class="notice err">Sebagian data belum dapat dimuat: ${esc(errors.join(' • '))}</div>`;
   }
+  function revenueOf(row) { return Number(row.selling_price || 0) * Number(row.quantity || 1); }
+  function renderGlobal() {
+    const businesses = state.businesses.filter((b) => b.unit_type === 'business');
+    const activeBusinesses = businesses.filter((b) => String(b.status || '').toLowerCase() === 'active');
+    const totalRevenue = state.transactions.reduce((sum,row) => sum + revenueOf(row), 0); const now = new Date();
+    const monthRevenue = state.transactions.filter((row) => { const d=new Date(row.transaction_date); return d.getFullYear()===now.getFullYear() && d.getMonth()===now.getMonth(); }).reduce((sum,row) => sum + revenueOf(row),0);
+    const activeCards = state.cards.filter((card) => String(card.status || '').toLowerCase()==='active' || card.activated_at).length;
+    $('totalRev').textContent=money(totalRevenue); $('monthRev').textContent=money(monthRevenue); $('totalBusinesses').textContent=String(businesses.length); $('activeBusinesses').textContent=String(activeBusinesses.length); $('totalTransactions').textContent=String(state.transactions.length); $('totalCustomers').textContent=String(state.customers.length); $('activeCards').textContent=String(activeCards); $('totalScan').textContent=String(state.scans.length);
+    fillYearOptions(); renderChart(); renderBusinessOverview(businesses); renderActivity(monthRevenue); renderHealth(businesses,activeBusinesses);
+  }
+  function fillYearOptions() {
+    const select=$('year'); if (!select || select.options.length) return; const years=new Set([new Date().getFullYear()]);
+    state.transactions.forEach((row) => { const year=new Date(row.transaction_date).getFullYear(); if(Number.isFinite(year)) years.add(year); });
+    [...years].sort((a,b)=>b-a).forEach((year)=>{const option=document.createElement('option');option.value=String(year);option.textContent=String(year);select.appendChild(option)}); select.value=String(new Date().getFullYear());
+  }
+  function renderChart() {
+    const names=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des']; const year=Number($('year').value)||new Date().getFullYear(); const selectedMonth=$('month').value; const totals=Array(12).fill(0);
+    state.transactions.forEach((row)=>{const date=new Date(row.transaction_date);if(date.getFullYear()===year)totals[date.getMonth()]+=revenueOf(row)});
+    const rows=selectedMonth===''?totals.map((value,index)=>({value,index})):[{value:totals[Number(selectedMonth)]||0,index:Number(selectedMonth)}]; const max=Math.max(1,...rows.map((row)=>row.value));
+    $('chart').innerHTML=rows.map((row)=>`<div class="bar" title="${names[row.index]}: ${money(row.value)}"><i style="height:${Math.max(5,row.value/max*220)}px"></i><span>${names[row.index]}</span></div>`).join('');
+    $('chartTotal').textContent=`Total periode: ${money(rows.reduce((sum,row)=>sum+row.value,0))} • ${state.transactions.length} transaksi seluruh bisnis`;
+  }
+  function renderBusinessOverview(businesses) {
+    const totals=Object.fromEntries(businesses.map((b)=>[b.id,{revenue:0,transactions:0,scans:0}]));
+    state.transactions.forEach((row)=>{if(totals[row.business_unit_id]){totals[row.business_unit_id].revenue+=revenueOf(row);totals[row.business_unit_id].transactions+=1}}); state.scans.forEach((row)=>{if(totals[row.business_unit_id])totals[row.business_unit_id].scans+=1});
+    const rows=businesses.map((business)=>({business,...totals[business.id]})).sort((a,b)=>b.revenue-a.revenue);
+    $('businessOverview').innerHTML=rows.length?rows.map(({business,revenue,transactions,scans})=>`<div class="row global-business-row"><div><strong>${esc(business.name||business.slug||'Unit Bisnis')}</strong><div class="muted">${esc(String(business.status||'unknown'))}</div></div><div class="global-business-metrics"><strong>${money(revenue)}</strong><span class="muted">${transactions} transaksi • ${scans} scan</span></div></div>`).join(''):'<div class="muted">Belum ada unit bisnis.</div>';
+  }
+  function renderActivity(monthRevenue) {
+    const now=new Date(); const monthTransactions=state.transactions.filter((row)=>{const d=new Date(row.transaction_date);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).length; const monthScans=state.scans.filter((row)=>{const d=new Date(row.scanned_at);return d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth()}).length;
+    $('activitySummary').innerHTML=`<div class="global-summary-line"><span>Revenue bulan ini</span><strong>${money(monthRevenue)}</strong></div><div class="global-summary-line"><span>Transaksi bulan ini</span><strong>${monthTransactions}</strong></div><div class="global-summary-line"><span>Scan / tap bulan ini</span><strong>${monthScans}</strong></div><div class="global-summary-line"><span>Total scan / tap</span><strong>${state.scans.length}</strong></div>`;
+  }
+  function renderHealth(businesses,activeBusinesses){const activeRatio=businesses.length?Math.round(activeBusinesses.length/businesses.length*100):0;$('platformHealth').innerHTML=`<div class="global-health-grid"><div><span class="muted">Status data</span><strong class="health-ok">Terhubung</strong></div><div><span class="muted">Bisnis aktif</span><strong>${activeRatio}%</strong></div><div><span class="muted">Transaksi terbaca</span><strong>${state.transactions.length}</strong></div><div><span class="muted">Scan / tap terbaca</span><strong>${state.scans.length}</strong></div></div>`;}
+  function bind(){
+    $('menuButton')?.addEventListener('click',(event)=>{event.preventDefault();event.stopPropagation();toggleMenu()}); $('closeMenu')?.addEventListener('click',closeMenu); $('dashboardMenu')?.addEventListener('click',closeMenu); $('refreshMenu')?.addEventListener('click',async()=>{closeMenu();await loadGlobalDashboard()}); $('logoutMenu')?.addEventListener('click',logout); $('loginBtn')?.addEventListener('click',login); $('password')?.addEventListener('keydown',(event)=>{if(event.key==='Enter')login()}); $('year')?.addEventListener('change',renderChart); $('month')?.addEventListener('change',renderChart); $('modalClose')?.addEventListener('click',()=>$('modal')?.classList.remove('open'));
+    document.addEventListener('click',(event)=>{const panel=$('menuPanel');const button=$('menuButton');if(panel?.classList.contains('open')&&!panel.contains(event.target)&&event.target!==button)closeMenu()}); document.addEventListener('keydown',(event)=>{if(event.key==='Escape'){closeMenu();$('modal')?.classList.remove('open')}});
+  }
+  window.ALJAVA_GLOBAL_DASHBOARD=Object.freeze({refresh:loadGlobalDashboard});
+  (async function init(){bind();if(await ensureAdmin())await loadGlobalDashboard()})();
 })();
