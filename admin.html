@@ -21,13 +21,18 @@
     .global-health-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
     .global-health-grid>div{display:flex;flex-direction:column;gap:5px;padding:13px;border:1px solid rgba(30,120,160,.10);border-radius:14px;background:rgba(248,252,255,.75)}
     .health-ok{color:#0f766e}
-    .business-category-list{display:grid;gap:8px;margin-top:10px}
-    .business-category{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid rgba(30,120,160,.12);border-radius:12px;background:#fff;color:#123b57;text-align:left;cursor:pointer;transition:.18s ease}
-    .business-category:hover{border-color:rgba(15,118,110,.35);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,65,90,.08)}
-    .business-category .category-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#effcff;font-weight:900;color:#0f766e;flex:0 0 32px}
-    .business-category .category-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
-    .business-category small{color:#71879a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .business-category-empty{padding:10px 2px;color:#71879a;font-size:13px}
+    .business-list{display:grid;gap:8px;margin-top:10px}
+    .business-menu-item{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid rgba(30,120,160,.12);border-radius:12px;background:#fff;color:#123b57;text-align:left;cursor:pointer;transition:.18s ease}
+    .business-menu-item:hover{border-color:rgba(15,118,110,.35);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,65,90,.08)}
+    .business-menu-item .business-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:#effcff;font-weight:900;color:#0f766e;flex:0 0 34px}
+    .business-menu-item .business-copy{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+    .business-menu-item small{color:#71879a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .business-menu-empty{padding:10px 2px;color:#71879a;font-size:13px}
+    .business-hub-entry{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid rgba(30,120,160,.12);border-radius:12px;background:#fff;color:#123b57;text-align:left;cursor:pointer;transition:.18s ease}
+    .business-hub-entry:hover{border-color:rgba(15,118,110,.35);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,65,90,.08)}
+    .business-hub-entry .hub-icon{width:34px;height:34px;display:grid;place-items:center;border-radius:9px;background:#f5f7ff;font-weight:900;color:#3159a6;flex:0 0 34px}
+    .business-hub-entry .hub-copy{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+    .business-hub-entry small{color:#71879a}
     @media(max-width:800px){.global-badge{display:none}.global-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.global-business-row{align-items:flex-start}.global-business-metrics{align-items:flex-end}}
     @media(max-width:560px){.global-health-grid{grid-template-columns:1fr}.global-business-row{flex-direction:column}.global-business-metrics{align-items:flex-start;text-align:left}.global-summary-line{align-items:flex-start;flex-direction:column;gap:4px}}
   </style>
@@ -47,22 +52,36 @@
   <button id="menuButton" class="menu-button" type="button" aria-label="Buka Main Menu" aria-expanded="false">☰</button>
   <nav id="menuPanel" class="menu-panel" aria-label="Main Menu">
     <div class="row menu-header">
-      <div><div class="menu-kicker">ALJAVA TERIONITY</div><h2>Main Menu</h2><p class="muted">Pusat kontrol seluruh bisnis.</p></div>
+      <div><div class="menu-kicker">ALJAVA TERIONITY</div><h2>Main Menu</h2><p class="muted">Pusat kontrol global dan akses ke masing-masing bisnis.</p></div>
       <button id="closeMenu" class="btn menu-close" type="button" aria-label="Tutup menu">×</button>
     </div>
+
     <div class="menu-section">
       <div class="menu-section-title">Overview</div>
       <div class="menu-items">
         <button id="dashboardMenu" class="menu-item active" type="button"><span class="menu-icon">⌂</span><span><b>Dashboard Utama</b><small>Ringkasan seluruh bisnis</small></span></button>
       </div>
     </div>
+
     <div class="menu-section">
-      <div class="menu-section-title">Kategori Bisnis</div>
-      <div id="businessCategories" class="business-category-list" aria-label="Kategori bisnis">
-        <div class="business-category-empty">Memuat kategori bisnis...</div>
+      <div class="menu-section-title">Business Hub</div>
+      <div class="menu-items">
+        <button id="businessHubMenu" class="business-hub-entry" type="button">
+          <span class="hub-icon">▦</span>
+          <span class="hub-copy"><b>Business Hub</b><small>Kelola struktur, kategori, dan unit usaha</small></span>
+          <span aria-hidden="true">›</span>
+        </button>
       </div>
     </div>
-    <section class="menu-settings" aria-label="Pengaturan">
+
+    <div class="menu-section">
+      <div class="menu-section-title">Bisnis</div>
+      <div id="businessCategories" class="business-list" aria-label="Daftar bisnis">
+        <div class="business-menu-empty">Memuat daftar bisnis...</div>
+      </div>
+    </div>
+
+    <section class="menu-settings" aria-label="Pengaturan sistem">
       <div class="menu-section-title">System</div>
       <div class="menu-items">
         <button id="refreshMenu" class="menu-item compact" type="button"><span class="menu-icon">↻</span><span><b>Refresh Data</b><small>Muat data seluruh bisnis</small></span></button>
@@ -70,6 +89,7 @@
       </div>
     </section>
   </nav>
+
   <main id="app" class="page" style="display:none">
     <header class="top">
       <div><div class="brand">ALJAVA TERIONITY</div><div class="muted">Admin Dashboard • Global Business Overview</div></div>
