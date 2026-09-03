@@ -12,6 +12,8 @@
   const client=window.__ALJAVA_SUPABASE_CLIENT;
   const STORAGE_KEY='aljava.active_business_unit';
   const SCOPED_TABLES=new Set(['Product','Cards','Transactions','Subscriptions','Sales','admin_card_actions','CardScans']);
+  let active=null, units=[], loading=null;
+  const listeners=new Set();
   const normalizeBusinessUnit=(unit)=>({...unit,id:unit?.id||unit?.business_unit_id||null,name:unit?.name||unit?.business_name||unit?.business_slug||'Unit Bisnis',slug:unit?.slug||unit?.business_slug||null,status:unit?.status||unit?.business_status||null,unit_type:unit?.unit_type||'business',role:unit?.role||unit?.role_code||null,membership_status:unit?.membership_status||null});
   const context={
     defaultSlug:CONFIG.defaultBusinessUnitSlug,
