@@ -21,6 +21,13 @@
     .global-health-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
     .global-health-grid>div{display:flex;flex-direction:column;gap:5px;padding:13px;border:1px solid rgba(30,120,160,.10);border-radius:14px;background:rgba(248,252,255,.75)}
     .health-ok{color:#0f766e}
+    .business-category-list{display:grid;gap:8px;margin-top:10px}
+    .business-category{width:100%;display:flex;align-items:center;gap:10px;padding:11px 12px;border:1px solid rgba(30,120,160,.12);border-radius:12px;background:#fff;color:#123b57;text-align:left;cursor:pointer;transition:.18s ease}
+    .business-category:hover{border-color:rgba(15,118,110,.35);transform:translateY(-1px);box-shadow:0 6px 16px rgba(15,65,90,.08)}
+    .business-category .category-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:#effcff;font-weight:900;color:#0f766e;flex:0 0 32px}
+    .business-category .category-copy{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .business-category small{color:#71879a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .business-category-empty{padding:10px 2px;color:#71879a;font-size:13px}
     @media(max-width:800px){.global-badge{display:none}.global-health-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.global-business-row{align-items:flex-start}.global-business-metrics{align-items:flex-end}}
     @media(max-width:560px){.global-health-grid{grid-template-columns:1fr}.global-business-row{flex-direction:column}.global-business-metrics{align-items:flex-start;text-align:left}.global-summary-line{align-items:flex-start;flex-direction:column;gap:4px}}
   </style>
@@ -47,6 +54,12 @@
       <div class="menu-section-title">Overview</div>
       <div class="menu-items">
         <button id="dashboardMenu" class="menu-item active" type="button"><span class="menu-icon">⌂</span><span><b>Dashboard Utama</b><small>Ringkasan seluruh bisnis</small></span></button>
+      </div>
+    </div>
+    <div class="menu-section">
+      <div class="menu-section-title">Kategori Bisnis</div>
+      <div id="businessCategories" class="business-category-list" aria-label="Kategori bisnis">
+        <div class="business-category-empty">Memuat kategori bisnis...</div>
       </div>
     </div>
     <section class="menu-settings" aria-label="Pengaturan">
