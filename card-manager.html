@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><title>ALJAVA — Kartu</title>
+<link rel="stylesheet" href="/assets/business-hub.css">
+<link rel="stylesheet" href="/assets/platform-ui.css">
+<style>
+.card-actions{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.card-form{margin-top:14px}.field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin:0 0 6px}.hint{font-size:11px;color:var(--muted);line-height:1.45}.status-badge{display:inline-block;border-radius:999px;padding:5px 8px;font-size:10px;font-weight:900;background:#eef6fa;color:#4d7185}.status-badge.ok{background:#eafaf5;color:#13815f}.status-badge.warn{background:#fff7e8;color:#9a6100}.code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:800;letter-spacing:.3px}.danger-note{margin-top:10px;color:#9b3047;font-size:11px}
+</style>
+</head>
+<body>
+<main class="page">
+<header class="topbar">
+<div><div class="eyebrow">ALJAVA TERIONITY • BUSINESS</div><h1 id="pageTitle">Manajemen Kartu</h1><p id="subtitle">Buat dan kelola kartu untuk bisnis aktif.</p></div>
+<div class="top-actions"><a id="backBusiness" class="btn secondary" href="#">Business Dashboard</a><a class="btn secondary" href="/admin">Global</a><a class="btn secondary" href="/business-hub.html">Business Hub</a></div>
+</header>
+<section id="message" class="notice" hidden></section>
+<section class="card workspace-banner"><div><span class="kicker">BUSINESS WORKSPACE</span><h2 id="businessName">Memuat...</h2><p id="businessMeta">Memuat konteks bisnis...</p></div></section>
+<section class="card section-card">
+<div class="section-head"><div><h2>Kartu</h2><p>Kartu dibuat dalam konteks bisnis ini. Kartu baru selalu berstatus <strong>pending</strong>.</p></div><div class="card-actions"><button id="newCardBtn" class="btn primary" type="button">+ Buat Kartu</button><button id="refreshBtn" class="btn secondary" type="button">Refresh</button></div></div>
+<div id="cardFormWrap" class="card-form" hidden>
+<div class="notice">Pilih produk bisnis. Kode kartu boleh dikosongkan untuk dibuat otomatis.</div>
+<form id="cardForm" class="form">
+<div><label class="field-label" for="productId">Produk</label><select id="productId" required><option value="">Memuat produk...</option></select></div>
+<div><label class="field-label" for="quantity">Jumlah kartu</label><input id="quantity" type="number" min="1" max="100" value="1" required></div>
+<div><label class="field-label" for="cardCode">Kode kartu <span class="hint">(opsional)</span></label><input id="cardCode" maxlength="80" placeholder="Contoh: STP-004"><div class="hint">Jika jumlah > 1 dan kode diisi, sistem menambahkan -01, -02, dst.</div></div>
+<div><label class="field-label" for="prefix">Prefix otomatis <span class="hint">(opsional)</span></label><input id="prefix" maxlength="20" placeholder="Contoh: KGR"><div class="hint">Dipakai hanya jika kode kartu kosong. Contoh hasil: KGR-STD-8F42A1.</div></div>
+<button id="saveCardBtn" class="btn primary" type="submit">Buat Kartu</button>
+</form>
+<div id="formMessage" class="danger-note"></div>
+</div>
+</section>
+<section class="card section-card"><div class="section-head"><div><h2>Daftar Kartu</h2><p>Hanya kartu milik business unit aktif yang ditampilkan.</p></div></div><div class="table-wrap"><table><thead><tr><th>Kode</th><th>Produk</th><th>Status</th><th>Customer</th><th>Dibuat</th><th>Aktif</th></tr></thead><tbody id="cardRows"><tr><td colspan="6" class="muted">Memuat kartu...</td></tr></tbody></table></div></section>
+<footer>ALJAVA TERIONITY • Card Manager • Tenant scoped</footer>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/assets/app-config.js"></script>
+<script src="/assets/business-context.js"></script>
+<script src="/assets/card-manager.js"></script>
+</body></html>
