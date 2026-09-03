@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow,noarchive"><title>ALJAVA — Kartu</title>
 <link rel="stylesheet" href="/assets/business-hub.css"><link rel="stylesheet" href="/assets/platform-ui.css">
 <style>
-.card-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px}.full{grid-column:1/-1}.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:5px}.actions-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}.code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:800}.btn{min-height:42px}.btn.primary{color:#fff;border-color:var(--blue);background:linear-gradient(100deg,#0879b8,#35c9f2)}
+.card-form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field-label{display:block;font-size:11px;font-weight:800;color:var(--muted);margin-bottom:6px}.full{grid-column:1/-1}.hint{font-size:11px;color:var(--muted);line-height:1.45;margin-top:5px}.actions-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}.btn{min-height:42px}.btn.primary{color:#fff;border-color:var(--blue);background:linear-gradient(100deg,#0879b8,#35c9f2)}.table-wrap{overflow:auto}.cards-table{min-width:900px;width:100%}.status-badge{display:inline-flex;padding:4px 8px;border-radius:999px;font-size:10px;font-weight:800}.status-active{background:#e9f9ef;color:#16834a}.status-pending{background:#fff5df;color:#a15d00}.status-expired{background:#ffe9e9;color:#b42318}.muted{color:var(--muted)}
 @media(max-width:650px){.card-form-grid{grid-template-columns:1fr}.full{grid-column:auto}.actions-row .btn{width:100%}}
 </style>
 </head>
@@ -33,13 +33,18 @@
 </form>
 <div id="cardCreationResults"></div>
 </section>
+<section class="card section-card">
+<div class="section-head"><div class="toolbar"><div><h2>Daftar Kartu</h2><p class="muted">Kartu yang sudah dibuat pada business unit aktif.</p></div><button id="cardsRefresh" class="btn secondary" type="button">Refresh</button></div></div>
+<div id="cardsSummary" class="notice info">Memuat data kartu...</div>
+<div class="table-wrap"><table class="cards-table"><thead><tr><th>Kode</th><th>Produk/Jenis</th><th>Status</th><th>Customer</th><th>Dibuat</th><th>Aktivasi</th><th>QR</th><th>NFC</th></tr></thead><tbody id="cardsTable"><tr><td colspan="8" class="muted">Memuat data kartu...</td></tr></tbody></table></div>
+</section>
 <footer>ALJAVA TERIONITY • Card Manager • Tenant scoped</footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="/assets/app-config.js"></script>
 <script src="/assets/business-context.js"></script>
 <script>
-document.addEventListener('DOMContentLoaded',()=>{const q=new URLSearchParams(location.search).get('business_unit_id');const link=document.getElementById('cancelLink');if(q&&link)link.href=`/business-dashboard.html?business_unit_id=${encodeURIComponent(q)}`;});
+document.addEventListener('DOMContentLoaded',()=>{const q=new URLSearchParams(location.search).get('business_unit_id');const link=document.getElementById('cancelLink');const back=document.getElementById('backBusiness');if(q){const u=`/business-dashboard.html?business_unit_id=${encodeURIComponent(q)}`;if(link)link.href=u;if(back)back.href=u;}});
 </script>
 <script src="/assets/card-manager.js"></script>
 </body></html>
