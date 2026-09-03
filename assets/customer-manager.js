@@ -6,12 +6,20 @@
   const esc = (v) => String(v ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   if (!window.supabase?.createClient || !CONFIG.supabaseUrl || !CONFIG.supabaseKey) return;
   const sb = window.__ALJAVA_SUPABASE_CLIENT || window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
+  const businessContext = window.ALJAVA_BUSINESS_CONTEXT;
   let editingId = null;
   let loading = false;
 
   function msg(type, text) {
     const el = $('customerMsg');
     if (el) { el.className = `notice ${type}`; el.textContent = text; }
+  }
+
+  async function getBusinessUnitId() {
+    if (!businessContext) throw new Error('Konteks unit bisnis belum tersedia.');
+    if (!businessContext.active) await businessContext.load();
+    if (!businessContext.active?.id) throw new Error('Unit bisnis aktif belum tersedia.');
+    return businessContext.active.id;
   }
 
   function clearForm() {
@@ -25,7 +33,11 @@
     if (loading) return;
     loading = true;
     try {
-      const { data, error } = await sb.from('Customers').select('id,business_name,owner_name,whatsapp,email,google_review_url,address,product_type,created_at,total_reviews').order('created_at', { ascending:false });
+      const businessUnitId = await getBusinessUnitId();
+      const { data, error } = await sb.from('Customers')
+        .select('id,business_unit_id,business_name,owner_name,whatsapp,email,google_review_url,address,product_type,created_at,total_reviews')
+        .eq('business_unit_id', businessUnitId)
+        .order('created_at', { ascending:false });
       if (error) throw error;
       const cards = window.__ALJAVA_CARDS || [];
       const search = ($('customerSearch')?.value || '').toLowerCase().trim();
@@ -44,7 +56,8 @@
 
   async function editCustomer(id) {
     try {
-      const { data, error } = await sb.from('Customers').select('*').eq('id', id).single();
+      const businessUnitId = await getBusinessUnitId();
+      const { data, error } = await sb.from('Customers').select('*').eq('id', id).eq('business_unit_id', businessUnitId).single();
       if (error) throw error;
       editingId = id;
       $('customerBusiness').value = data.business_name || '';
@@ -82,8 +95,10 @@
     if (submit) submit.disabled = true;
     msg('info', editingId ? 'Menyimpan perubahan...' : 'Membuat customer...');
     try {
+      const businessUnitId = await getBusinessUnitId();
+      payload.business_unit_id = businessUnitId;
       const result = editingId
-        ? await sb.from('Customers').update(payload).eq('id', editingId).select().single()
+        ? await sb.from('Customers').update(payload).eq('id', editingId).eq('business_unit_id', businessUnitId).select().single()
         : await sb.from('Customers').insert(payload).select().single();
       if (result.error) throw result.error;
       const wasEditing = Boolean(editingId);
@@ -110,6 +125,7 @@
     $('customerSearch')?.addEventListener('input', () => void loadCustomers());
     document.addEventListener('aljava:data-loaded', () => void loadCustomers());
     document.addEventListener('aljava:data-refresh-requested', () => void loadCustomers());
+    document.addEventListener('aljava:business-changed', () => { clearForm(); void loadCustomers(); });
     void loadCustomers();
   }
 
