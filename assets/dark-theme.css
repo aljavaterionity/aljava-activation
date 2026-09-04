@@ -16,9 +16,9 @@
 html,body{background:#080808!important;color:#f5f5f5!important}
 body{background:radial-gradient(circle at 92% 0,rgba(59,130,246,.055),transparent 30%),radial-gradient(circle at 8% 40%,rgba(34,211,238,.025),transparent 28%),#080808!important;overflow-x:hidden}
 .stars{display:none!important}.page{background:transparent}.top{border-color:#202020}
-/* ALJAVA logo: fast visible cyan/blue shimmer. */
-.brand{position:relative;background:linear-gradient(90deg,#0879b8 0%,#35c9f2 18%,#0879b8 36%,#35c9f2 54%,#0879b8 72%,#35c9f2 90%,#0879b8 100%)!important;background-size:300% 100%!important;background-position:0% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoShine .75s linear infinite!important;will-change:background-position,filter;filter:brightness(1.04)}
-@keyframes aljavaLogoShine{0%{background-position:0% center;filter:brightness(1)}50%{background-position:150% center;filter:brightness(1.28)}100%{background-position:300% center;filter:brightness(1)}}
+/* ALJAVA logo: continuous left-to-right moving shine, no blinking. */
+.brand{background:linear-gradient(105deg,#0879b8 0%,#35c9f2 34%,#35c9f2 43%,#ffffff 50%,#35c9f2 57%,#35c9f2 66%,#0879b8 100%)!important;background-size:250% 100%!important;background-position:0% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoShine 1.8s linear infinite!important;will-change:background-position}
+@keyframes aljavaLogoShine{from{background-position:0% center}to{background-position:250% center}}
 .top .brand{font-size:24px;line-height:1.15;margin-bottom:5px}.menu-kicker{color:#60a5fa!important}
 .muted{color:#a1a1aa!important}
 .glass{background:rgba(17,17,17,.72)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 18px 45px rgba(0,0,0,.28)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
