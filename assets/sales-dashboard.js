@@ -4,8 +4,18 @@
 
   function installSalesStyles() {
     if (document.getElementById('aljava-sales-dashboard-ui')) return;
+    const style = document.createElement('style');
+    style.id = 'aljava-sales-dashboard-ui';
+    style.textContent = `
+      #salesMenu{display:flex;align-items:center;gap:12px;text-align:left}
+      #salesMenu .sales-menu-icon{width:48px;height:48px;min-width:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#10b981,#059669);box-shadow:0 10px 22px rgba(5,150,105,.18)}
+      #salesMenu .sales-menu-icon svg{width:25px;height:25px;display:block}
+      #salesMenu .sales-menu-label{font-weight:800}
+    `;
+    document.head.appendChild(style);
+
     const link = document.createElement('link');
-    link.id = 'aljava-sales-dashboard-ui';
+    link.id = 'aljava-sales-dashboard-ui-css';
     link.rel = 'stylesheet';
     link.href = '/assets/sales-dashboard-ui.css';
     document.head.appendChild(link);
@@ -82,8 +92,11 @@
 
     const existingButton = $('salesMenu');
     const button = existingButton || document.createElement('button');
+    button.id = 'salesMenu';
+    button.type = 'button';
+    button.className = existingButton?.className || 'btn';
+    button.innerHTML = `<span class="sales-menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg></span><span class="sales-menu-label">Dashboard Penjualan</span>`;
     if (!existingButton) {
-      button.id = 'salesMenu'; button.type = 'button'; button.className = 'btn'; button.textContent = 'Dashboard Penjualan';
       button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView(); });
       menuItems.insertBefore(button, menuItems.children[2] || null);
     }
