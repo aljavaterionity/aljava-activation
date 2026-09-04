@@ -22,24 +22,32 @@
       if(!client)throw new Error('Supabase client belum siap.'); if(loading)return loading;
       loading=(async()=>{
         const requested=new URLSearchParams(location.search).get('business_unit_id');
+        // When a requested business is supplied, resolve it directly for verified admins first.
+        // This avoids making business-dashboard/card-manager depend on membership RPC latency.
+        if(requested){
+          const {data:isAdmin,error:adminError}=await client.rpc('is_admin_user');
+          if(!adminError && isAdmin===true){
+            const {data:requestedUnit,error:unitError}=await client.from('business_units').select('id,name,slug,status,unit_type').eq('id',requested).eq('status','active').eq('unit_type','business').maybeSingle();
+            if(unitError)throw unitError;
+            if(requestedUnit){
+              units=[normalizeBusinessUnit({...requestedUnit,role:'admin'})];
+              active=units[0];
+              localStorage.setItem(STORAGE_KEY,active.id);
+              listeners.forEach(fn=>fn(active,units.slice()));
+              return {active,units:units.slice()};
+            }
+          }
+        }
         let memberData=null,memberError=null;
         const result=await client.rpc('get_my_business_units');
         memberData=result.data; memberError=result.error;
-        if(memberError && !requested) throw memberError;
+        if(memberError)throw memberError;
         units=Array.isArray(memberData)?memberData.map(normalizeBusinessUnit).filter(u=>u.status==='active'&&u.unit_type==='business'&&u.id):[];
-        // Admin global navigation can open any active business directly by ID,
-        // while ordinary users remain restricted to get_my_business_units().
-        if(requested&&!units.some(u=>String(u.id)===String(requested))){
-          const {data:isAdmin,error:adminError}=await client.rpc('is_admin_user');
-          if(adminError)throw memberError||adminError;
-          if(isAdmin===true){
-            const {data:requestedUnit,error:unitError}=await client.from('business_units').select('id,name,slug,status,unit_type').eq('id',requested).eq('status','active').eq('unit_type','business').maybeSingle();
-            if(unitError)throw unitError;
-            if(requestedUnit)units=[normalizeBusinessUnit({...requestedUnit,role:'admin'})];
-          }
-        }
-        if(!units.length && memberError)throw memberError;
-        const saved=localStorage.getItem(STORAGE_KEY);active=units.find(u=>String(u.id)===String(requested))||units.find(u=>String(u.id)===String(saved))||units[0]||null;if(active)localStorage.setItem(STORAGE_KEY,active.id);listeners.forEach(fn=>fn(active,units.slice()));return{active,units:units.slice()};
+        const saved=localStorage.getItem(STORAGE_KEY);
+        active=units.find(u=>String(u.id)===String(requested))||units.find(u=>String(u.id)===String(saved))||units[0]||null;
+        if(active)localStorage.setItem(STORAGE_KEY,active.id);
+        listeners.forEach(fn=>fn(active,units.slice()));
+        return{active,units:units.slice()};
       })().finally(()=>{loading=null;});return loading;
     },
     set(unitId){const next=units.find(u=>String(u.id)===String(unitId));if(!next)throw new Error('Unit bisnis tidak tersedia untuk akun ini.');active=next;localStorage.setItem(STORAGE_KEY,next.id);listeners.forEach(fn=>fn(active,units.slice()));window.dispatchEvent(new CustomEvent('aljava:business-changed',{detail:{businessUnit:active}}));return active;},
