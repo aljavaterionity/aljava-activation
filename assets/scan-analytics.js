@@ -13,7 +13,15 @@
     s.innerHTML=`<div style="margin-top:18px"><h1 style="margin:0">Scan Analytics & Reporting</h1><p class="muted">Pantau penggunaan kartu dan aktivitas pelanggan.</p></div><section class="stats"><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="anTotal" class="num">0</div></div><div class="glass stat"><div class="muted">30 Hari</div><div id="an30" class="num">0</div></div><div class="glass stat"><div class="muted">Hari Aktif</div><div id="anDays" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Terscan</div><div id="anCards" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Aktivitas Scan Terbaru</h2><p class="muted">Data aktual dari CardScans.</p></div><button id="anRefresh" class="btn" type="button">⟳ Refresh</button></div></div><div class="body"><div id="anTable" class="table-wrap"><div class="muted">Memuat...</div></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Harian</h2></div><div class="body"><div id="anDaily" class="table-wrap"><div class="muted">Memuat...</div></div></div></section>`;
     app.appendChild(s); installed=true;
     const menu=$('menuPanel')?.querySelector(':scope > .menu-settings .menu-items');
-    if(menu&&!$('analyticsMenu')){const b=document.createElement('button');b.id='analyticsMenu';b.type='button';b.className='btn';b.textContent='Scan Analytics';b.onclick=show;menu.insertBefore(b,$('refreshMenu')||null)}
+    if(menu&&!$('analyticsMenu')){
+      const b=document.createElement('button');
+      b.id='analyticsMenu';
+      b.type='button';
+      b.className='menu-item compact';
+      b.innerHTML=`<span class="menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 3-4 3 2 4-6"/><path d="M15 7h4v4"/></svg></span><span><b>Scan Analytics</b><small>Analisis aktivitas kartu</small></span>`;
+      b.onclick=show;
+      menu.insertBefore(b,$('refreshMenu')||null);
+    }
     $('anRefresh')?.addEventListener('click',()=>void load());
   }
   function show(){install();document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active-view',v.id==='analyticsView'));$('menuPanel')?.classList.remove('open');$('menuButton')?.setAttribute('aria-expanded','false');history.replaceState?.(null,'','#analytics');window.scrollTo({top:0,behavior:'smooth'});void load();}
