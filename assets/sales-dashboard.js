@@ -2,6 +2,16 @@
 (() => {
   'use strict';
 
+  function installDarkTheme() {
+    if (document.getElementById('aljava-dark-theme')) return;
+    const link = document.createElement('link');
+    link.id = 'aljava-dark-theme';
+    link.rel = 'stylesheet';
+    link.href = '/assets/dark-theme.css';
+    document.head.appendChild(link);
+  }
+  installDarkTheme();
+
   function installSalesStyles() {
     if (document.getElementById('aljava-sales-dashboard-ui')) return;
     const style = document.createElement('style');
