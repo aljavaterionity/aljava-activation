@@ -92,6 +92,14 @@
     root.querySelector(`#${activeId}`)?.classList.add('active');
   }
 
+  function orderItems(container, ids) {
+    if (!container) return;
+    ids.forEach((id) => {
+      const item = container.querySelector(`#${id}`);
+      if (item) container.appendChild(item);
+    });
+  }
+
   function clean() {
     const root = panel();
     if (!root) return;
@@ -114,14 +122,9 @@
     if (operations && operations.parentElement !== mainItems) mainItems.appendChild(operations);
     const analytics = root.querySelector('#analyticsMenu');
     if (analytics && analytics.parentElement !== mainItems) mainItems.appendChild(analytics);
-    ['dashboardMenu','salesMenu','cardsMenu','productMenu','customerMenu','operationsMenu','analyticsMenu'].forEach((id) => {
-      const item = root.querySelector(`#${id}`);
-      if (item && item.parentElement === mainItems) mainItems.appendChild(item);
-    });
-    ['refreshMenu','addAccountMenu','resetMenu','logoutMenu'].forEach((id) => {
-      const item = root.querySelector(`#${id}`);
-      if (item && item.parentElement !== settingsItems) settingsItems.appendChild(item);
-    });
+
+    orderItems(mainItems, ['dashboardMenu','salesMenu','cardsMenu','productMenu','customerMenu','operationsMenu','analyticsMenu']);
+    orderItems(settingsItems, ['refreshMenu','addAccountMenu','resetMenu','logoutMenu']);
 
     root.querySelectorAll('.menu-item').forEach(enhanceButton);
     setActive(root);
@@ -133,6 +136,7 @@
   const scheduleClean = () => {
     clean();
     window.setTimeout(clean, 250);
+    window.setTimeout(clean, 1000);
   };
 
   window.addEventListener('hashchange', () => setActive(panel()));
