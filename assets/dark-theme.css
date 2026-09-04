@@ -16,8 +16,8 @@
 html,body{background:#080808!important;color:#f5f5f5!important}
 body{background:radial-gradient(circle at 92% 0,rgba(59,130,246,.055),transparent 30%),radial-gradient(circle at 8% 40%,rgba(34,211,238,.025),transparent 28%),#080808!important;overflow-x:hidden}
 .stars{display:none!important}.page{background:transparent}.top{border-color:#202020}
-.brand{background:linear-gradient(90deg,#0879b8 0%,#35c9f2 18%,#0879b8 36%,#0b8fd0 54%,#35c9f2 72%,#0879b8 90%,#35c9f2 100%)!important;background-size:500% 100%!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoColorShift 1.8s linear infinite!important;font-weight:950!important;letter-spacing:2.2px!important;text-shadow:0 0 18px rgba(53,201,242,.08)}
-@keyframes aljavaLogoColorShift{0%{background-position:0% center}50%{background-position:100% center}100%{background-position:0% center}}
+.brand{background:linear-gradient(90deg,#0879b8 0%,#35c9f2 50%,#0879b8 100%)!important;background-size:200% 100%!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoColorShift 1.2s ease-in-out infinite!important;font-weight:950!important;letter-spacing:2.2px!important;text-shadow:0 0 18px rgba(53,201,242,.08)}
+@keyframes aljavaLogoColorShift{0%,100%{background-position:0% center}50%{background-position:100% center}}
 .top .brand{font-size:24px;line-height:1.15;margin-bottom:5px}.menu-kicker{color:#60a5fa!important}
 .muted{color:#a1a1aa!important}
 .glass{background:rgba(17,17,17,.72)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 18px 45px rgba(0,0,0,.28)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
