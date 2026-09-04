@@ -5,17 +5,37 @@
   const esc = v => String(v ?? '').replace(/[&<>\"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;'}[c]));
   const cfg = window.ALJAVA_CONFIG || {};
   let sb, installed=false, loading=false;
+
   function install(){
-    if(installed)return; const app=$('app');if(!app)return;
+    if(installed)return;
+    const app=$('app');if(!app)return;
     if(!$('scanAnalyticsUI')){const link=document.createElement('link');link.id='scanAnalyticsUI';link.rel='stylesheet';link.href='/assets/scan-analytics-ui.css';document.head.appendChild(link);}
-    if(!$('scanAnalyticsMenuUI')){const style=document.createElement('style');style.id='scanAnalyticsMenuUI';style.textContent=`#analyticsMenu{display:flex;align-items:center;gap:12px;text-align:left}#analyticsMenu .scan-analytics-menu-icon{display:grid;place-items:center;width:48px;height:48px;min-width:48px;border-radius:16px;background:linear-gradient(145deg,#2563eb,#1d4ed8);box-shadow:0 10px 22px rgba(37,99,235,.18);color:#fff}#analyticsMenu .scan-analytics-menu-icon svg{width:25px;height:25px;display:block}`;document.head.appendChild(style);}
+    if(!$('scanAnalyticsMenuUI')){
+      const style=document.createElement('style');
+      style.id='scanAnalyticsMenuUI';
+      style.textContent=`#analyticsMenu{display:flex;align-items:center;gap:12px;text-align:left}#analyticsMenu .scan-analytics-menu-icon{display:grid;place-items:center;width:48px;height:48px;min-width:48px;border-radius:16px;background:linear-gradient(145deg,#06b6d4,#0891b2);box-shadow:0 10px 22px rgba(8,145,178,.18);color:#fff}#analyticsMenu .scan-analytics-menu-icon svg{width:24px;height:24px;display:block}#analyticsMenu .scan-analytics-menu-label{font-weight:800}`;
+      document.head.appendChild(style);
+    }
+
     const s=document.createElement('section');s.id='analyticsView';s.className='view';
     s.innerHTML=`<div style="margin-top:18px"><h1 style="margin:0">Scan Analytics & Reporting</h1><p class="muted">Pantau penggunaan kartu dan aktivitas pelanggan.</p></div><section class="stats"><div class="glass stat"><div class="muted">Total Scan / Tap</div><div id="anTotal" class="num">0</div></div><div class="glass stat"><div class="muted">30 Hari</div><div id="an30" class="num">0</div></div><div class="glass stat"><div class="muted">Hari Aktif</div><div id="anDays" class="num">0</div></div><div class="glass stat"><div class="muted">Kartu Terscan</div><div id="anCards" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Aktivitas Scan Terbaru</h2><p class="muted">Data aktual dari CardScans.</p></div><button id="anRefresh" class="btn" type="button">⟳ Refresh</button></div></div><div class="body"><div id="anTable" class="table-wrap"><div class="muted">Memuat...</div></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Ringkasan Harian</h2></div><div class="body"><div id="anDaily" class="table-wrap"><div class="muted">Memuat...</div></div></div></section>`;
     app.appendChild(s);installed=true;
-    const menu=document.querySelector('.menu-section .menu-items');
-    if(menu&&!$('analyticsMenu')){const b=document.createElement('button');b.id='analyticsMenu';b.type='button';b.className='menu-item';b.innerHTML=`<span class="menu-icon scan-analytics-menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 3-4 3 2 4-6"/><path d="M15 7h4v4"/></svg></span><span><b>Scan Analytics</b><small>Analisis aktivitas kartu</small></span>`;b.onclick=show;menu.appendChild(b);}
+
+    const menu=$('menuPanel')?.querySelector(':scope > .menu-section .menu-items');
+    if(menu&&!$('analyticsMenu')){
+      const b=document.createElement('button');
+      b.id='analyticsMenu';
+      b.type='button';
+      b.className='menu-item';
+      b.innerHTML=`<span class="menu-icon scan-analytics-menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19V10"/><path d="M12 19V5"/><path d="M19 19v-7"/><path d="M3 19h18"/></svg></span><span><b>Scan Analytics</b><small>Analisis aktivitas kartu</small></span>`;
+      b.onclick=show;
+      const operationsMenu=$('operationsMenu');
+      if(operationsMenu?.parentElement===menu) operationsMenu.insertAdjacentElement('afterend',b);
+      else menu.appendChild(b);
+    }
     $('anRefresh')?.addEventListener('click',()=>void load());
   }
+
   function client(){if(!sb&&window.supabase?.createClient&&cfg.supabaseUrl&&cfg.supabaseKey)sb=window.supabase.createClient(cfg.supabaseUrl,cfg.supabaseKey);return sb;}
   function show(){install();document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active-view',v.id==='analyticsView'));$('menuPanel')?.classList.remove('open');$('menuButton')?.setAttribute('aria-expanded','false');history.replaceState?.(null,'','#analytics');window.scrollTo({top:0,behavior:'smooth'});void load();}
   async function load(){
