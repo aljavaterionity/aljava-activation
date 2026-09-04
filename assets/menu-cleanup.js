@@ -11,7 +11,7 @@
     product:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.5 7.5 7.5 4 7.5-4M12 21v-9.5"/></svg>',
     customer:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H7.2A4.2 4.2 0 0 0 3 19.2V21"/><circle cx="9.5" cy="7.5" r="4"/><path d="M21 21v-1.8a4.2 4.2 0 0 0-3-4M16 3.7a4 4 0 0 1 0 7.6"/></svg>',
     operations:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg>',
-    analytics:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h17"/><rect x="7" y="13" width="2.8" height="4" rx=".7"/><rect x="11.5" y="10" width="2.8" height="7" rx=".7"/><rect x="16" y="6" width="2.8" height="11" rx=".7"/><path d="M7 9l4-3 3 2 5-5"/></svg>',
+    analytics:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5"/><path d="M4 19h17"/><rect x="7" y="13" width="2.8" height="4" rx=".7"/><rect x="11.2" y="10" width="2.8" height="7" rx=".7"/><rect x="15.4" y="7" width="2.8" height="10" rx=".7"/><path d="m7 10 4-3 3 2 5-5"/></svg>',
     refresh:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4L3 10"/><path d="M3 5v5h5"/><path d="M4 13a8 8 0 0 0 14.7 4L21 14"/><path d="M21 19v-5h-5"/></svg>',
     reset:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg>',
     add:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M3 21v-1.5A4.5 4.5 0 0 1 7.5 15h3A4.5 4.5 0 0 1 15 19.5V21"/><path d="M18 8v6M15 11h6"/></svg>',
@@ -54,8 +54,9 @@
       #menuPanel .menu-settings .menu-item{min-height:54px;border-radius:14px;background:#f8fafc;box-shadow:none}
       #menuPanel .menu-settings .menu-icon{flex-basis:40px;width:40px;height:40px;border-radius:13px;box-shadow:none}
       #menuPanel #refreshMenu .menu-icon{background:#0EA5E9}
-      #menuPanel #resetMenu .menu-icon,#menuPanel #logoutMenu .menu-icon{background:#EF4444}
+      #menuPanel #resetMenu .menu-icon{background:#EF4444}
       #menuPanel #addAccountMenu .menu-icon{background:#22C55E}
+      #menuPanel #logoutMenu .menu-icon{background:#EF4444}
       #menuPanel .menu-settings .menu-item.danger{background:#fff7f8;border-color:#fee2e2;color:#b4233d}
       #menuPanel .menu-settings .menu-item:hover{background:#fff;box-shadow:0 8px 18px rgba(15,23,42,.06)}
       #menuPanel .menu-settings .menu-item b{font-size:12px}
@@ -117,7 +118,7 @@
       const item = root.querySelector(`#${id}`);
       if (item && item.parentElement === mainItems) mainItems.appendChild(item);
     });
-    ['refreshMenu','resetMenu','addAccountMenu','logoutMenu'].forEach((id) => {
+    ['refreshMenu','addAccountMenu','resetMenu','logoutMenu'].forEach((id) => {
       const item = root.querySelector(`#${id}`);
       if (item && item.parentElement !== settingsItems) settingsItems.appendChild(item);
     });
