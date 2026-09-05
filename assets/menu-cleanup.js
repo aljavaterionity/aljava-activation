@@ -7,7 +7,7 @@
   const menuVisuals = document.createElement('link');
   menuVisuals.id = 'aljava-main-menu-icons-css';
   menuVisuals.rel = 'stylesheet';
-  menuVisuals.href = '/assets/main-menu-icons.css?v=20260905';
+  menuVisuals.href = '/assets/main-menu-icons.css?v=20260905-2';
   document.head.appendChild(menuVisuals);
   const ICONS = {
     dashboard:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
@@ -69,7 +69,7 @@
       #menuPanel .menu-header h2{font-size:21px;color:#fff;letter-spacing:-.3px}
       #menuPanel .menu-kicker{color:#0091FA}
       #menuPanel .menu-close{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#d4d4d8}
-      @media(max-width:650px){#menuPanel .menu-item{min-height:60px;padding:9px 10px;border-radius:15px}#menuPanel .menu-icon{flex-basis:44px;width:44px;height:44px;border-radius:14px}#menuPanel .menu-settings .menu-icon{flex-basis:38px;width:38px;height:38px;border-radius:12px}}
+      @media(max-width:650px){#menuPanel .menu-item{min-height:60px;padding:9px 10px;border-radius:15px}#menuPanel .menu-icon{flex-basis:44px;width:44px;height:44px;border-radius:50%}#menuPanel .menu-settings .menu-icon{flex-basis:38px;width:38px;height:38px;border-radius:50%}}
     `;
     document.head.appendChild(style);
   }
