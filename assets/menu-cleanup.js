@@ -59,6 +59,15 @@
     });
   }
 
+  function ensureCardTableTheme() {
+    if (document.getElementById('aljavaCardTableTheme')) return;
+    const link = document.createElement('link');
+    link.id = 'aljavaCardTableTheme';
+    link.rel = 'stylesheet';
+    link.href = '/assets/card-table-theme.css?v=status-outline-20260905-2210';
+    document.head.appendChild(link);
+  }
+
   function clean() {
     const root = panel();
     if (!root) return;
@@ -85,6 +94,7 @@
 
   window.menuController = Object.freeze({ refresh: clean });
   const schedule = () => window.setTimeout(clean, 0);
+  ensureCardTableTheme();
   window.addEventListener('hashchange', schedule);
   document.addEventListener('aljava:sales-ui-ready', schedule);
   document.addEventListener('aljava:data-loaded', schedule);
