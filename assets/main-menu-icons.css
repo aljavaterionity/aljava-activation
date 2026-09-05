@@ -35,7 +35,6 @@
   stroke-linecap:round!important;
   stroke-linejoin:round!important;
 }
-/* Legacy text glyph fallback: hide the glyph and draw the same line icon as a mask. */
 #menuPanel .menu-icon:not(:has(svg)){
   color:transparent!important;
 }
@@ -93,3 +92,28 @@
 @media(max-width:650px){
   #menuPanel .menu-icon,#menuPanel .menu-item.active .menu-icon{flex-basis:44px!important;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;border-radius:50%!important}
 }
+
+/* Dashboard card-summary: keep the card status table visually consistent with the dark dashboard theme. */
+#dashboardView>.glass.panel:last-child{background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 8px 30px rgba(0,0,0,.25)!important}
+#dashboardView>.glass.panel:last-child>.head{background:rgba(255,255,255,.025)!important;border-bottom:1px solid rgba(255,255,255,.07)!important;color:#fff!important}
+#dashboardView>.glass.panel:last-child>.head h2{color:#fff!important}
+#dashboardView>.glass.panel:last-child>.head .muted{color:#a1a1aa!important}
+#dashboardView>.glass.panel:last-child>.body{background:transparent!important;color:#e4e4e7!important}
+#dashboardView>.glass.panel:last-child #cardSummary .notice.info{background:rgba(0,117,242,.08)!important;border:1px solid rgba(0,117,242,.18)!important;color:#7dd3fc!important;border-radius:12px!important;padding:11px 13px!important}
+#dashboardView>.glass.panel:last-child #cardSummary .notice.info strong{color:#bae6fd!important}
+#dashboardView>.glass.panel:last-child .card-bulk-actions{background:rgba(255,255,255,.025)!important;border:1px solid rgba(255,255,255,.07)!important;color:#e4e4e7!important;border-radius:12px!important}
+#dashboardView>.glass.panel:last-child .check-all{color:#e4e4e7!important}
+#dashboardView>.glass.panel:last-child .table-wrap{background:rgba(255,255,255,.025)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:16px!important;overflow-x:auto!important}
+#dashboardView>.glass.panel:last-child .table-wrap table{background:transparent!important;color:#e4e4e7!important}
+#dashboardView>.glass.panel:last-child .table-wrap th{background:rgba(255,255,255,.05)!important;color:#d4d4d8!important;border-bottom:1px solid rgba(255,255,255,.08)!important;padding:10px!important}
+#dashboardView>.glass.panel:last-child .table-wrap td{background:rgba(255,255,255,.018)!important;color:#e4e4e7!important;border-bottom:1px solid rgba(255,255,255,.06)!important;padding:10px!important}
+#dashboardView>.glass.panel:last-child .table-wrap tbody tr:hover td{background:rgba(0,117,242,.05)!important}
+#dashboardView>.glass.panel:last-child .table-wrap td strong{color:#f4f4f5!important}
+#dashboardView>.glass.panel:last-child .table-wrap .active{color:#4ade80!important}
+#dashboardView>.glass.panel:last-child .table-wrap .pending{color:#fbbf24!important}
+#dashboardView>.glass.panel:last-child .table-wrap .expired{color:#f87171!important}
+#dashboardView>.glass.panel:last-child .table-wrap .summary-link{background:rgba(0,117,242,.08)!important;border:1px solid rgba(0,117,242,.18)!important;color:#7dd3fc!important;border-radius:9px!important;padding:7px 10px!important;box-shadow:none!important;font-size:11px!important}
+#dashboardView>.glass.panel:last-child .table-wrap .summary-link:hover{background:rgba(0,117,242,.14)!important;border-color:rgba(0,117,242,.3)!important}
+#dashboardView>.glass.panel:last-child .table-wrap .summary-delete-card{background:rgba(239,68,68,.08)!important;border:1px solid rgba(239,68,68,.18)!important;color:#fca5a5!important;border-radius:9px!important;padding:7px 10px!important;font-size:11px!important}
+#dashboardView>.glass.panel:last-child #deleteSelectedCards{background:rgba(239,68,68,.08)!important;border-color:rgba(239,68,68,.18)!important;color:#fca5a5!important}
+#dashboardView>.glass.panel:last-child #deleteSelectedCards:not(:disabled):hover{background:rgba(239,68,68,.13)!important;border-color:rgba(239,68,68,.28)!important}
