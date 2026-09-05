@@ -11,7 +11,17 @@
   let installed = false;
   let loading = false;
 
+  function installDarkTheme() {
+    if (document.getElementById('aljava-operations-dashboard-dark-css')) return;
+    const link = document.createElement('link');
+    link.id = 'aljava-operations-dashboard-dark-css';
+    link.rel = 'stylesheet';
+    link.href = '/assets/operations-dashboard-dark.css?v=20260905-2318';
+    document.head.appendChild(link);
+  }
+
   function install() {
+    installDarkTheme();
     if (installed) return;
     const app = $('app'); if (!app) return;
     const section = document.createElement('section');
