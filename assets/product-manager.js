@@ -1,12 +1,11 @@
 /* ALJAVA TERIONITY — Product manager */
 (() => {
   'use strict';
-
-  const $ = (id) => document.getElementById(id);
-  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#039;' }[char]));
-  const money = (value) => new Intl.NumberFormat('id-ID', { style:'currency', currency:'IDR', maximumFractionDigits:0 }).format(Number(value) || 0);
-  const CONFIG = window.ALJAVA_CONFIG;
-  const sb = CONFIG && window.supabase?.createClient ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey) : null;
+  const CORE = window.ALJAVA_CORE;
+  const $ = CORE?.$ || ((id) => document.getElementById(id));
+  const esc = CORE?.esc || ((value) => String(value ?? ''));
+  const money = CORE?.money || ((value) => Number(value) || 0);
+  const sb = CORE?.supabase || null;
   if (!sb) return;
 
   let products = [];
@@ -15,14 +14,10 @@
   function normalizeCode(value) {
     return String(value || '').trim().toUpperCase().replace(/[^A-Z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
   }
-
   function showMessage(text, type = 'info') {
     const el = $('productMsg');
-    if (!el) return;
-    el.className = `notice ${type}`;
-    el.textContent = text;
+    if (el) { el.className = `notice ${type}`; el.textContent = text; }
   }
-
   function ensureCommissionField() {
     const form = $('productForm');
     if (!form || $('productCommission')) return;
@@ -31,7 +26,6 @@
     field.id = 'productCommission'; field.className = 'field'; field.type = 'number'; field.min = '0'; field.step = '1'; field.placeholder = 'Komisi per unit';
     if (subscription) subscription.insertAdjacentElement('afterend', field); else form.appendChild(field);
   }
-
   function fillForm(product) {
     ensureCommissionField();
     $('productName').value = product?.name || '';
@@ -47,7 +41,6 @@
     updatePreview();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
-
   function resetForm() {
     $('productForm')?.reset();
     if ($('productCommission')) $('productCommission').value = '0';
@@ -55,12 +48,11 @@
     const button = $('productSubmitBtn'); if (button) button.textContent = 'Tambah Produk';
     updatePreview();
   }
-
   async function loadProducts() {
     const table = $('productRows'); if (!table) return [];
     table.innerHTML = '<tr><td colspan="8" class="muted">Memuat produk...</td></tr>';
     try {
-      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').order('created_at', { ascending:false });
+      const { data, error } = await sb.from('Product').select('id,name,product_code,category,hpp,selling_price,subscription_price,commission,created_at').order('created_at', { ascending: false });
       if (error) throw error;
       products = data || [];
       table.innerHTML = products.length ? products.map((p) => `<tr><td>${esc(p.name)}</td><td><strong>${esc(p.product_code || '-')}</strong></td><td>${esc(p.category || '-')}</td><td>${money(p.hpp)}</td><td>${money(p.selling_price)}</td><td>${money(p.subscription_price)}</td><td>${money(p.commission)}</td><td><button class="btn product-edit" type="button" data-id="${esc(p.id)}">Edit</button> <button class="btn danger product-delete" type="button" data-id="${esc(p.id)}" data-name="${esc(p.name)}">Hapus</button></td></tr>`).join('') : '<tr><td colspan="8" class="muted">Belum ada produk. Tambahkan produk pertama.</td></tr>';
@@ -72,7 +64,6 @@
       return [];
     }
   }
-
   async function deleteProduct(id, name) {
     if (!window.confirm(`Hapus produk "${name}"?\n\nJika produk sudah dipakai kartu/transaksi, database dapat menolak penghapusan.`)) return;
     const { error } = await sb.from('Product').delete().eq('id', id);
@@ -82,7 +73,6 @@
     await loadProducts();
     document.dispatchEvent(new CustomEvent('aljava:products-changed'));
   }
-
   async function saveProduct(event, explicitForm = null) {
     if (event) { event.preventDefault(); event.stopPropagation(); event.stopImmediatePropagation(); }
     const form = explicitForm || $('productForm');
@@ -105,8 +95,11 @@
       const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission };
       const result = editingId ? await sb.from('Product').update(payload).eq('id', editingId) : await sb.from('Product').insert(payload);
       if (result.error) throw result.error;
-      const message = editingId ? `✓ Produk ${name} berhasil diperbarui.` : `✓ Produk ${name} (${code}) berhasil dibuat.`;
-      resetForm(); showMessage(message, 'ok'); await loadProducts(); document.dispatchEvent(new CustomEvent('aljava:products-changed')); document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
+      const wasEditing = Boolean(editingId);
+      resetForm(); showMessage(wasEditing ? `✓ Produk ${name} berhasil diperbarui.` : `✓ Produk ${name} (${code}) berhasil dibuat.`, 'ok');
+      await loadProducts();
+      document.dispatchEvent(new CustomEvent('aljava:products-changed'));
+      document.dispatchEvent(new CustomEvent('aljava:data-loaded'));
       return true;
     } catch (error) {
       const duplicate = String(error?.message || '').toLowerCase().includes('product_product_code_uq') || String(error?.message || '').toLowerCase().includes('duplicate key');
@@ -114,24 +107,21 @@
       return false;
     } finally { if (submit) { submit.disabled = false; submit.textContent = editingId ? 'Simpan Perubahan' : 'Tambah Produk'; } }
   }
-
   function updatePreview() {
     const source = $('productCode')?.value.trim() || $('productName')?.value || '';
     const code = normalizeCode(source); ensureCommissionField();
     if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code} • Komisi: ${money(Number($('productCommission')?.value || 0))} / unit` : 'Kode produk dibuat otomatis dari nama produk.';
   }
-
   function bind() {
     const form = $('productForm'); const submit = $('productSubmitBtn') || form?.querySelector('button');
     if (form && submit && form.dataset.productManagerBound !== '1') {
-      form.dataset.productManagerBound = '1'; submit.type = 'button'; submit.onclick = () => { void saveProduct(null, form); };
-      form.addEventListener('submit', (event) => { void saveProduct(event, form); }, true);
-      ['productCode','productName','productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview));
+      form.dataset.productManagerBound = '1';
+      submit.type = 'button';
+      submit.addEventListener('click', () => { void saveProduct(null, form); });
+      ['productCode', 'productName', 'productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview));
       ensureCommissionField(); updatePreview(); void loadProducts();
     }
   }
-
-  window.__createProduct = () => saveProduct(null, $('productForm'));
-  window.productManager = { loadProducts, createProduct: saveProduct, editProduct: (id) => { const product = products.find((item) => String(item.id) === String(id)); if (product) fillForm(product); } };
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once:true }); else bind();
+  window.productManager = Object.freeze({ loadProducts, createProduct: saveProduct, editProduct: (id) => { const product = products.find((item) => String(item.id) === String(id)); if (product) fillForm(product); } });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true }); else bind();
 })();
