@@ -14,13 +14,12 @@
   function showMessage(text, type = 'info') { const el = $('productMsg'); if (el) { el.className = `notice ${type}`; el.textContent = text; } }
   function ensureCommissionField() {
     const form = $('productForm'); if (!form || $('productCommission')) return;
-    const subscription = $('productSubscription'); const field = document.createElement('input');
-    field.id = 'productCommission'; field.className = 'field'; field.type = 'number'; field.min = '0'; field.step = '1'; field.placeholder = 'Komisi per unit';
+    const subscription = $('productSubscription'); const field = document.createElement('input'); field.id = 'productCommission'; field.className = 'field'; field.type = 'number'; field.min = '0'; field.step = '1'; field.placeholder = 'Komisi per unit';
     if (subscription) subscription.insertAdjacentElement('afterend', field); else form.appendChild(field);
   }
   function fillForm(product) {
-    ensureCommissionField(); $('productName').value = product?.name || ''; $('productCode').value = product?.product_code || ''; $('productCategory').value = product?.category || ''; $('productHpp').value = product?.hpp ?? ''; $('productSelling').value = product?.selling_price ?? ''; $('productSubscription').value = product?.subscription_price ?? ''; $('productCommission').value = product?.commission ?? '0';
-    editingId = product?.id || null; const button = $('productSubmitBtn'); if (button) button.textContent = editingId ? 'Simpan Perubahan' : 'Tambah Produk'; updatePreview(); window.scrollTo({ top: 0, behavior: 'smooth' });
+    ensureCommissionField(); $('productName').value = product?.name || ''; $('productCode').value = product?.product_code || ''; $('productCategory').value = product?.category || ''; $('productHpp').value = product?.hpp ?? ''; $('productSelling').value = product?.selling_price ?? ''; $('productSubscription').value = product?.subscription_price ?? ''; $('productCommission').value = product?.commission ?? '0'; editingId = product?.id || null;
+    const button = $('productSubmitBtn'); if (button) button.textContent = editingId ? 'Simpan Perubahan' : 'Tambah Produk'; updatePreview(); window.scrollTo({ top: 0, behavior: 'smooth' });
   }
   function resetForm() { $('productForm')?.reset(); if ($('productCommission')) $('productCommission').value = '0'; editingId = null; const button = $('productSubmitBtn'); if (button) button.textContent = 'Tambah Produk'; updatePreview(); }
   async function loadProducts() {
@@ -64,9 +63,9 @@
   }
   function updatePreview() { const source = $('productCode')?.value.trim() || $('productName')?.value || ''; const code = normalizeCode(source); ensureCommissionField(); if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code} • Komisi: ${money(Number($('productCommission')?.value || 0))} / unit` : 'Kode produk dibuat otomatis dari nama produk.'; }
   function bind() {
-    const form = $('productForm'); if (!form || form.dataset.productManagerBound === '1') return;
-    form.dataset.productManagerBound = '1'; ensureCommissionField(); form.addEventListener('submit', (event) => { void saveProduct(event); });
-    ['productCode', 'productName', 'productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview)); updatePreview(); void loadProducts();
+    const form = $('productForm'); const submit = $('productSubmitBtn'); if (!form || !submit || form.dataset.productManagerBound === '1') return;
+    form.dataset.productManagerBound = '1'; submit.type = 'button'; submit.addEventListener('click', () => void saveProduct());
+    ['productCode', 'productName', 'productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview)); ensureCommissionField(); updatePreview(); void loadProducts();
   }
   window.productManager = Object.freeze({ loadProducts, createProduct: saveProduct, editProduct: (id) => { const product = products.find((item) => String(item.id) === String(id)); if (product) fillForm(product); } });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true }); else bind();
