@@ -29,3 +29,15 @@
 #dashboardView>.glass.panel:last-child #cardTable td.expired{color:#f87171!important;background:rgba(239,68,68,.055)!important}
 #dashboardView > .grid > .panel:nth-child(2) .body > .row::before{content:none!important;display:none!important}
 @media(max-width:650px){#dashboardView>.glass.panel:last-child{border-radius:18px!important}#dashboardView>.glass.panel:last-child #cardTable{border-radius:16px!important}}
+
+/* CARD CODE VISIBILITY — match KPI numbers; this rule is intentionally last so legacy theme selectors cannot dim the code. */
+#dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2) strong,
+#dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2) strong *{
+  color:#0b8cff!important;
+  -webkit-text-fill-color:#0b8cff!important;
+  text-shadow:0 0 12px rgba(0,117,242,.18)!important;
+  font-weight:850!important;
+  opacity:1!important;
+  filter:brightness(1.12)!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2){color:#0b8cff!important}
