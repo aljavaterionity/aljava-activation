@@ -1,0 +1,85 @@
+-- ALJAVA TERIONITY — Sales Workspace
+-- Idempotent migration for sales/card ownership, admin reporting RPCs and grants.
+
+create unique index if not exists cards_id_unique_idx on public."Cards"(id);
+
+create table if not exists public.sales_code_assignments (
+  id uuid primary key default gen_random_uuid(),
+  sales_id uuid not null references public."Sales"(id) on delete restrict,
+  card_id uuid not null references public."Cards"(id) on delete restrict,
+  business_unit_id uuid null references public.business_units(id) on delete restrict,
+  assigned_at timestamptz not null default now(),
+  unassigned_at timestamptz null,
+  assigned_by uuid null references auth.users(id) on delete set null,
+  status text not null default 'active' check (status in ('active','unassigned')),
+  created_at timestamptz not null default now(),
+  constraint sales_code_assignments_dates_chk check (unassigned_at is null or unassigned_at >= assigned_at)
+);
+
+create unique index if not exists sales_code_assignments_one_active_card_idx on public.sales_code_assignments(card_id) where status='active';
+create index if not exists sales_code_assignments_sales_active_idx on public.sales_code_assignments(sales_id,status,assigned_at desc);
+create index if not exists sales_code_assignments_business_idx on public.sales_code_assignments(business_unit_id,status,assigned_at desc);
+alter table public.sales_code_assignments enable row level security;
+drop policy if exists "Admins can manage sales code assignments" on public.sales_code_assignments;
+create policy "Admins can manage sales code assignments" on public.sales_code_assignments for all using (is_admin_user()) with check (is_admin_user());
+
+create or replace function public.admin_sales_workspace(p_start timestamptz default null,p_end timestamptz default null)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare result jsonb; begin
+  if not is_admin_user() then raise exception 'unauthorized'; end if;
+  with sales_base as (select s.id,s.name,s.email,s.whatsapp,s.status,s.created_at,s.business_unit_id from public."Sales" s),
+  assignment as (select a.sales_id,count(*) filter(where a.status='active') codes_held,count(*) filter(where a.status='active' and lower(coalesce(c.status,''))='active') active_codes,string_agg(c.card_code,' ') filter(where a.status='active') code_search from public.sales_code_assignments a join public."Cards" c on c.id=a.card_id group by a.sales_id),
+  tx as (select t.sales_id,count(*) transactions,coalesce(sum(t.selling_price*t.quantity),0) revenue,coalesce(sum(t.commission),0) commission,count(distinct t.card_id) filter(where t.card_id is not null) sold_codes,max(t.transaction_date) last_activity,string_agg(distinct concat_ws(' ',coalesce(c.business_name,''),coalesce(c.owner_name,''),coalesce(c.whatsapp,'')),' ') customer_search from public."Transactions" t left join public."Customers" c on c.id=t.customer_id where (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end) group by t.sales_id)
+  select jsonb_build_object(
+    'sales',coalesce((select jsonb_agg(jsonb_build_object('id',s.id,'name',s.name,'email',s.email,'whatsapp',s.whatsapp,'status',s.status,'created_at',s.created_at,'business_unit_id',s.business_unit_id,'last_activity',t.last_activity,'codes_held',coalesce(a.codes_held,0),'active_codes',coalesce(a.active_codes,0),'sold_codes',coalesce(t.sold_codes,0),'transactions',coalesce(t.transactions,0),'revenue',coalesce(t.revenue,0),'commission',coalesce(t.commission,0),'conversion_rate',case when coalesce(a.codes_held,0)>0 then round((coalesce(t.sold_codes,0)::numeric/coalesce(a.codes_held,0)::numeric)*100,1) else 0 end,'search_text',concat_ws(' ',s.name,s.email,s.whatsapp,a.code_search,t.customer_search)) order by s.name) from sales_base s left join assignment a on a.sales_id=s.id left join tx t on t.sales_id=s.id),'[]'::jsonb),
+    'totals',jsonb_build_object('total_sales',(select count(*) from sales_base),'active_sales',(select count(*) from sales_base where lower(status)='active'),'codes_held',(select count(*) from public.sales_code_assignments where status='active'),'revenue',(select coalesce(sum(revenue),0) from tx),'commission',(select coalesce(sum(commission),0) from tx))
+  ) into result; return result;
+end; $$;
+revoke execute on function public.admin_sales_workspace(timestamptz,timestamptz) from anon;
+grant execute on function public.admin_sales_workspace(timestamptz,timestamptz) to authenticated;
+
+create or replace function public.admin_sales_detail(p_sales_id uuid,p_start timestamptz default null,p_end timestamptz default null)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare result jsonb; begin
+  if not is_admin_user() then raise exception 'unauthorized'; end if;
+  select jsonb_build_object(
+    'sales',(select to_jsonb(s) from public."Sales" s where s.id=p_sales_id),
+    'transactions',coalesce((select jsonb_agg(jsonb_build_object('id',t.id,'transaction_code',t.transaction_code,'transaction_date',t.transaction_date,'card_id',t.card_id,'product_id',t.product_id,'customer_id',t.customer_id,'quantity',t.quantity,'selling_price',t.selling_price,'commission',t.commission,'payment_status',t.payment_status,'amount_paid',t.amount_paid) order by t.transaction_date desc) from public."Transactions" t where t.sales_id=p_sales_id and (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end)),'[]'::jsonb),
+    'codes',coalesce((select jsonb_agg(jsonb_build_object('assignment_id',a.id,'card_id',c.id,'card_code',c.card_code,'product_type',c.product_type,'status',c.status,'assigned_at',a.assigned_at,'unassigned_at',a.unassigned_at,'assignment_status',a.status) order by a.status desc,a.assigned_at desc) from public.sales_code_assignments a join public."Cards" c on c.id=a.card_id where a.sales_id=p_sales_id),'[]'::jsonb),
+    'summary',jsonb_build_object('codes_held',(select count(*) from public.sales_code_assignments a where a.sales_id=p_sales_id and a.status='active'),'available_codes',(select count(*) from public.sales_code_assignments a join public."Cards" c on c.id=a.card_id where a.sales_id=p_sales_id and a.status='active' and lower(coalesce(c.status,''))='pending'),'sold_codes',(select count(distinct t.card_id) from public."Transactions" t where t.sales_id=p_sales_id and t.card_id is not null and (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end)),'transactions',(select count(*) from public."Transactions" t where t.sales_id=p_sales_id and (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end)),'revenue',(select coalesce(sum(t.selling_price*t.quantity),0) from public."Transactions" t where t.sales_id=p_sales_id and (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end)),'commission',(select coalesce(sum(t.commission),0) from public."Transactions" t where t.sales_id=p_sales_id and (p_start is null or t.transaction_date>=p_start) and (p_end is null or t.transaction_date<=p_end)),'paid_commission',null,'pending_commission',null)
+  ) into result; return result;
+end; $$;
+revoke execute on function public.admin_sales_detail(uuid,timestamptz,timestamptz) from anon;
+grant execute on function public.admin_sales_detail(uuid,timestamptz,timestamptz) to authenticated;
+
+create or replace function public.admin_assign_sales_card(p_sales_id uuid,p_card_id uuid)
+returns jsonb language plpgsql security definer set search_path=public,auth as $$
+declare v_bu uuid; v_id uuid; begin
+  if not is_admin_user() then raise exception 'unauthorized'; end if;
+  if not exists(select 1 from public."Sales" where id=p_sales_id and lower(status)='active') then raise exception 'sales_inactive'; end if;
+  select business_unit_id into v_bu from public."Cards" where id=p_card_id;
+  if not found then raise exception 'card_not_found'; end if;
+  if exists(select 1 from public.sales_code_assignments where card_id=p_card_id and status='active') then raise exception 'card_already_assigned'; end if;
+  insert into public.sales_code_assignments(sales_id,card_id,business_unit_id,assigned_by) values(p_sales_id,p_card_id,v_bu,auth.uid()) returning id into v_id;
+  return jsonb_build_object('id',v_id);
+end; $$;
+revoke execute on function public.admin_assign_sales_card(uuid,uuid) from anon;
+grant execute on function public.admin_assign_sales_card(uuid,uuid) to authenticated;
+
+create or replace function public.admin_unassign_sales_card(p_assignment_id uuid)
+returns boolean language plpgsql security definer set search_path=public,auth as $$ begin
+  if not is_admin_user() then raise exception 'unauthorized'; end if;
+  update public.sales_code_assignments set status='unassigned',unassigned_at=now() where id=p_assignment_id and status='active'; return found;
+end; $$;
+revoke execute on function public.admin_unassign_sales_card(uuid) from anon;
+grant execute on function public.admin_unassign_sales_card(uuid) to authenticated;
+
+create or replace function public.admin_set_sales_status(p_sales_id uuid,p_status text)
+returns boolean language plpgsql security definer set search_path=public,auth as $$ begin
+  if not is_admin_user() then raise exception 'unauthorized'; end if;
+  if lower(p_status) not in ('active','inactive') then raise exception 'invalid_status'; end if;
+  update public."Sales" set status=lower(p_status) where id=p_sales_id;
+  update public.business_memberships set status=lower(p_status) where user_id=p_sales_id and role='sales'; return found;
+end; $$;
+revoke execute on function public.admin_set_sales_status(uuid,text) from anon;
+grant execute on function public.admin_set_sales_status(uuid,text) to authenticated;
