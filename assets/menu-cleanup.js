@@ -4,6 +4,11 @@
 
   const panel = () => document.getElementById('menuPanel');
   const normalize = (value) => String(value || '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim().toLowerCase();
+  const menuVisuals = document.createElement('link');
+  menuVisuals.id = 'aljava-main-menu-icons-css';
+  menuVisuals.rel = 'stylesheet';
+  menuVisuals.href = '/assets/main-menu-icons.css?v=20260905';
+  document.head.appendChild(menuVisuals);
   const ICONS = {
     dashboard:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
     sales:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>',
