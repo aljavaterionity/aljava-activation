@@ -11,4 +11,114 @@
       return Promise.resolve([]);
     }
   });
+
+  /* VISUAL-ONLY FINAL OVERRIDE
+     This script is already loaded after menu-cleanup.js, so this style is the final
+     author layer. It exists only to make the Main Menu icon system deterministic
+     even when an older cached menu-cleanup.js is still present in a browser. */
+  if (!document.getElementById('aljava-main-menu-final-icon-style')) {
+    const style = document.createElement('style');
+    style.id = 'aljava-main-menu-final-icon-style';
+    style.textContent = `
+      #menuPanel .menu-section .menu-icon,
+      #menuPanel .menu-settings .menu-icon {
+        flex:0 0 44px!important;
+        width:44px!important;
+        height:44px!important;
+        border-radius:50%!important;
+        display:grid!important;
+        place-items:center!important;
+        background:transparent!important;
+        border:1px solid transparent!important;
+        color:rgba(255,255,255,.52)!important;
+        box-shadow:none!important;
+        filter:none!important;
+        transform:none!important;
+      }
+      #menuPanel .menu-section .menu-icon svg,
+      #menuPanel .menu-settings .menu-icon svg {
+        width:22px!important;
+        height:22px!important;
+        fill:none!important;
+        stroke:currentColor!important;
+        stroke-width:1.9!important;
+        stroke-linecap:round!important;
+        stroke-linejoin:round!important;
+      }
+      #menuPanel #dashboardMenu .menu-icon{color:#0075F2!important}
+      #menuPanel #salesMenu .menu-icon{color:#00B8FF!important}
+      #menuPanel #cardsMenu .menu-icon{color:#10B981!important}
+      #menuPanel #productMenu .menu-icon{color:#F59E0B!important}
+      #menuPanel #customerMenu .menu-icon{color:#8B5CF6!important}
+      #menuPanel #operationsMenu .menu-icon{color:#38BDF8!important}
+      #menuPanel #analyticsMenu .menu-icon{color:#6366F1!important}
+      #menuPanel #refreshMenu .menu-icon{color:#3B82F6!important}
+      #menuPanel #resetMenu .menu-icon{color:#9CA3AF!important}
+      #menuPanel #addAccountMenu .menu-icon{color:#10B981!important}
+      #menuPanel #logoutMenu .menu-icon{color:#EF4444!important}
+
+      #menuPanel .menu-section .menu-item.active .menu-icon,
+      #menuPanel .menu-settings .menu-item.active .menu-icon {
+        flex:0 0 44px!important;
+        width:44px!important;
+        height:44px!important;
+        border-radius:50%!important;
+        color:#fff!important;
+        background:rgba(255,255,255,.10)!important;
+        border:1px solid rgba(255,255,255,.24)!important;
+        box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 0 1px rgba(255,255,255,.025),0 0 20px rgba(0,117,242,.30),0 8px 18px rgba(0,0,0,.24)!important;
+        transform:translateY(-1px)!important;
+      }
+      #menuPanel #dashboardMenu.active .menu-icon{background:rgba(0,117,242,.14)!important;border-color:rgba(0,117,242,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(0,117,242,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #salesMenu.active .menu-icon{background:rgba(0,184,255,.14)!important;border-color:rgba(0,184,255,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(0,184,255,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #cardsMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(16,185,129,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #productMenu.active .menu-icon{background:rgba(245,158,11,.14)!important;border-color:rgba(245,158,11,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(245,158,11,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #customerMenu.active .menu-icon{background:rgba(139,92,246,.14)!important;border-color:rgba(139,92,246,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(139,92,246,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #operationsMenu.active .menu-icon{background:rgba(56,189,248,.14)!important;border-color:rgba(56,189,248,.30)!important;box-shadow:inset 0 1px 1px rgba(56,189,248,.30),0 0 20px rgba(56,189,248,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #analyticsMenu.active .menu-icon{background:rgba(99,102,241,.14)!important;border-color:rgba(99,102,241,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(99,102,241,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #refreshMenu.active .menu-icon{background:rgba(59,130,246,.14)!important;border-color:rgba(59,130,246,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(59,130,246,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #resetMenu.active .menu-icon{background:rgba(156,163,175,.14)!important;border-color:rgba(156,163,175,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(156,163,175,.22),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #addAccountMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(16,185,129,.30),0 8px 18px rgba(0,0,0,.24)!important}
+      #menuPanel #logoutMenu.active .menu-icon{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(239,68,68,.30),0 8px 18px rgba(0,0,0,.24)!important}
+
+      #menuPanel #dashboardMenu.active b{color:#0075F2!important}
+      #menuPanel #salesMenu.active b{color:#00B8FF!important}
+      #menuPanel #cardsMenu.active b{color:#10B981!important}
+      #menuPanel #productMenu.active b{color:#F59E0B!important}
+      #menuPanel #customerMenu.active b{color:#8B5CF6!important}
+      #menuPanel #operationsMenu.active b{color:#38BDF8!important}
+      #menuPanel #analyticsMenu.active b{color:#6366F1!important}
+      #menuPanel #refreshMenu.active b{color:#3B82F6!important}
+      #menuPanel #resetMenu.active b{color:#9CA3AF!important}
+      #menuPanel #addAccountMenu.active b{color:#10B981!important}
+      #menuPanel #logoutMenu.active b{color:#EF4444!important}
+
+      #menuPanel .menu-item:hover .menu-icon{
+        transform:translateY(-1px)!important;
+        background:rgba(255,255,255,.045)!important;
+        border-color:rgba(255,255,255,.10)!important;
+        box-shadow:0 0 12px rgba(255,255,255,.035)!important;
+        filter:brightness(1.16)!important;
+      }
+      #menuPanel #dashboardMenu:hover .menu-icon{background:rgba(0,117,242,.07)!important;border-color:rgba(0,117,242,.16)!important;box-shadow:0 0 14px rgba(0,117,242,.10)!important}
+      #menuPanel #salesMenu:hover .menu-icon{background:rgba(0,184,255,.07)!important;border-color:rgba(0,184,255,.16)!important;box-shadow:0 0 14px rgba(0,184,255,.10)!important}
+      #menuPanel #cardsMenu:hover .menu-icon{background:rgba(16,185,129,.07)!important;border-color:rgba(16,185,129,.16)!important;box-shadow:0 0 14px rgba(16,185,129,.10)!important}
+      #menuPanel #productMenu:hover .menu-icon{background:rgba(245,158,11,.07)!important;border-color:rgba(245,158,11,.16)!important;box-shadow:0 0 14px rgba(245,158,11,.10)!important}
+      #menuPanel #customerMenu:hover .menu-icon{background:rgba(139,92,246,.07)!important;border-color:rgba(139,92,246,.16)!important;box-shadow:0 0 14px rgba(139,92,246,.10)!important}
+      #menuPanel #operationsMenu:hover .menu-icon{background:rgba(56,189,248,.07)!important;border-color:rgba(56,189,248,.16)!important;box-shadow:0 0 14px rgba(56,189,248,.10)!important}
+      #menuPanel #analyticsMenu:hover .menu-icon{background:rgba(99,102,241,.07)!important;border-color:rgba(99,102,241,.16)!important;box-shadow:0 0 14px rgba(99,102,241,.10)!important}
+      #menuPanel #refreshMenu:hover .menu-icon{background:rgba(59,130,246,.07)!important;border-color:rgba(59,130,246,.16)!important;box-shadow:0 0 14px rgba(59,130,246,.10)!important}
+      #menuPanel #resetMenu:hover .menu-icon{background:rgba(156,163,175,.07)!important;border-color:rgba(156,163,175,.16)!important;box-shadow:0 0 14px rgba(156,163,175,.08)!important}
+      #menuPanel #addAccountMenu:hover .menu-icon{background:rgba(16,185,129,.07)!important;border-color:rgba(16,185,129,.16)!important;box-shadow:0 0 14px rgba(16,185,129,.10)!important}
+      #menuPanel #logoutMenu:hover .menu-icon{background:rgba(239,68,68,.07)!important;border-color:rgba(239,68,68,.16)!important;box-shadow:0 0 14px rgba(239,68,68,.10)!important}
+
+      @media(max-width:650px){
+        #menuPanel .menu-section .menu-icon,
+        #menuPanel .menu-settings .menu-icon,
+        #menuPanel .menu-section .menu-item.active .menu-icon,
+        #menuPanel .menu-settings .menu-item.active .menu-icon{flex-basis:44px!important;width:44px!important;height:44px!important;border-radius:50%!important}
+      }
+    `;
+    document.head.appendChild(style);
+  }
 })();
