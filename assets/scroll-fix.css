@@ -88,7 +88,7 @@ body,#app,.page,.view { min-width:0; max-width:100%; overflow-x:hidden; }
   #dashboardView > .panel:last-of-type #cardTable td { padding:12px; }
 }
 
-/* KPI NEON WHITE — six KPI cards only. */
+/* KPI WHITE GLOW — six KPI cards only, softened. */
 #dashboardView .stats .stat .muted,
 #dashboardView .stats .stat .num{
   color:#ffffff!important;
@@ -96,7 +96,7 @@ body,#app,.page,.view { min-width:0; max-width:100%; overflow-x:hidden; }
   background:none!important;
   -webkit-background-clip:initial!important;
   background-clip:initial!important;
-  text-shadow:0 0 5px rgba(255,255,255,.95),0 0 12px rgba(255,255,255,.70),0 0 24px rgba(255,255,255,.38)!important;
+  text-shadow:0 0 3px rgba(255,255,255,.72),0 0 8px rgba(255,255,255,.38),0 0 14px rgba(255,255,255,.16)!important;
 }
 #dashboardView .stats .stat .muted{font-weight:800!important;letter-spacing:.35px}
 #dashboardView .stats .stat .num{font-weight:900!important;filter:none!important}
