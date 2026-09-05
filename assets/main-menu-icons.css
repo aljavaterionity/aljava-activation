@@ -41,3 +41,68 @@
   filter:brightness(1.12)!important;
 }
 #dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2){color:#0b8cff!important}
+
+/* PREMIUM SOLID TABLE — replace previous glass treatment on the card summary only. */
+#dashboardView>.glass.panel:last-child #cardTable,
+#dashboardView>.glass.panel:last-child #cardTable::after,
+#dashboardView>.glass.panel:last-child .card-bulk-actions{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#dashboardView>.glass.panel:last-child .card-bulk-actions{
+  background:#17191d!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:16px!important;
+  box-shadow:0 10px 24px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable{
+  background:#0f1115!important;
+  border:1px solid rgba(255,255,255,.09)!important;
+  border-radius:18px!important;
+  box-shadow:0 16px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.035)!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable::after{content:none!important}
+#dashboardView>.glass.panel:last-child #cardTable th{
+  background:#1b1e23!important;
+  color:#f4f4f5!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:none!important;
+  text-shadow:none!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable td{
+  background:#12151a!important;
+  color:#dfe3e8!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  box-shadow:none!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable tbody tr:nth-child(even) td{background:#101318!important}
+#dashboardView>.glass.panel:last-child #cardTable tbody tr:hover td{background:#181c22!important}
+#dashboardView>.glass.panel:last-child #cardTable tbody tr:last-child td{border-bottom:0!important}
+#dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2) strong,
+#dashboardView>.glass.panel:last-child #cardTable tbody td:nth-child(2) strong *{
+  color:#168cff!important;
+  -webkit-text-fill-color:#168cff!important;
+  text-shadow:none!important;
+  filter:none!important;
+  font-weight:850!important;
+  opacity:1!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable td.active{color:#4ade80!important;background:#102018!important;border-left:2px solid #22c55e!important}
+#dashboardView>.glass.panel:last-child #cardTable td.pending{color:#fbbf24!important;background:#211a0d!important;border-left:2px solid #f59e0b!important}
+#dashboardView>.glass.panel:last-child #cardTable td.expired{color:#f87171!important;background:#221315!important;border-left:2px solid #ef4444!important}
+#dashboardView>.glass.panel:last-child #cardTable .summary-link{
+  background:#16212c!important;
+  border:1px solid rgba(0,145,250,.22)!important;
+  color:#6dc7ff!important;
+  box-shadow:none!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable .summary-link:hover{background:#1b2b39!important;border-color:rgba(0,145,250,.40)!important}
+#dashboardView>.glass.panel:last-child #cardTable .summary-delete-card,
+#dashboardView>.glass.panel:last-child #deleteSelectedCards{
+  background:#241719!important;
+  border:1px solid rgba(239,68,68,.22)!important;
+  color:#fca5a5!important;
+  box-shadow:none!important;
+}
+#dashboardView>.glass.panel:last-child #cardTable .summary-delete-card:hover,
+#dashboardView>.glass.panel:last-child #deleteSelectedCards:hover{background:#301b1e!important;border-color:rgba(239,68,68,.38)!important}
