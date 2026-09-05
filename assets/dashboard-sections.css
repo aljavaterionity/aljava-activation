@@ -123,3 +123,72 @@
   background:linear-gradient(90deg,rgba(139,92,246,.075),rgba(255,255,255,.025))!important;
   box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 15px 30px rgba(0,0,0,.25),0 0 24px rgba(139,92,246,.06)!important;
 }
+
+/* KPI-LIKE TABLE CARDS — same shell, edge and glass language as the six KPI cards */
+#dashboardView > .grid > .panel:first-child .table-wrap,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row{
+  position:relative!important;
+  overflow:hidden!important;
+  border:1px solid rgba(255,255,255,.065)!important;
+  border-radius:22px!important;
+  background:rgba(255,255,255,.032)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),inset 0 -1px 0 rgba(255,255,255,.025),0 16px 34px rgba(0,0,0,.24)!important;
+  backdrop-filter:blur(18px)!important;
+  -webkit-backdrop-filter:blur(18px)!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap::after,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row::after{
+  content:""!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  border-radius:inherit!important;
+  padding:0!important;
+  background:linear-gradient(140deg,rgba(255,255,255,.18),rgba(255,255,255,.06) 18%,transparent 42%,transparent 72%,rgba(0,117,242,.06))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(255,255,255,.025)!important;
+  opacity:.72!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap > table,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row > *{
+  position:relative!important;
+  z-index:2!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap thead th{
+  background:rgba(255,255,255,.045)!important;
+  color:#cfd3da!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025)!important;
+  text-shadow:none!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap tbody td{
+  background:rgba(255,255,255,.012)!important;
+  color:#e4e4e7!important;
+  border-bottom:1px solid rgba(255,255,255,.045)!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap tbody tr:hover td{
+  background:rgba(255,255,255,.026)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.02),inset 0 -1px 0 rgba(0,117,242,.045)!important;
+}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row{
+  min-height:58px!important;
+  margin:0!important;
+  padding:10px 14px!important;
+  border-color:rgba(255,255,255,.065)!important;
+  background:rgba(255,255,255,.032)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),inset 0 -1px 0 rgba(255,255,255,.025),0 12px 28px rgba(0,0,0,.20)!important;
+}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row::before{display:none!important}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row > strong{color:#f0f3f7!important}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row > .muted{color:#a1a1aa!important}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row:hover{
+  transform:translateY(-1px)!important;
+  border-color:rgba(255,255,255,.12)!important;
+  background:rgba(255,255,255,.042)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),0 16px 34px rgba(0,0,0,.28),0 0 0 1px rgba(0,117,242,.025)!important;
+}
+@media(max-width:650px){
+  #dashboardView > .grid > .panel:first-child .table-wrap,
+  #dashboardView > .grid > .panel:nth-child(2) .body > .row{border-radius:18px!important}
+  #dashboardView > .grid > .panel:first-child .table-wrap{border-radius:18px!important}
+}
