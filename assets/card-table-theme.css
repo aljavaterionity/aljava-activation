@@ -1,0 +1,100 @@
+/* ALJAVA TERIONITY — Card table: premium solid dashboard surface, no glass */
+#dashboardView > .glass.panel:last-child,
+#dashboardView > .glass.panel:last-child .card-bulk-actions,
+#dashboardView > .glass.panel:last-child #cardTable{
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+
+#dashboardView > .glass.panel:last-child{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+  border:1px solid rgba(255,255,255,.08)!important;
+  border-radius:22px!important;
+  background:linear-gradient(180deg,#15171a 0%,#0d0f12 100%)!important;
+  box-shadow:0 18px 42px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.045)!important;
+}
+#dashboardView > .glass.panel:last-child::after{content:""!important;position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.035),transparent 24%,transparent 76%,rgba(255,255,255,.018))!important;box-shadow:none!important;opacity:1!important}
+#dashboardView > .glass.panel:last-child>.head,
+#dashboardView > .glass.panel:last-child>.body{position:relative!important;z-index:1!important;background:transparent!important}
+
+#dashboardView > .glass.panel:last-child .card-bulk-actions{
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:16px!important;
+  background:#17191d!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 8px 22px rgba(0,0,0,.20)!important;
+}
+#dashboardView > .glass.panel:last-child .check-all{color:#f4f4f5!important}
+
+#dashboardView > .glass.panel:last-child #cardTable{
+  position:relative!important;
+  overflow-x:auto!important;
+  border:1px solid rgba(255,255,255,.075)!important;
+  border-radius:18px!important;
+  background:#101216!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 30px rgba(0,0,0,.26)!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable::after{content:none!important}
+#dashboardView > .glass.panel:last-child #cardTable>table{background:transparent!important;border-collapse:separate!important;border-spacing:0!important}
+#dashboardView > .glass.panel:last-child #cardTable th{
+  background:#191c21!important;
+  color:#f1f5f9!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:inset 0 -1px 0 rgba(0,0,0,.35)!important;
+  text-shadow:none!important;
+  font-weight:800!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable td{
+  background:#111419!important;
+  color:#d8dde5!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  box-shadow:none!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable tbody tr:nth-child(even) td{background:#0f1216!important}
+#dashboardView > .glass.panel:last-child #cardTable tbody tr:hover td{background:#171b22!important}
+#dashboardView > .glass.panel:last-child #cardTable tbody tr:last-child td{border-bottom:0!important}
+
+/* Card code: bright KPI-like blue, clean rather than glowing */
+#dashboardView > .glass.panel:last-child #cardTable tbody td:nth-child(2) strong,
+#dashboardView > .glass.panel:last-child #cardTable tbody td:nth-child(2) strong *{
+  color:#168cff!important;
+  -webkit-text-fill-color:#168cff!important;
+  text-shadow:none!important;
+  filter:none!important;
+  opacity:1!important;
+  font-weight:850!important;
+}
+
+/* Status cells become compact colored badges */
+#dashboardView > .glass.panel:last-child #cardTable td.active,
+#dashboardView > .glass.panel:last-child #cardTable td.pending,
+#dashboardView > .glass.panel:last-child #cardTable td.expired{
+  font-weight:800!important;
+  border-left:1px solid transparent!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable td.active{color:#4ade80!important;background:#102018!important;border-left-color:#22c55e!important}
+#dashboardView > .glass.panel:last-child #cardTable td.pending{color:#fbbf24!important;background:#211a0d!important;border-left-color:#f59e0b!important}
+#dashboardView > .glass.panel:last-child #cardTable td.expired{color:#f87171!important;background:#221315!important;border-left-color:#ef4444!important}
+
+#dashboardView > .glass.panel:last-child #cardTable .summary-link{
+  background:#16212c!important;
+  border:1px solid rgba(0,145,250,.22)!important;
+  color:#6dc7ff!important;
+  box-shadow:none!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable .summary-link:hover{background:#1a2a38!important;border-color:rgba(0,145,250,.38)!important}
+#dashboardView > .glass.panel:last-child #cardTable .summary-delete-card,
+#dashboardView > .glass.panel:last-child #deleteSelectedCards{
+  background:#241719!important;
+  border:1px solid rgba(239,68,68,.22)!important;
+  color:#fca5a5!important;
+  box-shadow:none!important;
+}
+#dashboardView > .glass.panel:last-child #cardTable .summary-delete-card:hover,
+#dashboardView > .glass.panel:last-child #deleteSelectedCards:hover{background:#301b1e!important;border-color:rgba(239,68,68,.38)!important}
+
+@media(max-width:650px){
+  #dashboardView > .glass.panel:last-child{border-radius:18px!important}
+  #dashboardView > .glass.panel:last-child #cardTable{border-radius:15px!important}
+}
