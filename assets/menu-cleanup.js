@@ -7,6 +7,7 @@
   const ICONS = {
     dashboard: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
     sales: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>',
+    staff: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M8 9h8M8 13h5"/><circle cx="17" cy="15.5" r="2.2"/></svg>',
     cards: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
     product: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.5 7.5 7.5 4 7.5-4M12 21v-9.5"/></svg>',
     customer: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H7.2A4.2 4.2 0 0 0 3 19.2V21"/><circle cx="9.5" cy="7.5" r="4"/><path d="M21 21v-1.8a4.2 4.2 0 0 0-3-4M16 3.7a4 4 0 0 1 0 7.6"/></svg>',
@@ -47,6 +48,22 @@
     ids.forEach((id) => { const item = container.querySelector(`#${id}`); if (item) container.appendChild(item); });
   }
 
+  function ensureStaffWorkspaceMenu() {
+    const root = panel();
+    const mainSection = root?.querySelector('.menu-section');
+    if (!mainSection || root.querySelector('#staffWorkspaceSection')) return;
+    const section = document.createElement('div');
+    section.id = 'staffWorkspaceSection';
+    section.className = 'menu-section staff-workspace-section';
+    section.innerHTML = '<div class="menu-section-title">Staff Workspace</div><div class="menu-items"><button id="staffSalesWorkspaceMenu" class="menu-item" type="button"><span class="menu-icon staff-workspace-icon" aria-hidden="true">' + ICONS.staff + '</span><span><b>Sales Staff Workspace</b><small>Dashboard penjualan khusus staff</small></span></button></div>';
+    mainSection.insertAdjacentElement('afterend', section);
+    root.querySelector('#staffSalesWorkspaceMenu')?.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      window.location.href = '/staff-sales.html';
+    });
+  }
+
   function brightenCardCodes() {
     document.querySelectorAll('#dashboardView #cardTable tbody td:nth-child(2) strong').forEach((code) => {
       code.style.fontWeight = '800';
@@ -62,8 +79,7 @@
   function ensureCardTableTheme() {
     if (document.getElementById('aljavaCardTableTheme')) return;
     const link = document.createElement('link');
-    link.id = 'aljavaCardTableTheme';
-    link.rel = 'stylesheet';
+    link.id = 'aljavaCardTableTheme'; link.rel = 'stylesheet';
     link.href = '/assets/card-table-theme.css?v=status-outline-20260905-2210';
     document.head.appendChild(link);
   }
@@ -71,8 +87,7 @@
   function ensureDashboardMainTheme() {
     if (document.getElementById('aljavaDashboardMainTheme')) return;
     const link = document.createElement('link');
-    link.id = 'aljavaDashboardMainTheme';
-    link.rel = 'stylesheet';
+    link.id = 'aljavaDashboardMainTheme'; link.rel = 'stylesheet';
     link.href = '/assets/dashboard-main-theme.css?v=dashboard-unified-20260905-2318';
     document.head.appendChild(link);
   }
@@ -84,9 +99,7 @@
     const settingsItems = root.querySelector('.menu-settings .menu-items');
     if (!mainItems || !settingsItems) return;
 
-    root.querySelectorAll('button').forEach((button) => {
-      if (normalize(button.textContent) === 'hpp') button.remove();
-    });
+    root.querySelectorAll('button').forEach((button) => { if (normalize(button.textContent) === 'hpp') button.remove(); });
     const salesButtons = [...root.querySelectorAll('button')].filter((button) => normalize(button.textContent) === 'dashboard penjualan');
     const sales = root.querySelector('#salesMenu') || salesButtons[0];
     salesButtons.forEach((button) => { if (button !== sales) button.remove(); });
@@ -95,6 +108,7 @@
     orderItems(mainItems, ['dashboardMenu', 'salesMenu', 'cardsMenu', 'productMenu', 'customerMenu', 'operationsMenu', 'analyticsMenu']);
     orderItems(settingsItems, ['refreshMenu', 'addAccountMenu', 'resetMenu', 'logoutMenu']);
     root.querySelectorAll('.menu-item').forEach(enhanceButton);
+    ensureStaffWorkspaceMenu();
     setActive(root);
     brightenCardCodes();
     document.getElementById('logoutTop')?.remove();
