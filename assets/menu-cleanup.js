@@ -68,6 +68,15 @@
     document.head.appendChild(link);
   }
 
+  function ensureDashboardMainTheme() {
+    if (document.getElementById('aljavaDashboardMainTheme')) return;
+    const link = document.createElement('link');
+    link.id = 'aljavaDashboardMainTheme';
+    link.rel = 'stylesheet';
+    link.href = '/assets/dashboard-main-theme.css?v=dashboard-unified-20260905-2318';
+    document.head.appendChild(link);
+  }
+
   function clean() {
     const root = panel();
     if (!root) return;
@@ -95,6 +104,7 @@
   window.menuController = Object.freeze({ refresh: clean });
   const schedule = () => window.setTimeout(clean, 0);
   ensureCardTableTheme();
+  ensureDashboardMainTheme();
   window.addEventListener('hashchange', schedule);
   document.addEventListener('aljava:sales-ui-ready', schedule);
   document.addEventListener('aljava:data-loaded', schedule);
