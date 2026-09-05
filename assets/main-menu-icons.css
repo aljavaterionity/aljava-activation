@@ -6,7 +6,6 @@
 #menuPanel .menu-section .menu-items,
 #menuPanel .menu-settings .menu-items{gap:8px}
 
-/* Glass navigation item — icon-focused visual treatment only */
 #menuPanel .menu-section .menu-item,
 #menuPanel .menu-settings .menu-item{
   position:relative;
@@ -17,7 +16,6 @@
   transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,color .2s ease;
 }
 
-/* Inactive: clean line icon, semantic color, no heavy bubble */
 #menuPanel .menu-section .menu-icon,
 #menuPanel .menu-settings .menu-icon{
   position:relative;
@@ -46,7 +44,6 @@
   stroke-linejoin:round;
 }
 
-/* Exact semantic palette */
 #menuPanel #dashboardMenu .menu-icon{color:#0075F2!important}
 #menuPanel #salesMenu .menu-icon{color:#00B8FF!important}
 #menuPanel #cardsMenu .menu-icon{color:#10B981!important}
@@ -59,7 +56,6 @@
 #menuPanel #addAccountMenu .menu-icon{color:#10B981!important}
 #menuPanel #logoutMenu .menu-icon{color:#EF4444!important}
 
-/* Hover: subtle glass + light semantic lift, intentionally weaker than active */
 #menuPanel .menu-item:hover .menu-icon{
   transform:translateY(-1px);
   background:rgba(255,255,255,.045)!important;
@@ -80,7 +76,6 @@
 #menuPanel #addAccountMenu:hover .menu-icon{background:rgba(16,185,129,.07)!important;border-color:rgba(16,185,129,.16)!important;box-shadow:0 0 14px rgba(16,185,129,.10)!important}
 #menuPanel #logoutMenu:hover .menu-icon{background:rgba(239,68,68,.07)!important;border-color:rgba(239,68,68,.16)!important;box-shadow:0 0 14px rgba(239,68,68,.10)!important}
 
-/* Active: exact 44px circular raised glass bubble; icon remains clean/bright */
 #menuPanel .menu-section .menu-item.active .menu-icon,
 #menuPanel .menu-settings .menu-item.active .menu-icon{
   flex:0 0 44px;
@@ -99,7 +94,6 @@
 #menuPanel .menu-section .menu-item.active .menu-icon svg,
 #menuPanel .menu-settings .menu-item.active .menu-icon svg{width:22px;height:22px;stroke-width:2}
 
-/* Semantic active bubbles */
 #menuPanel #dashboardMenu.active .menu-icon{background:rgba(0,117,242,.14)!important;border-color:rgba(0,117,242,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(0,117,242,.30),0 8px 18px rgba(0,0,0,.24)!important}
 #menuPanel #salesMenu.active .menu-icon{background:rgba(0,184,255,.14)!important;border-color:rgba(0,184,255,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(0,184,255,.30),0 8px 18px rgba(0,0,0,.24)!important}
 #menuPanel #cardsMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(16,185,129,.30),0 8px 18px rgba(0,0,0,.24)!important}
@@ -112,7 +106,6 @@
 #menuPanel #addAccountMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(16,185,129,.30),0 8px 18px rgba(0,0,0,.24)!important}
 #menuPanel #logoutMenu.active .menu-icon{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.30)!important;box-shadow:inset 0 1px 1px rgba(255,255,255,.10),0 0 20px rgba(239,68,68,.30),0 8px 18px rgba(0,0,0,.24)!important}
 
-/* Active labels use the exact semantic color without changing typography/layout */
 #menuPanel #dashboardMenu.active b{color:#0075F2!important}
 #menuPanel #salesMenu.active b{color:#00B8FF!important}
 #menuPanel #cardsMenu.active b{color:#10B981!important}
@@ -130,7 +123,7 @@
 
 @media(max-width:650px){
   #menuPanel .menu-section .menu-icon,
-  #menuPanel .menu-settings .menu-icon{flex-basis:42px;width:42px;height:42px}
+  #menuPanel .menu-settings .menu-icon{flex-basis:44px;width:44px;height:44px}
   #menuPanel .menu-section .menu-item.active .menu-icon,
-  #menuPanel .menu-settings .menu-item.active .menu-icon{flex-basis:42px;width:42px;height:42px}
+  #menuPanel .menu-settings .menu-item.active .menu-icon{flex-basis:44px;width:44px;height:44px}
 }
