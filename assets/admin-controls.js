@@ -6,31 +6,32 @@
     loadPayments() { return Promise.resolve([]); }
   });
 
-  /* FINAL VISUAL GUARD — icon-only. No business logic is changed. */
+  /* VISUAL-ONLY MAIN MENU ICON GUARD. No business logic is changed. */
   const iconMap = {
-    dashboardMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
-    salesMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>',
-    cardsMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
-    productMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.5 7.5 7.5 4 7.5-4M12 21v-9.5"/></svg>',
-    customerMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H7.2A4.2 4.2 0 0 0 3 19.2V21"/><circle cx="9.5" cy="7.5" r="4"/><path d="M21 21v-1.8a4.2 4.2 0 0 0-3-4M16 3.7a4 4 0 0 1 0 7.6"/></svg>',
-    operationsMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg>',
-    analyticsMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17"/><rect x="7" y="13" width="2.8" height="4" rx=".7"/><rect x="11.2" y="10" width="2.8" height="7" rx=".7"/><rect x="15.4" y="7" width="2.8" height="10" rx=".7"/><path d="m7 10 4-3 3 2 5-5"/></svg>',
-    refreshMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4L3 10M3 5v5h5M4 13a8 8 0 0 0 14.7 4L21 14M21 19v-5h-5"/></svg>',
-    resetMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg>',
-    addAccountMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M3 21v-1.5A4.5 4.5 0 0 1 7.5 15h3A4.5 4.5 0 0 1 15 19.5V21"/><path d="M18 8v6M15 11h6"/></svg>',
-    logoutMenu:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="m15 16 4-4-4-4M19 12H9"/></svg>'
+    dashboardMenu:'<svg data-aljava-main-menu-icon="dashboardMenu" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
+    salesMenu:'<svg data-aljava-main-menu-icon="salesMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>',
+    cardsMenu:'<svg data-aljava-main-menu-icon="cardsMenu" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="M3 10h18M7 15h4"/></svg>',
+    productMenu:'<svg data-aljava-main-menu-icon="productMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9L12 3Z"/><path d="m4.5 7.5 7.5 4 7.5-4M12 21v-9.5"/></svg>',
+    customerMenu:'<svg data-aljava-main-menu-icon="customerMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M16 21v-1.8a4.2 4.2 0 0 0-4.2-4.2H7.2A4.2 4.2 0 0 0 3 19.2V21"/><circle cx="9.5" cy="7.5" r="4"/><path d="M21 21v-1.8a4.2 4.2 0 0 0-3-4M16 3.7a4 4 0 0 1 0 7.6"/></svg>',
+    operationsMenu:'<svg data-aljava-main-menu-icon="operationsMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/><circle cx="12" cy="12" r="4"/></svg>',
+    analyticsMenu:'<svg data-aljava-main-menu-icon="analyticsMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V5M4 19h17"/><rect x="7" y="13" width="2.8" height="4" rx=".7"/><rect x="11.2" y="10" width="2.8" height="7" rx=".7"/><rect x="15.4" y="7" width="2.8" height="10" rx=".7"/><path d="m7 10 4-3 3 2 5-5"/></svg>',
+    refreshMenu:'<svg data-aljava-main-menu-icon="refreshMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.7-4L3 10M3 5v5h5M4 13a8 8 0 0 0 14.7 4L21 14M21 19v-5h-5"/></svg>',
+    resetMenu:'<svg data-aljava-main-menu-icon="resetMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v6h6"/></svg>',
+    addAccountMenu:'<svg data-aljava-main-menu-icon="addAccountMenu" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M3 21v-1.5A4.5 4.5 0 0 1 7.5 15h3A4.5 4.5 0 0 1 15 19.5V21"/><path d="M18 8v6M15 11h6"/></svg>',
+    logoutMenu:'<svg data-aljava-main-menu-icon="logoutMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="m15 16 4-4-4-4M19 12H9"/></svg>'
   };
 
   function forceMainMenuIcons() {
     const panel = document.getElementById('menuPanel');
     if (!panel) return;
     Object.entries(iconMap).forEach(([id, svg]) => {
-      const item = document.getElementById(id);
+      const item = panel.querySelector('#' + id);
       if (!item) return;
       const icon = item.querySelector('.menu-icon');
       if (!icon) return;
-      icon.innerHTML = svg;
-      icon.setAttribute('aria-hidden','true');
+      const current = icon.querySelector('svg[data-aljava-main-menu-icon="' + id + '"]');
+      if (!current) icon.innerHTML = svg;
+      icon.setAttribute('aria-hidden', 'true');
     });
   }
 
@@ -60,8 +61,26 @@
   }
 
   function finalize() { installFinalStyle(); forceMainMenuIcons(); }
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', finalize, {once:true});
-  else finalize();
-  setTimeout(finalize, 50);
-  setTimeout(finalize, 250);
+
+  function installObserver() {
+    const panel = document.getElementById('menuPanel');
+    if (!panel || panel.dataset.aljavaIconGuardInstalled === '1') return;
+    panel.dataset.aljavaIconGuardInstalled = '1';
+    const observer = new MutationObserver(() => {
+      forceMainMenuIcons();
+    });
+    observer.observe(panel, {childList:true, subtree:true});
+    panel._aljavaIconGuardObserver = observer;
+  }
+
+  function boot() {
+    finalize();
+    installObserver();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
+  else boot();
+  setTimeout(boot, 50);
+  setTimeout(boot, 250);
+  setTimeout(boot, 750);
 })();
