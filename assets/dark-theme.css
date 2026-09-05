@@ -1,11 +1,6 @@
 :root{--aljava-blue:#0075F2;--aljava-blue-bright:#0091FA;--aljava-blue-deep:#0050E7;--aljava-blue-rgb:0,117,242;--bg-primary:#050505;--bg-secondary:#080808;--bg-sidebar:#070707;--glass-bg:rgba(255,255,255,.05);--glass-bg-strong:rgba(255,255,255,.065);--glass-border:rgba(255,255,255,.10);--glass-border-soft:rgba(255,255,255,.07);--text-primary:#fff;--text-secondary:#A1A1AA;--text-muted:#71717A;--success:#22c55e;--warning:#f59e0b;--danger:#ef4444;--purple:#8b5cf6;--shadow:0 8px 30px rgba(0,0,0,.25)}
 *{box-sizing:border-box}html,body{background:var(--bg-primary)!important;color:var(--text-primary)!important}body{background:radial-gradient(circle at 92% 0,rgba(0,117,242,.08),transparent 30%),radial-gradient(circle at 8% 88%,rgba(0,80,231,.05),transparent 28%),var(--bg-primary)!important;overflow-x:hidden}.stars{display:none!important}.page{background:transparent!important}.top{border-color:var(--glass-border-soft)!important;padding-left:58px}
-/* ALJAVA TERIONITY wordmark: no standalone A, no external glow. The animated light lives inside the glyphs through background-clip:text. */
-.brand{position:relative;font-size:22px!important;line-height:1.2;width:auto!important;height:auto!important;min-width:0!important;display:block;white-space:nowrap;overflow:visible!important;margin:0!important;padding:0!important;background:linear-gradient(100deg,var(--aljava-blue-deep) 0%,var(--aljava-blue) 32%,var(--aljava-blue-bright) 44%,#21a5ff 50%,var(--aljava-blue-bright) 56%,var(--aljava-blue) 68%,var(--aljava-blue-deep) 100%)!important;background-size:320% 100%!important;background-position:200% 50%!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important;filter:none!important;animation:aljavaLogoInside 7.4s ease-in-out infinite!important;will-change:background-position,filter;isolation:isolate}
-.brand::after{content:"ALJAVA TERIONITY";position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 0%,transparent 40%,rgba(0,145,250,.78) 48%,rgba(33,165,255,.88) 50%,rgba(0,145,250,.78) 52%,transparent 60%,transparent 100%);background-size:260% 100%;background-position:220% 50%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:.78;filter:none;animation:aljavaInnerSweep 7.4s ease-in-out infinite;mix-blend-mode:screen}
-@keyframes aljavaLogoInside{0%,100%{background-position:200% 50%;filter:brightness(1)}38%{background-position:118% 50%;filter:brightness(1.04)}52%{background-position:42% 50%;filter:brightness(1.18)}66%{background-position:-18% 50%;filter:brightness(1.05)}78%{background-position:200% 50%;filter:brightness(1)}}
-@keyframes aljavaInnerSweep{0%,18%{background-position:220% 50%;opacity:0}45%{background-position:72% 50%;opacity:.30}52%{background-position:18% 50%;opacity:1}60%,100%{background-position:-90% 50%;opacity:0}}
-/* Same compact wordmark on login, centered and never clipped. */
+.brand{position:relative;font-size:22px!important;line-height:1.2;width:auto!important;height:auto!important;min-width:0!important;display:block;white-space:nowrap;overflow:visible!important;margin:0!important;padding:0!important;background:linear-gradient(100deg,var(--aljava-blue-deep) 0%,var(--aljava-blue) 32%,var(--aljava-blue-bright) 44%,#21a5ff 50%,var(--aljava-blue-bright) 56%,var(--aljava-blue) 68%,var(--aljava-blue-deep) 100%)!important;background-size:320% 100%!important;background-position:200% 50%!important;-webkit-background-clip:text!important;background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important;filter:none!important;animation:aljavaLogoInside 7.4s ease-in-out infinite!important;will-change:background-position,filter;isolation:isolate}.brand::after{content:"ALJAVA TERIONITY";position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 0%,transparent 40%,rgba(0,145,250,.78) 48%,rgba(33,165,255,.88) 50%,rgba(0,145,250,.78) 52%,transparent 60%,transparent 100%);background-size:260% 100%;background-position:220% 50%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;opacity:.78;filter:none;animation:aljavaInnerSweep 7.4s ease-in-out infinite;mix-blend-mode:screen}@keyframes aljavaLogoInside{0%,100%{background-position:200% 50%;filter:brightness(1)}38%{background-position:118% 50%;filter:brightness(1.04)}52%{background-position:42% 50%;filter:brightness(1.18)}66%{background-position:-18% 50%;filter:brightness(1.05)}78%{background-position:200% 50%;filter:brightness(1)}}@keyframes aljavaInnerSweep{0%,18%{background-position:220% 50%;opacity:0}45%{background-position:72% 50%;opacity:.30}52%{background-position:18% 50%;opacity:1}60%,100%{background-position:-90% 50%;opacity:0}}
 .top .brand{font-size:22px!important}.login-box .brand{font-size:21px!important;width:auto!important;height:auto!important;margin:0 auto 10px!important;text-align:center;display:block}.login-box .brand::after{content:"ALJAVA TERIONITY";opacity:.78}.login-box .brand{animation:aljavaLogoInsideLogin 7.4s ease-in-out infinite}@keyframes aljavaLogoInsideLogin{0%,100%{background-position:200% 50%;filter:brightness(1)}50%{background-position:35% 50%;filter:brightness(1.18)}}
 .glass,.panel,.stat,.modal-card,.login-box{background:var(--glass-bg)!important;border:1px solid var(--glass-border)!important;box-shadow:var(--shadow)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.panel .head,.head{background:rgba(255,255,255,.025)!important;border-bottom:1px solid var(--glass-border-soft)!important}.panel .head h2,.view h1,.view h2,#dashboardView>.row:first-child h1{color:var(--text-primary)!important}.muted{color:var(--text-secondary)!important}
 .btn,.field{background:rgba(255,255,255,.04)!important;border:1px solid rgba(255,255,255,.10)!important;color:var(--text-primary)!important}.field::placeholder{color:var(--text-muted)!important}.btn:hover{background:rgba(255,255,255,.065)!important;border-color:rgba(0,117,242,.35)!important;box-shadow:0 8px 24px rgba(0,0,0,.24)!important}.btn:focus,.field:focus{outline:none!important;border-color:var(--aljava-blue)!important;box-shadow:0 0 0 3px rgba(0,117,242,.10)!important}.btn:disabled{opacity:.6}
@@ -21,102 +16,15 @@
 img,svg{max-width:100%}@media(max-width:650px){body{background:var(--bg-primary)!important}.top{padding-left:58px}.top .brand{font-size:18px!important;line-height:1.2}.login-box .brand{font-size:18px!important}.glass{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.menu-panel{background:rgba(7,7,7,.94)!important}.stats .stat{background:rgba(255,255,255,.045)!important}}
 
 /* PREMIUM GLASS DATA SURFACE — shared across dashboard KPI cards and every table */
-.stats .stat,
-#dashboardView .panel,
-#cardsView .panel,
-#productView .panel,
-#customersView .panel,
-#salesView .panel,
-.table-wrap,
-#dashboardView .table-wrap,
-#cardsView .table-wrap,
-#productView .table-wrap,
-#customersView .table-wrap,
-#salesView .table-wrap{
-  position:relative!important;
-  isolation:isolate!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025) 48%,rgba(0,117,242,.025))!important;
-  border:1px solid rgba(255,255,255,.105)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(255,255,255,.025),0 18px 42px rgba(0,0,0,.26)!important;
-  backdrop-filter:blur(22px) saturate(145%)!important;
-  -webkit-backdrop-filter:blur(22px) saturate(145%)!important;
-  overflow:hidden;
-}
-.stats .stat::after,
-#dashboardView .panel::after,
-#cardsView .panel::after,
-#productView .panel::after,
-#customersView .panel::after,
-#salesView .panel::after,
-.table-wrap::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-  background:linear-gradient(120deg,rgba(255,255,255,.11),transparent 26%,transparent 72%,rgba(0,117,242,.035));
-  opacity:.7;
-  z-index:-1;
-}
-.stats .stat:hover,
-#dashboardView .panel:hover,
-#cardsView .panel:hover,
-#productView .panel:hover,
-#customersView .panel:hover,
-#salesView .panel:hover,
-.table-wrap:hover{
-  border-color:rgba(0,145,250,.20)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -1px 0 rgba(255,255,255,.03),0 22px 52px rgba(0,0,0,.32),0 0 28px rgba(0,117,242,.05)!important;
-}
-.stats .stat{
-  overflow:hidden!important;
-}
-.stats .stat:before{
-  box-shadow:0 0 18px rgba(0,145,250,.34),0 0 36px rgba(0,117,242,.12)!important;
-}
-.table-wrap{
-  border-radius:18px!important;
-  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;
-}
-.table-wrap table{
-  position:relative;
-  z-index:1;
-  background:transparent!important;
-}
-.table-wrap thead th{
-  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
-  border-bottom:1px solid rgba(255,255,255,.10)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
-  text-shadow:0 1px 14px rgba(255,255,255,.08);
-}
-.table-wrap tbody td{
-  background:linear-gradient(180deg,rgba(255,255,255,.024),rgba(255,255,255,.012))!important;
-  border-bottom:1px solid rgba(255,255,255,.055)!important;
-  transition:background .18s ease,box-shadow .18s ease,transform .18s ease;
-}
-.table-wrap tbody tr:hover td{
-  background:linear-gradient(90deg,rgba(0,117,242,.075),rgba(255,255,255,.03))!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(0,117,242,.08);
-}
-.table-wrap tbody tr:last-child td{border-bottom:0!important}
-#cardSummary .notice.info,
-.card-bulk-actions,
-.notice.info{
-  background:linear-gradient(145deg,rgba(0,117,242,.10),rgba(255,255,255,.035))!important;
-  border-color:rgba(0,145,250,.18)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 22px rgba(0,0,0,.14)!important;
-  backdrop-filter:blur(16px)!important;
-  -webkit-backdrop-filter:blur(16px)!important;
-}
-@media(max-width:650px){
-  .stats .stat,
-  #dashboardView .panel,
-  #cardsView .panel,
-  #productView .panel,
-  #customersView .panel,
-  #salesView .panel,
-  .table-wrap{
-    backdrop-filter:blur(18px) saturate(135%)!important;
-    -webkit-backdrop-filter:blur(18px) saturate(135%)!important;
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 34px rgba(0,0,0,.24)!important;
-  }
-}
+.stats .stat,#dashboardView .panel,#cardsView .panel,#productView .panel,#customersView .panel,#salesView .panel,.table-wrap,#dashboardView .table-wrap,#cardsView .table-wrap,#productView .table-wrap,#customersView .table-wrap,#salesView .table-wrap{position:relative!important;isolation:isolate!important;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025) 48%,rgba(0,117,242,.025))!important;border:1px solid rgba(255,255,255,.105)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(255,255,255,.025),0 18px 42px rgba(0,0,0,.26)!important;backdrop-filter:blur(22px) saturate(145%)!important;-webkit-backdrop-filter:blur(22px) saturate(145%)!important;overflow:hidden!important}
+.stats .stat::after,#dashboardView .panel::after,#cardsView .panel::after,#productView .panel::after,#customersView .panel::after,#salesView .panel::after,.table-wrap::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(120deg,rgba(255,255,255,.11),transparent 26%,transparent 72%,rgba(0,117,242,.035));opacity:.7;z-index:-1}
+.stats .stat{overflow:hidden!important}.stats .stat::before{z-index:2!important}.stats .stat:hover,#dashboardView .panel:hover,#cardsView .panel:hover,#productView .panel:hover,#customersView .panel:hover,#salesView .panel:hover,.table-wrap:hover{border-color:rgba(0,145,250,.20)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -1px 0 rgba(255,255,255,.03),0 22px 52px rgba(0,0,0,.32),0 0 28px rgba(0,117,242,.05)!important}
+.stats .stat:before{box-shadow:0 0 18px rgba(0,145,250,.34),0 0 36px rgba(0,117,242,.12)!important}.table-wrap{border-radius:18px!important;background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important}.table-wrap table{position:relative;z-index:1;background:transparent!important}.table-wrap thead th{background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;border-bottom:1px solid rgba(255,255,255,.10)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06);text-shadow:0 1px 14px rgba(255,255,255,.08)}.table-wrap tbody td{background:linear-gradient(180deg,rgba(255,255,255,.024),rgba(255,255,255,.012))!important;border-bottom:1px solid rgba(255,255,255,.055)!important;transition:background .18s ease,box-shadow .18s ease,transform .18s ease}.table-wrap tbody tr:hover td{background:linear-gradient(90deg,rgba(0,117,242,.075),rgba(255,255,255,.03))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(0,117,242,.08)}.table-wrap tbody tr:last-child td{border-bottom:0!important}
+#cardSummary .notice.info,.card-bulk-actions,.notice.info{background:linear-gradient(145deg,rgba(0,117,242,.10),rgba(255,255,255,.035))!important;border-color:rgba(0,145,250,.18)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 22px rgba(0,0,0,.14)!important;backdrop-filter:blur(16px)!important;-webkit-backdrop-filter:blur(16px)!important}
+
+/* KPI EDGE — same glass contour language as the monthly revenue chart. */
+.stats .stat{border:1px solid transparent!important;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.022) 55%,rgba(0,117,242,.028)) padding-box,linear-gradient(135deg,rgba(255,255,255,.20),rgba(0,145,250,.16) 28%,rgba(255,255,255,.065) 60%,rgba(0,117,242,.15)) border-box!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -1px 0 rgba(0,0,0,.24),0 16px 36px rgba(0,0,0,.24),0 0 18px rgba(0,117,242,.045)!important}
+.stats .stat::after{inset:1px!important;z-index:1!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 25%,transparent 68%,rgba(0,117,242,.055))!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 18px rgba(255,255,255,.018);opacity:.9!important}
+.stats .stat::before{left:0!important;top:18px!important;bottom:18px!important;width:3px!important;border-radius:0 5px 5px 0!important;box-shadow:0 0 15px rgba(0,145,250,.30),0 0 30px rgba(0,117,242,.10)!important}
+.stats .stat .muted,.stats .stat .num{position:relative;z-index:3}.stats .stat:hover{transform:translateY(-1px)!important;border-color:transparent!important;background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.028) 55%,rgba(0,117,242,.04)) padding-box,linear-gradient(135deg,rgba(255,255,255,.25),rgba(0,145,250,.27) 30%,rgba(255,255,255,.09) 60%,rgba(0,117,242,.22)) border-box!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.16),inset 0 -1px 0 rgba(0,0,0,.22),0 20px 44px rgba(0,0,0,.30),0 0 30px rgba(0,117,242,.085)!important}.stats .stat:hover::after{filter:brightness(1.10)!important}
+@media(max-width:650px){.stats .stat:hover{transform:none!important}.stats .stat::before{top:15px!important;bottom:15px!important}.stats .stat::after{inset:1px!important}}
