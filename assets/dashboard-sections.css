@@ -28,8 +28,6 @@
 #dashboardView > .grid > .panel:nth-child(2) .body > .row strong { color:#263f59; font-size:13px; }
 #dashboardView > .grid > .panel:nth-child(2) .body > .row .muted { color:#7a8291; font-size:11px; font-weight:650; }
 #dashboardView > .grid > .panel .body > .muted:only-child,#dashboardView > .grid > .panel .body > div:not(.table-wrap):only-child { padding:28px 16px; text-align:center; border:1px dashed rgba(18,63,94,.12); border-radius:14px; color:#71879a; background:#fbfdff; }
-
-/* Dashboard stat accents previously injected by the obsolete dashboard-operations controller. */
 #dashboardView .stats .stat{transition:background .18s ease,border-color .18s ease,box-shadow .18s ease,transform .18s ease}
 #dashboardView .stats .stat:hover{transform:translateY(-2px)}
 #dashboardView .stats .stat:nth-child(1){background:#f7fbff;border-color:#bfdbfe;box-shadow:0 12px 35px rgba(37,99,235,.08)}
@@ -50,7 +48,6 @@
 #dashboardView .stats .stat:nth-child(6){background:#fffaf5;border-color:#fed7aa;box-shadow:0 12px 35px rgba(234,88,12,.07)}
 #dashboardView .stats .stat:nth-child(6):before{background:#f97316;opacity:1}
 #dashboardView .stats .stat:nth-child(6) .muted,#dashboardView .stats .stat:nth-child(6) .num{color:#ea580c}
-
 @media(max-width:650px){
   #dashboardView > .grid > .panel { border-radius:18px; }
   #dashboardView > .grid > .panel .head { padding:15px 15px 14px; }
@@ -64,3 +61,65 @@
 #dashboardView > .grid > .panel:first-child .table-wrap { width:100%; max-width:100%; min-width:0; touch-action:pan-x pan-y; overscroll-behavior-x:contain; overscroll-behavior-y:auto; pointer-events:auto; position:relative; }
 #dashboardView > .grid > .panel:first-child .table-wrap > table { width:max-content; min-width:680px; max-width:none; }
 @media(max-width:650px){#dashboardView > .grid > .panel:first-child .table-wrap { touch-action:pan-x pan-y; -webkit-overflow-scrolling:touch; overflow-x:auto; overflow-y:hidden; }#dashboardView > .grid > .panel:first-child .table-wrap > table { width:max-content; min-width:680px; }}
+
+/* PREMIUM GLASS EDGE — Transaction table + Scan summary, matched to KPI/revenue edge */
+#dashboardView > .grid > .panel:first-child .table-wrap,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row{
+  position:relative!important;
+  isolation:isolate!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;
+  border:1px solid rgba(255,255,255,.085)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),inset 0 -1px 0 rgba(255,255,255,.025),0 12px 28px rgba(0,0,0,.22)!important;
+  backdrop-filter:blur(18px) saturate(135%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(135%)!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap::after,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row::after{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:inherit;
+  pointer-events:none;
+  z-index:0;
+  background:linear-gradient(135deg,rgba(255,255,255,.13),transparent 28%,transparent 72%,rgba(0,117,242,.045));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.045);
+}
+#dashboardView > .grid > .panel:first-child .table-wrap > table,
+#dashboardView > .grid > .panel:nth-child(2) .body > .row > *{
+  position:relative;
+  z-index:1;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap thead th{
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.032))!important;
+  color:#d4d4d8!important;
+  border-bottom:1px solid rgba(255,255,255,.095)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.055),inset 0 -1px 0 rgba(0,117,242,.025)!important;
+  text-shadow:0 1px 12px rgba(255,255,255,.06);
+}
+#dashboardView > .grid > .panel:first-child .table-wrap tbody td{
+  background:linear-gradient(180deg,rgba(255,255,255,.022),rgba(255,255,255,.010))!important;
+  color:#e4e4e7!important;
+  border-bottom:1px solid rgba(255,255,255,.052)!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap tbody tr:hover td{
+  background:linear-gradient(90deg,rgba(0,117,242,.07),rgba(255,255,255,.026))!important;
+}
+#dashboardView > .grid > .panel:first-child .table-wrap tbody tr:last-child td{border-bottom:0!important}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row{
+  min-height:58px;
+  border-color:rgba(139,92,246,.11)!important;
+  color:#e4e4e7!important;
+}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row strong{color:#dbeafe!important;text-shadow:0 1px 10px rgba(255,255,255,.035)}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row .muted{color:#a1a1aa!important}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row:before{
+  z-index:2;
+  background:rgba(139,92,246,.09)!important;
+  border:1px solid rgba(139,92,246,.14);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 6px 16px rgba(139,92,246,.08);
+}
+#dashboardView > .grid > .panel:nth-child(2) .body > .row:hover{
+  border-color:rgba(139,92,246,.19)!important;
+  background:linear-gradient(90deg,rgba(139,92,246,.075),rgba(255,255,255,.025))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.07),0 15px 30px rgba(0,0,0,.25),0 0 24px rgba(139,92,246,.06)!important;
+}
