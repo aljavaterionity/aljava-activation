@@ -1,0 +1,52 @@
+/* ALJAVA TERIONITY — Operations Dashboard dark theme aligned with Dashboard Utama + Dashboard Penjualan. */
+#operationsView{--ops-blue:#0075F2;--ops-cyan:#38bdf8;--ops-green:#22c55e;--ops-amber:#f59e0b;--ops-purple:#8b5cf6;--ops-red:#ef4444;--ops-text:#e5e7eb;--ops-muted:#a1a1aa;color:var(--ops-text)!important}
+#operationsView>div:first-child{margin-top:10px!important;margin-bottom:8px!important;padding:8px 2px!important}
+#operationsView>div:first-child h1{color:#fff!important;font-size:30px!important;line-height:1.12!important;font-weight:850!important;letter-spacing:-.6px!important}
+#operationsView>div:first-child p{margin:7px 0 0!important;color:#a1a1aa!important;font-size:12px!important}
+#operationsView .stats{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:14px!important;margin:16px 0 18px!important}
+#operationsView .stat.glass{position:relative!important;min-height:112px!important;padding:18px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;overflow:hidden!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:20px!important;background:linear-gradient(180deg,#15171a 0%,#0d0f12 100%)!important;box-shadow:0 14px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.045)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#operationsView .stat.glass:after{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.035),transparent 24%,transparent 76%,rgba(255,255,255,.012))!important}
+#operationsView .stat.glass:before{content:""!important;position:absolute!important;left:0!important;top:14px!important;bottom:14px!important;width:3px!important;border-radius:0 4px 4px 0!important;background:var(--metric-accent,var(--ops-blue))!important;z-index:2!important}
+#operationsView .stat:nth-child(1){--metric-accent:var(--ops-blue)}
+#operationsView .stat:nth-child(2){--metric-accent:var(--ops-green)}
+#operationsView .stat:nth-child(3){--metric-accent:var(--ops-cyan)}
+#operationsView .stat:nth-child(4){--metric-accent:var(--ops-purple)}
+#operationsView .stat:nth-child(5){--metric-accent:var(--ops-green)}
+#operationsView .stat:nth-child(6){--metric-accent:var(--ops-amber)}
+#operationsView .stat .muted{position:relative!important;z-index:3!important;color:#a1a1aa!important;font-size:11px!important;font-weight:700!important;letter-spacing:.25px!important;text-transform:uppercase!important}
+#operationsView .stat .num{position:relative!important;z-index:3!important;margin-top:9px!important;color:var(--metric-accent)!important;font-size:26px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:-.4px!important;text-shadow:none!important;white-space:nowrap!important}
+#operationsView>.panel{position:relative!important;overflow:hidden!important;width:100%!important;min-width:0!important;margin:16px 0 0!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:22px!important;background:linear-gradient(180deg,#15171a 0%,#0d0f12 100%)!important;box-shadow:0 18px 42px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.04)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#operationsView>.panel:after{content:""!important;position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent 25%,transparent 76%,rgba(255,255,255,.012))!important}
+#operationsView>.panel .head,#operationsView>.panel .body{position:relative!important;z-index:1!important;background:transparent!important}
+#operationsView>.panel .head{padding:18px 20px 16px!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+#operationsView>.panel .head:after{content:""!important;position:absolute!important;left:20px!important;bottom:-1px!important;width:48px!important;height:3px!important;border-radius:999px 999px 0 0!important;background:var(--ops-blue)!important}
+#operationsView>.panel .head h2{color:#fff!important;font-size:17px!important;line-height:1.3!important;font-weight:850!important;letter-spacing:-.2px!important}
+#operationsView>.panel .head p{color:#a1a1aa!important;font-size:11px!important}
+#operationsView>.panel .body{padding:18px 20px 20px!important;color:var(--ops-text)!important}
+#operationsView .table-wrap{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important;overscroll-behavior-x:auto!important;border:1px solid rgba(255,255,255,.075)!important;border-radius:18px!important;background:#101216!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 30px rgba(0,0,0,.24)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+#operationsView .table-wrap>table{width:100%!important;min-width:620px!important;border:0!important;border-collapse:separate!important;border-spacing:0!important;background:transparent!important}
+#operationsView table thead th{padding:12px 13px!important;background:#191c21!important;color:#f1f5f9!important;border-bottom:1px solid rgba(255,255,255,.10)!important;box-shadow:inset 0 -1px 0 rgba(0,0,0,.35)!important;text-shadow:none!important;font-size:10px!important;font-weight:850!important;letter-spacing:.5px!important;text-transform:uppercase!important;white-space:nowrap!important}
+#operationsView table tbody td{padding:13px!important;background:#111419!important;color:#d8dde5!important;border-bottom:1px solid rgba(255,255,255,.055)!important;font-size:12px!important;line-height:1.45!important;vertical-align:middle!important}
+#operationsView table tbody tr:nth-child(even) td{background:#0f1216!important}
+#operationsView table tbody tr:hover td{background:#171b22!important}
+#operationsView table tbody tr:last-child td{border-bottom:0!important}
+#operationsView #opsActions table tbody td:nth-child(2),#operationsView #opsHealth table tbody td:nth-child(2){font-size:12px!important;font-weight:800!important;white-space:nowrap!important}
+#operationsView #opsActions table tbody td:nth-child(2){color:#fbbf24!important}
+#operationsView #opsActions table tbody tr:nth-child(2) td:nth-child(2),#operationsView #opsActions table tbody tr:nth-child(4) td:nth-child(2),#operationsView #opsHealth table tbody td:nth-child(2){color:#4ade80!important}
+#operationsView #opsActions table tbody td:nth-child(2)::before,#operationsView #opsHealth table tbody td:nth-child(2)::before{content:none!important}
+#operationsView #opsActions table tbody td:nth-child(3),#operationsView #opsHealth table tbody td:nth-child(3){color:#a1a1aa!important}
+#operationsView #opsRecent{overflow-x:auto!important}
+#operationsView #opsRecent>div{position:relative!important;min-width:0!important;padding:15px 2px!important;border-bottom:1px solid rgba(255,255,255,.055)!important;background:transparent!important}
+#operationsView #opsRecent>div:last-child{border-bottom:0!important}
+#operationsView #opsRecent>div::before{content:none!important}
+#operationsView #opsRecent strong{color:#168cff!important;font-size:14px!important;font-weight:850!important}
+#operationsView #opsRecent .muted{color:#a1a1aa!important;font-size:11px!important}
+#operationsView #opsRecent .ops-paid-badge{display:inline-flex!important;align-items:center!important;margin-left:7px!important;padding:4px 8px!important;border:1px solid rgba(34,197,94,.24)!important;border-radius:999px!important;background:#13231d!important;color:#6ee7b7!important;font-size:9px!important;line-height:1!important;font-weight:800!important;letter-spacing:.06em!important;vertical-align:1px!important}
+#operationsView #opsRecent .ops-partial-badge{border-color:rgba(245,158,11,.24)!important;background:#211a0d!important;color:#fbbf24!important}
+#operationsView #opsRecent .ops-unpaid-badge{border-color:rgba(239,68,68,.24)!important;background:#241719!important;color:#fca5a5!important}
+#operationsView #opsTopProducts table tbody td:first-child{color:#e4e4e7!important;font-weight:750!important}
+#operationsView #opsTopProducts table tbody td:last-child{color:#60a5fa!important;font-weight:850!important;text-align:right!important}
+#operationsView .notice.err{margin:0!important;border:1px solid rgba(239,68,68,.25)!important;border-radius:12px!important;background:#241719!important;color:#fca5a5!important}
+@media(max-width:1100px){#operationsView .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
+@media(max-width:768px){#operationsView>div:first-child{margin-top:16px!important;margin-bottom:14px!important}#operationsView>div:first-child h1{font-size:28px!important}#operationsView .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:11px!important;margin-bottom:14px!important}#operationsView .stat.glass{min-height:105px!important;padding:15px 14px!important;border-radius:16px!important}#operationsView .stat .num{font-size:19px!important}#operationsView>.panel{border-radius:18px!important;margin-top:13px!important}#operationsView>.panel .head{padding:15px!important}#operationsView>.panel .head:after{left:15px!important;width:42px!important}#operationsView>.panel .body{padding:14px 15px 15px!important}#operationsView .table-wrap{border-radius:15px!important}}
+@media(max-width:430px){#operationsView .stats{grid-template-columns:1fr!important}}
