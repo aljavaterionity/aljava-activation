@@ -16,9 +16,9 @@
 html,body{background:#080808!important;color:#f5f5f5!important}
 body{background:radial-gradient(circle at 92% 0,rgba(59,130,246,.055),transparent 30%),radial-gradient(circle at 8% 40%,rgba(34,211,238,.025),transparent 28%),#080808!important;overflow-x:hidden}
 .stars{display:none!important}.page{background:transparent}.top{border-color:#202020}
-/* ALJAVA logo: continuous left-to-right moving shine, no blinking or brightness pulsing. */
-.brand{background:linear-gradient(110deg,#07577f 0%,#0879b8 24%,#35c9f2 39%,#35c9f2 43%,#ffffff 47%,#ffffff 49%,#35c9f2 51%,#35c9f2 56%,#0879b8 72%,#07577f 100%)!important;background-size:320% 100%!important;background-position:-160% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoShine 1s linear infinite!important;will-change:background-position}
-@keyframes aljavaLogoShine{0%{background-position:-160% center}100%{background-position:160% center}}
+/* ALJAVA logo: strong visible pulse like the earlier blinking effect. */
+.brand{background:linear-gradient(90deg,#07577f 0%,#0879b8 25%,#35c9f2 50%,#0879b8 75%,#07577f 100%)!important;background-size:220% 100%!important;background-position:0% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoPulse .55s ease-in-out infinite alternate!important;will-change:filter,background-position;text-shadow:0 0 0 rgba(53,201,242,0)}
+@keyframes aljavaLogoPulse{0%{background-position:0% center;filter:brightness(.72);text-shadow:0 0 0 rgba(53,201,242,0)}100%{background-position:100% center;filter:brightness(1.75);text-shadow:0 0 18px rgba(53,201,242,.72),0 0 34px rgba(53,201,242,.28)}}
 .top .brand{font-size:24px;line-height:1.15;margin-bottom:5px}.menu-kicker{color:#60a5fa!important}
 .muted{color:#a1a1aa!important}
 .glass{background:rgba(17,17,17,.72)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 18px 45px rgba(0,0,0,.28)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
