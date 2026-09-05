@@ -69,3 +69,39 @@
   #cardAssignmentPanel #assignCard,#cardAssignmentPanel #assignCustomer{width:100%;height:46px;min-height:46px;font-size:16px}
   #cardAssignmentPanel #assignCount{font-size:11px}
 }
+
+/* DARK DASHBOARD THEME — aligned with Dashboard Utama and Dashboard Penjualan, no glass */
+#cardsView{--cards-bg:#0b0d10;--cards-surface:#111419;--cards-surface-2:#15171a;--cards-line-dark:rgba(255,255,255,.08);--cards-text:#e5e7eb;--cards-muted-dark:#a1a1aa;--cards-blue-dark-ui:#0075f2;--cards-blue-bright:#168cff;color:var(--cards-text)!important}
+#cardsView>.row:first-child h1{color:#fff!important}
+#cardsView>.row:first-child p{color:#a1a1aa!important}
+#cardsView>.row:first-child:before{background:var(--cards-blue-dark-ui)!important;box-shadow:none!important}
+#cardsView>.panel{position:relative!important;overflow:hidden!important;background:linear-gradient(180deg,#15171a 0%,#0d0f12 100%)!important;border:1px solid var(--cards-line-dark)!important;border-radius:22px!important;box-shadow:0 18px 42px rgba(0,0,0,.30),inset 0 1px 0 rgba(255,255,255,.04)!important}
+#cardsView>.panel:after{content:""!important;position:absolute!important;inset:0!important;z-index:0!important;pointer-events:none!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent 25%,transparent 76%,rgba(255,255,255,.012))!important}
+#cardsView>.panel>.head,#cardsView>.panel>.body{position:relative!important;z-index:1!important;background:transparent!important}
+#cardsView>.panel>.head{padding:18px 20px 16px!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
+#cardsView>.panel>.head:after{left:20px!important;background:var(--cards-blue-dark-ui)!important}
+#cardsView>.panel>.head h2{color:#fff!important}
+#cardsView>.panel>.head p{color:#a1a1aa!important}
+#cardsView>.panel>.body{padding:18px 20px 20px!important;color:var(--cards-text)!important}
+#cardsView .form .field,#cardAssignmentPanel #assignCard,#cardAssignmentPanel #assignCustomer{background:#111419!important;border:1px solid rgba(255,255,255,.09)!important;color:#e4e4e7!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 5px 12px rgba(0,0,0,.16)!important}
+#cardsView .form .field::placeholder{color:#71717a!important}
+#cardsView .form .field:hover,#cardAssignmentPanel #assignCard:hover,#cardAssignmentPanel #assignCustomer:hover{border-color:rgba(255,255,255,.15)!important}
+#cardsView .form .field:focus,#cardAssignmentPanel #assignCard:focus,#cardAssignmentPanel #assignCustomer:focus{border-color:rgba(0,117,242,.45)!important;box-shadow:0 0 0 3px rgba(0,117,242,.10)!important}
+#cardsView .notice.info,#cardAssignmentPanel #assignCount{background:#111b27!important;border:1px solid rgba(0,117,242,.18)!important;color:#8bd3ff!important}
+#cardsView .notice.info strong{color:#bfe9ff!important}
+#cardsView .form>button.btn,#cardAssignmentPanel #assignBtn{background:linear-gradient(100deg,#0050e7,#0075f2 50%,#168cff)!important;border:1px solid rgba(22,140,255,.55)!important;color:#fff!important;box-shadow:0 10px 24px rgba(0,0,0,.24)!important}
+#cardsView .form>button.btn:hover,#cardAssignmentPanel #assignBtn:hover{background:linear-gradient(100deg,#0757f0,#0a7df5 50%,#2498ff)!important;box-shadow:0 12px 28px rgba(0,0,0,.30)!important}
+#cardsView #singleMsg .notice.ok,#cardsView #assignMsg .notice.ok{background:#102018!important;border-color:rgba(34,197,94,.28)!important;color:#4ade80!important}
+#cardsView #singleMsg .notice.err,#cardsView #assignMsg .notice.err{background:#241719!important;border-color:rgba(239,68,68,.28)!important;color:#fca5a5!important}
+#cardsView #cardCreationResults>.glass{background:#111419!important;border-color:rgba(255,255,255,.075)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 12px 28px rgba(0,0,0,.22)!important}
+#cardsView #cardCreationResults .head{background:#15171a!important;border-bottom-color:rgba(255,255,255,.07)!important}
+#cardsView #cardCreationResults .body{background:transparent!important}
+#cardsView #cardCreationResults .table-wrap,#cardsView .table-wrap{border-color:rgba(255,255,255,.075)!important;background:#101216!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 30px rgba(0,0,0,.20)!important}
+#cardsView #cardCreationResults th,#cardsView .table-wrap th{background:#191c21!important;color:#f1f5f9!important;border-bottom:1px solid rgba(255,255,255,.10)!important}
+#cardsView #cardCreationResults td,#cardsView .table-wrap td{background:#111419!important;color:#d8dde5!important;border-bottom:1px solid rgba(255,255,255,.055)!important}
+#cardsView #cardCreationResults tbody tr:nth-child(even) td,#cardsView .table-wrap tbody tr:nth-child(even) td{background:#0f1216!important}
+#cardsView #cardCreationResults tbody tr:hover td,#cardsView .table-wrap tbody tr:hover td{background:#171b22!important}
+#cardsView #cardCreationResults td:first-child strong{color:#168cff!important}
+#cardsView #cardCreationResults .btn{background:#16212c!important;border-color:rgba(0,145,250,.22)!important;color:#6dc7ff!important;box-shadow:none!important}
+#cardsView .muted:only-child{display:block;padding:28px 18px;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:13px;background:#111419;color:#a1a1aa!important}
+@media(max-width:650px){#cardsView>.panel{border-radius:18px!important}#cardsView>.panel>.head{padding:15px 15px 14px!important}#cardsView>.panel>.body{padding:14px 15px 15px!important}}
