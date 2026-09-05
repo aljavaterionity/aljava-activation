@@ -1,65 +1,27 @@
 /* ALJAVA TERIONITY — Sales dashboard */
 (() => {
   'use strict';
+  const CORE = window.ALJAVA_CORE;
+  const $ = CORE?.$ || ((id) => document.getElementById(id));
+  const money = CORE?.money || ((value) => Number(value) || 0);
+  const esc = CORE?.esc || ((value) => String(value ?? ''));
+  const client = CORE?.supabase || null;
+  if (!client) return;
 
-  function installDarkTheme() {
-    if (document.getElementById('aljava-dark-theme')) return;
-    const link = document.createElement('link');
-    link.id = 'aljava-dark-theme';
-    link.rel = 'stylesheet';
-    link.href = '/assets/dark-theme.css';
-    document.head.appendChild(link);
-  }
-  installDarkTheme();
+  let initialized = false;
+  let loading = false;
 
   function installSalesStyles() {
     if (document.getElementById('aljava-sales-dashboard-ui')) return;
     const style = document.createElement('style');
     style.id = 'aljava-sales-dashboard-ui';
-    style.textContent = `
-      #salesMenu{display:flex;align-items:center;gap:12px;text-align:left}
-      #salesMenu .sales-menu-icon{width:48px;height:48px;min-width:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#10b981,#059669);box-shadow:0 10px 22px rgba(5,150,105,.18)}
-      #salesMenu .sales-menu-icon svg{width:25px;height:25px;display:block}
-      #salesMenu .sales-menu-label{font-weight:800}
-    `;
+    style.textContent = '#salesMenu{display:flex;align-items:center;gap:12px;text-align:left}.sales-menu-icon{width:48px;height:48px;min-width:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#10b981,#059669);box-shadow:0 10px 22px rgba(5,150,105,.18)}.sales-menu-icon svg{width:25px;height:25px;display:block}.sales-menu-label{font-weight:800}';
     document.head.appendChild(style);
-
     const link = document.createElement('link');
     link.id = 'aljava-sales-dashboard-ui-css';
     link.rel = 'stylesheet';
     link.href = '/assets/sales-dashboard-ui.css';
     document.head.appendChild(link);
-  }
-  installSalesStyles();
-
-  const $ = (id) => document.getElementById(id);
-  const money = (value) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(value) || 0);
-  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' }[char]));
-  let sb = null;
-  let initialized = false;
-  let loading = false;
-  let exportLoader = null;
-
-  function getClient() {
-    if (sb) return sb;
-    const config = window.ALJAVA_CONFIG;
-    if (!config || !window.supabase?.createClient) return null;
-    sb = window.supabase.createClient(config.supabaseUrl, config.supabaseKey);
-    return sb;
-  }
-
-  function loadExportModule() {
-    if (window.salesExport?.install) { window.salesExport.install(); return Promise.resolve(); }
-    if (exportLoader) return exportLoader;
-    exportLoader = new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = '/assets/sales-export.js';
-      script.async = true;
-      script.onload = () => { try { window.salesExport?.install?.(); resolve(); } catch (error) { reject(error); } };
-      script.onerror = () => reject(new Error('Modul export Excel gagal dimuat.'));
-      document.body.appendChild(script);
-    });
-    return exportLoader;
   }
 
   function normalizeWhatsapp(value) {
@@ -69,22 +31,19 @@
     if (digits.startsWith('0')) return `62${digits.slice(1)}`;
     return digits;
   }
-
   function whatsappUrl(number, message) {
     const normalized = normalizeWhatsapp(number);
-    if (!normalized) return '';
-    return `https://wa.me/${normalized}?text=${encodeURIComponent(message)}`;
+    return normalized ? `https://wa.me/${normalized}?text=${encodeURIComponent(message)}` : '';
   }
-
   function salesWhatsappMessage(row, customer, product) {
     const qty = Number(row.quantity || 1);
     const revenue = Number(row.selling_price || 0) * qty;
-    const status = row.payment_status || '-';
-    return ['Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.','',`No. Transaksi: ${row.transaction_code || '-'}`,`Produk: ${product?.name || '-'}`,`Qty: ${qty}`,`Total: ${money(revenue)}`,`Status pembayaran: ${status}`,`Tanggal: ${new Date(row.transaction_date).toLocaleString('id-ID')}`,'',`Customer: ${customer?.business_name || customer?.owner_name || '-'}`,'Terima kasih.'].join('\n');
+    return ['Halo, terima kasih telah melakukan transaksi di ALJAVA TERIONITY.', '', `No. Transaksi: ${row.transaction_code || '-'}`, `Produk: ${product?.name || '-'}`, `Qty: ${qty}`, `Total: ${money(revenue)}`, `Status pembayaran: ${row.payment_status || '-'}`, `Tanggal: ${new Date(row.transaction_date).toLocaleString('id-ID')}`, '', `Customer: ${customer?.business_name || customer?.owner_name || '-'}`, 'Terima kasih.'].join('\n');
   }
 
   function showView() {
     installSalesStyles();
+    installUi();
     document.querySelectorAll('.view').forEach((view) => view.classList.toggle('active-view', view.id === 'salesView'));
     $('menuPanel')?.classList.remove('open');
     $('menuButton')?.setAttribute('aria-expanded', 'false');
@@ -96,31 +55,31 @@
   function installUi() {
     installSalesStyles();
     if (initialized) return;
-    const menuItems = document.querySelector('.menu-items');
+    const menuItems = document.querySelector('.menu-section > .menu-items');
     const app = $('app');
     if (!menuItems || !app) return;
 
-    const existingButton = $('salesMenu');
-    const button = existingButton || document.createElement('button');
-    button.id = 'salesMenu';
-    button.type = 'button';
-    button.className = existingButton?.className || 'btn';
-    button.innerHTML = `<span class="sales-menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg></span><span class="sales-menu-label">Dashboard Penjualan</span>`;
-    if (!existingButton) {
+    let button = $('salesMenu');
+    if (!button) {
+      button = document.createElement('button');
+      button.id = 'salesMenu';
+      button.type = 'button';
+      button.className = 'menu-item';
+      button.innerHTML = '<span class="menu-icon sales-menu-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5"/><path d="M4 19h16"/><path d="m7 15 4-5 3 3 5-7"/><path d="M15 6h4v4"/></svg></span><span class="sales-menu-label"><b>Dashboard Penjualan</b><small>Omzet, transaksi & performa</small></span>';
       button.addEventListener('click', (event) => { event.preventDefault(); event.stopPropagation(); showView(); });
-      menuItems.insertBefore(button, menuItems.children[2] || null);
+      menuItems.insertBefore(button, menuItems.children[1] || null);
     }
 
-    const existingSection = $('salesView');
-    const section = existingSection || document.createElement('section');
-    if (!existingSection) {
-      section.id = 'salesView'; section.className = 'view';
-      section.innerHTML = `<div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button><button id="salesExportExcel" class="btn" type="button">Export Excel</button></div></div><section class="stats sales-stats"><div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div><div class="body"><div id="salesProductSummary"></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div><div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div></section>`;
+    let section = $('salesView');
+    if (!section) {
+      section = document.createElement('section');
+      section.id = 'salesView';
+      section.className = 'view';
+      section.innerHTML = '<div class="row" style="margin-top:18px"><div><h1 style="margin:0">Dashboard Penjualan</h1><p class="muted">Omzet, HPP, komisi, laba kotor, transaksi, dan performa produk.</p></div><div class="actions"><button id="salesRefresh" class="btn" type="button">Refresh</button></div></div><section class="stats sales-stats"><div class="glass stat"><div class="muted">Omzet Total</div><div id="salesRevenue" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">HPP Total</div><div id="salesHpp" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Komisi Total</div><div id="salesCommission" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Laba Kotor</div><div id="salesGrossProfit" class="num">Rp 0</div></div><div class="glass stat"><div class="muted">Transaksi</div><div id="salesTransactions" class="num">0</div></div></section><section class="glass panel"><div class="head"><div class="row"><div><h2 style="margin:0">Ringkasan Penjualan</h2><p class="muted">Filter periode tanpa mengubah data transaksi.</p></div><div class="filter"><input id="salesStart" class="field" type="date"><input id="salesEnd" class="field" type="date"></div></div></div><div class="body"><div id="salesProductSummary"></div></div></section><section class="glass panel"><div class="head"><h2 style="margin:0">Transaksi Penjualan</h2></div><div class="body"><div id="salesTransactionTable" class="table-wrap"></div></div></section>';
       app.appendChild(section);
     }
 
     $('salesRefresh')?.addEventListener('click', () => void loadSales());
-    $('salesExportExcel')?.addEventListener('click', () => void loadExportModule().then(() => window.salesExport?.exportExcel?.()).catch((error) => alert(`Gagal menyiapkan Excel: ${error?.message || error}`)));
     $('salesStart')?.addEventListener('change', () => void loadSales());
     $('salesEnd')?.addEventListener('change', () => void loadSales());
     initialized = true;
@@ -135,8 +94,7 @@
 
   async function loadSales() {
     installUi();
-    const client = getClient();
-    if (!client || !initialized || loading) return;
+    if (!initialized || loading) return;
     loading = true;
     const refreshButton = $('salesRefresh');
     if (refreshButton) { refreshButton.disabled = true; refreshButton.textContent = 'Memuat…'; }
@@ -152,10 +110,9 @@
       if (productsResult.error) throw productsResult.error;
       if (customersResult.error) throw customersResult.error;
       const { start, end } = getPeriod();
-      const products = Object.fromEntries((productsResult.data || []).map((p) => [p.id, p]));
-      const customers = Object.fromEntries((customersResult.data || []).map((c) => [c.id, c]));
-      const tx = (txResult.data || []).filter((row) => { const d = new Date(row.transaction_date); return (!start || d >= start) && (!end || d <= end); });
-
+      const products = Object.fromEntries((productsResult.data || []).map((product) => [product.id, product]));
+      const customers = Object.fromEntries((customersResult.data || []).map((customer) => [customer.id, customer]));
+      const tx = (txResult.data || []).filter((row) => { const date = new Date(row.transaction_date); return (!start || date >= start) && (!end || date <= end); });
       const revenue = tx.reduce((sum, row) => sum + Number(row.selling_price || 0) * Number(row.quantity || 1), 0);
       const hpp = tx.reduce((sum, row) => sum + Number(row.hpp || 0) * Number(row.quantity || 1), 0);
       const commission = tx.reduce((sum, row) => sum + Number(row.commission || 0), 0);
@@ -187,7 +144,6 @@
     }
   }
 
-  window.salesDashboard = { show: showView, load: loadSales };
+  window.salesDashboard = Object.freeze({ show: showView, load: loadSales });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', installUi, { once: true }); else installUi();
-  document.addEventListener('aljava:data-loaded', installUi);
 })();
