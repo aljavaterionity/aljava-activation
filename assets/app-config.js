@@ -5,7 +5,7 @@
   const CONFIG = Object.freeze({
     supabaseUrl: 'https://lbzwmcxwxummitldxucj.supabase.co',
     supabaseKey: 'sb_publishable_uADO7eqVkcwnhY5B0IZrSA_h6p9VRaw',
-    activationBaseUrl: 'https://aljava-activation.vercel.app/'
+    activationBaseUrl: 'https://aljava-activation.alpin011204.workers.dev/'
   });
 
   const supabaseClient = window.supabase?.createClient
