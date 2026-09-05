@@ -14,8 +14,8 @@
   function showMessage(text, type = 'info') { const el = $('productMsg'); if (el) { el.className = `notice ${type}`; el.textContent = text; } }
   function ensureCommissionField() {
     const form = $('productForm'); if (!form || $('productCommission')) return;
-    const subscription = $('productSubscription');
-    const field = document.createElement('input'); field.id = 'productCommission'; field.className = 'field'; field.type = 'number'; field.min = '0'; field.step = '1'; field.placeholder = 'Komisi per unit';
+    const subscription = $('productSubscription'); const field = document.createElement('input');
+    field.id = 'productCommission'; field.className = 'field'; field.type = 'number'; field.min = '0'; field.step = '1'; field.placeholder = 'Komisi per unit';
     if (subscription) subscription.insertAdjacentElement('afterend', field); else form.appendChild(field);
   }
   function fillForm(product) {
@@ -50,8 +50,8 @@
     if (!name) { showMessage('Nama produk wajib diisi.', 'err'); $('productName')?.focus(); return false; }
     if (!code) { showMessage('Kode produk tidak valid.', 'err'); $('productCode')?.focus(); return false; }
     if ([hpp, selling, commission].some((value) => !Number.isFinite(value) || value < 0) || (subscription !== null && (!Number.isFinite(subscription) || subscription < 0))) { showMessage('HPP, harga, subscription, dan komisi tidak boleh negatif atau tidak valid.', 'err'); return false; }
-    const submit = $('productSubmitBtn') || form.querySelector('button'); if (submit) { submit.disabled = true; submit.textContent = editingId ? 'Menyimpan...' : 'Menambah...'; }
-    const editing = editingId;
+    const submit = $('productSubmitBtn') || form.querySelector('button'); const editing = editingId;
+    if (submit) { submit.disabled = true; submit.textContent = editing ? 'Menyimpan...' : 'Menambah...'; }
     try {
       const payload = { name, product_code: code, category, hpp, selling_price: selling, subscription_price: subscription, commission };
       const result = editing ? await sb.from('Product').update(payload).eq('id', editing) : await sb.from('Product').insert(payload);
@@ -60,15 +60,13 @@
     } catch (error) {
       const duplicate = String(error?.message || '').toLowerCase().includes('product_product_code_uq') || String(error?.message || '').toLowerCase().includes('duplicate key');
       showMessage(duplicate ? `❌ Kode produk ${code} sudah digunakan.` : `❌ Gagal menyimpan produk: ${error?.message || error}`, 'err'); return false;
-    } finally { if (submit) { submit.disabled = false; submit.textContent = editingId ? 'Simpan Perubahan' : 'Tambah Produk'; } }
+    } finally { if (submit) { submit.disabled = false; submit.textContent = editing ? 'Simpan Perubahan' : 'Tambah Produk'; } }
   }
   function updatePreview() { const source = $('productCode')?.value.trim() || $('productName')?.value || ''; const code = normalizeCode(source); ensureCommissionField(); if ($('productPreview')) $('productPreview').textContent = code ? `Kode produk: ${code} • Komisi: ${money(Number($('productCommission')?.value || 0))} / unit` : 'Kode produk dibuat otomatis dari nama produk.'; }
   function bind() {
     const form = $('productForm'); if (!form || form.dataset.productManagerBound === '1') return;
-    form.dataset.productManagerBound = '1'; ensureCommissionField();
-    form.addEventListener('submit', (event) => { void saveProduct(event); });
-    ['productCode', 'productName', 'productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview));
-    updatePreview(); void loadProducts();
+    form.dataset.productManagerBound = '1'; ensureCommissionField(); form.addEventListener('submit', (event) => { void saveProduct(event); });
+    ['productCode', 'productName', 'productCommission'].forEach((id) => $(id)?.addEventListener('input', updatePreview)); updatePreview(); void loadProducts();
   }
   window.productManager = Object.freeze({ loadProducts, createProduct: saveProduct, editProduct: (id) => { const product = products.find((item) => String(item.id) === String(id)); if (product) fillForm(product); } });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true }); else bind();
