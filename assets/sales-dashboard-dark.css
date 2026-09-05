@@ -56,11 +56,21 @@
 #salesView>#salesOperationsReport h3{color:#fff!important}
 #salesView .muted:only-child{display:block;padding:28px 18px;text-align:center;border:1px dashed rgba(255,255,255,.12);border-radius:13px;background:#111419;color:#a1a1aa!important}
 @media(max-width:1000px){#salesView>.sales-stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
-@media(max-width:650px){#salesView>.row:first-child h1{font-size:24px!important}#salesView>.sales-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#salesView>.sales-stats>.stat{min-height:105px!important;padding:15px 14px!important;border-radius:16px!important}#salesView>.sales-stats>.stat .num{font-size:19px!important}#salesView>.panel{margin-top:13px!important;border-radius:18px!important}#salesView>.panel>.head{padding:15px 15px 14px!important}#salesView>.panel>.head:after{left:15px!important;width:42px!important}#salesView>.panel>.body{padding:14px 15px 15px!important}#salesView>.panel .filter{width:100%;display:grid;grid-template-columns:1fr 1fr}#salesView>.panel .filter .field{width:100%;min-width:0;height:46px!important}#salesView .table-wrap{border-radius:15px!important}}
+@media(max-width:650px){#salesView>.row:first-child h1{font-size:24px!important}#salesView>.sales-stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important}#salesView>.sales-stats>.stat{min-height:105px!important;padding:15px 14px!important;border-radius:16px!important}#salesView>.panel{margin-top:13px!important;border-radius:18px!important}#salesView>.panel>.head{padding:15px 15px 14px!important}#salesView>.panel>.head:after{left:15px!important;width:42px!important}#salesView>.panel>.body{padding:14px 15px 15px!important}#salesView>.panel .filter{width:100%;display:grid;grid-template-columns:1fr 1fr}#salesView>.panel .filter .field{width:100%;min-width:0;height:46px!important}#salesView .table-wrap{border-radius:15px!important}}
 
-/* KPI typography alignment — match Dashboard Utama: solid white, no neon/glow. */
+/* KPI typography alignment — Dashboard Utama style: solid white, no neon/glow. */
 #salesView>.sales-stats>.stat .muted{color:#fff!important;font-size:10px!important;font-weight:700!important;letter-spacing:.45px!important;text-shadow:none!important}
 #salesView>.sales-stats>.stat .num{color:#fff!important;font-size:26px!important;line-height:1.1!important;font-weight:900!important;letter-spacing:-.4px!important;text-shadow:none!important;filter:none!important}
 #salesView>#salesOperationsReport .sales-report-stats .muted{color:#fff!important;font-size:10px!important;font-weight:700!important;letter-spacing:.45px!important;text-shadow:none!important}
 #salesView>#salesOperationsReport .sales-report-stats .num{color:#fff!important;font-weight:900!important;text-shadow:none!important;filter:none!important}
 @media(max-width:650px){#salesView>.sales-stats>.stat .num{font-size:19px!important}}
+
+/* FINAL OVERRIDE — keep Sales Dashboard KPI numbers white even if UI theme loads later. */
+#salesView .sales-stats > .stat .num,
+#salesView .sales-stats > .stat .num *{color:#fff!important;text-shadow:none!important;filter:none!important}
+#salesView .sales-stats > .stat .muted,
+#salesView .sales-stats > .stat .muted *{color:#fff!important;text-shadow:none!important;filter:none!important}
+#salesView #salesOperationsReport .sales-report-stats .num,
+#salesView #salesOperationsReport .sales-report-stats .num *{color:#fff!important;text-shadow:none!important;filter:none!important}
+#salesView #salesOperationsReport .sales-report-stats .muted,
+#salesView #salesOperationsReport .sales-report-stats .muted *{color:#fff!important;text-shadow:none!important;filter:none!important}
