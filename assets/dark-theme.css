@@ -16,9 +16,9 @@
 html,body{background:#080808!important;color:#f5f5f5!important}
 body{background:radial-gradient(circle at 92% 0,rgba(59,130,246,.055),transparent 30%),radial-gradient(circle at 8% 40%,rgba(34,211,238,.025),transparent 28%),#080808!important;overflow-x:hidden}
 .stars{display:none!important}.page{background:transparent}.top{border-color:#202020}
-/* ALJAVA logo: bright moving shimmer, darker blue/cyan base, no blinking. */
-.brand{background:linear-gradient(90deg,#07577f 0%,#0879b8 14%,#35c9f2 27%,#0879b8 39%,#0b5f8d 46%,#35c9f2 49%,#ffffff 50%,#35c9f2 51%,#0879b8 55%,#35c9f2 68%,#0879b8 82%,#07577f 100%)!important;background-size:260% 100%!important;background-position:0% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoShine .9s linear infinite!important;will-change:background-position}
-@keyframes aljavaLogoShine{0%{background-position:0% center}100%{background-position:260% center}}
+/* ALJAVA logo: continuous left-to-right moving shine, no blinking or brightness pulsing. */
+.brand{background:linear-gradient(110deg,#07577f 0%,#0879b8 24%,#35c9f2 39%,#35c9f2 43%,#ffffff 47%,#ffffff 49%,#35c9f2 51%,#35c9f2 56%,#0879b8 72%,#07577f 100%)!important;background-size:320% 100%!important;background-position:-160% center!important;color:transparent!important;-webkit-background-clip:text!important;background-clip:text!important;-webkit-text-fill-color:transparent!important;animation:aljavaLogoShine 1s linear infinite!important;will-change:background-position}
+@keyframes aljavaLogoShine{0%{background-position:-160% center}100%{background-position:160% center}}
 .top .brand{font-size:24px;line-height:1.15;margin-bottom:5px}.menu-kicker{color:#60a5fa!important}
 .muted{color:#a1a1aa!important}
 .glass{background:rgba(17,17,17,.72)!important;border:1px solid rgba(255,255,255,.09)!important;box-shadow:0 18px 45px rgba(0,0,0,.28)!important;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
