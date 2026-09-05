@@ -6,7 +6,6 @@
     loadPayments() { return Promise.resolve([]); }
   });
 
-  /* VISUAL-ONLY MAIN MENU ICON GUARD. No business logic is changed. */
   const iconMap = {
     dashboardMenu:'<svg data-aljava-main-menu-icon="dashboardMenu" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
     salesMenu:'<svg data-aljava-main-menu-icon="salesMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 17l6-6 4 4 8-9"/><path d="M15 6h6v6"/></svg>',
@@ -21,66 +20,46 @@
     logoutMenu:'<svg data-aljava-main-menu-icon="logoutMenu" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"/><path d="m15 16 4-4-4-4M19 12H9"/></svg>'
   };
 
-  function forceMainMenuIcons() {
-    const panel = document.getElementById('menuPanel');
-    if (!panel) return;
-    Object.entries(iconMap).forEach(([id, svg]) => {
-      const item = panel.querySelector('#' + id);
-      if (!item) return;
-      const icon = item.querySelector('.menu-icon');
-      if (!icon) return;
-      const current = icon.querySelector('svg[data-aljava-main-menu-icon="' + id + '"]');
-      if (!current) icon.innerHTML = svg;
-      icon.setAttribute('aria-hidden', 'true');
+  function renderIcons(){
+    const panel=document.getElementById('menuPanel');
+    if(!panel) return;
+    Object.entries(iconMap).forEach(([id,svg])=>{
+      const icon=panel.querySelector('#'+id+' .menu-icon');
+      if(icon && !icon.querySelector('svg[data-aljava-main-menu-icon="'+id+'"]')) icon.innerHTML=svg;
     });
   }
 
-  function installFinalStyle() {
-    if (document.getElementById('aljava-main-menu-final-icon-guard')) return;
-    const style = document.createElement('style');
-    style.id = 'aljava-main-menu-final-icon-guard';
-    style.textContent = `
-      #menuPanel .menu-icon{flex:0 0 44px!important;width:44px!important;height:44px!important;min-width:44px!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:transparent!important;border:1px solid transparent!important;box-shadow:none!important;font-size:0!important;line-height:0!important;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,filter .2s ease!important}
-      #menuPanel .menu-icon svg{width:22px!important;height:22px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important}
-      #menuPanel #dashboardMenu .menu-icon{color:#0075F2!important}#menuPanel #salesMenu .menu-icon{color:#00B8FF!important}#menuPanel #cardsMenu .menu-icon{color:#10B981!important}#menuPanel #productMenu .menu-icon{color:#F59E0B!important}#menuPanel #customerMenu .menu-icon{color:#8B5CF6!important}#menuPanel #operationsMenu .menu-icon{color:#38BDF8!important}#menuPanel #analyticsMenu .menu-icon{color:#6366F1!important}#menuPanel #refreshMenu .menu-icon{color:#3B82F6!important}#menuPanel #resetMenu .menu-icon{color:#9CA3AF!important}#menuPanel #addAccountMenu .menu-icon{color:#10B981!important}#menuPanel #logoutMenu .menu-icon{color:#EF4444!important}
-      #menuPanel .menu-item:hover .menu-icon{transform:translateY(-1px)!important;background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.10)!important;box-shadow:0 0 12px rgba(255,255,255,.035)!important;filter:brightness(1.16)!important}
-      #menuPanel .menu-item.active .menu-icon{color:#fff!important;transform:translateY(-1px)!important}
-      #menuPanel #dashboardMenu.active .menu-icon{background:rgba(0,117,242,.14)!important;border-color:rgba(0,117,242,.30)!important;box-shadow:0 0 20px rgba(0,117,242,.30)!important}
-      #menuPanel #salesMenu.active .menu-icon{background:rgba(0,184,255,.14)!important;border-color:rgba(0,184,255,.30)!important;box-shadow:0 0 20px rgba(0,184,255,.30)!important}
-      #menuPanel #cardsMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:0 0 20px rgba(16,185,129,.30)!important}
-      #menuPanel #productMenu.active .menu-icon{background:rgba(245,158,11,.14)!important;border-color:rgba(245,158,11,.30)!important;box-shadow:0 0 20px rgba(245,158,11,.30)!important}
-      #menuPanel #customerMenu.active .menu-icon{background:rgba(139,92,246,.14)!important;border-color:rgba(139,92,246,.30)!important;box-shadow:0 0 20px rgba(139,92,246,.30)!important}
-      #menuPanel #operationsMenu.active .menu-icon{background:rgba(56,189,248,.14)!important;border-color:rgba(56,189,248,.30)!important;box-shadow:0 0 20px rgba(56,189,248,.30)!important}
-      #menuPanel #analyticsMenu.active .menu-icon{background:rgba(99,102,241,.14)!important;border-color:rgba(99,102,241,.30)!important;box-shadow:0 0 20px rgba(99,102,241,.30)!important}
-      #menuPanel #refreshMenu.active .menu-icon{background:rgba(59,130,246,.14)!important;border-color:rgba(59,130,246,.30)!important;box-shadow:0 0 20px rgba(59,130,246,.30)!important}
-      #menuPanel #resetMenu.active .menu-icon{background:rgba(156,163,175,.14)!important;border-color:rgba(156,163,175,.30)!important;box-shadow:0 0 20px rgba(156,163,175,.22)!important}
-      #menuPanel #addAccountMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:0 0 20px rgba(16,185,129,.30)!important}
-      #menuPanel #logoutMenu.active .menu-icon{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.30)!important;box-shadow:0 0 20px rgba(239,68,68,.30)!important}
-    `;
+  function installStyle(){
+    let style=document.getElementById('aljava-main-menu-final-icon-guard');
+    if(style) style.remove();
+    style=document.createElement('style');
+    style.id='aljava-main-menu-final-icon-guard';
+    style.textContent=`
+#menuPanel .menu-icon{position:relative!important;flex:0 0 28px!important;width:28px!important;min-width:28px!important;height:28px!important;padding:0!important;margin:0!important;border-radius:50%!important;display:grid!important;place-items:center!important;background:transparent!important;border:0!important;box-shadow:none!important;font-size:0!important;line-height:0!important;transform:none!important;filter:none!important;transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease,filter .2s ease!important}
+#menuPanel .menu-icon svg{width:22px!important;height:22px!important;display:block!important;fill:none!important;stroke:currentColor!important;stroke-width:1.9!important;stroke-linecap:round!important;stroke-linejoin:round!important}
+#menuPanel #dashboardMenu .menu-icon{color:#0075F2!important}#menuPanel #salesMenu .menu-icon{color:#00B8FF!important}#menuPanel #cardsMenu .menu-icon{color:#10B981!important}#menuPanel #productMenu .menu-icon{color:#F59E0B!important}#menuPanel #customerMenu .menu-icon{color:#8B5CF6!important}#menuPanel #operationsMenu .menu-icon{color:#38BDF8!important}#menuPanel #analyticsMenu .menu-icon{color:#6366F1!important}#menuPanel #refreshMenu .menu-icon{color:#3B82F6!important}#menuPanel #resetMenu .menu-icon{color:#9CA3AF!important}#menuPanel #addAccountMenu .menu-icon{color:#10B981!important}#menuPanel #logoutMenu .menu-icon{color:#EF4444!important}
+#menuPanel .menu-item:hover .menu-icon{transform:translateY(-1px)!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.10)!important;box-shadow:0 0 12px rgba(255,255,255,.05)!important;filter:brightness(1.16)!important}
+#menuPanel .menu-item.active .menu-icon{flex:0 0 44px!important;width:44px!important;min-width:44px!important;height:44px!important;border-radius:50%!important;color:#fff!important;background:rgba(0,117,242,.14)!important;border:1px solid rgba(0,117,242,.30)!important;box-shadow:0 0 20px rgba(0,117,242,.30)!important;transform:translateY(-1px)!important}
+#menuPanel #salesMenu.active .menu-icon{background:rgba(0,184,255,.14)!important;border-color:rgba(0,184,255,.30)!important;box-shadow:0 0 20px rgba(0,184,255,.30)!important}
+#menuPanel #cardsMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:0 0 20px rgba(16,185,129,.30)!important}
+#menuPanel #productMenu.active .menu-icon{background:rgba(245,158,11,.14)!important;border-color:rgba(245,158,11,.30)!important;box-shadow:0 0 20px rgba(245,158,11,.30)!important}
+#menuPanel #customerMenu.active .menu-icon{background:rgba(139,92,246,.14)!important;border-color:rgba(139,92,246,.30)!important;box-shadow:0 0 20px rgba(139,92,246,.30)!important}
+#menuPanel #operationsMenu.active .menu-icon{background:rgba(56,189,248,.14)!important;border-color:rgba(56,189,248,.30)!important;box-shadow:0 0 20px rgba(56,189,248,.30)!important}
+#menuPanel #analyticsMenu.active .menu-icon{background:rgba(99,102,241,.14)!important;border-color:rgba(99,102,241,.30)!important;box-shadow:0 0 20px rgba(99,102,241,.30)!important}
+#menuPanel #refreshMenu.active .menu-icon{background:rgba(59,130,246,.14)!important;border-color:rgba(59,130,246,.30)!important;box-shadow:0 0 20px rgba(59,130,246,.30)!important}
+#menuPanel #resetMenu.active .menu-icon{background:rgba(156,163,175,.14)!important;border-color:rgba(156,163,175,.30)!important;box-shadow:0 0 20px rgba(156,163,175,.22)!important}
+#menuPanel #addAccountMenu.active .menu-icon{background:rgba(16,185,129,.14)!important;border-color:rgba(16,185,129,.30)!important;box-shadow:0 0 20px rgba(16,185,129,.30)!important}
+#menuPanel #logoutMenu.active .menu-icon{background:rgba(239,68,68,.14)!important;border-color:rgba(239,68,68,.30)!important;box-shadow:0 0 20px rgba(239,68,68,.30)!important}
+#menuPanel .menu-item.active .menu-icon svg{width:22px!important;height:22px!important;stroke-width:2!important}
+@media(max-width:650px){#menuPanel .menu-icon{flex-basis:28px!important;width:28px!important;min-width:28px!important;height:28px!important}#menuPanel .menu-item.active .menu-icon{flex-basis:44px!important;width:44px!important;min-width:44px!important;height:44px!important}}
+`;
     document.head.appendChild(style);
   }
 
-  function finalize() { installFinalStyle(); forceMainMenuIcons(); }
-
-  function installObserver() {
-    const panel = document.getElementById('menuPanel');
-    if (!panel || panel.dataset.aljavaIconGuardInstalled === '1') return;
-    panel.dataset.aljavaIconGuardInstalled = '1';
-    const observer = new MutationObserver(() => {
-      forceMainMenuIcons();
-    });
-    observer.observe(panel, {childList:true, subtree:true});
-    panel._aljavaIconGuardObserver = observer;
-  }
-
-  function boot() {
-    finalize();
-    installObserver();
-  }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot, {once:true});
-  else boot();
-  setTimeout(boot, 50);
-  setTimeout(boot, 250);
-  setTimeout(boot, 750);
+  function boot(){installStyle();renderIcons();}
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',boot,{once:true}); else boot();
+  setTimeout(boot,50);setTimeout(boot,250);setTimeout(boot,750);
+  const observer=new MutationObserver(renderIcons);
+  const start=()=>{const p=document.getElementById('menuPanel');if(p) observer.observe(p,{childList:true,subtree:true});};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',start,{once:true}); else start();
 })();
