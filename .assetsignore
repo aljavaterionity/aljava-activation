@@ -1,0 +1,9 @@
+*.md
+README*
+vercel.json
+wrangler.json
+wrangler.jsonc
+wrangler.toml
+.github/
+.git/
+.gitignore
