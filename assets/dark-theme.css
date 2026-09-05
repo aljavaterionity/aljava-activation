@@ -12,10 +12,111 @@
 #cardsView .form>button.btn,#cardAssignmentPanel #assignBtn,#productSubmitBtn,#customerSubmit,.login-box button,.login-button{background:linear-gradient(100deg,var(--aljava-blue-deep),var(--aljava-blue),var(--aljava-blue-bright))!important;border-color:rgba(0,145,250,.55)!important;color:#fff!important;box-shadow:0 8px 24px rgba(0,117,242,.16)!important}#cardsView .form>button.btn:hover,#cardAssignmentPanel #assignBtn:hover,#productSubmitBtn:hover,#customerSubmit:hover,.login-box button:hover,.login-button:hover{filter:brightness(1.07)!important;box-shadow:0 10px 28px rgba(0,117,242,.22)!important}
 .login{background:radial-gradient(circle at 50% 0,rgba(0,117,242,.10),transparent 36%),#050505!important}.login-box{background:rgba(255,255,255,.055)!important;box-shadow:0 25px 70px rgba(0,0,0,.5),0 0 45px rgba(0,117,242,.06)!important}
 .menu-button{background:rgba(255,255,255,.055)!important;border-color:var(--glass-border)!important;color:var(--aljava-blue-bright)!important;box-shadow:0 12px 30px rgba(0,0,0,.4)!important;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}.menu-panel{background:rgba(7,7,7,.88)!important;border-color:var(--glass-border)!important;box-shadow:0 28px 80px rgba(0,0,0,.65)!important;backdrop-filter:blur(20px)!important;-webkit-backdrop-filter:blur(20px)!important}.menu-header,.menu-settings{border-color:var(--glass-border-soft)!important}.menu-section-title{color:#71717A!important}.menu-item{background:rgba(255,255,255,.035)!important;border-color:rgba(255,255,255,.065)!important;color:#fff!important}.menu-item:hover{background:rgba(0,117,242,.065)!important;border-color:rgba(0,117,242,.18)!important;box-shadow:0 8px 22px rgba(0,0,0,.28)!important}.menu-item.active{background:rgba(0,117,242,.10)!important;border-color:rgba(0,117,242,.22)!important;color:#fff!important;box-shadow:inset 3px 0 var(--aljava-blue),0 0 15px rgba(0,117,242,.06)!important}.menu-item small{color:#71717A!important}.menu-icon{background:rgba(0,117,242,.08)!important;color:var(--aljava-blue-bright)!important;border:1px solid rgba(0,117,242,.14)!important}.menu-settings .menu-item.danger{background:rgba(239,68,68,.07)!important;border-color:rgba(239,68,68,.18)!important;color:#fca5a5!important}.menu-settings .menu-item.danger .menu-icon{background:rgba(239,68,68,.10)!important;color:#f87171!important;border-color:rgba(239,68,68,.18)!important}
-#salesMenu .sales-menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border:1px solid rgba(0,117,242,.16)!important;box-shadow:0 8px 20px rgba(0,117,242,.10)!important}#menuPanel #dashboardMenu .menu-icon,#menuPanel #salesMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important}#menuPanel #cardsMenu .menu-icon{background:rgba(139,92,246,.10)!important;color:#a78bfa!important;border-color:rgba(139,92,246,.18)!important}#menuPanel #productMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.18)!important}#menuPanel #customerMenu .menu-icon{background:rgba(6,182,212,.10)!important;color:#22d3ee!important;border-color:rgba(6,182,212,.18)!important}#menuPanel #operationsMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.18)!important}#menuPanel #analyticsMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border-color:rgba(0,117,242,.16)!important}#menuPanel #refreshMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border-color:rgba(0,117,242,.16)!important}#menuPanel #resetMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.16)!important}#menuPanel #addAccountMenu .menu-icon{background:rgba(34,197,94,.10)!important;color:#4ade80!important;border-color:rgba(34,197,94,.16)!important}
+#salesMenu .sales-menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border:1px solid rgba(0,117,242,.16)!important;box-shadow:0 8px 20px rgba(0,117,242,.10)!important}#menuPanel #dashboardMenu .menu-icon,#menuPanel #salesMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important}#menuPanel #cardsMenu .menu-icon{background:rgba(139,92,246,.10)!important;color:#a78bfa!important;border-color:rgba(139,92,246,.18)!important}#menuPanel #productMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.18)!important}#menuPanel #customerMenu .menu-icon{background:rgba(6,182,212,.10)!important;color:#22d3ee!important;border-color:rgba(6,182,212,.18)!important}#menuPanel #operationsMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.18)!important}#menuPanel #analyticsMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border-color:rgba(0,117,242,.16)!important}#menuPanel #refreshMenu .menu-icon{background:rgba(0,117,242,.10)!important;color:var(--aljava-blue-bright)!important;border-color:rgba(0,117,242,.16)!important}#menuPanel #resetMenu .menu-icon{background:rgba(245,158,11,.10)!important;color:#fbbf24!important;border-color:rgba(245,158,11,.16)!important}#menuPanel #addAccountMenu .menu-icon{background:rgba(34,197,94,.10)!important;color:#4ade80!important;border-color:rgba(34,197,94,.18)!important}
 .stats .stat{background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.09)!important}.stat:before{background:linear-gradient(180deg,var(--aljava-blue-bright),var(--aljava-blue),var(--aljava-blue-deep))!important;box-shadow:0 0 16px rgba(0,117,242,.18)!important;opacity:1!important;animation:none!important}.num{background:linear-gradient(90deg,var(--aljava-blue-deep),var(--aljava-blue),var(--aljava-blue-bright))!important;background-clip:text!important;-webkit-background-clip:text!important;color:transparent!important;-webkit-text-fill-color:transparent!important;filter:drop-shadow(0 0 8px rgba(0,117,242,.14))!important}
 .chart{background:rgba(255,255,255,.025)!important;border:1px solid rgba(255,255,255,.07)!important}.bar i{background:linear-gradient(180deg,var(--aljava-blue-bright),var(--aljava-blue-deep))!important;box-shadow:0 8px 18px rgba(0,117,242,.12)!important}.bar span{color:var(--text-secondary)!important}
 .table-wrap{background:rgba(255,255,255,.025)!important;border:1px solid rgba(255,255,255,.08)!important;border-radius:16px!important;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 12px 30px rgba(0,0,0,.18)!important}table{background:transparent!important;border-collapse:separate!important;border-spacing:0!important}th{background:rgba(255,255,255,.05)!important;color:#d4d4d8!important;border-color:rgba(255,255,255,.08)!important}td{background:rgba(255,255,255,.018)!important;color:#e4e4e7!important;border-color:rgba(255,255,255,.06)!important}tbody tr:hover td{background:rgba(0,117,242,.05)!important}.active{color:#4ade80!important}.pending{color:#fbbf24!important}.expired{color:#f87171!important}
 .notice.info{background:rgba(0,117,242,.08)!important;color:#7dd3fc!important;border-color:rgba(0,117,242,.18)!important}.notice.ok{background:rgba(34,197,94,.08)!important;color:#86efac!important;border-color:rgba(34,197,94,.18)!important}.notice.err{background:rgba(239,68,68,.08)!important;color:#fca5a5!important;border-color:rgba(239,68,68,.18)!important}.modal{background:rgba(0,0,0,.78)!important}.modal-card{background:rgba(12,12,12,.94)!important;border-color:rgba(255,255,255,.10)!important}
 #dashboardView .panel,#cardsView .panel,#productView .panel,#customersView .panel,#salesView .panel{background:rgba(255,255,255,.045)!important;border-color:rgba(255,255,255,.09)!important;box-shadow:var(--shadow)!important}#dashboardView .panel .head,#cardsView .panel .head,#productView .panel .head,#customersView .panel .head,#salesView .panel .head{background:rgba(255,255,255,.025)!important;border-color:rgba(255,255,255,.07)!important}#cardsView .form .field,#cardAssignmentPanel #assignCard,#cardAssignmentPanel #assignCustomer,#productView .field,#customersView .field,#salesView .field{background:rgba(255,255,255,.04)!important;color:#fff!important;border-color:rgba(255,255,255,.10)!important}#productView th,#customersView th,#salesView th,#cardsView #cardCreationResults th{background:rgba(255,255,255,.05)!important;color:#d4d4d8!important}#productView td,#customersView td,#salesView td,#cardsView #cardCreationResults td{background:rgba(255,255,255,.018)!important;color:#e4e4e7!important;border-color:rgba(255,255,255,.06)!important}#dashboardView>.grid>.panel:nth-child(2) .body>.row{background:rgba(255,255,255,.025)!important;border-color:rgba(255,255,255,.07)!important}
 img,svg{max-width:100%}@media(max-width:650px){body{background:var(--bg-primary)!important}.top{padding-left:58px}.top .brand{font-size:18px!important;line-height:1.2}.login-box .brand{font-size:18px!important}.glass{backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}.menu-panel{background:rgba(7,7,7,.94)!important}.stats .stat{background:rgba(255,255,255,.045)!important}}
+
+/* PREMIUM GLASS DATA SURFACE — shared across dashboard KPI cards and every table */
+.stats .stat,
+#dashboardView .panel,
+#cardsView .panel,
+#productView .panel,
+#customersView .panel,
+#salesView .panel,
+.table-wrap,
+#dashboardView .table-wrap,
+#cardsView .table-wrap,
+#productView .table-wrap,
+#customersView .table-wrap,
+#salesView .table-wrap{
+  position:relative!important;
+  isolation:isolate!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.025) 48%,rgba(0,117,242,.025))!important;
+  border:1px solid rgba(255,255,255,.105)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.10),inset 0 -1px 0 rgba(255,255,255,.025),0 18px 42px rgba(0,0,0,.26)!important;
+  backdrop-filter:blur(22px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(145%)!important;
+  overflow:hidden;
+}
+.stats .stat::after,
+#dashboardView .panel::after,
+#cardsView .panel::after,
+#productView .panel::after,
+#customersView .panel::after,
+#salesView .panel::after,
+.table-wrap::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:linear-gradient(120deg,rgba(255,255,255,.11),transparent 26%,transparent 72%,rgba(0,117,242,.035));
+  opacity:.7;
+  z-index:-1;
+}
+.stats .stat:hover,
+#dashboardView .panel:hover,
+#cardsView .panel:hover,
+#productView .panel:hover,
+#customersView .panel:hover,
+#salesView .panel:hover,
+.table-wrap:hover{
+  border-color:rgba(0,145,250,.20)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),inset 0 -1px 0 rgba(255,255,255,.03),0 22px 52px rgba(0,0,0,.32),0 0 28px rgba(0,117,242,.05)!important;
+}
+.stats .stat{
+  overflow:hidden!important;
+}
+.stats .stat:before{
+  box-shadow:0 0 18px rgba(0,145,250,.34),0 0 36px rgba(0,117,242,.12)!important;
+}
+.table-wrap{
+  border-radius:18px!important;
+  background:linear-gradient(145deg,rgba(255,255,255,.055),rgba(255,255,255,.018))!important;
+}
+.table-wrap table{
+  position:relative;
+  z-index:1;
+  background:transparent!important;
+}
+.table-wrap thead th{
+  background:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.035))!important;
+  border-bottom:1px solid rgba(255,255,255,.10)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+  text-shadow:0 1px 14px rgba(255,255,255,.08);
+}
+.table-wrap tbody td{
+  background:linear-gradient(180deg,rgba(255,255,255,.024),rgba(255,255,255,.012))!important;
+  border-bottom:1px solid rgba(255,255,255,.055)!important;
+  transition:background .18s ease,box-shadow .18s ease,transform .18s ease;
+}
+.table-wrap tbody tr:hover td{
+  background:linear-gradient(90deg,rgba(0,117,242,.075),rgba(255,255,255,.03))!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),inset 0 -1px 0 rgba(0,117,242,.08);
+}
+.table-wrap tbody tr:last-child td{border-bottom:0!important}
+#cardSummary .notice.info,
+.card-bulk-actions,
+.notice.info{
+  background:linear-gradient(145deg,rgba(0,117,242,.10),rgba(255,255,255,.035))!important;
+  border-color:rgba(0,145,250,.18)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 8px 22px rgba(0,0,0,.14)!important;
+  backdrop-filter:blur(16px)!important;
+  -webkit-backdrop-filter:blur(16px)!important;
+}
+@media(max-width:650px){
+  .stats .stat,
+  #dashboardView .panel,
+  #cardsView .panel,
+  #productView .panel,
+  #customersView .panel,
+  #salesView .panel,
+  .table-wrap{
+    backdrop-filter:blur(18px) saturate(135%)!important;
+    -webkit-backdrop-filter:blur(18px) saturate(135%)!important;
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.09),0 14px 34px rgba(0,0,0,.24)!important;
+  }
+}
