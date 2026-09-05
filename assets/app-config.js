@@ -1,4 +1,4 @@
-/* ALJAVA TERIONITY — Shared client configuration */
+/* ALJAVA TERIONITY — shared application core/configuration */
 (() => {
   'use strict';
 
@@ -8,19 +8,19 @@
     activationBaseUrl: 'https://aljava-activation.vercel.app/'
   });
 
-  window.ALJAVA_CONFIG = CONFIG;
+  const supabaseClient = window.supabase?.createClient
+    ? window.supabase.createClient(CONFIG.supabaseUrl, CONFIG.supabaseKey)
+    : null;
 
-  // Keep every admin module on the same Supabase client/session. Some modules
-  // are loaded independently; re-creating a client before login can leave
-  // that module with a stale auth state and cause Cards INSERT to hit RLS as
-  // an unauthenticated request.
-  if (window.supabase?.createClient && !window.__ALJAVA_SUPABASE_CLIENT) {
-    const originalCreateClient = window.supabase.createClient.bind(window.supabase);
-    const sharedClient = originalCreateClient(CONFIG.supabaseUrl, CONFIG.supabaseKey);
-    window.__ALJAVA_SUPABASE_CLIENT = sharedClient;
-    window.supabase.createClient = (url, key, options) => {
-      if (url === CONFIG.supabaseUrl && key === CONFIG.supabaseKey) return sharedClient;
-      return originalCreateClient(url, key, options);
-    };
-  }
+  const $ = (id) => document.getElementById(id);
+  const esc = (value) => String(value ?? '').replace(/[&<>\"']/g, (char) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '\"': '&quot;', "'": '&#039;'
+  }[char]));
+  const money = (value) => new Intl.NumberFormat('id-ID', {
+    style: 'currency', currency: 'IDR', maximumFractionDigits: 0
+  }).format(Number(value) || 0);
+
+  window.ALJAVA_CONFIG = CONFIG;
+  window.ALJAVA_CORE = Object.freeze({ CONFIG, supabase: supabaseClient, $, esc, money });
+  window.__ALJAVA_SUPABASE_CLIENT = supabaseClient;
 })();
