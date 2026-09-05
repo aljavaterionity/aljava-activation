@@ -47,6 +47,18 @@
     ids.forEach((id) => { const item = container.querySelector(`#${id}`); if (item) container.appendChild(item); });
   }
 
+  function brightenCardCodes() {
+    document.querySelectorAll('#dashboardView #cardTable tbody td:nth-child(2) strong').forEach((code) => {
+      code.style.fontWeight = '800';
+      code.style.background = 'linear-gradient(90deg,#0050E7,#0075F2,#0091FA)';
+      code.style.backgroundClip = 'text';
+      code.style.webkitBackgroundClip = 'text';
+      code.style.color = 'transparent';
+      code.style.webkitTextFillColor = 'transparent';
+      code.style.filter = 'drop-shadow(0 0 7px rgba(0,117,242,.14))';
+    });
+  }
+
   function clean() {
     const root = panel();
     if (!root) return;
@@ -66,6 +78,7 @@
     orderItems(settingsItems, ['refreshMenu', 'addAccountMenu', 'resetMenu', 'logoutMenu']);
     root.querySelectorAll('.menu-item').forEach(enhanceButton);
     setActive(root);
+    brightenCardCodes();
     document.getElementById('logoutTop')?.remove();
     document.querySelectorAll('#salesView').forEach((view, index) => { if (index > 0) view.remove(); });
   }
@@ -75,5 +88,10 @@
   window.addEventListener('hashchange', schedule);
   document.addEventListener('aljava:sales-ui-ready', schedule);
   document.addEventListener('aljava:data-loaded', schedule);
+  document.addEventListener('aljava:cards-created', () => window.setTimeout(clean, 220));
+  document.addEventListener('aljava:data-refresh-requested', () => window.setTimeout(clean, 220));
+  document.addEventListener('aljava:cards-deleted', () => window.setTimeout(clean, 220));
+  document.getElementById('cardSearch')?.addEventListener('input', () => window.setTimeout(brightenCardCodes, 240));
+  document.getElementById('cardStatus')?.addEventListener('change', () => window.setTimeout(brightenCardCodes, 240));
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', clean, { once: true }); else clean();
 })();
