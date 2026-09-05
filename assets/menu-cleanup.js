@@ -33,38 +33,37 @@
     const style = document.createElement('style');
     style.id = 'aljava-main-menu-premium-style';
     style.textContent = `
-      #menuPanel .menu-section-title{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#64748b;text-transform:uppercase;margin:2px 4px 9px}
+      #menuPanel .menu-section-title{font-size:10px;font-weight:800;letter-spacing:1.6px;color:#71717A;text-transform:uppercase;margin:2px 4px 9px}
       #menuPanel .menu-items{display:grid;gap:8px}
-      #menuPanel .menu-item{min-height:64px;padding:10px 12px;border:1px solid #e8edf4;border-radius:16px;background:#fff;color:#17324d;display:flex;align-items:center;gap:13px;cursor:pointer;box-shadow:0 4px 14px rgba(15,23,42,.035);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
-      #menuPanel .menu-item:hover{transform:translateY(-1px);border-color:#dbe4ef;box-shadow:0 10px 24px rgba(15,23,42,.08);background:#fff}
-      #menuPanel .menu-item.active{border-color:#dbeafe;background:#f8fbff;color:#17324d;box-shadow:0 8px 24px rgba(37,99,235,.08)}
-      #menuPanel .menu-icon{flex:0 0 46px;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:0;border:0;box-shadow:0 7px 18px rgba(15,23,42,.10);transition:transform .16s ease,box-shadow .16s ease}
+      #menuPanel .menu-item{min-height:64px;padding:10px 12px;border:1px solid rgba(255,255,255,.065);border-radius:16px;background:rgba(255,255,255,.035);color:#fff;display:flex;align-items:center;gap:13px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.12);transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease,background .16s ease}
+      #menuPanel .menu-item:hover{transform:translateY(-1px);border-color:rgba(0,117,242,.20);box-shadow:0 10px 24px rgba(0,0,0,.24);background:rgba(0,117,242,.065)}
+      #menuPanel .menu-item.active{border-color:rgba(0,117,242,.22);background:rgba(0,117,242,.10);color:#fff;box-shadow:inset 3px 0 #0075F2,0 8px 24px rgba(0,117,242,.06)}
+      #menuPanel .menu-icon{flex:0 0 46px;width:46px;height:46px;border-radius:15px;display:grid;place-items:center;color:#0091FA;font-size:0;border:1px solid rgba(0,117,242,.14);background:rgba(0,117,242,.08);box-shadow:0 7px 18px rgba(0,0,0,.16);transition:transform .16s ease,box-shadow .16s ease}
       #menuPanel .menu-icon svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-      #menuPanel .menu-item:hover .menu-icon{transform:translateY(-1px);box-shadow:0 10px 22px rgba(15,23,42,.14)}
-      #menuPanel #dashboardMenu .menu-icon{background:linear-gradient(135deg,#3B82F6,#2563EB);box-shadow:0 8px 20px rgba(37,99,235,.22)}
-      #menuPanel #salesMenu .menu-icon{background:linear-gradient(135deg,#10B981,#059669);box-shadow:0 8px 20px rgba(5,150,105,.20)}
-      #menuPanel #cardsMenu .menu-icon{background:linear-gradient(135deg,#8B5CF6,#7C3AED);box-shadow:0 8px 20px rgba(124,58,237,.20)}
-      #menuPanel #productMenu .menu-icon{background:linear-gradient(135deg,#F59E0B,#F97316);box-shadow:0 8px 20px rgba(249,115,22,.20)}
-      #menuPanel #customerMenu .menu-icon{background:linear-gradient(135deg,#06B6D4,#0891B2);box-shadow:0 8px 20px rgba(8,145,178,.20)}
-      #menuPanel #operationsMenu .menu-icon{background:linear-gradient(135deg,#F59E0B,#D97706);box-shadow:0 8px 20px rgba(217,119,6,.20)}
-      #menuPanel #analyticsMenu .menu-icon{background:linear-gradient(135deg,#14B8A6,#0F766E);box-shadow:0 8px 20px rgba(15,118,110,.20)}
+      #menuPanel .menu-item:hover .menu-icon{transform:translateY(-1px);box-shadow:0 10px 22px rgba(0,117,242,.10)}
+      #menuPanel #dashboardMenu .menu-icon,#menuPanel #salesMenu .menu-icon{background:rgba(0,117,242,.10);color:#0091FA;border-color:rgba(0,117,242,.16)}
+      #menuPanel #cardsMenu .menu-icon{background:rgba(139,92,246,.10);color:#a78bfa;border-color:rgba(139,92,246,.18)}
+      #menuPanel #productMenu .menu-icon{background:rgba(245,158,11,.10);color:#fbbf24;border-color:rgba(245,158,11,.18)}
+      #menuPanel #customerMenu .menu-icon{background:rgba(6,182,212,.10);color:#22d3ee;border-color:rgba(6,182,212,.18)}
+      #menuPanel #operationsMenu .menu-icon{background:rgba(245,158,11,.10);color:#fbbf24;border-color:rgba(245,158,11,.18)}
+      #menuPanel #analyticsMenu .menu-icon{background:rgba(0,117,242,.10);color:#0091FA;border-color:rgba(0,117,242,.16)}
       #menuPanel .menu-item b{display:block;font-size:13px;line-height:1.25;font-weight:800;color:inherit}
-      #menuPanel .menu-item small{display:block;margin-top:3px;color:#64748b;font-size:10px;font-weight:500;line-height:1.35}
-      #menuPanel .menu-settings{margin-top:18px;padding-top:16px;border-top:1px solid #e9eef5}
-      #menuPanel .menu-settings .menu-item{min-height:54px;border-radius:14px;background:#f8fafc;box-shadow:none}
+      #menuPanel .menu-item small{display:block;margin-top:3px;color:#71717A;font-size:10px;font-weight:500;line-height:1.35}
+      #menuPanel .menu-settings{margin-top:18px;padding-top:16px;border-top:1px solid rgba(255,255,255,.07)}
+      #menuPanel .menu-settings .menu-item{min-height:54px;border-radius:14px;background:rgba(255,255,255,.025);box-shadow:none}
       #menuPanel .menu-settings .menu-icon{flex-basis:40px;width:40px;height:40px;border-radius:13px;box-shadow:none}
-      #menuPanel #refreshMenu .menu-icon{background:#0EA5E9}
-      #menuPanel #resetMenu .menu-icon{background:#EF4444}
-      #menuPanel #addAccountMenu .menu-icon{background:#22C55E}
-      #menuPanel #logoutMenu .menu-icon{background:#EF4444}
-      #menuPanel .menu-settings .menu-item.danger{background:#fff7f8;border-color:#fee2e2;color:#b4233d}
-      #menuPanel .menu-settings .menu-item:hover{background:#fff;box-shadow:0 8px 18px rgba(15,23,42,.06)}
+      #menuPanel #refreshMenu .menu-icon{background:rgba(0,117,242,.10);color:#0091FA}
+      #menuPanel #resetMenu .menu-icon{background:rgba(245,158,11,.10);color:#fbbf24}
+      #menuPanel #addAccountMenu .menu-icon{background:rgba(34,197,94,.10);color:#4ade80}
+      #menuPanel #logoutMenu .menu-icon{background:rgba(239,68,68,.10);color:#f87171}
+      #menuPanel .menu-settings .menu-item.danger{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.18);color:#fca5a5}
+      #menuPanel .menu-settings .menu-item:hover{background:rgba(255,255,255,.045);box-shadow:0 8px 18px rgba(0,0,0,.20)}
       #menuPanel .menu-settings .menu-item b{font-size:12px}
       #menuPanel .menu-settings .menu-item small{font-size:9px}
-      #menuPanel .menu-header{padding-bottom:17px;border-bottom:1px solid #e9eef5}
-      #menuPanel .menu-header h2{font-size:21px;color:#0f2740;letter-spacing:-.3px}
-      #menuPanel .menu-kicker{color:#2563EB}
-      #menuPanel .menu-close{border-color:#e5eaf1;background:#fff;color:#475569}
+      #menuPanel .menu-header{padding-bottom:17px;border-bottom:1px solid rgba(255,255,255,.07)}
+      #menuPanel .menu-header h2{font-size:21px;color:#fff;letter-spacing:-.3px}
+      #menuPanel .menu-kicker{color:#0091FA}
+      #menuPanel .menu-close{border-color:rgba(255,255,255,.10);background:rgba(255,255,255,.04);color:#d4d4d8}
       @media(max-width:650px){#menuPanel .menu-item{min-height:60px;padding:9px 10px;border-radius:15px}#menuPanel .menu-icon{flex-basis:44px;width:44px;height:44px;border-radius:14px}#menuPanel .menu-settings .menu-icon{flex-basis:38px;width:38px;height:38px;border-radius:12px}}
     `;
     document.head.appendChild(style);
