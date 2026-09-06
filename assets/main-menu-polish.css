@@ -1,6 +1,19 @@
 /* ALJAVA TERIONITY — Main Menu visual polish. */
-/* Remove the stray top row created when #closeMenu is mistakenly enhanced as a menu item. */
-#menuPanel #closeMenu{display:none!important}
+/* The close control is a control, not a menu item. Keep it compact and clickable. */
+#menuPanel #closeMenu{
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  flex:0 0 40px!important;
+  width:40px!important;
+  min-width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+  padding:0!important;
+  border-radius:11px!important;
+  font-size:22px!important;
+  line-height:1!important;
+}
 
 /* One coherent icon language across every Main Menu item. */
 #menuPanel .menu-icon{
@@ -29,8 +42,8 @@
 
 /* Category accents: controlled color, no neon text. */
 #menuPanel #dashboardMenu .menu-icon{color:#38a3ff!important;background:rgba(0,117,242,.10)!important;border-color:rgba(0,117,242,.22)!important}
-#menuPanel #salesMenu .menu-icon,
-#menuPanel #salesWorkspaceMenu .menu-icon{color:#43c8ff!important;background:rgba(0,184,255,.09)!important;border-color:rgba(0,184,255,.20)!important}
+#menuPanel #salesMenu .menu-icon{color:#45c6ff!important;background:rgba(0,184,255,.09)!important;border-color:rgba(0,184,255,.20)!important}
+#menuPanel #salesWorkspaceMenu .menu-icon{color:#a78bfa!important;background:rgba(139,92,246,.10)!important;border-color:rgba(139,92,246,.22)!important}
 #menuPanel #cardsMenu .menu-icon{color:#4ade80!important;background:rgba(34,197,94,.09)!important;border-color:rgba(34,197,94,.20)!important}
 #menuPanel #productMenu .menu-icon{color:#fbbf24!important;background:rgba(245,158,11,.09)!important;border-color:rgba(245,158,11,.20)!important}
 #menuPanel #customerMenu .menu-icon{color:#a78bfa!important;background:rgba(139,92,246,.09)!important;border-color:rgba(139,92,246,.20)!important}
