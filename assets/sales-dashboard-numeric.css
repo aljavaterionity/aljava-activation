@@ -11,3 +11,7 @@
 #salesView #salesTransactionTable>table td:nth-child(8),
 #salesView #salesTransactionTable>table td:nth-child(9),
 #salesView #salesTransactionTable>table td:nth-child(10){color:#fff!important;text-shadow:none!important;filter:none!important}
+
+/* Dashboard Penjualan tidak memakai tombol Refresh; data dimuat otomatis dan lewat filter periode. */
+#salesView #salesRefresh{display:none!important}
+#salesView .actions:has(#salesRefresh){display:none!important}
