@@ -1,93 +1,66 @@
 /* ALJAVA TERIONITY — Operations Dashboard
-   Visual system aligned with Dashboard Utama: same spacing, shell, type scale and restrained accents. */
+   Single visual source: inherit the current Dashboard Utama theme from dark-theme.css.
+   This file owns layout/spacing and Operations-only components; it does not restyle global shells. */
 #operationsView{
-  --ops-blue:#0075F2;--ops-blue-bright:#0091FA;--ops-green:#22c55e;--ops-amber:#f59e0b;--ops-red:#ef4444;
-  --ops-text:#fff;--ops-muted:#A1A1AA;--ops-line:rgba(255,255,255,.08);--ops-line-soft:rgba(255,255,255,.065);
-  width:100%;max-width:100%;min-width:0;box-sizing:border-box;color:var(--ops-text)!important;
+  width:100%;max-width:100%;min-width:0;box-sizing:border-box;color:var(--text-primary)!important;
 }
 
-/* Page heading — same rhythm as Dashboard Utama. */
+/* Page heading — same spacing and type scale as current Dashboard Utama. */
 #operationsView>div:first-child{margin:10px 0 6px!important;padding:6px 2px!important}
-#operationsView>div:first-child h1{margin:0!important;color:#fff!important;font-size:30px!important;line-height:1.12!important;font-weight:800!important;letter-spacing:-.5px!important}
-#operationsView>div:first-child p{margin:6px 0 0!important;color:var(--ops-muted)!important;font-size:12px!important;line-height:1.5!important}
+#operationsView>div:first-child h1{margin:0!important;color:var(--text-primary)!important;font-size:30px!important;line-height:1.12!important;font-weight:800!important;letter-spacing:-.5px!important}
+#operationsView>div:first-child p{margin:6px 0 0!important;color:var(--text-secondary)!important;font-size:12px!important;line-height:1.5!important}
 
-/* KPI cards — 3-column rhythm, same shell as main dashboard. */
+/* KPI layout only — visual card shell is inherited from current Dashboard Utama. */
 #operationsView .stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin:16px 0 18px!important}
-#operationsView .stat.glass{
-  position:relative!important;min-width:0!important;min-height:112px!important;padding:18px!important;
-  display:flex!important;flex-direction:column!important;justify-content:center!important;overflow:hidden!important;
-  border:1px solid rgba(255,255,255,.065)!important;border-radius:22px!important;
-  background:rgba(255,255,255,.032)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),inset 0 -1px 0 rgba(255,255,255,.025),0 16px 34px rgba(0,0,0,.24)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-#operationsView .stat.glass::before{
-  content:""!important;position:absolute!important;left:0!important;top:14px!important;bottom:14px!important;width:3px!important;border-radius:0 4px 4px 0!important;
-  background:linear-gradient(180deg,var(--ops-blue-bright),var(--ops-blue),#0050E7)!important;
-  box-shadow:0 0 16px rgba(0,117,242,.18)!important;
-}
-#operationsView .stat.glass::after{
-  content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;border-radius:inherit!important;
-  background:linear-gradient(140deg,rgba(255,255,255,.045),transparent 28%,transparent 72%,rgba(0,117,242,.018))!important;
-}
-#operationsView .stat .muted{position:relative!important;z-index:2!important;color:#A1A1AA!important;font-size:11px!important;line-height:1.3!important;font-weight:700!important;letter-spacing:.25px!important;text-transform:uppercase!important}
-#operationsView .stat .num{position:relative!important;z-index:2!important;margin-top:9px!important;color:#fff!important;font-size:26px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.4px!important;text-shadow:none!important;overflow-wrap:anywhere!important}
+#operationsView .stat.glass{min-width:0!important;min-height:112px!important;padding:18px!important;box-sizing:border-box!important}
+#operationsView .stat .muted{position:relative!important;z-index:2!important;color:var(--text-secondary)!important;font-size:11px!important;line-height:1.3!important;font-weight:700!important;letter-spacing:.25px!important;text-transform:uppercase!important}
+#operationsView .stat .num{position:relative!important;z-index:2!important;margin-top:9px!important;color:#fff!important;font-size:26px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.4px!important;overflow-wrap:anywhere!important}
 
-/* Panels — same shell, border and header treatment as Dashboard Utama. */
-#operationsView>.panel{
-  position:relative!important;width:100%!important;min-width:0!important;margin:16px 0 0!important;overflow:hidden!important;
-  border:1px solid rgba(255,255,255,.09)!important;border-radius:22px!important;
-  background:rgba(255,255,255,.045)!important;
-  box-shadow:0 8px 30px rgba(0,0,0,.25)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-#operationsView>.panel::after{content:""!important;position:absolute!important;inset:0!important;pointer-events:none!important;border-radius:inherit!important;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent 25%,transparent 76%,rgba(0,117,242,.012))!important}
-#operationsView>.panel .head,#operationsView>.panel .body{position:relative!important;z-index:1!important;background:transparent!important}
-#operationsView>.panel .head{padding:16px 20px!important;border-bottom:1px solid rgba(255,255,255,.07)!important}
-#operationsView>.panel .head::after{content:""!important;position:absolute!important;left:20px!important;bottom:-1px!important;width:48px!important;height:3px!important;border-radius:999px 999px 0 0!important;background:var(--ops-blue)!important;box-shadow:0 0 10px rgba(0,117,242,.16)!important}
-#operationsView>.panel .head h2{margin:0!important;color:#fff!important;font-size:17px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:-.2px!important}
-#operationsView>.panel .head p{margin:4px 0 0!important;color:var(--ops-muted)!important;font-size:11px!important;line-height:1.5!important}
-#operationsView>.panel .body{padding:18px 20px 20px!important;color:var(--ops-text)!important}
+/* Keep the current Dashboard Utama blue edge language on every Operations KPI without adding a second shell. */
+#operationsView .stat.glass::before{content:""!important}
+#operationsView .stat:nth-child(1)::before,#operationsView .stat:nth-child(2)::before,#operationsView .stat:nth-child(3)::before,#operationsView .stat:nth-child(4)::before,#operationsView .stat:nth-child(5)::before,#operationsView .stat:nth-child(6)::before{background:linear-gradient(180deg,var(--aljava-blue-bright),var(--aljava-blue),var(--aljava-blue-deep))!important;box-shadow:0 0 16px rgba(0,117,242,.18)!important;opacity:1!important}
 
-/* Tables — unified typography and spacing. */
-#operationsView .table-wrap{
-  width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;
-  -webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important;overscroll-behavior-x:contain!important;
-  border:1px solid rgba(255,255,255,.08)!important;border-radius:16px!important;background:rgba(255,255,255,.025)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.025),0 12px 30px rgba(0,0,0,.18)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-}
-#operationsView .table-wrap>table{width:100%!important;min-width:620px!important;border:0!important;border-collapse:separate!important;border-spacing:0!important;background:transparent!important}
-#operationsView table thead th{padding:12px 13px!important;background:rgba(255,255,255,.05)!important;color:#d4d4d8!important;border-bottom:1px solid rgba(255,255,255,.08)!important;font-size:10.5px!important;font-weight:800!important;letter-spacing:.55px!important;text-transform:uppercase!important;text-align:left!important;white-space:nowrap!important}
-#operationsView table tbody td{padding:13px!important;background:rgba(255,255,255,.018)!important;color:#e4e4e7!important;border-bottom:1px solid rgba(255,255,255,.06)!important;font-size:12px!important;line-height:1.45!important;font-weight:500!important;vertical-align:middle!important}
-#operationsView table tbody tr:nth-child(even) td{background:rgba(255,255,255,.012)!important}
-#operationsView table tbody tr:hover td{background:rgba(0,117,242,.05)!important}
+/* Panels — inherit the current Dashboard Utama panel treatment. */
+#operationsView>.panel{width:100%!important;min-width:0!important;margin:16px 0 0!important}
+#operationsView>.panel .head,#operationsView>.panel .body{position:relative!important}
+#operationsView>.panel .head{padding:16px 20px!important}
+#operationsView>.panel .head::after{content:""!important;position:absolute!important;left:20px!important;bottom:-1px!important;width:48px!important;height:3px!important;border-radius:999px 999px 0 0!important;background:var(--aljava-blue)!important;box-shadow:0 0 10px rgba(0,117,242,.16)!important}
+#operationsView>.panel .head h2{margin:0!important;color:var(--text-primary)!important;font-size:17px!important;line-height:1.3!important;font-weight:800!important;letter-spacing:-.2px!important}
+#operationsView>.panel .head p{margin:4px 0 0!important;color:var(--text-secondary)!important;font-size:11px!important;line-height:1.5!important}
+#operationsView>.panel .body{padding:18px 20px 20px!important}
+
+/* Tables — inherit current global table visual treatment; Operations only controls spacing/scroll. */
+#operationsView .table-wrap{width:100%!important;max-width:100%!important;min-width:0!important;overflow-x:auto!important;overflow-y:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-x pan-y!important;overscroll-behavior-x:contain!important}
+#operationsView .table-wrap>table{width:100%!important;min-width:620px!important}
+#operationsView table thead th{font-size:10.5px!important;font-weight:800!important;letter-spacing:.55px!important;text-transform:uppercase!important;text-align:left!important;white-space:nowrap!important}
+#operationsView table tbody td{font-size:12px!important;line-height:1.45!important;font-weight:500!important;vertical-align:middle!important;color:var(--text-primary)!important}
 #operationsView table tbody tr:last-child td{border-bottom:0!important}
 
-/* Status indicators — no emoji; use the same compact dot language across the dashboard. */
-#operationsView .ops-status{display:inline-flex!important;align-items:center!important;gap:8px!important;white-space:nowrap!important;color:#fff!important;font-size:12px!important;font-weight:500!important;line-height:1.35!important}
-#operationsView .ops-status-dot{display:inline-block!important;width:7px!important;height:7px!important;flex:0 0 7px!important;border-radius:50%!important;background:var(--ops-green)!important;box-shadow:0 0 7px rgba(34,197,94,.42)!important}
-#operationsView .ops-status.warning .ops-status-dot{background:var(--ops-amber)!important;box-shadow:0 0 7px rgba(245,158,11,.42)!important}
-#operationsView .ops-status.danger .ops-status-dot{background:var(--ops-red)!important;box-shadow:0 0 7px rgba(239,68,68,.42)!important}
+/* Status indicators — compact dots, no emoji and no duplicate pseudo-elements. */
+#operationsView .ops-status{display:inline-flex!important;align-items:center!important;gap:8px!important;white-space:nowrap!important;color:var(--text-primary)!important;font-size:12px!important;font-weight:500!important;line-height:1.35!important}
+#operationsView .ops-status-dot{display:inline-block!important;width:7px!important;height:7px!important;flex:0 0 7px!important;border-radius:50%!important;background:var(--success)!important;box-shadow:0 0 7px rgba(34,197,94,.42)!important}
+#operationsView .ops-status.warning .ops-status-dot{background:var(--warning)!important;box-shadow:0 0 7px rgba(245,158,11,.42)!important}
+#operationsView .ops-status.danger .ops-status-dot{background:var(--danger)!important;box-shadow:0 0 7px rgba(239,68,68,.42)!important}
 #operationsView #opsActions table tbody td:nth-child(2),#operationsView #opsHealth table tbody td:nth-child(2){white-space:nowrap!important}
-#operationsView #opsActions table tbody td:nth-child(3),#operationsView #opsHealth table tbody td:nth-child(3){color:#A1A1AA!important}
+#operationsView #opsActions table tbody td:nth-child(3),#operationsView #opsHealth table tbody td:nth-child(3){color:var(--text-secondary)!important}
 
-/* Recent transactions — compact, calm, consistent with main dashboard. */
-#operationsView #opsRecent>div{position:relative!important;min-width:0!important;padding:14px 2px!important;border-bottom:1px solid rgba(255,255,255,.06)!important;background:transparent!important}
+/* Recent transactions — no secondary card wrapper or duplicate icon treatment. */
+#operationsView #opsRecent>div{min-width:0!important;padding:14px 2px!important;border-bottom:1px solid rgba(255,255,255,.06)!important;background:transparent!important}
 #operationsView #opsRecent>div:last-child{border-bottom:0!important}
-#operationsView #opsRecent strong{color:#fff!important;font-size:13px!important;font-weight:600!important;line-height:1.35!important}
-#operationsView #opsRecent .muted{color:#A1A1AA!important;font-size:11px!important;line-height:1.5!important}
+#operationsView #opsRecent strong{color:var(--text-primary)!important;font-size:13px!important;font-weight:600!important;line-height:1.35!important}
+#operationsView #opsRecent .muted{color:var(--text-secondary)!important;font-size:11px!important;line-height:1.5!important}
 #operationsView #opsRecent .ops-paid-badge{display:inline-flex!important;align-items:center!important;gap:6px!important;margin-left:7px!important;padding:4px 8px!important;border:1px solid rgba(34,197,94,.22)!important;border-radius:7px!important;background:rgba(34,197,94,.07)!important;color:#86efac!important;font-size:10px!important;line-height:1!important;font-weight:600!important;letter-spacing:0!important;vertical-align:1px!important;box-shadow:none!important}
-#operationsView #opsRecent .ops-paid-badge::before{content:""!important;width:6px!important;height:6px!important;flex:0 0 6px!important;border-radius:50%!important;background:#22c55e!important;box-shadow:0 0 6px rgba(34,197,94,.45)!important}
+#operationsView #opsRecent .ops-paid-badge::before{content:""!important;width:6px!important;height:6px!important;flex:0 0 6px!important;border-radius:50%!important;background:var(--success)!important;box-shadow:0 0 6px rgba(34,197,94,.45)!important}
 #operationsView #opsRecent .ops-partial-badge{border-color:rgba(245,158,11,.22)!important;background:rgba(245,158,11,.07)!important;color:#fbbf24!important}
-#operationsView #opsRecent .ops-partial-badge::before{background:#f59e0b!important;box-shadow:0 0 6px rgba(245,158,11,.42)!important}
+#operationsView #opsRecent .ops-partial-badge::before{background:var(--warning)!important;box-shadow:0 0 6px rgba(245,158,11,.42)!important}
 #operationsView #opsRecent .ops-unpaid-badge{border-color:rgba(239,68,68,.22)!important;background:rgba(239,68,68,.07)!important;color:#fca5a5!important}
-#operationsView #opsRecent .ops-unpaid-badge::before{background:#ef4444!important;box-shadow:0 0 6px rgba(239,68,68,.42)!important}
+#operationsView #opsRecent .ops-unpaid-badge::before{background:var(--danger)!important;box-shadow:0 0 6px rgba(239,68,68,.42)!important}
 
-/* Top products. */
-#operationsView #opsTopProducts table tbody td:first-child{color:#e4e4e7!important;font-size:12px!important;font-weight:500!important}
-#operationsView #opsTopProducts table tbody td:last-child{color:#fff!important;font-size:12px!important;font-weight:500!important;text-align:right!important}
-#operationsView .notice.err{margin:0!important;border:1px solid rgba(239,68,68,.25)!important;border-radius:12px!important;background:rgba(239,68,68,.08)!important;color:#fca5a5!important}
+/* Top products — same white table value treatment as Dashboard Utama. */
+#operationsView #opsTopProducts table tbody td:first-child,
+#operationsView #opsTopProducts table tbody td:last-child{color:var(--text-primary)!important;font-size:12px!important;font-weight:500!important}
+#operationsView #opsTopProducts table tbody td:last-child{text-align:right!important}
+#operationsView .notice.err{margin:0!important}
 
 @media(max-width:1000px){#operationsView .stats{grid-template-columns:repeat(3,minmax(0,1fr))!important}}
 @media(max-width:768px){
@@ -96,7 +69,7 @@
   #operationsView .stats{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin:14px 0 14px!important}
   #operationsView .stat.glass{min-height:105px!important;padding:15px 14px!important;border-radius:18px!important}
   #operationsView .stat .num{font-size:22px!important}
-  #operationsView>.panel{border-radius:19px!important;margin-top:13px!important}
+  #operationsView>.panel{margin-top:13px!important}
   #operationsView>.panel .head{padding:15px!important}
   #operationsView>.panel .head::after{left:15px!important;width:42px!important}
   #operationsView>.panel .body{padding:14px 15px 15px!important}
