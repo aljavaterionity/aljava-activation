@@ -34,6 +34,14 @@
     document.head.appendChild(numericLink);
   }
 
+  function enforceSalesKpiWhite() {
+    document.querySelectorAll('#salesView>.sales-stats>.stat .num').forEach((el) => {
+      el.style.setProperty('color', '#fff', 'important');
+      el.style.setProperty('text-shadow', 'none', 'important');
+      el.style.setProperty('filter', 'none', 'important');
+    });
+  }
+
   function normalizeWhatsapp(value) {
     const digits = String(value || '').replace(/\D/g, '');
     if (!digits) return '';
@@ -59,12 +67,16 @@
     $('menuButton')?.setAttribute('aria-expanded', 'false');
     history.replaceState?.(null, '', '#sales');
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    enforceSalesKpiWhite();
     void loadSales();
   }
 
   function installUi() {
     installSalesStyles();
-    if (initialized) return;
+    if (initialized) {
+      enforceSalesKpiWhite();
+      return;
+    }
     const menuItems = document.querySelector('.menu-section > .menu-items');
     const app = $('app');
     if (!menuItems || !app) return;
@@ -93,6 +105,7 @@
     $('salesStart')?.addEventListener('change', () => void loadSales());
     $('salesEnd')?.addEventListener('change', () => void loadSales());
     initialized = true;
+    enforceSalesKpiWhite();
     document.dispatchEvent(new CustomEvent('aljava:sales-ui-ready'));
   }
 
@@ -110,6 +123,7 @@
     if (refreshButton) { refreshButton.disabled = true; refreshButton.textContent = 'Memuat…'; }
     const hosts = ['salesRevenue', 'salesHpp', 'salesCommission', 'salesGrossProfit', 'salesTransactions'];
     hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '…' : 'Memuat…'; });
+    enforceSalesKpiWhite();
     try {
       const [txResult, productsResult, customersResult] = await Promise.all([
         client.from('Transactions').select('id,transaction_code,customer_id,product_id,quantity,selling_price,hpp,commission,payment_status,transaction_date,amount_paid,due_date').order('transaction_date', { ascending: false }),
@@ -131,6 +145,7 @@
       $('salesCommission').textContent = money(commission);
       $('salesGrossProfit').textContent = money(revenue - hpp - commission);
       $('salesTransactions').textContent = String(tx.length);
+      enforceSalesKpiWhite();
 
       const grouped = {};
       tx.forEach((row) => {
@@ -148,6 +163,7 @@
       if ($('salesProductSummary')) $('salesProductSummary').innerHTML = `<div class="notice err">❌ Gagal memuat dashboard penjualan: ${message}</div>`;
       if ($('salesTransactionTable')) $('salesTransactionTable').innerHTML = '';
       hosts.forEach((id) => { if ($(id)) $(id).textContent = id === 'salesTransactions' ? '0' : money(0); });
+      enforceSalesKpiWhite();
     } finally {
       loading = false;
       if (refreshButton) { refreshButton.disabled = false; refreshButton.textContent = 'Refresh'; }
