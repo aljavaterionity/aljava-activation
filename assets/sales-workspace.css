@@ -29,12 +29,13 @@
 #salesWorkspaceView .sales-workspace-table td{background:#111419!important;color:#d8dde5!important;border-top:1px solid rgba(255,255,255,.05)!important;padding:13px 14px!important;vertical-align:middle!important;font-size:12px!important}
 #salesWorkspaceView .sales-workspace-table tbody tr:nth-child(even) td{background:#0f1216!important}
 #salesWorkspaceView .sales-workspace-table tbody tr:hover td{background:#171b22!important}
-#salesWorkspaceView .sales-workspace-table th:nth-child(1){width:24%}
-#salesWorkspaceView .sales-workspace-table th:nth-child(2){width:12%}
-#salesWorkspaceView .sales-workspace-table th:nth-child(3){width:25%}
-#salesWorkspaceView .sales-workspace-table th:nth-child(4){width:17%}
-#salesWorkspaceView .sales-workspace-table th:nth-child(5){width:10%}
-#salesWorkspaceView .sales-workspace-table th:nth-child(6){width:12%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(1){width:22%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(2){width:10%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(3){width:15%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(4){width:15%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(5){width:9%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(6){width:13%}
+#salesWorkspaceView .sales-workspace-table th:nth-child(7){width:16%}
 #salesWorkspaceView .sales-person{color:#f2f4f7!important;font-size:13px!important;font-weight:800!important}
 #salesWorkspaceView .sales-id{display:inline-block;max-width:100%;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:11px!important;color:#b8c0cb!important;white-space:nowrap}
 #salesWorkspaceView .sales-date{color:#cbd1d9!important;white-space:nowrap}
@@ -43,8 +44,10 @@
 #salesWorkspaceView .sales-badge{display:inline-flex!important;align-items:center!important;justify-content:center!important;padding:4px 9px!important;border-radius:999px!important;font-size:10px!important;font-weight:800!important;border:1px solid rgba(255,255,255,.10)!important}
 #salesWorkspaceView .sales-badge.active{color:#4ade80!important;background:rgba(34,197,94,.08)!important;border-color:rgba(34,197,94,.25)!important}
 #salesWorkspaceView .sales-badge.inactive{color:#a1a1aa!important;background:rgba(161,161,170,.06)!important}
+#salesWorkspaceView .sales-action-btn{min-height:32px!important;padding:6px 11px!important;border-radius:8px!important;font-size:11px!important;font-weight:750!important;background:rgba(255,255,255,.045)!important;border:1px solid rgba(255,255,255,.11)!important;color:#f4f4f5!important;white-space:nowrap!important;box-shadow:none!important}
+#salesWorkspaceView .sales-action-btn:hover{background:rgba(255,255,255,.08)!important;border-color:rgba(255,255,255,.17)!important}
 #salesWorkspaceView .sales-workspace-empty{padding:30px!important;text-align:center!important;color:#71717a!important}
-/* Add Sales — name only; ID and joined date are generated server-side. */
+/* Add Sales */
 .sales-add-modal{width:min(520px,calc(100vw - 36px))!important}
 .sales-add-modal .sales-form-grid{display:grid!important;grid-template-columns:1fr!important;gap:10px!important}
 .sales-add-modal .field{height:42px!important;border-radius:11px!important}
@@ -52,5 +55,28 @@
 .sales-add-modal .notice{margin-top:10px!important}
 .sales-add-actions{display:flex!important;justify-content:flex-end!important;margin-top:14px!important}
 .sales-add-actions .btn{min-height:38px!important;padding:8px 13px!important}
+/* Sales detail / card ownership */
+.sales-detail-modal{width:min(920px,calc(100vw - 40px))!important;color:#e5e7eb!important}
+.sales-detail-header{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:16px!important;padding-bottom:14px!important;border-bottom:1px solid rgba(255,255,255,.075)!important}
+.sales-detail-title{font-size:22px!important;font-weight:850!important;color:#fff!important;line-height:1.2!important}
+.sales-detail-sub{margin-top:5px!important;color:#9ca3af!important;font-size:11.5px!important;line-height:1.45!important}
+.sales-detail-sub strong{color:#fff!important;font-weight:800!important}
+.sales-detail-stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important;padding:14px 0!important}
+.sales-detail-stat{padding:12px 14px!important;border:1px solid rgba(255,255,255,.075)!important;border-radius:11px!important;background:#121417!important}
+.sales-detail-stat span{display:block!important;color:#8f96a1!important;font-size:10px!important;text-transform:uppercase!important;letter-spacing:.55px!important}
+.sales-detail-stat strong{display:block!important;margin-top:6px!important;color:#fff!important;font-size:18px!important;font-weight:850!important}
+.sales-detail-section{padding-top:14px!important;margin-top:6px!important;border-top:1px solid rgba(255,255,255,.06)!important}
+.sales-detail-section-head h3{margin:0!important;color:#fff!important;font-size:14px!important;font-weight:850!important}
+.sales-detail-section-head p{margin:4px 0 0!important;font-size:11px!important}
+.sales-assign-row{display:flex!important;gap:8px!important;align-items:center!important;margin-top:11px!important}
+.sales-assign-row .field{flex:1 1 auto!important;height:38px!important;border-radius:10px!important}
+.sales-assign-row .btn{min-height:38px!important;padding:7px 12px!important}
+.sales-codes-list,.sales-activations-list{display:grid!important;gap:7px!important;margin-top:10px!important}
+.sales-code-item,.sales-activation-item{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:12px!important;padding:10px 12px!important;border:1px solid rgba(255,255,255,.07)!important;border-radius:10px!important;background:#111419!important}
+.sales-code-main{color:#f5f5f5!important;font-size:12px!important;font-weight:800!important}
+.sales-code-meta{margin-top:3px!important;color:#8e96a2!important;font-size:10.5px!important;line-height:1.4!important}
+.sales-unassign-btn{min-height:30px!important;padding:5px 9px!important;border-radius:8px!important;font-size:10.5px!important;background:rgba(255,255,255,.03)!important;border:1px solid rgba(255,255,255,.10)!important;color:#d4d4d8!important;box-shadow:none!important}
+.sales-activation-commission{color:#fff!important;font-size:12px!important;font-weight:850!important;white-space:nowrap!important}
+.sales-detail-loading{padding:30px 10px!important;text-align:center!important;color:#8e96a2!important;font-size:12px!important}
 @media(max-width:900px){#salesWorkspaceView .sales-performance-head{align-items:flex-start!important;flex-direction:column!important}.sales-performance-filters{width:100%!important;justify-content:stretch!important}.sales-performance-filters .field{flex:1 1 0!important}.sales-performance-filters .field:first-child{min-width:0!important;flex:2 1 220px!important}}
-@media(max-width:650px){#salesWorkspaceView{padding-bottom:20px!important}#salesWorkspaceView>.row:first-child{padding:5px 0!important;margin-bottom:10px!important}#salesWorkspaceView>.row:first-child>div:first-child{margin-left:22px!important}#salesWorkspaceView>.row:first-child h1{font-size:24px!important;letter-spacing:-.55px!important}#salesWorkspaceView>.row:first-child>div:first-child:before{height:40px}#salesWorkspaceView>.row:first-child .sales-workspace-toolbar{width:auto!important;margin-left:auto!important}.sales-performance-filters{display:grid!important;grid-template-columns:1fr!important;width:100%!important}.sales-performance-filters .field,.sales-performance-filters .field:first-child{width:100%!important;min-width:0!important}.sales-period{padding:9px 15px!important}.sales-period .btn,.sales-period .field,#salesWorkspaceView #swApplyPeriod{min-height:34px!important;height:34px!important;font-size:11px!important}.sales-workspace-panel{border-radius:15px!important}.sales-workspace-panel .head{padding:15px 15px 0!important}.sales-workspace-panel .body{padding:14px 15px 15px!important}.sales-workspace-table{min-width:760px!important}.sales-add-modal{width:calc(100vw - 28px)!important}}
+@media(max-width:650px){#salesWorkspaceView{padding-bottom:20px!important}#salesWorkspaceView>.row:first-child{padding:5px 0!important;margin-bottom:10px!important}#salesWorkspaceView>.row:first-child>div:first-child{margin-left:22px!important}#salesWorkspaceView>.row:first-child h1{font-size:24px!important;letter-spacing:-.55px!important}#salesWorkspaceView>.row:first-child>div:first-child:before{height:40px}#salesWorkspaceView>.row:first-child .sales-workspace-toolbar{width:auto!important;margin-left:auto!important}.sales-performance-filters{display:grid!important;grid-template-columns:1fr!important;width:100%!important}.sales-performance-filters .field,.sales-performance-filters .field:first-child{width:100%!important;min-width:0!important}.sales-period{padding:9px 15px!important}.sales-period .btn,.sales-period .field,#salesWorkspaceView #swApplyPeriod{min-height:34px!important;height:34px!important;font-size:11px!important}.sales-workspace-panel{border-radius:15px!important}.sales-workspace-panel .head{padding:15px 15px 0!important}.sales-workspace-panel .body{padding:14px 15px 15px!important}.sales-workspace-table{min-width:860px!important}.sales-add-modal{width:calc(100vw - 28px)!important}.sales-detail-modal{width:calc(100vw - 26px)!important}.sales-detail-stats{grid-template-columns:1fr!important}.sales-detail-header{align-items:flex-start!important}.sales-assign-row{align-items:stretch!important;flex-direction:column!important}.sales-code-item,.sales-activation-item{align-items:flex-start!important}.sales-unassign-btn{flex:0 0 auto!important}}
