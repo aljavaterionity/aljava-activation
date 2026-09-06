@@ -2,126 +2,40 @@
    Single visual language for every admin table.
    Edit this file first when changing table appearance. */
 
-:root{
-  --aljava-table-bg:#0d0f12;
-  --aljava-table-head:#15181d;
-  --aljava-table-row:#101318;
-  --aljava-table-row-alt:#0d1014;
-  --aljava-table-hover:#171c23;
-  --aljava-table-border:rgba(255,255,255,.09);
-  --aljava-table-border-soft:rgba(255,255,255,.055);
-  --aljava-table-border-strong:rgba(255,255,255,.13);
-  --aljava-table-text:#d9dee7;
-  --aljava-table-heading:#f5f7fa;
-  --aljava-table-muted:#8d95a3;
-  --aljava-table-accent:#3b82f6;
-}
+:root{--aljava-table-bg:#0d0f12;--aljava-table-head:#15181d;--aljava-table-row:#101318;--aljava-table-row-alt:#0d1014;--aljava-table-hover:#171c23;--aljava-table-border:rgba(255,255,255,.09);--aljava-table-border-soft:rgba(255,255,255,.055);--aljava-table-border-strong:rgba(255,255,255,.13);--aljava-table-text:#d9dee7;--aljava-table-heading:#f5f7fa;--aljava-table-muted:#8d95a3}
 
 /* BASE — every admin table inherits the same language. */
-#app table.aljava-table,
-#app table:not(.no-aljava-table){
-  width:100%!important;
-  min-width:680px;
-  border-collapse:separate!important;
-  border-spacing:0!important;
-  background:var(--aljava-table-bg)!important;
-  color:var(--aljava-table-text)!important;
-  font-size:12px!important;
-  line-height:1.45!important;
-}
-
-#app table.aljava-table thead th,
-#app table:not(.no-aljava-table) thead th{
-  height:44px!important;
-  padding:11px 14px!important;
-  background:var(--aljava-table-head)!important;
-  color:var(--aljava-table-heading)!important;
-  border:0!important;
-  border-bottom:1px solid var(--aljava-table-border-strong)!important;
-  font-size:10px!important;
-  font-weight:800!important;
-  letter-spacing:.45px!important;
-  line-height:1.2!important;
-  text-align:left!important;
-  text-transform:uppercase!important;
-  white-space:nowrap!important;
-  vertical-align:middle!important;
-  text-shadow:none!important;
-}
-
-#app table.aljava-table tbody td,
-#app table:not(.no-aljava-table) tbody td{
-  min-height:48px!important;
-  padding:12px 14px!important;
-  background:var(--aljava-table-row)!important;
-  color:var(--aljava-table-text)!important;
-  border:0!important;
-  border-bottom:1px solid var(--aljava-table-border-soft)!important;
-  vertical-align:middle!important;
-  box-shadow:none!important;
-  transition:background .16s ease,border-color .16s ease!important;
-}
-
-#app table.aljava-table tbody tr:nth-child(even) td,
-#app table:not(.no-aljava-table) tbody tr:nth-child(even) td{background:var(--aljava-table-row-alt)!important}
-
-#app table.aljava-table tbody tr:hover td,
-#app table:not(.no-aljava-table) tbody tr:hover td{
-  background:var(--aljava-table-hover)!important;
-  border-bottom-color:rgba(59,130,246,.18)!important;
-}
-
-#app table.aljava-table tbody tr:last-child td,
-#app table:not(.no-aljava-table) tbody tr:last-child td{border-bottom:0!important}
+#app table.aljava-table,#app table:not(.no-aljava-table){width:100%!important;min-width:680px;border-collapse:separate!important;border-spacing:0!important;background:var(--aljava-table-bg)!important;color:var(--aljava-table-text)!important;font-size:12px!important;line-height:1.45!important}
+#app table.aljava-table thead th,#app table:not(.no-aljava-table) thead th{height:44px!important;padding:11px 14px!important;background:var(--aljava-table-head)!important;color:var(--aljava-table-heading)!important;border:0!important;border-bottom:1px solid var(--aljava-table-border-strong)!important;font-size:10px!important;font-weight:800!important;letter-spacing:.45px!important;line-height:1.2!important;text-align:left!important;text-transform:uppercase!important;white-space:nowrap!important;vertical-align:middle!important;text-shadow:none!important}
+#app table.aljava-table tbody td,#app table:not(.no-aljava-table) tbody td{min-height:48px!important;padding:12px 14px!important;background:var(--aljava-table-row)!important;color:var(--aljava-table-text)!important;border:0!important;border-bottom:1px solid var(--aljava-table-border-soft)!important;vertical-align:middle!important;box-shadow:none!important;transition:background .16s ease,border-color .16s ease!important}
+#app table.aljava-table tbody tr:nth-child(even) td,#app table:not(.no-aljava-table) tbody tr:nth-child(even) td{background:var(--aljava-table-row-alt)!important}
+#app table.aljava-table tbody tr:hover td,#app table:not(.no-aljava-table) tbody tr:hover td{background:var(--aljava-table-hover)!important;border-bottom-color:rgba(59,130,246,.18)!important}
+#app table.aljava-table tbody tr:last-child td,#app table:not(.no-aljava-table) tbody tr:last-child td{border-bottom:0!important}
 
 /* TABLE SHELL — same border, radius and spacing everywhere. */
-#app .table-wrap,
-#app .table-container,
-#app .table-responsive,
-#app [class*="table-wrap"],
-#app [class*="table-container"],
-#app [class*="table-responsive"]{
-  width:100%!important;
-  overflow-x:auto!important;
-  overflow-y:hidden!important;
-  border:1px solid var(--aljava-table-border)!important;
-  border-radius:14px!important;
-  background:var(--aljava-table-bg)!important;
-  box-shadow:0 8px 22px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.025)!important;
-  backdrop-filter:none!important;
-  -webkit-backdrop-filter:none!important;
-  scrollbar-width:thin;
-}
-
-#app .table-wrap > table,
-#app .table-container > table,
-#app .table-responsive > table{margin:0!important}
+#app .table-wrap,#app .table-container,#app .table-responsive,#app [class*="table-wrap"],#app [class*="table-container"],#app [class*="table-responsive"]{width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;border:1px solid var(--aljava-table-border)!important;border-radius:14px!important;background:var(--aljava-table-bg)!important;box-shadow:0 8px 22px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.025)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;scrollbar-width:thin}
+#app .table-wrap>table,#app .table-container>table,#app .table-responsive>table{margin:0!important}
 
 /* CONTENT HIERARCHY */
 #app table strong{color:#f7f9fb!important;font-weight:800!important}
 #app table .muted{color:var(--aljava-table-muted)!important}
 #app table a:not(.btn){color:#8db8ff!important;text-decoration:none!important}
 #app table a:not(.btn):hover{text-decoration:underline!important}
-
-#app table td .btn,
-#app table td button{
-  min-height:32px!important;
-  padding:7px 10px!important;
-  border-radius:8px!important;
-  box-shadow:none!important;
-  white-space:nowrap!important;
-}
-
-/* STATUS — semantic colors only; table shell stays identical. */
+#app table td .btn,#app table td button{min-height:32px!important;padding:7px 10px!important;border-radius:8px!important;box-shadow:none!important;white-space:nowrap!important}
 #app table td.active,#app table .status-active{color:#4ade80!important}
 #app table td.pending,#app table .status-pending{color:#fbbf24!important}
 #app table td.expired,#app table .status-expired{color:#f87171!important}
 
-@media(max-width:700px){
-  #app table.aljava-table,
-  #app table:not(.no-aljava-table){min-width:620px;font-size:11.5px!important}
-  #app table.aljava-table thead th,
-  #app table:not(.no-aljava-table) thead th{padding:10px 12px!important}
-  #app table.aljava-table tbody td,
-  #app table:not(.no-aljava-table) tbody td{padding:11px 12px!important}
-}
+/* FINAL AUTHORITY — overrides legacy module-specific table CSS. */
+#app #dashboardView table thead th,#app #salesView table thead th,#app #cardsView table thead th,#app #productView table thead th,#app #customersView table thead th,#app #operationsView table thead th,#app #analyticsView table thead th{background:var(--aljava-table-head)!important;color:var(--aljava-table-heading)!important;border:0!important;border-bottom:1px solid var(--aljava-table-border-strong)!important;box-shadow:none!important;text-shadow:none!important}
+#app #dashboardView table tbody td,#app #salesView table tbody td,#app #cardsView table tbody td,#app #productView table tbody td,#app #customersView table tbody td,#app #operationsView table tbody td,#app #analyticsView table tbody td{background:var(--aljava-table-row)!important;color:var(--aljava-table-text)!important;border:0!important;border-bottom:1px solid var(--aljava-table-border-soft)!important;box-shadow:none!important}
+#app #dashboardView table tbody tr:nth-child(even) td,#app #salesView table tbody tr:nth-child(even) td,#app #cardsView table tbody tr:nth-child(even) td,#app #productView table tbody tr:nth-child(even) td,#app #customersView table tbody tr:nth-child(even) td,#app #operationsView table tbody tr:nth-child(even) td,#app #analyticsView table tbody tr:nth-child(even) td{background:var(--aljava-table-row-alt)!important}
+#app #dashboardView table tbody tr:hover td,#app #salesView table tbody tr:hover td,#app #cardsView table tbody tr:hover td,#app #productView table tbody tr:hover td,#app #customersView table tbody tr:hover td,#app #operationsView table tbody tr:hover td,#app #analyticsView table tbody tr:hover td{background:var(--aljava-table-hover)!important}
+
+/* Requested neon status edges for the card table. */
+#app #dashboardView #cardTable table td.active,#app #dashboardView #cardTable table td.pending,#app #dashboardView #cardTable table td.expired{position:relative!important;font-weight:800!important;border:1px solid transparent!important;border-radius:12px!important}
+#app #dashboardView #cardTable table td.active{color:#4ade80!important;background:#102018!important;border-color:rgba(34,197,94,.82)!important;box-shadow:0 0 8px rgba(34,197,94,.20),inset 0 0 0 1px rgba(34,197,94,.18)!important}
+#app #dashboardView #cardTable table td.pending{color:#fbbf24!important;background:#211a0d!important;border-color:rgba(245,158,11,.82)!important;box-shadow:0 0 8px rgba(245,158,11,.18),inset 0 0 0 1px rgba(245,158,11,.18)!important}
+#app #dashboardView #cardTable table td.expired{color:#f87171!important;background:#221315!important;border-color:rgba(239,68,68,.82)!important;box-shadow:0 0 8px rgba(239,68,68,.18),inset 0 0 0 1px rgba(239,68,68,.18)!important}
+
+@media(max-width:700px){#app table.aljava-table,#app table:not(.no-aljava-table){min-width:620px;font-size:11.5px!important}#app table.aljava-table thead th,#app table:not(.no-aljava-table) thead th{padding:10px 12px!important}#app table.aljava-table tbody td,#app table:not(.no-aljava-table) tbody td{padding:11px 12px!important}}
