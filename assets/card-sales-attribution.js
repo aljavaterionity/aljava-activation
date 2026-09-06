@@ -28,14 +28,20 @@
   };
 
   async function fetchAttribution() {
-    const { data, error } = await client.rpc('admin_dashboard_card_sales_attribution');
-    if (error) throw error;
-    return Array.isArray(data) ? data : [];
+    const controller = new AbortController();
+    const timerId = setTimeout(() => controller.abort(), 10000);
+    try {
+      const request = client.rpc('admin_dashboard_card_sales_attribution');
+      const { data, error } = await Promise.race([
+        request,
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Atribusi sales: permintaan data timeout')), 10000))
+      ]);
+      if (error) throw error;
+      return Array.isArray(data) ? data : [];
+    } finally { clearTimeout(timerId); }
   }
 
-  function buildMap(rows) {
-    return new Map(rows.map((row) => [String(row.card_id), row]));
-  }
+  function buildMap(rows) { return new Map(rows.map((row) => [String(row.card_id), row])); }
 
   function render() {
     if (rendering) return false;
@@ -78,27 +84,17 @@
   async function refresh() {
     if (loading || !document.querySelector('#dashboardView.active-view')) return;
     loading = true;
-    try {
-      window.__ALJAVA_CARD_SALES_ATTRIBUTION = await fetchAttribution();
-      style();
-      render();
-    } catch (error) {
-      console.warn('[ALJAVA] card sales attribution:', error?.message || error);
-    } finally { loading = false; }
+    try { window.__ALJAVA_CARD_SALES_ATTRIBUTION = await fetchAttribution(); style(); render(); }
+    catch (error) { console.warn('[ALJAVA] card sales attribution:', error?.message || error); }
+    finally { loading = false; }
   }
 
-  function schedule(delay = 80) {
-    clearTimeout(timer);
-    timer = setTimeout(() => { void refresh(); render(); }, delay);
-  }
+  function schedule(delay = 80) { clearTimeout(timer); timer = setTimeout(() => { void refresh(); render(); }, delay); }
 
   function bind() {
     style();
     const host = $('cardTable');
-    if (host && !observer) {
-      observer = new MutationObserver(() => { if (!rendering) render(); });
-      observer.observe(host, { childList: true, subtree: true });
-    }
+    if (host && !observer) { observer = new MutationObserver(() => { if (!rendering) render(); }); observer.observe(host, { childList: true, subtree: true }); }
     document.addEventListener('aljava:data-loaded', () => schedule(80));
     document.addEventListener('aljava:cards-created', () => schedule(120));
     document.addEventListener('aljava:cards-deleted', () => schedule(120));
@@ -106,7 +102,5 @@
     window.addEventListener('hashchange', () => schedule(80));
     schedule(120);
   }
-
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
-  else bind();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true }); else bind();
 })();
