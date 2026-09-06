@@ -1,3 +1,4 @@
+@import url('/assets/sales-workspace-actions.css?v=20260907-0517');
 /* ALJAVA TERIONITY — Main Menu visual polish. */
 /* The close control is a control, not a menu item. Keep it compact and clickable. */
 #menuPanel #closeMenu{display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:0 0 40px!important;width:40px!important;min-width:40px!important;height:40px!important;min-height:40px!important;padding:0!important;border-radius:11px!important;font-size:22px!important;line-height:1!important}
