@@ -1,0 +1,13 @@
+/* ALJAVA TERIONITY — Sales dashboard numeric values: white only. */
+#salesView .sales-stats>.stat .num,
+#salesView #salesProductSummary .table-wrap>table td:nth-child(3),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(4),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(5),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(6),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(7),
+#salesView #salesTransactionTable>table td:nth-child(5),
+#salesView #salesTransactionTable>table td:nth-child(6),
+#salesView #salesTransactionTable>table td:nth-child(7),
+#salesView #salesTransactionTable>table td:nth-child(8),
+#salesView #salesTransactionTable>table td:nth-child(9),
+#salesView #salesTransactionTable>table td:nth-child(10){color:#fff!important;text-shadow:none!important;filter:none!important}
