@@ -1,4 +1,4 @@
-/* ALJAVA TERIONITY — Dashboard card sales attribution */
+/* ALJAVA TERIONITY — Dashboard card sales attribution (stable renderer) */
 (() => {
   'use strict';
   const CORE = window.ALJAVA_CORE;
@@ -8,6 +8,7 @@
   if (!client) return;
 
   let loading = false;
+  let rendering = false;
   let observer = null;
   let timer = null;
 
@@ -37,47 +38,41 @@
   }
 
   function render() {
+    if (rendering) return false;
     const host = $('cardTable');
     if (!host || !host.closest('#dashboardView') || !host.querySelector('table')) return false;
-    const map = buildMap(window.__ALJAVA_CARD_SALES_ATTRIBUTION || []);
-    const headers = host.querySelectorAll('table thead tr');
-    headers.forEach((tr) => {
-      if (![...tr.children].some((cell) => cell.dataset.cardSalesAttrHeader === '1')) {
-        const th = document.createElement('th');
-        th.textContent = 'Kelola';
-        th.dataset.cardSalesAttrHeader = '1';
-        tr.appendChild(th);
-      }
-    });
-
-    host.querySelectorAll('table tbody tr').forEach((tr) => {
-      if (tr.children.length === 1 && tr.querySelector('.notice')) return;
-      const selector = tr.querySelector('.card-select');
-      const cardId = selector?.value || '';
-      if (!cardId) return;
-      let cell = tr.querySelector('td.card-sales-attribution');
-      if (!cell) {
-        cell = document.createElement('td');
-        cell.className = 'card-sales-attribution';
-        tr.appendChild(cell);
-      }
-      const a = map.get(String(cardId));
-      const isActivated = Boolean(a?.activated_by_sales_name);
-      const holder = a?.held_by_sales_name || '';
-      if (isActivated) {
-        cell.classList.add('activated');
-        cell.classList.remove('holder');
-        cell.innerHTML = `<span class="sales-attribution-name">${esc(a.activated_by_sales_name)}</span><span class="sales-attribution-meta">Diaktivasi oleh Sales</span>`;
-      } else if (holder) {
-        cell.classList.add('holder');
-        cell.classList.remove('activated');
-        cell.innerHTML = `<span class="sales-attribution-name">${esc(holder)}</span><span class="sales-attribution-meta">Dipegang Sales</span>`;
-      } else {
-        cell.classList.remove('holder', 'activated');
-        cell.innerHTML = '<span class="muted">Belum dipegang</span>';
-      }
-    });
-    return true;
+    const previousObserver = observer;
+    rendering = true;
+    previousObserver?.disconnect();
+    try {
+      const map = buildMap(window.__ALJAVA_CARD_SALES_ATTRIBUTION || []);
+      host.querySelectorAll('table thead tr').forEach((tr) => {
+        if (!tr.querySelector('[data-card-sales-attr-header="1"]')) {
+          const th = document.createElement('th');
+          th.textContent = 'Kelola';
+          th.dataset.cardSalesAttrHeader = '1';
+          tr.appendChild(th);
+        }
+      });
+      host.querySelectorAll('table tbody tr').forEach((tr) => {
+        if (tr.children.length === 1 && tr.querySelector('.notice, .muted')) return;
+        const selector = tr.querySelector('.card-select');
+        const cardId = selector?.value || '';
+        if (!cardId) return;
+        let cell = tr.querySelector('td.card-sales-attribution');
+        if (!cell) { cell = document.createElement('td'); cell.className = 'card-sales-attribution'; tr.appendChild(cell); }
+        const a = map.get(String(cardId));
+        let cls = '', html = '<span class="muted">Belum dipegang</span>';
+        if (a?.activated_by_sales_name) { cls='activated'; html=`<span class="sales-attribution-name">${esc(a.activated_by_sales_name)}</span><span class="sales-attribution-meta">Diaktivasi oleh Sales</span>`; }
+        else if (a?.held_by_sales_name) { cls='holder'; html=`<span class="sales-attribution-name">${esc(a.held_by_sales_name)}</span><span class="sales-attribution-meta">Dipegang Sales</span>`; }
+        const className = `card-sales-attribution${cls ? ` ${cls}` : ''}`;
+        if (cell.className !== className || cell.innerHTML !== html) { cell.className = className; cell.innerHTML = html; }
+      });
+      return true;
+    } finally {
+      rendering = false;
+      if (previousObserver) previousObserver.observe(host, { childList: true, subtree: true });
+    }
   }
 
   async function refresh() {
@@ -89,24 +84,19 @@
       render();
     } catch (error) {
       console.warn('[ALJAVA] card sales attribution:', error?.message || error);
-    } finally {
-      loading = false;
-    }
+    } finally { loading = false; }
   }
 
   function schedule(delay = 80) {
     clearTimeout(timer);
-    timer = setTimeout(() => {
-      void refresh();
-      render();
-    }, delay);
+    timer = setTimeout(() => { void refresh(); render(); }, delay);
   }
 
   function bind() {
     style();
     const host = $('cardTable');
     if (host && !observer) {
-      observer = new MutationObserver(() => render());
+      observer = new MutationObserver(() => { if (!rendering) render(); });
       observer.observe(host, { childList: true, subtree: true });
     }
     document.addEventListener('aljava:data-loaded', () => schedule(80));
