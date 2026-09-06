@@ -12,6 +12,19 @@
 #salesView #salesTransactionTable>table td:nth-child(9),
 #salesView #salesTransactionTable>table td:nth-child(10){color:#fff!important;text-shadow:none!important;filter:none!important}
 
+/* Force sales KPI numbers to render as solid white, overriding the global blue gradient text treatment. */
+#salesView .sales-stats>.stat .num,
+#salesView #salesOperationsReport .sales-report-stats>.stat .num{
+  color:#fff!important;
+  -webkit-text-fill-color:#fff!important;
+  background:#fff!important;
+  background-image:none!important;
+  background-clip:border-box!important;
+  -webkit-background-clip:border-box!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+
 /* Dashboard Penjualan tidak memakai tombol Refresh; data dimuat otomatis dan lewat filter periode. */
 #salesView #salesRefresh{display:none!important}
 #salesView .actions:has(#salesRefresh){display:none!important}
