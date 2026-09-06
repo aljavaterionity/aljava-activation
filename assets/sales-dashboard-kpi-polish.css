@@ -1,4 +1,4 @@
-/* ALJAVA TERIONITY — Sales KPI polish: soft neon accent + white values. */
+/* ALJAVA TERIONITY — Sales KPI polish: white values + soft neon accent lines. */
 #salesView>.sales-stats>.stat{
   background:#111419!important;
   border:1px solid rgba(255,255,255,.085)!important;
@@ -18,7 +18,7 @@
   filter:none!important;
 }
 
-/* Laporan Operasional — white values + blue neon accent line. */
+/* Laporan Operasional — values and table text must be bright white. */
 #salesView #salesOperationsReport .sales-report-stats>.stat{
   position:relative!important;
   overflow:hidden!important;
@@ -39,4 +39,36 @@
   color:#fff!important;
   text-shadow:none!important;
   filter:none!important;
+}
+#salesView #salesOperationsReport .table-wrap table tbody td,
+#salesView #salesOperationsReport .table-wrap table tbody td strong,
+#salesView #salesOperationsReport .table-wrap table tbody td span,
+#salesView #salesOperationsReport .table-wrap table tbody td a{
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+
+/* Status Pembayaran — keep dot clearly separated from Paid label. */
+#salesView #salesOperationsReport>.body>.grid>div:last-child .table-wrap table tbody td:first-child{
+  position:relative!important;
+  padding-left:34px!important;
+  color:#fff!important;
+  font-weight:500!important;
+  white-space:nowrap!important;
+}
+#salesView #salesOperationsReport>.body>.grid>div:last-child .table-wrap table tbody td:first-child:before{
+  content:""!important;
+  position:absolute!important;
+  left:12px!important;
+  top:50%!important;
+  width:6px!important;
+  height:6px!important;
+  margin:0!important;
+  border-radius:50%!important;
+  transform:translateY(-50%)!important;
+  background:#94a3b8!important;
+  box-shadow:none!important;
 }
