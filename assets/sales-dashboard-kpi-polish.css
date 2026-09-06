@@ -1,0 +1,19 @@
+/* ALJAVA TERIONITY — Sales KPI polish: soft neon accent + white values. */
+#salesView>.sales-stats>.stat{
+  background:#111419!important;
+  border:1px solid rgba(255,255,255,.085)!important;
+  box-shadow:0 12px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.025)!important;
+}
+#salesView>.sales-stats>.stat:before{
+  top:17px!important;
+  bottom:17px!important;
+  width:3px!important;
+  background:var(--metric-accent)!important;
+  box-shadow:0 0 5px color-mix(in srgb,var(--metric-accent) 62%,transparent),0 0 12px color-mix(in srgb,var(--metric-accent) 22%,transparent)!important;
+}
+#salesView>.sales-stats>.stat .num,
+#salesView>.sales-stats>.stat .muted{
+  color:#fff!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
