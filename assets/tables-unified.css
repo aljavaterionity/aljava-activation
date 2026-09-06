@@ -1,238 +1,127 @@
-/* ALJAVA TERIONITY — Unified table system
-   One table language across Dashboard, Sales, Sales Workspace, Cards, Customers,
-   Products, Operations and Analytics. Solid premium dark surface; no glass. */
+/* ALJAVA TERIONITY — Unified Table System v2
+   Single visual language for every admin table.
+   Edit this file first when changing table appearance. */
 
 :root{
-  --aljava-table-bg:#101216;
-  --aljava-table-row:#111419;
-  --aljava-table-row-alt:#0f1216;
-  --aljava-table-hover:#171b22;
-  --aljava-table-head:#191c21;
-  --aljava-table-border:rgba(255,255,255,.075);
-  --aljava-table-border-strong:rgba(255,255,255,.105);
-  --aljava-table-text:#d8dde5;
-  --aljava-table-heading:#f1f5f9;
-  --aljava-table-muted:#8f96a3;
+  --aljava-table-bg:#0d0f12;
+  --aljava-table-head:#15181d;
+  --aljava-table-row:#101318;
+  --aljava-table-row-alt:#0d1014;
+  --aljava-table-hover:#171c23;
+  --aljava-table-border:rgba(255,255,255,.09);
+  --aljava-table-border-soft:rgba(255,255,255,.055);
+  --aljava-table-border-strong:rgba(255,255,255,.13);
+  --aljava-table-text:#d9dee7;
+  --aljava-table-heading:#f5f7fa;
+  --aljava-table-muted:#8d95a3;
   --aljava-table-accent:#3b82f6;
 }
 
-/* Every normal data table */
-#app table:not(.no-aljava-table),
-#dashboardView table,
-#salesView table,
-#sales-workspace table,
-#cardsView table,
-#customerView table,
-#customersView table,
-#productView table,
-#productsView table,
-#operationsView table,
-#analyticsView table{
+/* BASE — every admin table inherits the same language. */
+#app table.aljava-table,
+#app table:not(.no-aljava-table){
   width:100%!important;
+  min-width:680px;
   border-collapse:separate!important;
   border-spacing:0!important;
-  background:transparent!important;
+  background:var(--aljava-table-bg)!important;
   color:var(--aljava-table-text)!important;
   font-size:12px!important;
+  line-height:1.45!important;
 }
 
-#app table:not(.no-aljava-table) thead th,
-#dashboardView table thead th,
-#salesView table thead th,
-#sales-workspace table thead th,
-#cardsView table thead th,
-#customerView table thead th,
-#customersView table thead th,
-#productView table thead th,
-#productsView table thead th,
-#operationsView table thead th,
-#analyticsView table thead th{
+#app table.aljava-table thead th,
+#app table:not(.no-aljava-table) thead th{
   height:44px!important;
   padding:11px 14px!important;
   background:var(--aljava-table-head)!important;
   color:var(--aljava-table-heading)!important;
+  border:0!important;
   border-bottom:1px solid var(--aljava-table-border-strong)!important;
   font-size:10px!important;
-  line-height:1.2!important;
   font-weight:800!important;
   letter-spacing:.45px!important;
+  line-height:1.2!important;
+  text-align:left!important;
   text-transform:uppercase!important;
   white-space:nowrap!important;
+  vertical-align:middle!important;
   text-shadow:none!important;
-  box-shadow:inset 0 -1px 0 rgba(0,0,0,.28)!important;
 }
 
-#app table:not(.no-aljava-table) tbody td,
-#dashboardView table tbody td,
-#salesView table tbody td,
-#sales-workspace table tbody td,
-#cardsView table tbody td,
-#customerView table tbody td,
-#customersView table tbody td,
-#productView table tbody td,
-#productsView table tbody td,
-#operationsView table tbody td,
-#analyticsView table tbody td{
+#app table.aljava-table tbody td,
+#app table:not(.no-aljava-table) tbody td{
   min-height:48px!important;
   padding:12px 14px!important;
   background:var(--aljava-table-row)!important;
   color:var(--aljava-table-text)!important;
-  border-bottom:1px solid rgba(255,255,255,.052)!important;
+  border:0!important;
+  border-bottom:1px solid var(--aljava-table-border-soft)!important;
   vertical-align:middle!important;
   box-shadow:none!important;
   transition:background .16s ease,border-color .16s ease!important;
 }
 
-#app table:not(.no-aljava-table) tbody tr:nth-child(even) td,
-#dashboardView table tbody tr:nth-child(even) td,
-#salesView table tbody tr:nth-child(even) td,
-#sales-workspace table tbody tr:nth-child(even) td,
-#cardsView table tbody tr:nth-child(even) td,
-#customerView table tbody tr:nth-child(even) td,
-#customersView table tbody tr:nth-child(even) td,
-#productView table tbody tr:nth-child(even) td,
-#productsView table tbody tr:nth-child(even) td,
-#operationsView table tbody tr:nth-child(even) td,
-#analyticsView table tbody tr:nth-child(even) td{background:var(--aljava-table-row-alt)!important}
+#app table.aljava-table tbody tr:nth-child(even) td,
+#app table:not(.no-aljava-table) tbody tr:nth-child(even) td{background:var(--aljava-table-row-alt)!important}
 
-#app table:not(.no-aljava-table) tbody tr:hover td,
-#dashboardView table tbody tr:hover td,
-#salesView table tbody tr:hover td,
-#sales-workspace table tbody tr:hover td,
-#cardsView table tbody tr:hover td,
-#customerView table tbody tr:hover td,
-#customersView table tbody tr:hover td,
-#productView table tbody tr:hover td,
-#productsView table tbody tr:hover td,
-#operationsView table tbody tr:hover td,
-#analyticsView table tbody tr:hover td{background:var(--aljava-table-hover)!important}
+#app table.aljava-table tbody tr:hover td,
+#app table:not(.no-aljava-table) tbody tr:hover td{
+  background:var(--aljava-table-hover)!important;
+  border-bottom-color:rgba(59,130,246,.18)!important;
+}
 
-#app table:not(.no-aljava-table) tbody tr:last-child td,
-#dashboardView table tbody tr:last-child td,
-#salesView table tbody tr:last-child td,
-#sales-workspace table tbody tr:last-child td,
-#cardsView table tbody tr:last-child td,
-#customerView table tbody tr:last-child td,
-#customersView table tbody tr:last-child td,
-#productView table tbody tr:last-child td,
-#productsView table tbody tr:last-child td,
-#operationsView table tbody tr:last-child td,
-#analyticsView table tbody tr:last-child td{border-bottom:0!important}
+#app table.aljava-table tbody tr:last-child td,
+#app table:not(.no-aljava-table) tbody tr:last-child td{border-bottom:0!important}
 
-/* Table containers: same radius, border and internal spacing everywhere. */
+/* TABLE SHELL — same border, radius and spacing everywhere. */
 #app .table-wrap,
 #app .table-container,
 #app .table-responsive,
 #app [class*="table-wrap"],
-#dashboardView #cardTable,
-#salesView #salesTable,
-#sales-workspace .sales-table-wrap,
-#sales-workspace .table-wrap,
-#cardsView #cardTable,
-#customerView .table-wrap,
-#customersView .table-wrap,
-#productView .table-wrap,
-#productsView .table-wrap,
-#operationsView .table-wrap,
-#analyticsView .table-wrap{
-  overflow:auto!important;
+#app [class*="table-container"],
+#app [class*="table-responsive"]{
+  width:100%!important;
+  overflow-x:auto!important;
+  overflow-y:hidden!important;
   border:1px solid var(--aljava-table-border)!important;
   border-radius:14px!important;
   background:var(--aljava-table-bg)!important;
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.028),0 10px 24px rgba(0,0,0,.18)!important;
+  box-shadow:0 8px 22px rgba(0,0,0,.16),inset 0 1px 0 rgba(255,255,255,.025)!important;
   backdrop-filter:none!important;
   -webkit-backdrop-filter:none!important;
+  scrollbar-width:thin;
 }
 
-/* Keep common table text hierarchy consistent. */
-#app table strong,
-#dashboardView table strong,
-#salesView table strong,
-#sales-workspace table strong,
-#cardsView table strong,
-#customerView table strong,
-#customersView table strong,
-#productView table strong,
-#productsView table strong,
-#operationsView table strong,
-#analyticsView table strong{color:#f5f7fa!important;font-weight:800!important}
+#app .table-wrap > table,
+#app .table-container > table,
+#app .table-responsive > table{margin:0!important}
 
-#app table .muted,
-#dashboardView table .muted,
-#salesView table .muted,
-#sales-workspace table .muted,
-#cardsView table .muted,
-#customerView table .muted,
-#customersView table .muted,
-#productView table .muted,
-#productsView table .muted,
-#operationsView table .muted,
-#analyticsView table .muted{color:var(--aljava-table-muted)!important}
+/* CONTENT HIERARCHY */
+#app table strong{color:#f7f9fb!important;font-weight:800!important}
+#app table .muted{color:var(--aljava-table-muted)!important}
+#app table a:not(.btn){color:#8db8ff!important;text-decoration:none!important}
+#app table a:not(.btn):hover{text-decoration:underline!important}
 
-/* Compact action buttons inside tables share one shape. */
 #app table td .btn,
-#app table td button,
-#dashboardView table td .btn,
-#dashboardView table td button,
-#salesView table td .btn,
-#salesView table td button,
-#sales-workspace table td .btn,
-#sales-workspace table td button,
-#cardsView table td .btn,
-#cardsView table td button,
-#customerView table td .btn,
-#customerView table td button,
-#customersView table td .btn,
-#customersView table td button,
-#productView table td .btn,
-#productView table td button,
-#productsView table td .btn,
-#productsView table td button,
-#operationsView table td .btn,
-#operationsView table td button,
-#analyticsView table td .btn,
-#analyticsView table td button{
+#app table td button{
   min-height:32px!important;
   padding:7px 10px!important;
   border-radius:8px!important;
   box-shadow:none!important;
+  white-space:nowrap!important;
 }
 
-/* Preserve semantic status colors while keeping the table shell identical. */
-#app table td.active,
-#dashboardView table td.active,
-#salesView table td.active,
-#sales-workspace table td.active{color:#4ade80!important}
-#app table td.pending,
-#dashboardView table td.pending,
-#salesView table td.pending,
-#sales-workspace table td.pending{color:#fbbf24!important}
-#app table td.expired,
-#dashboardView table td.expired,
-#salesView table td.expired,
-#sales-workspace table td.expired{color:#f87171!important}
+/* STATUS — semantic colors only; table shell stays identical. */
+#app table td.active,#app table .status-active{color:#4ade80!important}
+#app table td.pending,#app table .status-pending{color:#fbbf24!important}
+#app table td.expired,#app table .status-expired{color:#f87171!important}
 
 @media(max-width:700px){
-  #app table:not(.no-aljava-table) thead th,
-  #dashboardView table thead th,
-  #salesView table thead th,
-  #sales-workspace table thead th,
-  #cardsView table thead th,
-  #customerView table thead th,
-  #customersView table thead th,
-  #productView table thead th,
-  #productsView table thead th,
-  #operationsView table thead th,
-  #analyticsView table thead th{padding:10px 12px!important}
-  #app table:not(.no-aljava-table) tbody td,
-  #dashboardView table tbody td,
-  #salesView table tbody td,
-  #sales-workspace table tbody td,
-  #cardsView table tbody td,
-  #customerView table tbody td,
-  #customersView table tbody td,
-  #productView table tbody td,
-  #productsView table tbody td,
-  #operationsView table tbody td,
-  #analyticsView table tbody td{padding:11px 12px!important}
+  #app table.aljava-table,
+  #app table:not(.no-aljava-table){min-width:620px;font-size:11.5px!important}
+  #app table.aljava-table thead th,
+  #app table:not(.no-aljava-table) thead th{padding:10px 12px!important}
+  #app table.aljava-table tbody td,
+  #app table:not(.no-aljava-table) tbody td{padding:11px 12px!important}
 }
