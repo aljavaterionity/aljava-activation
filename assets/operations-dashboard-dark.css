@@ -10,18 +10,19 @@
 #operationsView>div:first-child h1{margin:0!important;color:var(--text-primary)!important;font-size:30px!important;line-height:1.12!important;font-weight:800!important;letter-spacing:-.5px!important}
 #operationsView>div:first-child p{margin:6px 0 0!important;color:var(--text-secondary)!important;font-size:12px!important;line-height:1.5!important}
 
-/* KPI layout only — visual card shell is inherited from current Dashboard Utama. */
+/* KPI layout only — visual card shell is inherited from current Dashboard Utama, without blur. */
 #operationsView .stats{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:14px!important;margin:16px 0 18px!important}
-#operationsView .stat.glass{min-width:0!important;min-height:112px!important;padding:18px!important;box-sizing:border-box!important}
+#operationsView .stat.glass{min-width:0!important;min-height:112px!important;padding:18px!important;box-sizing:border-box!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #operationsView .stat .muted{position:relative!important;z-index:2!important;color:var(--text-secondary)!important;font-size:11px!important;line-height:1.3!important;font-weight:700!important;letter-spacing:.25px!important;text-transform:uppercase!important}
-#operationsView .stat .num{position:relative!important;z-index:2!important;margin-top:9px!important;color:#fff!important;font-size:26px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.4px!important;overflow-wrap:anywhere!important}
+#operationsView .stat .num{position:relative!important;z-index:2!important;margin-top:9px!important;color:#fff!important;-webkit-text-fill-color:#fff!important;background:transparent!important;background-image:none!important;background-clip:border-box!important;-webkit-background-clip:border-box!important;text-shadow:none!important;filter:none!important;font-size:26px!important;line-height:1.1!important;font-weight:800!important;letter-spacing:-.4px!important;overflow-wrap:anywhere!important}
 
-/* Keep the current Dashboard Utama blue edge language on every Operations KPI without adding a second shell. */
-#operationsView .stat.glass::before{content:""!important}
-#operationsView .stat:nth-child(1)::before,#operationsView .stat:nth-child(2)::before,#operationsView .stat:nth-child(3)::before,#operationsView .stat:nth-child(4)::before,#operationsView .stat:nth-child(5)::before,#operationsView .stat:nth-child(6)::before{background:linear-gradient(180deg,var(--aljava-blue-bright),var(--aljava-blue),var(--aljava-blue-deep))!important;box-shadow:0 0 16px rgba(0,117,242,.18)!important;opacity:1!important}
+/* KPI accent — single Operations owner; blue neon edge matches the current Dashboard Utama language. */
+#operationsView .stat.glass::before{
+  content:""!important;background:linear-gradient(180deg,var(--aljava-blue-bright),var(--aljava-blue),var(--aljava-blue-deep))!important;box-shadow:0 0 8px rgba(0,145,250,.42),0 0 18px rgba(0,117,242,.20)!important;opacity:1!important;animation:none!important
+}
 
-/* Panels — inherit the current Dashboard Utama panel treatment. */
-#operationsView>.panel{width:100%!important;min-width:0!important;margin:16px 0 0!important}
+/* Panels — inherit the current Dashboard Utama panel treatment, without blur. */
+#operationsView>.panel{width:100%!important;min-width:0!important;margin:16px 0 0!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
 #operationsView>.panel .head,#operationsView>.panel .body{position:relative!important}
 #operationsView>.panel .head{padding:16px 20px!important}
 #operationsView>.panel .head::after{content:""!important;position:absolute!important;left:20px!important;bottom:-1px!important;width:48px!important;height:3px!important;border-radius:999px 999px 0 0!important;background:var(--aljava-blue)!important;box-shadow:0 0 10px rgba(0,117,242,.16)!important}
