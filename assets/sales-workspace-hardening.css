@@ -1,0 +1,18 @@
+/* ALJAVA TERIONITY — resilient Sales Workspace controls */
+#salesWorkspaceView .sw-hardening-modal{color:#e5e7eb!important}
+#salesWorkspaceView .sw-form-stack{display:grid!important;gap:10px!important}
+#salesWorkspaceView .sw-field-label{display:grid!important;gap:6px!important;color:#9ca3af!important;font-size:11px!important;font-weight:700!important;letter-spacing:.15px!important}
+#salesWorkspaceView .sw-field-label .field{width:100%!important;height:42px!important;border-radius:11px!important}
+#salesWorkspaceView .sw-form-note{margin:10px 0 0!important;font-size:11px!important;line-height:1.5!important}
+#salesWorkspaceView .sw-card-picker{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;gap:8px!important;align-items:center!important;margin-top:11px!important}
+#salesWorkspaceView .sw-card-picker .field{height:40px!important;border-radius:10px!important;min-width:0!important}
+#salesWorkspaceView .sw-card-picker .btn{height:40px!important;min-height:40px!important;padding:8px 13px!important;border-radius:10px!important;white-space:nowrap!important}
+#salesWorkspaceView .sw-card-picker select option{background:#111419!important;color:#f5f5f5!important}
+#salesWorkspaceView .sw-hardening-modal .notice{margin-top:10px!important}
+#salesWorkspaceView .sales-add-actions{gap:8px!important;flex-wrap:wrap!important}
+@media(max-width:650px){
+  #salesWorkspaceView .sw-card-picker{grid-template-columns:1fr!important}
+  #salesWorkspaceView .sw-card-picker .btn{width:100%!important}
+  #salesWorkspaceView .sales-add-actions{display:grid!important;grid-template-columns:1fr 1fr!important}
+  #salesWorkspaceView .sales-add-actions .btn{width:100%!important}
+}
