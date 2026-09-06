@@ -18,9 +18,13 @@
 
 /* Payment status: keep the indicator visually separate from the label. */
 #salesView #salesTransactionTable>table tbody td:nth-child(11){
-  color:#f5f7fa!important;
-  font-weight:750!important;
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.4!important;
   white-space:nowrap!important;
+  text-shadow:none!important;
+  filter:none!important;
 }
 #salesView #salesTransactionTable>table tbody td:nth-child(11)::before{
   content:""!important;
@@ -34,3 +38,38 @@
   box-shadow:0 0 6px rgba(34,197,94,.45)!important;
 }
 #salesView #salesTransactionTable>table tbody td:nth-child(11):has(*)::before{display:none!important}
+
+/* Unified table typography: body text and numeric values use one weight, size and white tone. */
+#salesView .table-wrap>table tbody td,
+#salesView .table-wrap>table tbody td strong,
+#salesView .table-wrap>table tbody td b,
+#salesView .table-wrap>table tbody td span,
+#salesView .table-wrap>table tbody td a,
+#salesView .table-wrap>table tbody td .num,
+#salesView .table-wrap>table tbody td .muted{
+  color:#fff!important;
+  font-size:12px!important;
+  font-weight:500!important;
+  line-height:1.4!important;
+  text-shadow:none!important;
+  filter:none!important;
+}
+
+/* Remove page-specific colored/bold values so every table value is visually equal. */
+#salesView #salesProductSummary .table-wrap>table td:nth-child(4),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(6),
+#salesView #salesProductSummary .table-wrap>table td:nth-child(7),
+#salesView #salesTransactionTable td:nth-child(1) strong,
+#salesView #salesTransactionTable td:nth-child(6),
+#salesView #salesTransactionTable td:nth-child(9),
+#salesView #salesTransactionTable td:nth-child(10),
+#salesView #salesTransactionTable td:nth-child(11){
+  color:#fff!important;
+  font-weight:500!important;
+}
+
+/* Keep action controls distinct from normal table text. */
+#salesView #salesTransactionTable td:nth-child(12) .btn{
+  font-size:11px!important;
+  font-weight:500!important;
+}
