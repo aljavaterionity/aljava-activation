@@ -1,0 +1,30 @@
+/* ALJAVA TERIONITY — Sales payment status polish */
+#salesView #salesTransactionTable table tbody td:nth-child(11){
+  color:#f5f7fa!important;
+  font-weight:750!important;
+  white-space:nowrap!important;
+  vertical-align:middle!important;
+}
+
+/* Keep the status dot, but give it deliberate breathing room. */
+#salesView #salesTransactionTable table tbody td:nth-child(11)::before{
+  content:""!important;
+  display:inline-block!important;
+  width:7px!important;
+  height:7px!important;
+  margin-right:9px!important;
+  border-radius:50%!important;
+  vertical-align:1px!important;
+  background:#22c55e!important;
+  box-shadow:0 0 6px rgba(34,197,94,.45)!important;
+}
+
+#salesView #salesTransactionTable table tbody td:nth-child(11):has(*)::before{display:none!important}
+
+@media(max-width:650px){
+  #salesView #salesTransactionTable table tbody td:nth-child(11)::before{
+    width:6px!important;
+    height:6px!important;
+    margin-right:8px!important;
+  }
+}
