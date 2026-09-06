@@ -19,6 +19,18 @@
     const date = new Date(value);
     return Number.isNaN(date.getTime()) ? '-' : date.toLocaleDateString('id-ID');
   };
+  const query = async (build, label, timeoutMs = 10000) => {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const { data, error } = await build(controller.signal);
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      if (error?.name === 'AbortError' || controller.signal.aborted) throw new Error(`${label}: permintaan data timeout`);
+      throw error;
+    } finally { clearTimeout(timer); }
+  };
 
   let refreshTimer = null;
   let loading = false;
@@ -34,9 +46,9 @@
     loading = true;
     try {
       const [{ data: cards, error: cardsError }, { data: products, error: productsError }, { data: customers, error: customersError }] = await Promise.all([
-        client.from('Cards').select('id,card_code,product_type,status,customer_id,product_id,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url').order('created_at', { ascending: false }),
-        client.from('Product').select('id,name,category,product_code'),
-        client.from('Customers').select('id,business_name,owner_name')
+        query((signal) => client.from('Cards').select('id,card_code,product_type,status,customer_id,product_id,created_at,activated_at,expires_at,activation_url,qr_code_url,nfc_url').order('created_at', { ascending: false }).abortSignal?.(signal), 'Cards').then(data => ({data,error:null})).catch(error => ({data:null,error})),
+        query((signal) => client.from('Product').select('id,name,category,product_code').abortSignal?.(signal), 'Product').then(data => ({data,error:null})).catch(error => ({data:null,error})),
+        query((signal) => client.from('Customers').select('id,business_name,owner_name').abortSignal?.(signal), 'Customers').then(data => ({data,error:null})).catch(error => ({data:null,error}))
       ]);
       if (cardsError || productsError || customersError) {
         host.innerHTML = '<div class="notice err">❌ Gagal memuat ringkasan kartu.</div>';
