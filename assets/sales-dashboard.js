@@ -15,7 +15,12 @@
     if (document.getElementById('aljava-sales-dashboard-ui')) return;
     const style = document.createElement('style');
     style.id = 'aljava-sales-dashboard-ui';
-    style.textContent = '#salesMenu{display:flex;align-items:center;gap:12px;text-align:left}.sales-menu-icon{width:48px;height:48px;min-width:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#10b981,#059669);box-shadow:0 10px 22px rgba(5,150,105,.18)}.sales-menu-icon svg{width:25px;height:25px;display:block}.sales-menu-label{font-weight:800}';
+    style.textContent = '#salesMenu{display:flex;align-items:center;gap:12px;text-align:left}.sales-menu-icon{width:48px;height:48px;min-width:48px;display:grid;place-items:center;border-radius:16px;background:linear-gradient(145deg,#10b981,#059669);box-shadow:0 10px 22px rgba(5,150,105,.18)}.sales-menu-icon svg{width:25px;height:25px;display:block}.sales-menu-label{font-weight:800}' +
+      '#salesView .sales-stats>.stat .num,#salesView #salesOperationsReport .sales-report-stats>.stat .num{color:#fff!important;text-shadow:none!important;filter:none!important}' +
+      '#salesView #salesOperationsReport .head h2,#salesView #salesOperationsReport .head p,#salesView #salesOperationsReport .head .muted,#salesView #salesOperationsReport .body h3,#salesView #salesOperationsReport .sales-report-stats>.stat .muted{color:#fff!important;text-shadow:none!important;filter:none!important}' +
+      '#salesView #salesOperationsReport .table-wrap table tbody td,#salesView #salesOperationsReport .table-wrap table tbody td strong,#salesView #salesOperationsReport .table-wrap table tbody td span,#salesView #salesOperationsReport .table-wrap table tbody td a{color:#fff!important;font-size:12px!important;font-weight:500!important;line-height:1.4!important;text-shadow:none!important;filter:none!important}' +
+      '#salesView #salesOperationsReport>.body>.grid>div:last-child .table-wrap table tbody td:first-child{color:#fff!important;font-weight:500!important;white-space:nowrap!important;padding-left:34px!important;position:relative!important}' +
+      '#salesView #salesOperationsReport>.body>.grid>div:last-child .table-wrap table tbody td:first-child:before{content:""!important;position:absolute!important;left:12px!important;top:50%!important;width:6px!important;height:6px!important;margin:0!important;border-radius:50%!important;transform:translateY(-50%)!important;background:#94a3b8!important;box-shadow:none!important}';
     document.head.appendChild(style);
     const link = document.createElement('link');
     link.id = 'aljava-sales-dashboard-ui-css';
@@ -35,7 +40,12 @@
   }
 
   function enforceSalesKpiWhite() {
-    document.querySelectorAll('#salesView>.sales-stats>.stat .num').forEach((el) => {
+    document.querySelectorAll('#salesView .num').forEach((el) => {
+      el.style.setProperty('color', '#fff', 'important');
+      el.style.setProperty('text-shadow', 'none', 'important');
+      el.style.setProperty('filter', 'none', 'important');
+    });
+    document.querySelectorAll('#salesView #salesOperationsReport .head h2,#salesView #salesOperationsReport .head p,#salesView #salesOperationsReport .head .muted,#salesView #salesOperationsReport .body h3,#salesView #salesOperationsReport .sales-report-stats>.stat .muted,#salesView #salesOperationsReport .table-wrap tbody td,#salesView #salesOperationsReport .table-wrap tbody td *').forEach((el) => {
       el.style.setProperty('color', '#fff', 'important');
       el.style.setProperty('text-shadow', 'none', 'important');
       el.style.setProperty('filter', 'none', 'important');
@@ -157,6 +167,7 @@
       const productRows = Object.values(grouped).sort((a, b) => b.revenue - a.revenue);
       $('salesProductSummary').innerHTML = productRows.length ? `<div class="table-wrap"><table><thead><tr><th>Produk</th><th>Kode</th><th>Qty</th><th>Omzet</th><th>HPP</th><th>Komisi</th><th>Laba Kotor</th></tr></thead><tbody>${productRows.map((row) => `<tr><td>${esc(row.name)}</td><td>${esc(row.code)}</td><td>${row.qty}</td><td>${money(row.revenue)}</td><td>${money(row.hpp)}</td><td>${money(row.commission)}</td><td>${money(row.revenue - row.hpp - row.commission)}</td></tr>`).join('')}</tbody></table></div>` : '<div class="muted">Belum ada penjualan pada periode ini.</div>';
       $('salesTransactionTable').innerHTML = tx.length ? `<table><thead><tr><th>No. Transaksi</th><th>Tanggal</th><th>Customer</th><th>Produk</th><th>Qty</th><th>Omzet</th><th>Dibayar</th><th>Piutang</th><th>Komisi</th><th>Laba Kotor</th><th>Status</th><th>WhatsApp</th></tr></thead><tbody>${tx.slice(0, 100).map((row) => { const qty = Number(row.quantity || 1); const rev = Number(row.selling_price || 0) * qty; const cost = Number(row.hpp || 0) * qty; const fee = Number(row.commission || 0); const paid = Math.min(Math.max(Number(row.amount_paid || 0), 0), rev); const receivable = Math.max(0, rev - paid); const customer = customers[row.customer_id] || {}; const product = products[row.product_id] || {}; const wa = whatsappUrl(customer.whatsapp, salesWhatsappMessage(row, customer, product)); return `<tr><td><strong>${esc(row.transaction_code || '-')}</strong></td><td>${esc(new Date(row.transaction_date).toLocaleString('id-ID'))}</td><td>${esc(customer.business_name || customer.owner_name || '-')}</td><td>${esc(product.name || '-')}</td><td>${qty}</td><td>${money(rev)}</td><td>${money(paid)}</td><td>${money(receivable)}</td><td>${money(fee)}</td><td>${money(rev - cost - fee)}</td><td>${esc(row.payment_status || '-')}</td><td>${wa ? `<a class="btn" target="_blank" rel="noopener noreferrer" href="${esc(wa)}">WhatsApp</a>` : '<span class="muted">Tidak ada nomor</span>'}</td></tr>`; }).join('')}</tbody></table>` : '<div class="muted">Belum ada transaksi.</div>';
+      enforceSalesKpiWhite();
       document.dispatchEvent(new CustomEvent('aljava:sales-data-rendered'));
     } catch (error) {
       const message = esc(error?.message || error);
