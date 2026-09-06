@@ -27,6 +27,11 @@
     darkLink.rel = 'stylesheet';
     darkLink.href = '/assets/sales-dashboard-dark.css?v=20260905-2236';
     document.head.appendChild(darkLink);
+    const numericLink = document.createElement('link');
+    numericLink.id = 'aljava-sales-dashboard-numeric-css';
+    numericLink.rel = 'stylesheet';
+    numericLink.href = '/assets/sales-dashboard-numeric.css?v=20260907-001';
+    document.head.appendChild(numericLink);
   }
 
   function normalizeWhatsapp(value) {
