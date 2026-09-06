@@ -1,0 +1,7 @@
+/* ALJAVA TERIONITY — Sales Workspace action buttons */
+#salesWorkspaceRefresh{display:none!important}
+#salesWorkspaceAdd{height:44px!important;min-height:44px!important;padding:0 22px!important;border:1px solid rgba(22,140,255,.55)!important;border-radius:13px!important;background:linear-gradient(100deg,#0050e7,#0075f2 50%,#168cff)!important;color:#fff!important;font-size:13px!important;font-weight:850!important;box-shadow:0 10px 24px rgba(0,0,0,.24)!important;transition:transform .16s ease,box-shadow .16s ease,background .16s ease!important}
+#salesWorkspaceAdd:hover{background:linear-gradient(100deg,#0757f0,#0a7df5 50%,#2498ff)!important;transform:translateY(-1px)!important;box-shadow:0 12px 28px rgba(0,0,0,.30)!important}
+#salesWorkspaceAdd:active{transform:translateY(0)!important;box-shadow:0 6px 16px rgba(0,0,0,.22)!important}
+#salesWorkspaceAdd:disabled{opacity:.62!important;cursor:not-allowed!important;transform:none!important;box-shadow:none!important}
+@media(max-width:650px){#salesWorkspaceAdd{width:100%!important;height:46px!important;min-height:46px!important;font-size:13px!important}.sales-workspace-toolbar:has(#salesWorkspaceAdd){width:100%!important;margin-top:6px!important}}
