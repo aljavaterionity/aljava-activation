@@ -16,7 +16,7 @@
 #salesView #salesRefresh{display:none!important}
 #salesView .actions:has(#salesRefresh){display:none!important}
 
-/* Payment status: keep the indicator visually separate from the label. */
+/* Payment status: give the dot and "Paid" label clear, consistent spacing. */
 #salesView #salesTransactionTable>table tbody td:nth-child(11){
   color:#fff!important;
   font-size:12px!important;
@@ -25,13 +25,14 @@
   white-space:nowrap!important;
   text-shadow:none!important;
   filter:none!important;
+  padding-left:4px!important;
 }
 #salesView #salesTransactionTable>table tbody td:nth-child(11)::before{
   content:""!important;
   display:inline-block!important;
   width:7px!important;
   height:7px!important;
-  margin-right:9px!important;
+  margin-right:11px!important;
   border-radius:50%!important;
   vertical-align:1px!important;
   background:#22c55e!important;
