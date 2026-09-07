@@ -22,11 +22,9 @@ The current repository contains:
 - Deployment configuration for Vercel and Wrangler
 - Operational/admin documentation files
 
-The recursive Git tree is currently cleanly readable and is not marked truncated by GitHub. fileciteturn1file0L2-L10
+The recursive Git tree is currently readable and GitHub reports it as not truncated. fileciteturn1file0L2-L10
 
 ## 3. Initial Architecture Map
-
-### Frontend entry points
 
 | Area | Entry | Current implementation | Initial status |
 |---|---|---|---|
@@ -48,107 +46,84 @@ The recursive Git tree is currently cleanly readable and is not marked truncated
 **Severity:** HIGH  
 **Classification:** `REVIEW_REQUIRED`
 
-The live database contains both:
-
-- `public."Cards"` — UUID-based current card model
-- `public.cards` — legacy bigint-based table
-
-The legacy `public.cards` table currently contains **0 rows**, while `public."Cards"` contains **5 rows**. This strongly suggests a legacy object remains in the live schema, but it must not be dropped until every code path, function, trigger, migration and historical dependency is verified.
-
-The current migration history explicitly refers to `public."Cards"` and describes legacy-card compatibility separately, reinforcing that this is a migration/architecture boundary rather than something safe to delete immediately.
+The live database contains both `public."Cards"` and legacy `public.cards`. The legacy table currently contains **0 rows**, while `public."Cards"` contains **5 rows**. Do not drop the legacy table until every source-code reference, RPC, trigger, migration and relationship has been verified.
 
 ### F-002 — Shared Supabase configuration exists, but public activation duplicates configuration
 
 **Severity:** HIGH  
 **Classification:** `REFACTOR`
 
-`assets/app-config.js` is a shared source for the Supabase URL/key and activation base URL and creates the shared client. fileciteturn4file0L2-L6
+`assets/app-config.js` is the current shared source for Supabase URL/key, activation base URL and the browser Supabase client. fileciteturn4file0L2-L6
 
-However, `index.html` independently hardcodes:
-
-- Supabase project URL
-- publishable key
-- Edge Function URLs
-
-This creates a second configuration source and makes future environment/config changes prone to drift. The public publishable key is not equivalent to a service-role secret, but the duplication itself violates the requested Single Source of Truth rule. fileciteturn19file0L2-L2
+`index.html` independently hardcodes the Supabase URL, publishable key and two Edge Function URLs. This is a configuration drift risk and violates the requested Single Source of Truth principle. The key shown is a publishable client key, not a service-role secret, but the duplication still needs cleanup. fileciteturn19file0L2-L2
 
 ### F-003 — Reset dashboard has multiple overlapping event mechanisms
 
 **Severity:** HIGH  
 **Classification:** `REFACTOR`
 
-`assets/reset-dashboard.js` currently combines:
-
-- direct `click` listener
-- direct `pointerup` listener
-- `onclick` assignment
-- delegated `pointerup`
-- delegated `touchend`
-- delegated `click`
-- MutationObserver rebinding
-- delayed rebinding at 250/1000/2000 ms
-
-This is a strong indication of accumulated defensive patches and creates a realistic risk of duplicate invocation, racey UI behaviour and unnecessary DOM observation. The file also logs reset activation and contains cache-busting style recovery logic. fileciteturn21file0L2-L6
-
-**Action:** consolidate to one deterministic binding strategy after verifying the original mobile failure mode.
+`assets/reset-dashboard.js` combines direct click/pointer listeners, `onclick`, delegated click/pointer/touch listeners, a `MutationObserver`, and several delayed rebinding attempts. This is excessive for one button and is a likely source of duplicate invocation and difficult-to-debug mobile behaviour. fileciteturn21file0L2-L6
 
 ### F-004 — Card creation is client-side direct insert
 
 **Severity:** HIGH  
 **Classification:** `REFACTOR / SECURITY REVIEW`
 
-`assets/card-manager.js` generates card rows in the browser and inserts them directly into `public."Cards"`. The current RLS policy permits authenticated admins through `is_admin_user()`, so this is not automatically insecure; however, critical fields such as status, URLs and relationships are assembled client-side. fileciteturn22file0L2-L6
-
-The correct final design must be determined from the full schema/RLS/function audit rather than simply disabling RLS or adding permissive policies.
+`assets/card-manager.js` generates critical card fields in the browser and directly inserts into `public."Cards"`. Current RLS can permit admins, so this is not automatically a vulnerability; however, card status, product/customer relationships and activation URLs should be reviewed for server-side authority and integrity. fileciteturn22file0L2-L6
 
 ### F-005 — Previous Cards RLS error requires historical/root-cause verification
 
 **Severity:** HIGH  
 **Classification:** `REVIEW_REQUIRED`
 
-The live `public."Cards"` table currently has an authenticated `ALL` policy whose condition is `is_admin_user() OR has_business_permission(business_unit_id, 'card.manage')` for both visibility and write checks. The live `is_admin_user()` function checks both `admin_profiles` and `profiles` for an `admin` role. This means the previously observed `new row violates row-level security policy for table "Cards"` cannot be assumed to be caused by the current policy alone.
-
-The remaining audit must verify:
-
-1. the exact authenticated user context used when the failure occurred;
-2. whether `is_admin_user()` returned true at that time;
-3. whether an older policy was active during the failure;
-4. whether the inserted row had a business scope that changed policy evaluation;
-5. whether there were duplicate/competing policies before the latest migrations.
-
-Do **not** disable RLS as a workaround.
+Current `Cards` RLS has an authenticated `ALL` policy using `is_admin_user() OR has_business_permission(business_unit_id, 'card.manage')` for visibility and writes. Current `is_admin_user()` checks both `admin_profiles` and `profiles` for an `admin` role. Therefore the historical `new row violates row-level security policy for table "Cards"` error cannot be attributed to the current policy without tracing the failing session and historical policy state.
 
 ### F-006 — Live migration history is much larger than repository migration set
 
 **Severity:** CRITICAL  
 **Classification:** `REVIEW_REQUIRED`
 
-The live Supabase project reports a long migration history spanning August 29 through September 7, including many iterative security/RLS/reset/sales fixes. The repository currently contains only a small set of later migration files.
+The live project has a long migration history from August 29 through September 7, covering repeated RLS, reset, transaction, payment, business-scope and sales changes. The repository contains only a small later subset of migration files. This is a production/repository schema source-of-truth problem until proven otherwise.
 
-This creates a potentially serious source-of-truth problem: the repository migration directory is not currently a complete historical representation of the live database migration history.
-
-Before any schema cleanup, we must establish whether:
-
-- historical migrations were intentionally squashed/removed;
-- the repository is missing migrations;
-- migrations were applied manually;
-- the live project contains objects that are not reproducible from the repository;
-- destructive cleanup would make a fresh environment diverge from production.
-
-No migration deletion should occur until this is resolved.
+Before schema cleanup, determine whether the history was intentionally squashed, manually applied, or simply omitted from the repository. A fresh environment must be reproducible without silently diverging from production.
 
 ### F-007 — Repeated reset/dashboard fixes indicate accumulated patching
 
 **Severity:** MEDIUM/HIGH  
 **Classification:** `REFACTOR`
 
-Recent Git history contains a sequence of reset-dashboard fixes and cache-busting commits immediately before the current baseline, including repeated attempts to harden reset binding and mobile confirmation. This does not prove a functional defect by itself, but it is a strong maintenance signal that the reset subsystem should be treated as a root-cause refactor target rather than patched again. 
+Recent Git history shows repeated reset-dashboard hardening and cache-busting commits immediately before the current baseline. This is a maintenance signal that the reset flow should be root-cause refactored instead of receiving another isolated patch.
+
+### F-008 — `Cards` primary key is structurally unusual
+
+**Severity:** HIGH  
+**Classification:** `REVIEW_REQUIRED / DATABASE REFACTOR`
+
+The live `public."Cards"` table currently has a composite primary key:
+
+`PRIMARY KEY (id, card_code, status, product_type, created_at)`
+
+while it also has a unique `card_code` index and a separate unique `id` index. Other relationships reference `Cards.id`. This is an unusual and unnecessarily complex identity model for a card entity and may explain why a separate `cards_id_unique_idx` exists.
+
+Do not change this in-place until every foreign key, RPC and query dependency is mapped. The likely target architecture is a single stable identity key, but that must be proven and migrated safely.
+
+### F-009 — Duplicate/redundant indexes exist
+
+**Severity:** MEDIUM  
+**Classification:** `REVIEW_REQUIRED`
+
+Examples observed in the live database include:
+
+- `Cards`: primary-key composite index + unique `id` index + unique `card_code` index + an additional non-unique `idx_cards_card_code` on the same column.
+- `sales_code_assignments`: two separate unique partial indexes enforcing the same `(card_id) WHERE status='active'` rule.
+- `transaction_payment_audit`: separate `admin_id` index and a composite `(admin_id, created_at DESC)` index that may overlap.
+- `CardScans`: several single-column and composite indexes whose actual query benefit needs verification.
+
+No index is to be dropped merely because it looks redundant; query plans and dependency history must be checked first.
 
 ## 5. Live Database Inventory
 
 ### Public tables observed
-
-Current live public tables include:
 
 - `CardScans`
 - `Cards`
@@ -174,7 +149,7 @@ Current live public tables include:
 - `sales_code_assignments`
 - `transaction_payment_audit`
 
-Supabase also contains platform-owned `auth`, `storage`, `realtime`, `extensions`, `vault`, and migration metadata tables. These are not application cleanup candidates by default.
+Supabase platform-owned schemas are also present and are not application cleanup candidates by default.
 
 ### Current operational row counts verified
 
@@ -182,36 +157,24 @@ Supabase also contains platform-owned `auth`, `storage`, `realtime`, `extensions
 - `public.cards`: 0
 - `public."Sales"`: 2
 
-A duplicate `card_code` check on `public."Cards"` currently returned no duplicate codes.
+A duplicate `card_code` check on `public."Cards"` returned no duplicates.
 
 ## 6. RLS Inventory — Current Live State
 
-The current public RLS surface includes explicit policies for:
-
-- `CardScans`
-- `Cards`
-- `Customers`
-- `Product`
-- `Sales`
-- `Subscriptions`
-- `Transactions`
-- card audit tables
-- business authorization tables
-- ERP/project/finance tables
-- legacy `cards`
+The current public RLS surface includes policies for operational tables, audit tables, business authorization tables, ERP/project/finance tables and legacy `cards`.
 
 Important observations:
 
-- Current `Cards` uses an admin/business-manager write rule.
-- Current `Customers`, `Product`, `Sales`, `Subscriptions`, and `Transactions` use business-scoped permissions plus admin bypass.
+- `Cards` uses an admin/business-manager write rule.
+- `Customers`, `Product`, `Sales`, `Subscriptions`, and `Transactions` use business-scoped permissions plus admin bypass.
 - Legacy `cards` has a separate admin-oriented policy surface.
-- `CardScans` allows anonymous/authenticated insertion of constrained scan/tap events while reads are business/admin scoped.
+- `CardScans` allows constrained anonymous/authenticated scan/tap inserts while reads are business/admin scoped.
 
-The full final RLS matrix will be produced after verifying table ownership, grants, helper functions and actual application usage together.
+The final RLS matrix will be produced only after grants, helper functions, RPC execution privileges and application references are verified together.
 
 ## 7. RPC / Function Inventory — Current Live State
 
-The live project contains security-sensitive functions including:
+Security-sensitive live functions include:
 
 - `is_admin_user`
 - `is_admin`
@@ -226,31 +189,32 @@ The live project contains security-sensitive functions including:
 - project/finance automation functions
 - transaction/card activation trigger functions
 
-Many of the admin and business functions are `SECURITY DEFINER`. These require a dedicated audit of `search_path`, execution grants, authorization checks, and privilege boundaries before any refactor.
+Many are `SECURITY DEFINER`. Each requires a dedicated audit of `search_path`, execution grants, authorization guards and privilege boundaries.
 
 ## 8. Payment / Transaction Initial Findings
 
-`record_transaction_payment` exists as a `SECURITY DEFINER` RPC and returns payment status, paid amount and remaining amount. The current live database therefore has a server-side payment path that should remain the authoritative mechanism.
+`record_transaction_payment` is a `SECURITY DEFINER` RPC returning payment status, paid amount and remaining amount. It should remain the authoritative mutation path unless a later audit proves a safer design.
 
-The sales dashboard currently calculates displayed revenue/receivable values client-side from transaction fields. That is acceptable for presentation only; financial mutation and authoritative payment calculations must remain server/database controlled.
+The sales dashboard calculates displayed revenue/receivable values client-side from transaction fields. This is acceptable for presentation, but financial mutation and authoritative payment validation must remain server/database controlled.
 
 ## 9. Classification Snapshot
 
 | Finding / Object | Classification | Reason |
 |---|---|---|
 | `assets/app-config.js` | KEEP | Shared config/client source |
-| `assets/admin.js` | REFACTOR | Core controller is broad and centralizes multiple responsibilities |
-| `assets/card-manager.js` | REFACTOR | Direct critical-field insert; verify server authority |
+| `assets/admin.js` | REFACTOR | Broad controller responsibilities |
+| `assets/card-manager.js` | REFACTOR | Direct critical-field insert; server authority review required |
 | `assets/reset-dashboard.js` | REFACTOR | Multiple overlapping handlers + MutationObserver |
-| `public."Cards"` | KEEP | Active current card table |
-| `public.cards` | REVIEW_REQUIRED | Legacy table, currently empty; dependency audit required |
+| `public."Cards"` | KEEP / DATABASE REFACTOR REVIEW | Active table, but identity/index design needs review |
+| `public.cards` | REVIEW_REQUIRED | Legacy table, currently empty |
 | `record_transaction_payment` | KEEP / SECURITY REVIEW | Critical payment RPC |
-| Historical Supabase migrations absent from repo | REVIEW_REQUIRED / CRITICAL | Production/repository migration divergence |
+| Historical Supabase migrations absent from repo | REVIEW_REQUIRED / CRITICAL | Production/repository divergence |
 | Public activation config in `index.html` | REFACTOR | Duplicate configuration source |
+| Duplicate indexes | REVIEW_REQUIRED | Need query/dependency proof before removal |
 
 ## 10. No-Delete List During Remaining Audit
 
-Until dependency verification is complete, do **not** delete:
+Until dependency verification is complete, do not delete:
 
 - `public.cards`
 - any Supabase migration
@@ -259,10 +223,9 @@ Until dependency verification is complete, do **not** delete:
 - any JS module merely because it is dynamically loaded
 - any deployment/config file
 - any audit/admin documentation
+- any index identified as redundant without query-plan/dependency evidence
 
 ## 11. Phase 1 Remaining Work
-
-The discovery phase is **not yet complete**. Remaining audit work includes:
 
 1. Read every HTML file completely and map every static/dynamic script/style reference.
 2. Read every JS module and build function/event/reference relationships.
@@ -271,17 +234,15 @@ The discovery phase is **not yet complete**. Remaining audit work includes:
 5. Audit all foreign keys, indexes, constraints and triggers.
 6. Audit all RPC definitions, grants, `SECURITY DEFINER`, `search_path` and authorization guards.
 7. Verify live data integrity/orphans across operational tables.
-8. Trace every reference to the legacy `public.cards` table.
+8. Trace every reference to legacy `public.cards`.
 9. Verify payment atomicity and duplicate/concurrent payment handling.
-10. Establish a reproducible migration/source-of-truth strategy before schema cleanup.
-11. Complete the final KEEP/REFACTOR/MERGE/REMOVE/REVIEW_REQUIRED matrix.
+10. Establish a reproducible migration/source-of-truth strategy.
+11. Complete KEEP/REFACTOR/MERGE/REMOVE/REVIEW_REQUIRED for every object.
 
 ## 12. Decision Gate
 
 **No production cleanup is authorized by this report yet.**
 
-The correct sequence remains:
+Correct sequence:
 
 `Discovery → Dependency Map → Classification → Plan → Cleanup → Refactor → Bug Fix → Test → Re-Audit → Final Report`
-
-The audit should proceed from the confirmed root causes above, with the legacy table and migration-history divergence treated as explicit review gates rather than assumptions.
