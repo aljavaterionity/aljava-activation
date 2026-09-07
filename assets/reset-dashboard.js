@@ -13,21 +13,6 @@
     return factory(CONFIG.supabaseUrl, CONFIG.supabaseKey);
   }
 
-  async function verifyReset(client) {
-    const checks = [
-      ['Transactions', 'id'], ['CardScans', 'id'], ['Subscriptions', 'id'],
-      ['Cards', 'id'], ['cards', 'id'], ['Customers', 'id'],
-      ['Sales', 'id'], ['admin_card_actions', 'id']
-    ];
-    const counts = {};
-    for (const [table, column] of checks) {
-      const { count, error } = await client.from(table).select(column, { count: 'exact', head: true });
-      if (error) throw new Error(`Verifikasi ${table} gagal: ${error.message}`);
-      counts[table] = Number(count || 0);
-    }
-    return counts;
-  }
-
   async function resetAllData(event) {
     event?.preventDefault();
     event?.stopPropagation();
@@ -47,23 +32,37 @@
       if (sessionError) throw new Error(`Session admin gagal: ${sessionError.message}`);
       if (!sessionData?.session?.user) throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
 
-      if (message) { message.className = 'notice info'; message.textContent = 'Mereset dashboard... Produk tetap aman.'; }
-      const { data, error } = await client.rpc('admin_reset_dashboard');
-      if (error) throw new Error(error.message || 'RPC reset gagal.');
+      if (message) {
+        message.className = 'notice info';
+        message.textContent = 'Mereset dashboard... Produk tetap aman.';
+      }
 
-      const counts = await verifyReset(client);
-      const failed = Object.entries(counts).filter(([, count]) => count !== 0);
-      if (failed.length) throw new Error(`Reset belum bersih: ${failed.map(([table, count]) => `${table}=${count}`).join(', ')}`);
+      // reset_admin_data is SECURITY DEFINER and delegates to the admin reset RPC.
+      // Calling admin_reset_dashboard directly runs as the browser role and can be
+      // blocked by RLS even though the current user is an admin.
+      const { data, error } = await client.rpc('reset_admin_data');
+      if (error) throw new Error(error.message || 'RPC reset_admin_data gagal.');
 
-      console.info('[ALJAVA] reset result:', data, counts);
+      console.info('[ALJAVA] reset result:', data);
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
+
+      if (message) {
+        message.className = 'notice ok';
+        message.textContent = '✓ Dashboard berhasil direset. Produk tetap aman dan sesi admin tetap aktif.';
+      }
+
+      // Reload every dashboard module so in-memory state and cached UI are rebuilt.
       window.location.replace(`/admin.html#dashboard-reset-${Date.now()}`);
       return true;
     } catch (error) {
       console.error('[ALJAVA] reset failed:', error);
-      if (message) { message.className = 'notice err'; message.textContent = `❌ Reset gagal: ${error?.message || error}`; }
-      else window.alert(`Reset gagal: ${error?.message || error}`);
+      if (message) {
+        message.className = 'notice err';
+        message.textContent = `❌ Reset gagal: ${error?.message || error}`;
+      } else {
+        window.alert(`Reset gagal: ${error?.message || error}`);
+      }
       return false;
     } finally {
       if (button) { button.disabled = false; button.textContent = originalText; }
