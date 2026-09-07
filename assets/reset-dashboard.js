@@ -4,6 +4,7 @@
 
   const $ = (id) => document.getElementById(id);
   const CONFIG = window.ALJAVA_CONFIG || {};
+  let resetBusy = false;
 
   function show(message, type = 'info') {
     const el = $('cardActionMsg');
@@ -26,6 +27,8 @@
   }
 
   async function resetAllData(event) {
+    if (resetBusy) return false;
+    resetBusy = true;
     event?.preventDefault();
     event?.stopPropagation();
     event?.stopImmediatePropagation();
@@ -34,6 +37,7 @@
     const confirmation = window.prompt('RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus data operasional.\nProduk tidak dihapus.\n\nKetik RESET untuk melanjutkan:');
     if (confirmation !== 'RESET') {
       show('Reset dibatalkan. Tidak ada data yang dihapus.', 'info');
+      resetBusy = false;
       return false;
     }
 
@@ -75,23 +79,27 @@
       return false;
     } finally {
       if (button) { button.disabled = false; button.textContent = originalText; }
+      resetBusy = false;
     }
+  }
+
+  function delegatedResetClick(event) {
+    const target = event.target?.closest?.('#resetMenu');
+    if (!target) return;
+    resetAllData(event);
   }
 
   function bind() {
     const button = $('resetMenu');
-    if (!button) {
-      console.warn('[ALJAVA] Reset button #resetMenu not found');
-      return;
-    }
-    if (button.dataset.fullResetBound !== '1') {
+    if (button && button.dataset.fullResetBound !== '1') {
       button.dataset.fullResetBound = '1';
       button.addEventListener('click', resetAllData, true);
-      console.info('[ALJAVA] Reset Dashboard handler bound');
+      console.info('[ALJAVA] Reset Dashboard direct handler bound');
     }
   }
 
   window.__resetDashboard = resetAllData;
+  document.addEventListener('click', delegatedResetClick, true);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
   else bind();
   window.setTimeout(bind, 500);
