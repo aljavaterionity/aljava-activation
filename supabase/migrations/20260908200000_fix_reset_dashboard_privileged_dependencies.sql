@@ -5,19 +5,19 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 DECLARE
-  deleted_card_scans bigint;
-  deleted_admin_actions bigint;
-  deleted_assignments bigint;
-  deleted_payment_audit bigint;
-  deleted_finance bigint;
-  deleted_transactions bigint;
-  deleted_subscriptions bigint;
-  deleted_cards bigint;
-  deleted_legacy_cards bigint;
-  deleted_customers bigint;
-  deleted_sales bigint;
+  deleted_card_scans bigint := 0;
+  deleted_admin_actions bigint := 0;
+  deleted_assignments bigint := 0;
+  deleted_payment_audit bigint := 0;
+  deleted_finance bigint := 0;
+  deleted_transactions bigint := 0;
+  deleted_subscriptions bigint := 0;
+  deleted_cards bigint := 0;
+  deleted_legacy_cards bigint := 0;
+  deleted_customers bigint := 0;
+  deleted_sales bigint := 0;
 BEGIN
-  IF NOT public.is_admin() THEN
+  IF NOT public.is_admin_user() THEN
     RAISE EXCEPTION 'Admin access required';
   END IF;
 
@@ -85,10 +85,9 @@ SECURITY DEFINER
 SET search_path = public
 AS $$
 BEGIN
-  IF NOT public.is_admin() THEN
+  IF NOT public.is_admin_user() THEN
     RAISE EXCEPTION 'Admin access required';
   END IF;
-
   RETURN public.admin_reset_dashboard();
 END;
 $$;
