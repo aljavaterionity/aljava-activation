@@ -29,12 +29,23 @@
   async function resetAllData(event) {
     if (resetBusy) return false;
     resetBusy = true;
-    event?.preventDefault();
-    event?.stopPropagation();
-    event?.stopImmediatePropagation();
+    event?.preventDefault?.();
+    event?.stopPropagation?.();
+    event?.stopImmediatePropagation?.();
 
-    console.info('[ALJAVA] Reset Dashboard clicked');
-    const confirmation = window.prompt('RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus data operasional.\nProduk tidak dihapus.\n\nKetik RESET untuk melanjutkan:');
+    console.info('[ALJAVA] Reset Dashboard activated');
+    let confirmation = null;
+    try {
+      confirmation = window.prompt(
+        'RESET DATA DASHBOARD\n\nKetik RESET untuk menghapus data operasional.\nProduk tidak dihapus.\n\nKetik RESET untuk melanjutkan:'
+      );
+    } catch (promptError) {
+      console.error('[ALJAVA] reset prompt failed:', promptError);
+      show(`❌ Prompt reset tidak dapat dibuka: ${promptError?.message || promptError}`, 'err');
+      resetBusy = false;
+      return false;
+    }
+
     if (confirmation !== 'RESET') {
       show('Reset dibatalkan. Tidak ada data yang dihapus.', 'info');
       resetBusy = false;
@@ -48,7 +59,6 @@
     try {
       show('Mereset dashboard... Produk tetap aman.', 'info');
       const client = createClient();
-
       const { data: sessionData, error: sessionError } = await client.auth.getSession();
       if (sessionError) throw new Error(`Session admin gagal: ${sessionError.message}`);
       if (!sessionData?.session?.user) throw new Error('Sesi admin tidak ditemukan. Silakan login ulang.');
@@ -65,13 +75,9 @@
 
       console.info('[ALJAVA] reset result:', data);
       show('✓ Dashboard berhasil direset. Produk tetap aman.', 'ok');
-
       try { sessionStorage.clear(); } catch (_) {}
       try { localStorage.removeItem('admin_dashboard_state'); } catch (_) {}
-
-      setTimeout(() => {
-        window.location.replace(`/admin.html#dashboard-reset-${Date.now()}`);
-      }, 500);
+      setTimeout(() => window.location.replace(`/admin.html#dashboard-reset-${Date.now()}`), 500);
       return true;
     } catch (error) {
       console.error('[ALJAVA] reset failed:', error);
@@ -83,25 +89,40 @@
     }
   }
 
-  function delegatedResetClick(event) {
-    const target = event.target?.closest?.('#resetMenu');
-    if (!target) return;
+  function isResetTarget(event) {
+    return !!event?.target?.closest?.('#resetMenu');
+  }
+
+  function delegatedActivate(event) {
+    if (!isResetTarget(event)) return;
     resetAllData(event);
   }
 
+  function installDirect(button) {
+    if (!button || button.dataset.resetHardBound === '1') return;
+    button.dataset.resetHardBound = '1';
+    button.type = 'button';
+    button.addEventListener('click', resetAllData, true);
+    button.addEventListener('pointerup', resetAllData, true);
+    button.onclick = resetAllData;
+    console.info('[ALJAVA] Reset Dashboard hard binding installed');
+  }
+
   function bind() {
-    const button = $('resetMenu');
-    if (button && button.dataset.fullResetBound !== '1') {
-      button.dataset.fullResetBound = '1';
-      button.addEventListener('click', resetAllData, true);
-      console.info('[ALJAVA] Reset Dashboard direct handler bound');
-    }
+    installDirect($('resetMenu'));
   }
 
   window.__resetDashboard = resetAllData;
-  document.addEventListener('click', delegatedResetClick, true);
+  document.addEventListener('pointerup', delegatedActivate, true);
+  document.addEventListener('touchend', delegatedActivate, true);
+  document.addEventListener('click', delegatedActivate, true);
+
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true });
   else bind();
-  window.setTimeout(bind, 500);
-  window.setTimeout(bind, 1500);
+
+  const observer = new MutationObserver(() => bind());
+  observer.observe(document.documentElement, { childList: true, subtree: true });
+  window.setTimeout(bind, 250);
+  window.setTimeout(bind, 1000);
+  window.setTimeout(bind, 2000);
 })();
