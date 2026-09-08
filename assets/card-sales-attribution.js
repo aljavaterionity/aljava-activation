@@ -17,7 +17,10 @@
     const s = document.createElement('style');
     s.id = 'aljava-card-sales-attribution-style';
     s.textContent = `
-      #dashboardView #cardTable .card-sales-attribution{min-width:150px;white-space:nowrap}
+      #dashboardView #cardTable .card-sales-attribution{min-width:150px;white-space:nowrap;background:#0f1216!important;color:#d3d7de!important;border-bottom:1px solid rgba(255,255,255,.055)!important;box-shadow:none!important}
+      #dashboardView #cardTable tbody tr:nth-child(even) .card-sales-attribution{background:#0d1014!important}
+      #dashboardView #cardTable tbody tr:hover .card-sales-attribution{background:#15191f!important}
+      #dashboardView #cardTable .card-sales-attribution .muted{color:#8d95a3!important}
       #dashboardView #cardTable .card-sales-attribution .sales-attribution-name{font-weight:700;color:#f4f4f5}
       #dashboardView #cardTable .card-sales-attribution .sales-attribution-meta{display:block;margin-top:2px;color:#8f949d;font-size:10px;line-height:1.25}
       #dashboardView #cardTable .card-sales-attribution.holder .sales-attribution-meta{color:#8bd3ff}
