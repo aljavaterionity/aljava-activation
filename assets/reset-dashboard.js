@@ -20,12 +20,6 @@
     return factory(CONFIG.supabaseUrl, CONFIG.supabaseKey);
   }
 
-  function closeResetDialog(result) {
-    const dialog = $('aljavaResetDialog');
-    if (dialog) dialog.remove();
-    return result;
-  }
-
   function requestResetConfirmation() {
     return new Promise(resolve => {
       const old = $('aljavaResetDialog');
@@ -66,7 +60,6 @@
       const confirmed = await requestResetConfirmation();
       if (!confirmed) { show('Reset dibatalkan. Tidak ada data yang dihapus.', 'info'); return false; }
       const button = $('resetMenu');
-      const originalText = button?.textContent || 'Reset Dashboard';
       if (button) { button.disabled = true; button.textContent = 'Mereset...'; }
       show('Mereset dashboard... Produk tetap aman.', 'info');
       const client = createClient();
@@ -93,24 +86,12 @@
     }
   }
 
-  function isResetTarget(event) { return !!event?.target?.closest?.('#resetMenu'); }
-  function delegatedActivate(event) { if (isResetTarget(event)) resetAllData(event); }
-  function installDirect(button) {
-    if (!button || button.dataset.resetHardBound === '1') return;
-    button.dataset.resetHardBound = '1';
-    button.type = 'button';
-    button.addEventListener('click', resetAllData, true);
-    button.addEventListener('pointerup', resetAllData, true);
-    button.onclick = resetAllData;
+  function handleResetClick(event) {
+    const target = event?.target?.closest?.('#resetMenu');
+    if (!target) return;
+    resetAllData(event);
   }
-  function bind() { installDirect($('resetMenu')); }
 
   window.__resetDashboard = resetAllData;
-  document.addEventListener('pointerup', delegatedActivate, true);
-  document.addEventListener('touchend', delegatedActivate, true);
-  document.addEventListener('click', delegatedActivate, true);
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bind, { once: true }); else bind();
-  const observer = new MutationObserver(bind);
-  observer.observe(document.documentElement, { childList: true, subtree: true });
-  [250, 1000, 2000].forEach(ms => window.setTimeout(bind, ms));
+  document.addEventListener('click', handleResetClick, true);
 })();
