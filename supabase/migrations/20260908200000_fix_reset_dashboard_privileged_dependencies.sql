@@ -21,37 +21,37 @@ BEGIN
     RAISE EXCEPTION 'Admin access required';
   END IF;
 
-  DELETE FROM public."CardScans";
+  DELETE FROM public."CardScans" WHERE TRUE;
   GET DIAGNOSTICS deleted_card_scans = ROW_COUNT;
 
-  DELETE FROM public.admin_card_actions;
+  DELETE FROM public.admin_card_actions WHERE TRUE;
   GET DIAGNOSTICS deleted_admin_actions = ROW_COUNT;
 
-  DELETE FROM public.sales_code_assignments;
+  DELETE FROM public.sales_code_assignments WHERE TRUE;
   GET DIAGNOSTICS deleted_assignments = ROW_COUNT;
 
-  DELETE FROM public.transaction_payment_audit;
+  DELETE FROM public.transaction_payment_audit WHERE TRUE;
   GET DIAGNOSTICS deleted_payment_audit = ROW_COUNT;
 
   DELETE FROM public.finance_entries WHERE transaction_id IS NOT NULL;
   GET DIAGNOSTICS deleted_finance = ROW_COUNT;
 
-  DELETE FROM public."Transactions";
+  DELETE FROM public."Transactions" WHERE TRUE;
   GET DIAGNOSTICS deleted_transactions = ROW_COUNT;
 
-  DELETE FROM public."Subscriptions";
+  DELETE FROM public."Subscriptions" WHERE TRUE;
   GET DIAGNOSTICS deleted_subscriptions = ROW_COUNT;
 
-  DELETE FROM public."Cards";
+  DELETE FROM public."Cards" WHERE TRUE;
   GET DIAGNOSTICS deleted_cards = ROW_COUNT;
 
-  DELETE FROM public.cards;
+  DELETE FROM public.cards WHERE TRUE;
   GET DIAGNOSTICS deleted_legacy_cards = ROW_COUNT;
 
-  DELETE FROM public."Customers";
+  DELETE FROM public."Customers" WHERE TRUE;
   GET DIAGNOSTICS deleted_customers = ROW_COUNT;
 
-  DELETE FROM public."Sales";
+  DELETE FROM public."Sales" WHERE TRUE;
   GET DIAGNOSTICS deleted_sales = ROW_COUNT;
 
   RETURN jsonb_build_object(
