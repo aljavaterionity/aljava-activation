@@ -1,1 +1,9 @@
 /* Deprecated legacy Operations Dashboard layer. Visual styling is now owned by operations-dashboard-dark.css. */
+
+/* Dashboard empty states — match the dark panel borders/surface. */
+#dashboardView > .grid > .panel .body > .muted:only-child,
+#dashboardView > .grid > .panel .body > div:not(.table-wrap):only-child {
+  border-color:rgba(255,255,255,.065)!important;
+  background:rgba(255,255,255,.018)!important;
+  color:#a1a1aa!important;
+}
